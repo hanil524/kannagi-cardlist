@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>巫カードギャラリー</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- 大きく表示する画像を格納する要素 -->
+            <div class="large-image-container">
+                <img src="" alt="Large Image" id="large-image" />
+            </div>
+            <!-- 既存のコード -->
+
+            <header>
+                <h1>カードギャラリー</h1>
+                <select id="filter-season">
+                    <option value="all">全て</option>
+                    <option value="春">春</option>
+                    <option value="夏">夏</option>
+                    <option value="秋">秋</option>
+                    <option value="冬">冬</option>
+                    <!-- 他の季節オプション -->
+                </select>
+            </header>
+            <section class="card-gallery">
+                <div
+                    class="card"
+                    data-number="1"
+                    data-power="1"
+                    data-season="春"
+                >
+                    <img src="images/card1.jpg" alt="Card 1" />
+                </div>
+                <div
+                    class="card"
+                    data-number="2"
+                    data-power="1"
+                    data-season="夏"
+                >
+                    <img src="images/card2.jpg" alt="Card 2" />
+                </div>
+                <div
+                    class="card"
+                    data-number="3"
+                    data-power="1"
+                    data-season="秋"
+                >
+                    <img src="images/card3.jpg" alt="Card 3" />
+                </div>
+                <div
+                    class="card"
+                    data-number="4"
+                    data-power="1"
+                    data-season="冬"
+                >
+                    <img src="images/card4.jpg" alt="Card 4" />
+                </div>
+                <!-- 追加のカード -->
+            </section>
+        </div>
+        <script src="scripts.js"></script>
+    </body>
+</html>
