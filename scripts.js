@@ -1,9 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const searchBox = document.getElementById("search-box");
-    const mobileSearchBox = document.getElementById("mobile-search-box");
-    searchBox.addEventListener("input", filterCardsByName);
-    mobileSearchBox.addEventListener("input", filterCardsByName);
-});
+console.log("JavaScript is loaded");
 
 const filters = {
     series: new Set(),
@@ -16,6 +11,20 @@ const filters = {
 
 let sortCriteria = null;
 let sortOrder = "asc";
+
+document.addEventListener("DOMContentLoaded", () => {
+    const searchBox = document.getElementById("search-box");
+    searchBox.addEventListener("input", filterCardsByName);
+
+    const cards = document.querySelectorAll(".card img");
+    cards.forEach((card) => {
+        card.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+                openImageModal(card.src);
+            }
+        });
+    });
+});
 
 const filterCardsByName = (event) => {
     const query = event.target.value.toLowerCase();
@@ -111,13 +120,17 @@ const filterCards = () => {
 };
 
 const openModal = (filterId) => {
+    console.log(`openModal called with filterId: ${filterId}`);
     const modal = document.getElementById("modal");
     const modalButtons = document.getElementById("modal-buttons");
     modalButtons.innerHTML = "";
 
-    const filterContent = document
-        .querySelector(`#${filterId} .filter-content`)
-        .querySelectorAll("button");
+    const filterElement = document.querySelector(`#${filterId}`);
+    console.log(`filterElement: `, filterElement);
+
+    const filterContent = filterElement.querySelectorAll("button");
+    console.log(`filterContent: `, filterContent);
+
     filterContent.forEach((button) => {
         const newButton = document.createElement("button");
         newButton.innerText = button.innerText;
@@ -129,9 +142,11 @@ const openModal = (filterId) => {
     });
 
     modal.style.display = "block";
+    console.log("Modal should be visible now");
 };
 
 const closeModal = () => {
+    console.log("closeModal called");
     const modal = document.getElementById("modal");
     modal.style.display = "none";
 };
@@ -145,11 +160,14 @@ const toggleMenu = () => {
     }
 };
 
-const toggleFilter = (filterId) => {
-    const filterContent = document.getElementById(filterId);
-    if (filterContent.style.display === "flex") {
-        filterContent.style.display = "none";
-    } else {
-        filterContent.style.display = "flex";
-    }
+const openImageModal = (src) => {
+    const modal = document.getElementById("image-modal");
+    const modalImage = document.getElementById("modal-image");
+    modalImage.src = src;
+    modal.style.display = "flex";
+};
+
+const closeImageModal = () => {
+    const modal = document.getElementById("image-modal");
+    modal.style.display = "none";
 };
