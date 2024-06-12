@@ -11,6 +11,7 @@
             <a href="https://www.kannagi-cardgame.jp/" target="_blank"
                 >【巫 公式サイト】</a
             >
+            <span class="header-title">巫KANNAGIカードゲーム</span>
             <input type="text" id="search-box" placeholder="カード名で検索" />
         </header>
         <div class="mobile-header">
@@ -20,11 +21,6 @@
                 <a href="https://www.kannagi-cardgame.jp/" target="_blank"
                     >巫 公式サイト</a
                 >
-                <input
-                    type="text"
-                    id="mobile-search-box"
-                    placeholder="カード名で検索"
-                />
             </div>
         </div>
         <main>
@@ -137,15 +133,6 @@
                         <button>水</button>
                     </div>
                 </div>
-                <div id="modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeModal()"
-                            >&times;</span
-                        >
-                        <div id="modal-buttons" class="modal-buttons"></div>
-                    </div>
-                </div>
-
                 <div class="filter-group">
                     <button onclick="resetFilters()">ソート解除</button>
                 </div>
@@ -304,6 +291,19 @@
                 <!-- もっとカード... -->
             </section>
         </main>
+
+        <!-- モーダルウィンドウ -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="modal-buttons" class="modal-buttons"></div>
+            </div>
+        </div>
+
+        <div id="image-modal" class="image-modal">
+            <span class="close" onclick="closeImageModal()">&times;</span>
+            <img id="modal-image" src="" alt="Card Image" />
+        </div>
 
         <script src="scripts.js"></script>
     </body>
