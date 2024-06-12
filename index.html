@@ -3,64 +3,308 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>巫カードギャラリー</title>
+        <title>巫カードリスト</title>
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <div class="container">
-            <!-- 大きく表示する画像を格納する要素 -->
-            <div class="large-image-container">
-                <img src="" alt="Large Image" id="large-image" />
+        <header id="main-header">
+            <a href="https://www.kannagi-cardgame.jp/" target="_blank"
+                >【巫 公式サイト】</a
+            >
+            <input type="text" id="search-box" placeholder="カード名で検索" />
+        </header>
+        <div class="mobile-header">
+            <div class="hamburger-menu" onclick="toggleMenu()">&#9776;</div>
+            <div id="mobile-menu">
+                <div class="close-menu" onclick="toggleMenu()">&#10006;</div>
+                <a href="https://www.kannagi-cardgame.jp/" target="_blank"
+                    >巫 公式サイト</a
+                >
+                <input
+                    type="text"
+                    id="mobile-search-box"
+                    placeholder="カード名で検索"
+                />
             </div>
-            <!-- 既存のコード -->
-
-            <header>
-                <h1>カードギャラリー</h1>
-                <select id="filter-season">
-                    <option value="all">全て</option>
-                    <option value="春">春</option>
-                    <option value="夏">夏</option>
-                    <option value="秋">秋</option>
-                    <option value="冬">冬</option>
-                    <!-- 他の季節オプション -->
-                </select>
-            </header>
-            <section class="card-gallery">
-                <div
-                    class="card"
-                    data-number="1"
-                    data-power="1"
-                    data-season="春"
-                >
-                    <img src="images/card1.jpg" alt="Card 1" />
-                </div>
-                <div
-                    class="card"
-                    data-number="2"
-                    data-power="1"
-                    data-season="夏"
-                >
-                    <img src="images/card2.jpg" alt="Card 2" />
-                </div>
-                <div
-                    class="card"
-                    data-number="3"
-                    data-power="1"
-                    data-season="秋"
-                >
-                    <img src="images/card3.jpg" alt="Card 3" />
-                </div>
-                <div
-                    class="card"
-                    data-number="4"
-                    data-power="1"
-                    data-season="冬"
-                >
-                    <img src="images/card4.jpg" alt="Card 4" />
-                </div>
-                <!-- 追加のカード -->
-            </section>
         </div>
+        <main>
+            <section id="filter-section">
+                <div class="filter-group">
+                    <label>ソート順：</label>
+                    <div class="sort-buttons">
+                        <button onclick="sortCards('number')">No.</button>
+                        <button onclick="sortCards('cost')">コスト</button>
+                        <button onclick="sortCards('power')">力</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>シリーズ：</label>
+                    <div class="filter-buttons" data-attribute="series">
+                        <button onclick="showAllCards()">全リスト</button>
+                        <button
+                            data-attribute="series"
+                            onclick="toggleFilterCard('series', '夏VS冬バトルセット')"
+                        >
+                            夏VS冬バトルセット（1）
+                        </button>
+                        <button
+                            data-attribute="series"
+                            onclick="toggleFilterCard('series', '新季の到来')"
+                        >
+                            新季の到来（2）
+                        </button>
+                        <button
+                            data-attribute="series"
+                            onclick="toggleFilterCard('series', '百鬼夜行')"
+                        >
+                            百鬼夜行（3）
+                        </button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>季節：</label>
+                    <div class="filter-buttons" data-attribute="season">
+                        <button onclick="toggleFilterCard('season', '春')">
+                            春
+                        </button>
+                        <button onclick="toggleFilterCard('season', '夏')">
+                            夏
+                        </button>
+                        <button onclick="toggleFilterCard('season', '秋')">
+                            秋
+                        </button>
+                        <button onclick="toggleFilterCard('season', '冬')">
+                            冬
+                        </button>
+                        <button onclick="toggleFilterCard('season', '混化')">
+                            混化
+                        </button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>札種類：</label>
+                    <div class="filter-buttons" data-attribute="type">
+                        <button onclick="toggleFilterCard('type', '場所札')">
+                            場所札
+                        </button>
+                        <button onclick="toggleFilterCard('type', '怪異札')">
+                            怪異札
+                        </button>
+                        <button onclick="toggleFilterCard('type', '道具札')">
+                            道具札
+                        </button>
+                        <button onclick="toggleFilterCard('type', '季節札')">
+                            季節札
+                        </button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button onclick="openModal('role')">【役割】</button>
+                    <div id="role" class="filter-content" style="display: none">
+                        <button>バニラ</button>
+                        <button>魂加速</button>
+                        <button>札除去</button>
+                        <button>ランデス</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button onclick="openModal('keyword')">
+                        【キーワード】
+                    </button>
+                    <div
+                        id="keyword"
+                        class="filter-content"
+                        style="display: none"
+                    >
+                        <button>逆境</button>
+                        <button>楽園</button>
+                        <button>速攻</button>
+                        <button>呪い</button>
+                        <button>神秘</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button onclick="openModal('attribute')">【属性】</button>
+                    <div
+                        id="attribute"
+                        class="filter-content"
+                        style="display: none"
+                    >
+                        <button>園</button>
+                        <button>闇</button>
+                        <button>霊</button>
+                        <button>火</button>
+                        <button>水</button>
+                    </div>
+                </div>
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()"
+                            >&times;</span
+                        >
+                        <div id="modal-buttons" class="modal-buttons"></div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <button onclick="resetFilters()">ソート解除</button>
+                </div>
+            </section>
+            <section id="card-list">
+                <div
+                    class="card"
+                    data-number="29"
+                    data-name="朧車"
+                    data-cost="4"
+                    data-power="2"
+                    data-series="夏VS冬バトルセット"
+                    data-season="冬"
+                    data-type="場所札"
+                    data-role="札除去 2種類札"
+                    data-keyword=""
+                    data-attribute="廃車 妖怪"
+                >
+                    <img src="images/card_1_ (29).jpg" alt="Card 29" />
+                </div>
+                <div
+                    class="card"
+                    data-number="31"
+                    data-name="夜霧の幻宿"
+                    data-cost="6"
+                    data-power="3"
+                    data-series="夏VS冬バトルセット"
+                    data-season="冬"
+                    data-type="場所札"
+                    data-role="札除去"
+                    data-keyword=""
+                    data-attribute="廃旅館 幻"
+                >
+                    <img src="images/card_1_ (31).jpg" alt="Card 31" />
+                </div>
+                <div
+                    class="card"
+                    data-number="41"
+                    data-name="血液達磨"
+                    data-cost="1"
+                    data-power="0"
+                    data-series="夏VS冬バトルセット"
+                    data-season="冬"
+                    data-type="道具札"
+                    data-role="札除去"
+                    data-keyword=""
+                    data-attribute="血液"
+                >
+                    <img src="images/card_1_ (41).jpg" alt="Card 41" />
+                </div>
+                <div
+                    class="card"
+                    data-number="52"
+                    data-name="悠習の古日記"
+                    data-cost="3"
+                    data-power="0"
+                    data-series="夏VS冬バトルセット"
+                    data-season="春"
+                    data-type="道具札"
+                    data-role="札除去"
+                    data-keyword=""
+                    data-attribute="古書"
+                >
+                    <img src="images/card_1_ (52).jpg" alt="Card 52" />
+                </div>
+                <div
+                    class="card"
+                    data-number="101"
+                    data-name="体探しの園"
+                    data-cost="0"
+                    data-power="1"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role="バニラ"
+                    data-keyword=""
+                    data-attribute="園"
+                >
+                    <img src="images/card_2_ (1).jpg" alt="Card 101" />
+                </div>
+                <div
+                    class="card"
+                    data-number="102"
+                    data-name="神隠しの廃集落"
+                    data-cost="0"
+                    data-power="1"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role="魂加速"
+                    data-keyword=""
+                    data-attribute="廃集落 神隠し"
+                >
+                    <img src="images/card_2_ (2).jpg" alt="Card 102" />
+                </div>
+                <div
+                    class="card"
+                    data-number="103"
+                    data-name="光の指す方へ"
+                    data-cost="1"
+                    data-power="1"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role=""
+                    data-keyword="楽園"
+                    data-attribute="廃線 解脱"
+                >
+                    <img src="images/card_2_ (3).jpg" alt="Card 103" />
+                </div>
+                <div
+                    class="card"
+                    data-number="104"
+                    data-name="吸血鬼の栖"
+                    data-cost="4"
+                    data-power="3"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role="魂加速 札除去"
+                    data-keyword="召喚時"
+                    data-attribute="蝙蝠 血液"
+                >
+                    <img src="images/card_2_ (4).jpg" alt="Card 104" />
+                </div>
+                <div
+                    class="card"
+                    data-number="105"
+                    data-name="終わらない夢"
+                    data-cost="3"
+                    data-power="3"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role="魂加速"
+                    data-keyword=""
+                    data-attribute="悪夢"
+                >
+                    <img src="images/card_2_ (5).jpg" alt="Card 105" />
+                </div>
+                <div
+                    class="card"
+                    data-number="106"
+                    data-name="菴捻銀山"
+                    data-cost="4"
+                    data-power="3"
+                    data-series="新季の到来"
+                    data-season="春"
+                    data-type="場所札"
+                    data-role=""
+                    data-keyword="楽園"
+                    data-attribute="廃鉱山 解脱"
+                >
+                    <img src="images/card_2_ (6).jpg" alt="Card 106" />
+                </div>
+                <!-- もっとカード... -->
+            </section>
+        </main>
+
         <script src="scripts.js"></script>
     </body>
 </html>
