@@ -148,6 +148,35 @@ main {
     }
 }
 
+/* ヘッダーのスタイル */
+header {
+    background: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    flex: 1;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-container input {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    display: none;
+}
+
 /* モーダルのスタイル */
 .modal {
     display: none;
@@ -201,4 +230,43 @@ main {
 
 .modal-buttons button:hover {
     background-color: #ccc;
+}
+
+/* 画像モーダル */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.image-modal img {
+    width: 95%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .card {
+        flex-basis: calc(50% - 10px);
+    }
+
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: #333;
+        color: white;
+    }
+
+    .header-title {
+        font-size: 1em;
+        margin-left: 10px;
+    }
 }
