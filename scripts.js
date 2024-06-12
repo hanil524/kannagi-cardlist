@@ -24,6 +24,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    const filterButtons = document.querySelectorAll(".filter-buttons button");
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const attribute = button.parentNode.getAttribute("data-attribute");
+            const value = button.innerText.trim();
+            toggleFilterCard(attribute, value);
+        });
+    });
+
+    const modalButtons = document.querySelectorAll(".filter-group button");
+    modalButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const match = button
+                .getAttribute("onclick")
+                .match(/openModal\('(.+?)'\)/);
+            if (match) {
+                const filterId = match[1];
+                openModal(filterId);
+            }
+        });
+    });
 });
 
 const filterCardsByName = (event) => {
@@ -65,6 +87,7 @@ const resetFilters = () => {
     Object.keys(filters).forEach((key) => filters[key].clear());
     const cards = document.querySelectorAll(".card");
     cards.forEach((card) => (card.style.display = ""));
+    document.getElementById("no-cards-message").style.display = "none";
     resetSort();
 };
 
@@ -88,35 +111,35 @@ const toggleFilterCard = (attribute, value) => {
         filters[attribute].add(value);
     }
     filterCards();
-    closeModal();
 };
 
 const filterCards = () => {
     const cards = document.querySelectorAll(".card");
+    let anyVisible = false;
     cards.forEach((card) => {
         let shouldDisplay = true;
-        for (let attribute in filters) {
-            if (filters[attribute].size > 0) {
-                let cardAttributes = card.dataset[attribute].split(" ");
-                let hasMatch = false;
-                for (let filterValue of filters[attribute]) {
-                    if (cardAttributes.includes(filterValue)) {
-                        hasMatch = true;
-                        break;
-                    }
-                }
-                if (!hasMatch) {
+        for (const [attribute, values] of Object.entries(filters)) {
+            if (values.size > 0) {
+                const cardAttribute = card.getAttribute(`data-${attribute}`);
+                const cardAttributes = cardAttribute.split(" "); // 複数の属性を考慮
+                if (
+                    !values.has(cardAttribute) &&
+                    !cardAttributes.some((attr) => values.has(attr))
+                ) {
                     shouldDisplay = false;
                     break;
                 }
             }
         }
+        card.style.display = shouldDisplay ? "" : "none";
         if (shouldDisplay) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
+            anyVisible = true;
         }
     });
+
+    document.getElementById("no-cards-message").style.display = anyVisible
+        ? "none"
+        : "block";
 };
 
 const openModal = (filterId) => {
@@ -125,17 +148,18 @@ const openModal = (filterId) => {
     const modalButtons = document.getElementById("modal-buttons");
     modalButtons.innerHTML = "";
 
-    const filterElement = document.querySelector(`#${filterId}`);
-    console.log(`filterElement: `, filterElement);
+    const filterElement = document.getElementById(filterId);
+    if (!filterElement) {
+        console.error(`Element with id ${filterId} not found`);
+        return;
+    }
 
     const filterContent = filterElement.querySelectorAll("button");
-    console.log(`filterContent: `, filterContent);
-
     filterContent.forEach((button) => {
         const newButton = document.createElement("button");
         newButton.innerText = button.innerText;
         newButton.onclick = () => {
-            toggleFilterCard(filterId, button.innerText);
+            toggleFilterCard(filterId, button.innerText.trim());
             closeModal();
         };
         modalButtons.appendChild(newButton);
@@ -149,15 +173,6 @@ const closeModal = () => {
     console.log("closeModal called");
     const modal = document.getElementById("modal");
     modal.style.display = "none";
-};
-
-const toggleMenu = () => {
-    const mobileMenu = document.getElementById("mobile-menu");
-    if (mobileMenu.style.display === "flex") {
-        mobileMenu.style.display = "none";
-    } else {
-        mobileMenu.style.display = "flex";
-    }
 };
 
 const openImageModal = (src) => {
