@@ -105,7 +105,7 @@ main {
     flex-basis: calc(20% - 10px);
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: transform 0.1s;
 }
 
 .card img {
@@ -154,27 +154,61 @@ header {
     color: white;
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    position: relative;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
-.header-title {
-    font-weight: bold;
-    font-size: 1.2em;
-    text-align: center;
-    flex: 1;
+header a {
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
 }
 
-.search-container {
-    position: relative;
-}
-
-.search-container input {
+header input {
     padding: 5px;
     border: none;
     border-radius: 5px;
-    display: none;
+    max-width: 200px; /* 検索バーの幅を調整 */
+    flex-grow: 1;
+    text-align: center; /* 中央に配置 */
+}
+
+.pc-only {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .pc-only {
+        display: none;
+    }
+
+    header input {
+        max-width: 90%; /* スマホの検索バー幅を調整 */
+    }
+
+    .card {
+        flex-basis: calc(50% - 10px);
+    }
+
+    main {
+        margin-top: 60px; /* ヘッダーの高さ分のマージンを追加 */
+    }
+}
+
+/* カード表示エリアのスタイル */
+#card-list {
+    padding: 40px; /* カード一覧の両端に余白を追加 */
+}
+
+@media (min-width: 1024px) {
+    #card-list {
+        max-width: 80%; /* PC画面での最大幅を設定 */
+        margin: 0 auto; /* 中央に配置 */
+    }
 }
 
 /* モーダルのスタイル */
@@ -197,13 +231,17 @@ header {
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
+    position: relative;
 }
 
 .close {
-    color: #aaa;
-    float: right;
+    color: #5f5f5f;
     font-size: 28px;
     font-weight: bold;
+    position: absolute;
+    top: -5px; /* モーダルの外側に配置 */
+    right: 50%;
+    transform: translateX(50%);
 }
 
 .close:hover,
@@ -249,24 +287,4 @@ header {
 .image-modal img {
     width: 95%;
     height: auto;
-}
-
-@media (max-width: 768px) {
-    .card {
-        flex-basis: calc(50% - 10px);
-    }
-
-    .mobile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background: #333;
-        color: white;
-    }
-
-    .header-title {
-        font-size: 1em;
-        margin-left: 10px;
-    }
 }
