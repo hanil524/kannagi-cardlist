@@ -8,21 +8,14 @@
     </head>
     <body>
         <header id="main-header">
-            <a href="https://www.kannagi-cardgame.jp/" target="_blank"
+            <a
+                href="https://www.kannagi-cardgame.jp/"
+                target="_blank"
+                class="pc-only"
                 >【巫 公式サイト】</a
             >
-            <span class="header-title">巫KANNAGIカードゲーム</span>
             <input type="text" id="search-box" placeholder="カード名で検索" />
         </header>
-        <div class="mobile-header">
-            <div class="hamburger-menu" onclick="toggleMenu()">&#9776;</div>
-            <div id="mobile-menu">
-                <div class="close-menu" onclick="toggleMenu()">&#10006;</div>
-                <a href="https://www.kannagi-cardgame.jp/" target="_blank"
-                    >巫 公式サイト</a
-                >
-            </div>
-        </div>
         <main>
             <section id="filter-section">
                 <div class="filter-group">
@@ -36,21 +29,20 @@
                 <div class="filter-group">
                     <label>シリーズ：</label>
                     <div class="filter-buttons" data-attribute="series">
-                        <button onclick="showAllCards()">全リスト</button>
                         <button
-                            data-attribute="series"
+                            data-filter="series"
                             onclick="toggleFilterCard('series', '夏VS冬バトルセット')"
                         >
                             夏VS冬バトルセット（1）
                         </button>
                         <button
-                            data-attribute="series"
+                            data-filter="series"
                             onclick="toggleFilterCard('series', '新季の到来')"
                         >
                             新季の到来（2）
                         </button>
                         <button
-                            data-attribute="series"
+                            data-filter="series"
                             onclick="toggleFilterCard('series', '百鬼夜行')"
                         >
                             百鬼夜行（3）
@@ -60,19 +52,34 @@
                 <div class="filter-group">
                     <label>季節：</label>
                     <div class="filter-buttons" data-attribute="season">
-                        <button onclick="toggleFilterCard('season', '春')">
+                        <button
+                            data-filter="season"
+                            onclick="toggleFilterCard('season', '春')"
+                        >
                             春
                         </button>
-                        <button onclick="toggleFilterCard('season', '夏')">
+                        <button
+                            data-filter="season"
+                            onclick="toggleFilterCard('season', '夏')"
+                        >
                             夏
                         </button>
-                        <button onclick="toggleFilterCard('season', '秋')">
+                        <button
+                            data-filter="season"
+                            onclick="toggleFilterCard('season', '秋')"
+                        >
                             秋
                         </button>
-                        <button onclick="toggleFilterCard('season', '冬')">
+                        <button
+                            data-filter="season"
+                            onclick="toggleFilterCard('season', '冬')"
+                        >
                             冬
                         </button>
-                        <button onclick="toggleFilterCard('season', '混化')">
+                        <button
+                            data-filter="season"
+                            onclick="toggleFilterCard('season', '混化')"
+                        >
                             混化
                         </button>
                     </div>
@@ -80,16 +87,28 @@
                 <div class="filter-group">
                     <label>札種類：</label>
                     <div class="filter-buttons" data-attribute="type">
-                        <button onclick="toggleFilterCard('type', '場所札')">
+                        <button
+                            data-filter="type"
+                            onclick="toggleFilterCard('type', '場所札')"
+                        >
                             場所札
                         </button>
-                        <button onclick="toggleFilterCard('type', '怪異札')">
+                        <button
+                            data-filter="type"
+                            onclick="toggleFilterCard('type', '怪異札')"
+                        >
                             怪異札
                         </button>
-                        <button onclick="toggleFilterCard('type', '道具札')">
+                        <button
+                            data-filter="type"
+                            onclick="toggleFilterCard('type', '道具札')"
+                        >
                             道具札
                         </button>
-                        <button onclick="toggleFilterCard('type', '季節札')">
+                        <button
+                            data-filter="type"
+                            onclick="toggleFilterCard('type', '季節札')"
+                        >
                             季節札
                         </button>
                     </div>
@@ -97,10 +116,18 @@
                 <div class="filter-group">
                     <button onclick="openModal('role')">【役割】</button>
                     <div id="role" class="filter-content" style="display: none">
-                        <button>バニラ</button>
-                        <button>魂加速</button>
-                        <button>札除去</button>
-                        <button>ランデス</button>
+                        <button onclick="toggleFilterCard('role', 'バニラ')">
+                            バニラ
+                        </button>
+                        <button onclick="toggleFilterCard('role', '魂加速')">
+                            魂加速
+                        </button>
+                        <button onclick="toggleFilterCard('role', '札除去')">
+                            札除去
+                        </button>
+                        <button onclick="toggleFilterCard('role', 'ランデス')">
+                            ランデス
+                        </button>
                     </div>
                 </div>
                 <div class="filter-group">
@@ -112,11 +139,21 @@
                         class="filter-content"
                         style="display: none"
                     >
-                        <button>逆境</button>
-                        <button>楽園</button>
-                        <button>速攻</button>
-                        <button>呪い</button>
-                        <button>神秘</button>
+                        <button onclick="toggleFilterCard('keyword', '逆境')">
+                            逆境
+                        </button>
+                        <button onclick="toggleFilterCard('keyword', '楽園')">
+                            楽園
+                        </button>
+                        <button onclick="toggleFilterCard('keyword', '速攻')">
+                            速攻
+                        </button>
+                        <button onclick="toggleFilterCard('keyword', '呪い')">
+                            呪い
+                        </button>
+                        <button onclick="toggleFilterCard('keyword', '神秘')">
+                            神秘
+                        </button>
                     </div>
                 </div>
                 <div class="filter-group">
@@ -126,11 +163,21 @@
                         class="filter-content"
                         style="display: none"
                     >
-                        <button>園</button>
-                        <button>闇</button>
-                        <button>霊</button>
-                        <button>火</button>
-                        <button>水</button>
+                        <button onclick="toggleFilterCard('attribute', '園')">
+                            園
+                        </button>
+                        <button onclick="toggleFilterCard('attribute', '闇')">
+                            闇
+                        </button>
+                        <button onclick="toggleFilterCard('attribute', '霊')">
+                            霊
+                        </button>
+                        <button onclick="toggleFilterCard('attribute', '火')">
+                            火
+                        </button>
+                        <button onclick="toggleFilterCard('attribute', '水')">
+                            水
+                        </button>
                     </div>
                 </div>
                 <div class="filter-group">
@@ -138,6 +185,9 @@
                 </div>
             </section>
             <section id="card-list">
+                <div id="no-cards-message" style="display: none">
+                    該当カードがありません。「ソート解除を押してください。」
+                </div>
                 <div
                     class="card"
                     data-number="29"
@@ -288,11 +338,9 @@
                 >
                     <img src="images/card_2_ (6).jpg" alt="Card 106" />
                 </div>
-                <!-- もっとカード... -->
             </section>
         </main>
 
-        <!-- モーダルウィンドウ -->
         <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -301,8 +349,12 @@
         </div>
 
         <div id="image-modal" class="image-modal">
-            <span class="close" onclick="closeImageModal()">&times;</span>
-            <img id="modal-image" src="" alt="Card Image" />
+            <img
+                id="modal-image"
+                src=""
+                alt="Card Image"
+                onclick="closeImageModal()"
+            />
         </div>
 
         <script src="scripts.js"></script>
