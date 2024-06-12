@@ -201,12 +201,12 @@ header input {
 
 /* カード表示エリアのスタイル */
 #card-list {
-    padding: 40px; /* カード一覧の両端に余白を追加 */
+    padding: 0px; /* カード一覧の両端に余白を追加 */
 }
 
 @media (min-width: 1024px) {
     #card-list {
-        max-width: 80%; /* PC画面での最大幅を設定 */
+        max-width: 75%; /* PC画面での最大幅を設定 */
         margin: 0 auto; /* 中央に配置 */
     }
 }
