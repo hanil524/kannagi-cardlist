@@ -1,5 +1,7 @@
+// ページがロードされた際の初期設定
 console.log("JavaScript is loaded");
 
+// フィルター条件を保持するオブジェクト
 const filters = {
     series: new Set(),
     season: new Set(),
@@ -9,13 +11,17 @@ const filters = {
     attribute: new Set(),
 };
 
+// ソート条件を保持する変数
 let sortCriteria = null;
 let sortOrder = "asc";
 
+// ページロード後にDOMの初期設定を行う
 document.addEventListener("DOMContentLoaded", () => {
+    // 検索ボックスにイベントリスナーを追加
     const searchBox = document.getElementById("search-box");
     searchBox.addEventListener("input", filterCardsByName);
 
+    // カード画像にクリックイベントを追加（モバイル用）
     const cards = document.querySelectorAll(".card img");
     cards.forEach((card) => {
         card.addEventListener("click", () => {
@@ -25,18 +31,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // フィルターボタンにクリックイベントを追加
     const filterButtons = document.querySelectorAll(".filter-buttons button");
     filterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
             const attribute = button.parentNode.getAttribute("data-attribute");
             const value = button.innerText.trim();
             toggleFilterCard(attribute, value);
         });
     });
 
+    // モーダルボタンにクリックイベントを追加
     const modalButtons = document.querySelectorAll(".filter-group button");
     modalButtons.forEach((button) => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
             const match = button
                 .getAttribute("onclick")
                 .match(/openModal\('(.+?)'\)/);
@@ -48,19 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// カード名でのフィルタリングを行う関数
 const filterCardsByName = (event) => {
     const query = event.target.value.toLowerCase();
     const cards = document.querySelectorAll(".card");
     cards.forEach((card) => {
         const name = card.dataset.name.toLowerCase();
-        if (name.includes(query)) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
+        card.style.display = name.includes(query) ? "block" : "none";
     });
 };
 
+// カードのソートを行う関数
 const sortCards = (criteria) => {
     if (sortCriteria === criteria) {
         sortOrder = sortOrder === "asc" ? "desc" : "asc";
@@ -74,23 +82,21 @@ const sortCards = (criteria) => {
     cards.sort((a, b) => {
         const aValue = parseInt(a.dataset[criteria]);
         const bValue = parseInt(b.dataset[criteria]);
-        if (sortOrder === "asc") {
-            return aValue - bValue;
-        } else {
-            return bValue - aValue;
-        }
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     });
     cards.forEach((card) => cardList.appendChild(card));
 };
 
+// フィルターをリセットする関数
 const resetFilters = () => {
     Object.keys(filters).forEach((key) => filters[key].clear());
     const cards = document.querySelectorAll(".card");
-    cards.forEach((card) => (card.style.display = ""));
+    cards.forEach((card) => (card.style.display = "block")); // すべてのカードを再表示
     document.getElementById("no-cards-message").style.display = "none";
     resetSort();
 };
 
+// ソートをリセットする関数
 const resetSort = () => {
     sortCriteria = null;
     sortOrder = "asc";
@@ -104,6 +110,7 @@ const resetSort = () => {
     cards.forEach((card) => cardList.appendChild(card));
 };
 
+// フィルター条件をトグルする関数
 const toggleFilterCard = (attribute, value) => {
     if (filters[attribute].has(value)) {
         filters[attribute].delete(value);
@@ -113,6 +120,7 @@ const toggleFilterCard = (attribute, value) => {
     filterCards();
 };
 
+// カードをフィルタリングする関数
 const filterCards = () => {
     const cards = document.querySelectorAll(".card");
     let anyVisible = false;
@@ -121,17 +129,19 @@ const filterCards = () => {
         for (const [attribute, values] of Object.entries(filters)) {
             if (values.size > 0) {
                 const cardAttribute = card.getAttribute(`data-${attribute}`);
-                const cardAttributes = cardAttribute.split(" "); // 複数の属性を考慮
-                if (
-                    !values.has(cardAttribute) &&
-                    !cardAttributes.some((attr) => values.has(attr))
-                ) {
+                const cardAttributes = cardAttribute
+                    ? cardAttribute.split(" ")
+                    : [];
+                const matches =
+                    values.has(cardAttribute) ||
+                    cardAttributes.some((attr) => values.has(attr));
+                if (!matches) {
                     shouldDisplay = false;
                     break;
                 }
             }
         }
-        card.style.display = shouldDisplay ? "" : "none";
+        card.style.display = shouldDisplay ? "block" : "none";
         if (shouldDisplay) {
             anyVisible = true;
         }
@@ -142,8 +152,8 @@ const filterCards = () => {
         : "block";
 };
 
+// モーダルを開く関数
 const openModal = (filterId) => {
-    console.log(`openModal called with filterId: ${filterId}`);
     const modal = document.getElementById("modal");
     const modalButtons = document.getElementById("modal-buttons");
     modalButtons.innerHTML = "";
@@ -166,15 +176,15 @@ const openModal = (filterId) => {
     });
 
     modal.style.display = "block";
-    console.log("Modal should be visible now");
 };
 
+// モーダルを閉じる関数
 const closeModal = () => {
-    console.log("closeModal called");
     const modal = document.getElementById("modal");
     modal.style.display = "none";
 };
 
+// 画像モーダルを開く関数
 const openImageModal = (src) => {
     const modal = document.getElementById("image-modal");
     const modalImage = document.getElementById("modal-image");
@@ -182,6 +192,7 @@ const openImageModal = (src) => {
     modal.style.display = "flex";
 };
 
+// 画像モーダルを閉じる関数
 const closeImageModal = () => {
     const modal = document.getElementById("image-modal");
     modal.style.display = "none";
