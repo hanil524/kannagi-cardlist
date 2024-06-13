@@ -63,6 +63,7 @@ header input {
 main {
     margin-top: 60px;
     padding: 20px;
+    padding-bottom: 100px; /* 下に余白を追加 */
 }
 
 #filter-section {
@@ -80,6 +81,7 @@ main {
     background-color: #f9f9f9;
     display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
     align-items: center;
+    font-size: 12px;
 }
 
 .sort-buttons,
@@ -108,7 +110,7 @@ main {
     flex-basis: calc(20% - 10px);
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.1s;
+    transition: transform 0.15s;
 }
 
 .card img {
@@ -118,7 +120,7 @@ main {
 }
 
 .card:hover {
-    transform: scale(1.5);
+    transform: scale(1.4);
 }
 
 @media (max-width: 1024px) {
@@ -130,6 +132,9 @@ main {
 @media (max-width: 768px) {
     .card {
         flex-basis: calc(33.33% - 10px);
+    }
+    .card:hover {
+        transform: none; /* スマホ表示でのマウスオーバー機能を無効化 */
     }
 }
 
