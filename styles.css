@@ -78,6 +78,8 @@ main {
     padding: 10px;
     border-radius: 5px;
     background-color: #f9f9f9;
+    display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
+    align-items: center;
 }
 
 .sort-buttons,
@@ -85,6 +87,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    cursor: pointer;
 }
 
 .filter-content {
@@ -148,7 +151,6 @@ main {
     }
 }
 
-/* ヘッダーのスタイル */
 header {
     background: #333;
     color: white;
