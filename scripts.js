@@ -74,7 +74,7 @@ const sortCards = (criteria) => {
         sortOrder = sortOrder === "asc" ? "desc" : "asc";
     } else {
         sortCriteria = criteria;
-        sortOrder = "asc";
+        sortOrder = criteria === "number" ? "desc" : "asc"; // 'number'の場合、初回は'降順'に設定
     }
 
     const cardList = document.getElementById("card-list");
