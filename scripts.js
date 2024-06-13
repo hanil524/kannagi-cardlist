@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filterButtons.forEach((button) => {
         button.addEventListener("click", (event) => {
             event.stopPropagation();
-            const attribute = button.parentNode.getAttribute("data-attribute");
+            const attribute = button.getAttribute("data-filter");
             const value = button.innerText.trim();
             toggleFilterCard(attribute, value);
         });
@@ -112,6 +112,10 @@ const resetSort = () => {
 
 // フィルター条件をトグルする関数
 const toggleFilterCard = (attribute, value) => {
+    if (!attribute || !filters[attribute]) {
+        console.error(`Attribute "${attribute}" not found in filters.`);
+        return;
+    }
     if (filters[attribute].has(value)) {
         filters[attribute].delete(value);
     } else {
