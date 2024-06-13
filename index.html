@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>巫カードリスト</title>
         <link rel="stylesheet" href="styles.css" />
+        <link rel="icon" href="favicon/favicon.ico" />
     </head>
     <body>
         <header id="main-header">
@@ -12,7 +13,7 @@
                 href="https://www.kannagi-cardgame.jp/"
                 target="_blank"
                 class="pc-only"
-                >【巫 公式サイト】</a
+                >【巫 公式サイトはこちら】</a
             >
             <input type="text" id="search-box" placeholder="カード名で検索" />
         </header>
@@ -114,7 +115,7 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <button onclick="openModal('role')">【役割】</button>
+                    <button onclick="openModal('role')">■役割</button>
                     <div id="role" class="filter-content" style="display: none">
                         <button onclick="toggleFilterCard('role', 'バニラ')">
                             バニラ
@@ -131,9 +132,7 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <button onclick="openModal('keyword')">
-                        【キーワード】
-                    </button>
+                    <button onclick="openModal('keyword')">■キーワード</button>
                     <div
                         id="keyword"
                         class="filter-content"
@@ -157,7 +156,7 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <button onclick="openModal('attribute')">【属性】</button>
+                    <button onclick="openModal('attribute')">■属性</button>
                     <div
                         id="attribute"
                         class="filter-content"
@@ -185,7 +184,7 @@
                     </div>
                 </div>
                 <div class="filter-group">
-                    <button onclick="resetFilters()">ソート解除</button>
+                    <button onclick="resetFilters()">※ソート解除</button>
                 </div>
             </section>
             <section id="card-list">
@@ -351,7 +350,6 @@
                 <div id="modal-buttons" class="modal-buttons"></div>
             </div>
         </div>
-
         <div id="image-modal" class="image-modal">
             <img
                 id="modal-image"
@@ -360,7 +358,6 @@
                 onclick="closeImageModal()"
             />
         </div>
-
         <script src="scripts.js"></script>
     </body>
 </html>
