@@ -1,298 +1,303 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: rgb(70, 69, 69);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(70, 69, 69);
 }
 
 header {
-    background: #333;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background: #333;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 header a {
-    color: white;
-    text-decoration: none;
-    margin-right: 20px;
+  color: white;
+  text-decoration: none;
+  margin-right: 20px;
 }
 
 header input {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
 }
 
 .mobile-header {
-    display: none;
-    background: #333;
-    color: white;
-    padding: 10px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
+  display: none;
+  background: #333;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
 }
 
 .hamburger-menu {
-    font-size: 24px;
-    cursor: pointer;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 #mobile-menu {
-    display: none;
-    flex-direction: column;
-    background: #000;
-    padding: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1001;
+  display: none;
+  flex-direction: column;
+  background: #000;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
 }
 
 .close-menu {
-    font-size: 24px;
-    cursor: pointer;
-    align-self: flex-end;
+  font-size: 24px;
+  cursor: pointer;
+  align-self: flex-end;
 }
 
 main {
-    margin-top: 60px;
-    padding: 20px;
-    padding-bottom: 100px; /* 下に余白を追加 */
+  margin-top: 60px;
+  padding: 20px;
+  padding-bottom: 100px; /* 下に余白を追加 */
 }
 
 #filter-section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
 .filter-group {
-    margin: 10px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
-    align-items: center;
-    font-size: 12px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
+  align-items: center;
+  font-size: 12px;
 }
 
 .sort-buttons,
 .filter-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  cursor: pointer;
 }
 
 .filter-content {
-    display: none;
-    flex-direction: column;
-    margin-top: 10px;
-    gap: 10px;
+  display: none;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
 }
 
 #card-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .card {
-    flex-basis: calc(20% - 10px);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.08s;
+  flex-basis: calc(20% - 10px);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.08s;
 }
 
 .card img {
-    width: 100%;
-    display: block;
-    border-radius: 15px;
+  background-color: #f0f0f0; /* 適宜背景色を設定 */
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  /* 画像が読み込まれるまでの間に何も表示されないように */
+  background: url('path/to/placeholder-image.png') center center no-repeat;
+  background-size: cover;
 }
 
 .card:hover {
-    transform: scale(1.45);
+  transform: scale(1.45);
 }
 
 @media (max-width: 1024px) {
-    .card {
-        flex-basis: calc(25% - 10px);
-    }
+  .card {
+    flex-basis: calc(25% - 10px);
+  }
 }
 
 @media (max-width: 768px) {
-    .card {
-        flex-basis: calc(33.33% - 10px);
-    }
-    .card:hover {
-        transform: none; /* スマホ表示でのマウスオーバー機能を無効化 */
-    }
+  .card {
+    flex-basis: calc(33.33% - 10px);
+  }
+  .card:hover {
+    transform: none; /* スマホ表示でのマウスオーバー機能を無効化 */
+  }
 }
 
 @media (max-width: 600px) {
-    .mobile-header {
-        display: flex;
-    }
-    header {
-        display: none;
-    }
-    .card {
-        flex-basis: calc(50% - 10px);
-    }
+  .mobile-header {
+    display: flex;
+  }
+  header {
+    display: none;
+  }
+  .card {
+    flex-basis: calc(50% - 10px);
+  }
 }
 
 @media (max-width: 400px) {
-    .card {
-        flex-basis: 100%;
-    }
+  .card {
+    flex-basis: 100%;
+  }
 }
 
 header {
-    background: #333;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
+  background: #333;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
 }
 
 header a {
-    color: white;
-    text-decoration: none;
-    margin-right: 10px;
+  color: white;
+  text-decoration: none;
+  margin-right: 10px;
 }
 
 header input {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    max-width: 200px; /* 検索バーの幅を調整 */
-    flex-grow: 1;
-    text-align: center; /* 中央に配置 */
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  max-width: 200px; /* 検索バーの幅を調整 */
+  flex-grow: 1;
+  text-align: center; /* 中央に配置 */
 }
 
 .pc-only {
-    display: block;
+  display: block;
 }
 
 @media (max-width: 768px) {
-    .pc-only {
-        display: none;
-    }
+  .pc-only {
+    display: none;
+  }
 
-    header input {
-        max-width: 90%; /* スマホの検索バー幅を調整 */
-    }
+  header input {
+    max-width: 90%; /* スマホの検索バー幅を調整 */
+  }
 
-    .card {
-        flex-basis: calc(50% - 10px);
-    }
+  .card {
+    flex-basis: calc(50% - 10px);
+  }
 
-    main {
-        margin-top: 60px; /* ヘッダーの高さ分のマージンを追加 */
-    }
+  main {
+    margin-top: 60px; /* ヘッダーの高さ分のマージンを追加 */
+  }
 }
 
 /* カード表示エリアのスタイル */
 #card-list {
-    padding: 0px; /* カード一覧の両端に余白を追加 */
+  padding: 0px; /* カード一覧の両端に余白を追加 */
 }
 
 @media (min-width: 1024px) {
-    #card-list {
-        max-width: 75%; /* PC画面での最大幅を設定 */
-        margin: 0 auto; /* 中央に配置 */
-    }
+  #card-list {
+    max-width: 75%; /* PC画面での最大幅を設定 */
+    margin: 0 auto; /* 中央に配置 */
+  }
 }
 
 /* モーダルのスタイル */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    position: relative;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
 }
 
 .close {
-    color: #5f5f5f;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: -5px; /* モーダルの外側に配置 */
-    right: 50%;
-    transform: translateX(50%);
+  color: #5f5f5f;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: -5px; /* モーダルの外側に配置 */
+  right: 50%;
+  transform: translateX(50%);
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .modal-buttons button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .modal-buttons button:hover {
-    background-color: #ccc;
+  background-color: #ccc;
 }
 
 /* 画像モーダル */
 .image-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    justify-content: center;
-    align-items: center;
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  justify-content: center;
+  align-items: center;
 }
 
 .image-modal img {
-    width: 95%;
-    height: auto;
+  width: 95%;
+  height: auto;
 }
