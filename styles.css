@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: rgb(70, 69, 69);
 }
 
 header {
@@ -110,7 +111,7 @@ main {
     flex-basis: calc(20% - 10px);
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.15s;
+    transition: transform 0.08s;
 }
 
 .card img {
@@ -120,7 +121,7 @@ main {
 }
 
 .card:hover {
-    transform: scale(1.4);
+    transform: scale(1.45);
 }
 
 @media (max-width: 1024px) {
