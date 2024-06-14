@@ -57,8 +57,24 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 画像の遅延読み込みを設定
-    const lazyImages = document.querySelectorAll("img[data-src]");
+    // 初期表示範囲の画像を選択し、それ以外の画像は遅延読み込み
+    const initialImages = document.querySelectorAll(
+        "#card-list .card:nth-child(-n+10) img"
+    ); // 初期表示範囲の画像を選択
+    const lazyImages = document.querySelectorAll(
+        "#card-list .card:nth-child(n+11) img"
+    ); // それ以降の画像
+
+    // 初期表示範囲の画像は通常読み込み
+    initialImages.forEach((img) => {
+        const src = img.getAttribute("data-src");
+        if (src) {
+            img.src = src;
+            img.removeAttribute("data-src");
+        }
+    });
+
+    // それ以降の画像は遅延読み込みを設定
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
