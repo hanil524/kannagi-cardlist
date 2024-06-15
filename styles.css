@@ -1,328 +1,228 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: rgb(70, 69, 69);
-}
+// ページがロードされた際の初期設定
+console.log('JavaScript is loaded');
 
-header {
-  background: #333;
-  color: white;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+// フィルター条件を保持するオブジェクト
+const filters = {
+  series: new Set(),
+  season: new Set(),
+  type: new Set(),
+  role: new Set(),
+  keyword: new Set(),
+  attribute: new Set()
+};
 
-header a {
-  color: white;
-  text-decoration: none;
-  margin-right: 20px;
-}
+// ソート条件を保持する変数
+let sortCriteria = null;
+let sortOrder = 'asc';
 
-header input {
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-}
+// ページロード後にDOMの初期設定を行う
+document.addEventListener('DOMContentLoaded', () => {
+  // 検索ボックスにイベントリスナーを追加
+  const searchBox = document.getElementById('search-box');
+  searchBox.addEventListener('input', filterCardsByName);
 
-.mobile-header {
-  display: none;
-  background: #333;
-  color: white;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
+  // カード画像にクリックイベントを追加（モバイル用）
+  const cards = document.querySelectorAll('.card img');
+  cards.forEach((card) => {
+    card.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        openImageModal(card.src);
+      }
+    });
+  });
 
-.hamburger-menu {
-  font-size: 24px;
-  cursor: pointer;
-}
+  // フィルターボタンにクリックイベントを追加
+  const filterButtons = document.querySelectorAll('.filter-buttons button');
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const attribute = button.getAttribute('data-filter');
+      const value = button.innerText.trim();
+      toggleFilterCard(attribute, value);
+    });
+  });
 
-#mobile-menu {
-  display: none;
-  flex-direction: column;
-  background: #000;
-  padding: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1001;
-}
+  // モーダルボタンにクリックイベントを追加
+  const modalButtons = document.querySelectorAll('.filter-group button');
+  modalButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const match = button.getAttribute('onclick').match(/openModal\('(.+?)'\)/);
+      if (match) {
+        const filterId = match[1];
+        openModal(filterId);
+      }
+    });
+  });
 
-.close-menu {
-  font-size: 24px;
-  cursor: pointer;
-  align-self: flex-end;
-}
+  // 初期表示範囲の画像を選択し、それ以外の画像は遅延読み込み
+  const initialImages = document.querySelectorAll('#card-list .card:nth-child(-n+10) img'); // 初期表示範囲の画像を選択
+  const lazyImages = document.querySelectorAll('#card-list .card:nth-child(n+11) img'); // それ以降の画像
 
-main {
-  margin-top: 60px;
-  padding: 20px;
-  padding-bottom: 100px; /* 下に余白を追加 */
-}
+  // 初期表示範囲の画像は通常読み込み
+  initialImages.forEach((img) => {
+    const src = img.getAttribute('data-src');
+    if (src) {
+      img.src = src;
+      img.removeAttribute('data-src');
+    }
+  });
 
-#filter-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 0 auto;
-}
+  // それ以降の画像は遅延読み込みを設定
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+        img.alt = img.getAttribute('data-alt'); // alt属性を復元
+        observer.unobserve(img);
+      }
+    });
+  });
 
-#filter-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin-bottom: 20px; /* フィルターボタンからカード画像までの間隔を広げる */
-  gap: 10px;
-}
+  lazyImages.forEach((img) => {
+    img.src = ''; // プレースホルダー画像を使わずにsrc属性を空に設定
+    img.alt = ''; // alt属性を一時的に空に設定
+    observer.observe(img);
+  });
+});
 
-/* フィルターボタンからカード画像までの間隔を広げる（PC表示のみ） */
-@media (min-width: 768px) {
-  #filter-section {
-    margin-bottom: 80px; /* フィルターボタンからカード画像までの間隔を広げる */
-  }
-}
+// カード名でのフィルタリングを行う関数
+const filterCardsByName = (event) => {
+  const query = event.target.value.toLowerCase();
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card) => {
+    const name = card.dataset.name.toLowerCase();
+    const attributes = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
+    card.style.display = name.includes(query) || attributes.includes(query) ? 'block' : 'none';
+  });
+};
 
-.filter-group {
-  margin: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  gap: 10px; /* ボタン間の隙間を調整 */
-}
-
-.sort-buttons,
-.filter-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.filter-content {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
-  gap: 10px;
-}
-
-#card-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
-.card {
-  flex-basis: calc(20% - 10px);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.08s;
-}
-
-.card img {
-  background-color: #f0f0f0; /* 適宜背景色を設定 */
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  /* 画像が読み込まれるまでの間に何も表示されないように */
-  background: url('path/to/placeholder-image.png') center center no-repeat;
-  background-size: cover;
-}
-
-.card:hover {
-  transform: scale(1.45);
-}
-
-@media (max-width: 1024px) {
-  .card {
-    flex-basis: calc(25% - 10px);
-  }
-}
-
-@media (max-width: 768px) {
-  .card {
-    flex-basis: calc(33.33% - 10px);
-  }
-  .card:hover {
-    transform: none; /* スマホ表示でのマウスオーバー機能を無効化 */
-  }
-}
-
-@media (max-width: 600px) {
-  .mobile-header {
-    display: flex;
-  }
-  header {
-    display: none;
-  }
-  .card {
-    flex-basis: calc(50% - 10px);
-  }
-}
-
-@media (max-width: 400px) {
-  .card {
-    flex-basis: 100%;
-  }
-}
-
-header {
-  background: #333;
-  color: white;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
-header a {
-  color: white;
-  text-decoration: none;
-  margin-right: 10px;
-}
-
-header input {
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-  max-width: 200px; /* 検索バーの幅を調整 */
-  flex-grow: 1;
-  text-align: center; /* 中央に配置 */
-}
-
-.pc-only {
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .pc-only {
-    display: none;
+// カードのソートを行う関数
+const sortCards = (criteria) => {
+  if (sortCriteria === criteria) {
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCriteria = criteria;
+    sortOrder = criteria === 'number' ? 'desc' : 'asc'; // 'number'の場合、初回は'降順'に設定
   }
 
-  header input {
-    max-width: 90%; /* スマホの検索バー幅を調整 */
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+  cards.sort((a, b) => {
+    const aValue = parseInt(a.dataset[criteria]);
+    const bValue = parseInt(b.dataset[criteria]);
+    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+  });
+  cards.forEach((card) => cardList.appendChild(card));
+};
+
+// フィルターをリセットする関数
+const resetFilters = () => {
+  Object.keys(filters).forEach((key) => filters[key].clear());
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card) => (card.style.display = 'block')); // すべてのカードを再表示
+  document.getElementById('no-cards-message').style.display = 'none';
+  resetSort();
+};
+
+// ソートをリセットする関数
+const resetSort = () => {
+  sortCriteria = null;
+  sortOrder = 'asc';
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+  cards.sort((a, b) => {
+    const aValue = parseInt(a.dataset.number);
+    const bValue = parseInt(b.dataset.number);
+    return aValue - bValue;
+  });
+  cards.forEach((card) => cardList.appendChild(card));
+};
+
+// フィルター条件をトグルする関数
+const toggleFilterCard = (attribute, value) => {
+  if (!attribute || !filters[attribute]) {
+    console.error(`Attribute "${attribute}" not found in filters.`);
+    return;
+  }
+  if (filters[attribute].has(value)) {
+    filters[attribute].delete(value);
+  } else {
+    filters[attribute].add(value);
+  }
+  filterCards();
+};
+
+// カードをフィルタリングする関数
+const filterCards = () => {
+  const cards = document.querySelectorAll('.card');
+  let anyVisible = false;
+  cards.forEach((card) => {
+    let shouldDisplay = true;
+    for (const [attribute, values] of Object.entries(filters)) {
+      if (values.size > 0) {
+        const cardAttribute = card.getAttribute(`data-${attribute}`);
+        const cardAttributes = cardAttribute ? cardAttribute.split(' ') : [];
+        const matches = values.has(cardAttribute) || cardAttributes.some((attr) => values.has(attr));
+        if (!matches) {
+          shouldDisplay = false;
+          break;
+        }
+      }
+    }
+    card.style.display = shouldDisplay ? 'block' : 'none';
+    if (shouldDisplay) {
+      anyVisible = true;
+    }
+  });
+
+  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+};
+
+// モーダルを開く関数
+const openModal = (filterId) => {
+  const modal = document.getElementById('modal');
+  const modalButtons = document.getElementById('modal-buttons');
+  modalButtons.innerHTML = '';
+
+  const filterElement = document.getElementById(filterId);
+  if (!filterElement) {
+    console.error(`Element with id ${filterId} not found`);
+    return;
   }
 
-  .card {
-    flex-basis: calc(50% - 10px);
-  }
+  const filterContent = filterElement.querySelectorAll('button');
+  filterContent.forEach((button) => {
+    const newButton = document.createElement('button');
+    newButton.innerText = button.innerText;
+    newButton.onclick = () => {
+      toggleFilterCard(filterId, button.innerText.trim());
+      closeModal();
+    };
+    modalButtons.appendChild(newButton);
+  });
 
-  main {
-    margin-top: 60px; /* ヘッダーの高さ分のマージンを追加 */
-  }
-}
+  modal.style.display = 'block';
+};
 
-/* カード表示エリアのスタイル */
-#card-list {
-  padding: 0px; /* カード一覧の両端に余白を追加 */
-}
+// モーダルを閉じる関数
+const closeModal = () => {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'none';
+};
 
-@media (min-width: 1024px) {
-  #card-list {
-    max-width: 75%; /* PC画面での最大幅を設定 */
-    margin: 0 auto; /* 中央に配置 */
-  }
-}
+// 画像モーダルを開く関数
+const openImageModal = (src) => {
+  const modal = document.getElementById('image-modal');
+  const modalImage = document.getElementById('modal-image');
+  modalImage.src = src;
+  modal.style.display = 'flex';
+};
 
-/* モーダルのスタイル */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 600px;
-  position: relative;
-}
-
-.close {
-  color: #5f5f5f;
-  font-size: 28px;
-  font-weight: bold;
-  position: absolute;
-  top: -5px; /* モーダルの外側に配置 */
-  right: 50%;
-  transform: translateX(50%);
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.modal-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.modal-buttons button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.modal-buttons button:hover {
-  background-color: #ccc;
-}
-
-/* 画像モーダル */
-.image-modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  justify-content: center;
-  align-items: center;
-}
-
-.image-modal img {
-  width: 95%;
-  height: auto;
-}
-
-#search-box {
-  width: calc(100% - 20px); /* 余白を含む幅調整 */
-  padding: 10px; /* 内側の余白調整 */
-  display: block;
-  box-sizing: border-box; /* パディングを含む幅調整 */
-}
+// 画像モーダルを閉じる関数
+const closeImageModal = () => {
+  const modal = document.getElementById('image-modal');
+  modal.style.display = 'none';
+};
