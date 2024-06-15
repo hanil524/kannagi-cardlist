@@ -67,11 +67,26 @@ main {
   padding-bottom: 100px; /* 下に余白を追加 */
 }
 
+#filter-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
 #filter-section {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* フィルターボタンからカード画像までの間隔を広げる */
+  gap: 10px;
+}
+
+/* フィルターボタンからカード画像までの間隔を広げる（PC表示のみ） */
+@media (min-width: 768px) {
+  #filter-section {
+    margin-bottom: 80px; /* フィルターボタンからカード画像までの間隔を広げる */
+  }
 }
 
 .filter-group {
@@ -82,7 +97,9 @@ main {
   background-color: #f9f9f9;
   display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
+  justify-content: center;
   font-size: 12px;
+  gap: 10px; /* ボタン間の隙間を調整 */
 }
 
 .sort-buttons,
@@ -96,6 +113,7 @@ main {
 .filter-content {
   display: none;
   flex-direction: column;
+  align-items: center;
   margin-top: 10px;
   gap: 10px;
 }
@@ -300,4 +318,11 @@ header input {
 .image-modal img {
   width: 95%;
   height: auto;
+}
+
+#search-box {
+  width: calc(100% - 20px); /* 余白を含む幅調整 */
+  padding: 10px; /* 内側の余白調整 */
+  display: block;
+  box-sizing: border-box; /* パディングを含む幅調整 */
 }
