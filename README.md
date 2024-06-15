@@ -6,6 +6,3 @@ Kannagi-cardlistは「巫KANNAGIカードゲーム」の製品リストを管理
 
 ## Author
 [twitter](https://x.com/hanil524)
-
-## Licence
-[MIT](https://......)
