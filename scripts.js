@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = entry.target;
         img.src = img.getAttribute('data-src');
         img.removeAttribute('data-src');
+        img.alt = img.getAttribute('data-alt'); // alt属性を復元
         observer.unobserve(img);
       }
     });
@@ -82,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lazyImages.forEach((img) => {
     img.src = ''; // プレースホルダー画像を使わずにsrc属性を空に設定
+    img.alt = ''; // alt属性を一時的に空に設定
     observer.observe(img);
   });
 });
@@ -92,7 +94,8 @@ const filterCardsByName = (event) => {
   const cards = document.querySelectorAll('.card');
   cards.forEach((card) => {
     const name = card.dataset.name.toLowerCase();
-    card.style.display = name.includes(query) ? 'block' : 'none';
+    const attributes = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
+    card.style.display = name.includes(query) || attributes.includes(query) ? 'block' : 'none';
   });
 };
 
