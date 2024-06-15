@@ -15,32 +15,34 @@
     </header>
     <main>
       <section id="filter-section">
-        <div class="filter-group">
-          <label>ソート順：</label>
-          <div class="sort-buttons">
-            <button onclick="sortCards('number')">No.</button>
-            <button onclick="sortCards('cost')">コスト</button>
-            <button onclick="sortCards('power')">力</button>
+        <div id="filter-container">
+          <div class="filter-group">
+            <label>ソート順：</label>
+            <div class="sort-buttons">
+              <button onclick="sortCards('number')">No.</button>
+              <button onclick="sortCards('cost')">コスト</button>
+              <button onclick="sortCards('power')">力</button>
+            </div>
           </div>
-        </div>
-        <div class="filter-group">
-          <label>条件：</label>
-          <div class="filter-buttons">
-            <button onclick="openModal('series')">シリーズ</button>
-            <button onclick="openModal('season')">季節</button>
-            <button onclick="openModal('type')">札種類</button>
+          <div class="filter-group">
+            <label>条件：</label>
+            <div class="filter-buttons">
+              <button onclick="openModal('series')">シリーズ</button>
+              <button onclick="openModal('season')">季節</button>
+              <button onclick="openModal('type')">札種類</button>
+            </div>
           </div>
-        </div>
-        <div class="filter-group">
-          <label>要素：</label>
-          <div class="filter-buttons">
-            <button onclick="openModal('role')">役割</button>
-            <button onclick="openModal('keyword')">キーワード</button>
-            <button onclick="openModal('attribute')">属性</button>
+          <div class="filter-group">
+            <label>要素：</label>
+            <div class="filter-buttons">
+              <button onclick="openModal('role')">役割</button>
+              <button onclick="openModal('keyword')">キーワード</button>
+              <button onclick="openModal('attribute')">属性</button>
+            </div>
           </div>
-        </div>
-        <div class="filter-group">
-          <button onclick="resetFilters()">※ソート解除</button>
+          <div class="filter-group">
+            <button onclick="resetFilters()">※ソート解除</button>
+          </div>
         </div>
       </section>
       <section id="card-list">
@@ -62,6 +64,411 @@
         </div>
         <div
           class="card"
+          data-number="2"
+          data-name="霊気漂う橿木集落"
+          data-cost="0"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="バニラ"
+          data-keyword=""
+          data-attribute="廃集落 幽霊"
+        >
+          <img data-src="images/card_1_ (2).jpg" src="placeholder.jpg" alt="Card 2" />
+        </div>
+        <div
+          class="card"
+          data-number="3"
+          data-name="神隠しの廃集落"
+          data-cost="0"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="魂加速 自傷ダメ"
+          data-keyword=""
+          data-attribute="廃集落 神隠し"
+        >
+          <img data-src="images/card_1_ (3).jpg" src="placeholder.jpg" alt="Card 3" />
+        </div>
+        <div
+          class="card"
+          data-number="4"
+          data-name="発狂人形の家"
+          data-cost="1"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="廃屋 人形"
+        >
+          <img data-src="images/card_1_ (4).jpg" src="placeholder.jpg" alt="Card 4" />
+        </div>
+        <div
+          class="card"
+          data-number="5"
+          data-name="怨まれた別荘"
+          data-cost="2"
+          data-power="2"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="直接ダメ 札ダメ"
+          data-keyword="憤怒"
+          data-attribute="廃別荘"
+        >
+          <img data-src="images/card_1_ (5).jpg" src="placeholder.jpg" alt="Card 5" />
+        </div>
+        <div
+          class="card"
+          data-number="6"
+          data-name="腐乱別荘"
+          data-cost="3"
+          data-power="2"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role=""
+          data-keyword="速攻"
+          data-attribute="廃別荘"
+        >
+          <img data-src="images/card_1_ (6).jpg" src="placeholder.jpg" alt="Card 6" />
+        </div>
+        <div
+          class="card"
+          data-number="7"
+          data-name="放棄された怪奇現象の家"
+          data-cost="4"
+          data-power="3"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="バフ"
+          data-keyword=""
+          data-attribute="廃屋 怨霊"
+        >
+          <img data-src="images/card_1_ (7).jpg" src="placeholder.jpg" alt="Card 7" />
+        </div>
+        <div
+          class="card"
+          data-number="8"
+          data-name="放棄された怪奇現象の家"
+          data-cost="5"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="直接ダメ 札ダメ"
+          data-keyword=""
+          data-attribute="廃旅館 動物"
+        >
+          <img data-src="images/card_1_ (8).jpg" src="placeholder.jpg" alt="Card 8" />
+        </div>
+        <div
+          class="card"
+          data-number="9"
+          data-name="荒れ果てた幻想病院"
+          data-cost="6"
+          data-power="3"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role="公開ドロー ドロー"
+          data-keyword=""
+          data-attribute="廃病院 蟲"
+        >
+          <img data-src="images/card_1_ (9).jpg" src="placeholder.jpg" alt="Card 9" />
+        </div>
+        <div
+          class="card"
+          data-number="10"
+          data-name="炎河荘"
+          data-cost="8"
+          data-power="5"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role=""
+          data-keyword=""
+          data-attribute="廃旅館 火事"
+        >
+          <img data-src="images/card_1_ (10).jpg" src="placeholder.jpg" alt="Card 10" />
+        </div>
+        <div
+          class="card"
+          data-number="11"
+          data-name="受刑者のアジト"
+          data-cost="10"
+          data-power="7"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role=""
+          data-keyword="神秘 憤怒 速攻"
+          data-attribute="廃屋 罪 呪"
+        >
+          <img data-src="images/card_1_ (11).jpg" src="placeholder.jpg" alt="Card 11" />
+        </div>
+        <div
+          class="card"
+          data-number="12"
+          data-name="辿り着けない神社"
+          data-cost="13"
+          data-power="10"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="場所札"
+          data-role=""
+          data-keyword="神秘 憤怒 速攻"
+          data-attribute="廃屋 罪 呪"
+        >
+          <img data-src="images/card_1_ (12).jpg" src="placeholder.jpg" alt="Card 12" />
+        </div>
+        <div
+          class="card"
+          data-number="13"
+          data-name="病ねずみ"
+          data-cost="0"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="蟲 病"
+        >
+          <img data-src="images/card_1_ (13).jpg" src="placeholder.jpg" alt="Card 13" />
+        </div>
+        <div
+          class="card"
+          data-number="14"
+          data-name="蠢く黒い影"
+          data-cost="2"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="陰 蟲"
+        >
+          <img data-src="images/card_1_ (14).jpg" src="placeholder.jpg" alt="Card 14" />
+        </div>
+        <div
+          class="card"
+          data-number="15"
+          data-name="変異した蚯蚓"
+          data-cost="5"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ 公開ドロー ドロー"
+          data-keyword=""
+          data-attribute="蟲"
+        >
+          <img data-src="images/card_1_ (15).jpg" src="placeholder.jpg" alt="Card 15" />
+        </div>
+        <div
+          class="card"
+          data-number="16"
+          data-name="巫の幽霊"
+          data-cost="6"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="幽霊"
+        >
+          <img data-src="images/card_1_ (16).jpg" src="placeholder.jpg" alt="Card 16" />
+        </div>
+        <div
+          class="card"
+          data-number="17"
+          data-name="狐面の神"
+          data-cost="7"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ 魂利用"
+          data-keyword=""
+          data-attribute="神 狐 狐面の神"
+        >
+          <img data-src="images/card_1_ (17).jpg" src="placeholder.jpg" alt="Card 17" />
+        </div>
+        <div
+          class="card"
+          data-number="18"
+          data-name="死を告げる黒蝶"
+          data-cost="11"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="怪異札"
+          data-role="直接ダメ 手札公開"
+          data-keyword=""
+          data-attribute="蟲 死神 神"
+        >
+          <img data-src="images/card_1_ (18).jpg" src="placeholder.jpg" alt="Card 18" />
+        </div>
+        <div
+          class="card"
+          data-number="19"
+          data-name="草刈り鎌"
+          data-cost="1"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="道具札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="鎌"
+        >
+          <img data-src="images/card_1_ (19).jpg" src="placeholder.jpg" alt="Card 19" />
+        </div>
+        <div
+          class="card"
+          data-number="20"
+          data-name="ランタン"
+          data-cost="2"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="道具札"
+          data-role="直接ダメ 手札公開"
+          data-keyword=""
+          data-attribute="鎌"
+        >
+          <img data-src="images/card_1_ (20).jpg" src="placeholder.jpg" alt="Card 20" />
+        </div>
+        <div
+          class="card"
+          data-number="21"
+          data-name="呪いの藁人形"
+          data-cost="4"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="道具札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="人形 藁人形 呪"
+        >
+          <img data-src="images/card_1_ (21).jpg" src="placeholder.jpg" alt="Card 21" />
+        </div>
+        <div
+          class="card"
+          data-number="22"
+          data-name="発狂する日本人形"
+          data-cost="5"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="道具札"
+          data-role="直接ダメ 手札入替"
+          data-keyword=""
+          data-attribute="人形 日本人形"
+        >
+          <img data-src="images/card_1_ (22).jpg" src="placeholder.jpg" alt="Card 22" />
+        </div>
+        <div
+          class="card"
+          data-number="23"
+          data-name="真夏の夜"
+          data-cost="6"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="夏"
+          data-type="季節札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="蟲 幽霊"
+        >
+          <img data-src="images/card_1_ (23).jpg" src="placeholder.jpg" alt="Card 23" />
+        </div>
+        <div
+          class="card"
+          data-number="24"
+          data-name="漆黒の建造物"
+          data-cost="0"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="バニラ"
+          data-keyword=""
+          data-attribute="廃マンション 陰"
+        >
+          <img data-src="images/card_1_ (24).jpg" src="placeholder.jpg" alt="Card 24" />
+        </div>
+        <div
+          class="card"
+          data-number="25"
+          data-name="暗予劇場"
+          data-cost="0"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="バニラ"
+          data-keyword=""
+          data-attribute="廃劇場 胎内"
+        >
+          <img data-src="images/card_1_ (25).jpg" src="placeholder.jpg" alt="Card 25" />
+        </div>
+        <div
+          class="card"
+          data-number="26"
+          data-name="神隠しの廃集落"
+          data-cost="0"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="ロック"
+          data-keyword=""
+          data-attribute="廃集落 神隠し"
+        >
+          <img data-src="images/card_1_ (26).jpg" src="placeholder.jpg" alt="Card 26" />
+        </div>
+        <div
+          class="card"
+          data-number="27"
+          data-name="血液の貯蔵庫"
+          data-cost="1"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="魂加速"
+          data-keyword="不屈"
+          data-attribute="廃別荘 血液"
+        >
+          <img data-src="images/card_1_ (27).jpg" src="placeholder.jpg" alt="Card 27" />
+        </div>
+        <div
+          class="card"
+          data-number="28"
+          data-name="東洋の廃洋館"
+          data-cost="2"
+          data-power="3"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="バニラ"
+          data-keyword=""
+          data-attribute="廃洋館 石像"
+        >
+          <img data-src="images/card_1_ (28).jpg" src="placeholder.jpg" alt="Card 28" />
+        </div>
+        <div
+          class="card"
           data-number="29"
           data-name="朧車"
           data-cost="4"
@@ -69,11 +476,26 @@
           data-series="夏VS冬バトルセット"
           data-season="冬"
           data-type="場所札"
-          data-role="札除去 2種類札"
+          data-role="札除去 2種類札 バニラ"
           data-keyword=""
           data-attribute="廃車 妖怪"
         >
           <img data-src="images/card_1_ (29).jpg" src="placeholder.jpg" alt="Card 29" />
+        </div>
+        <div
+          class="card"
+          data-number="30"
+          data-name="異界監禁施設"
+          data-cost="5"
+          data-power="3"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="ロック"
+          data-keyword=""
+          data-attribute="廃施設 牢獄"
+        >
+          <img data-src="images/card_1_ (30).jpg" src="placeholder.jpg" alt="Card 30" />
         </div>
         <div
           class="card"
@@ -92,6 +514,141 @@
         </div>
         <div
           class="card"
+          data-number="32"
+          data-name="豪幻堂"
+          data-cost="7"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="札除去"
+          data-keyword=""
+          data-attribute="廃旅館 幻"
+        >
+          <img data-src="images/card_1_ (32).jpg" src="placeholder.jpg" alt="Card 32" />
+        </div>
+        <div
+          class="card"
+          data-number="33"
+          data-name="鬼人村"
+          data-cost="9"
+          data-power="6"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role=""
+          data-keyword="逆境"
+          data-attribute="鬼 廃村"
+        >
+          <img data-src="images/card_1_ (33).jpg" src="placeholder.jpg" alt="Card 33" />
+        </div>
+        <div
+          class="card"
+          data-number="34"
+          data-name="豪血の廃病院"
+          data-cost="9"
+          data-power="5"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="札除去"
+          data-keyword="神秘"
+          data-attribute="廃病院 血液"
+        >
+          <img data-src="images/card_1_ (34).jpg" src="placeholder.jpg" alt="Card 34" />
+        </div>
+        <div
+          class="card"
+          data-number="35"
+          data-name="鬼ヶ淵"
+          data-cost="13"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="場所札"
+          data-role="直接ダメ"
+          data-keyword="神秘"
+          data-attribute="鬼 霊場"
+        >
+          <img data-src="images/card_1_ (35).jpg" src="placeholder.jpg" alt="Card 35" />
+        </div>
+        <div
+          class="card"
+          data-number="36"
+          data-name="未完の石材"
+          data-cost="0"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="怪異札"
+          data-role="サーチ"
+          data-keyword=""
+          data-attribute="石像"
+        >
+          <img data-src="images/card_1_ (36).jpg" src="placeholder.jpg" alt="Card 36" />
+        </div>
+        <div
+          class="card"
+          data-number="37"
+          data-name="雲外鏡"
+          data-cost="1"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="怪異札"
+          data-role="ドロー 自傷ダメ"
+          data-keyword=""
+          data-attribute="鏡"
+        >
+          <img data-src="images/card_1_ (37).jpg" src="placeholder.jpg" alt="Card 37" />
+        </div>
+        <div
+          class="card"
+          data-number="38"
+          data-name="霊安室の鏡"
+          data-cost="5"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="怪異札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="鏡 怨霊"
+        >
+          <img data-src="images/card_1_ (38).jpg" src="placeholder.jpg" alt="Card 38" />
+        </div>
+        <div
+          class="card"
+          data-number="39"
+          data-name="鬼面の神"
+          data-cost="7"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="怪異札"
+          data-role=""
+          data-keyword="神秘"
+          data-attribute="神 鬼 鬼面の神"
+        >
+          <img data-src="images/card_1_ (39).jpg" src="placeholder.jpg" alt="Card 39" />
+        </div>
+        <div
+          class="card"
+          data-number="40"
+          data-name="鬼門"
+          data-cost="9"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="怪異札"
+          data-role="魂利用"
+          data-keyword=""
+          data-attribute="鬼 廃門"
+        >
+          <img data-src="images/card_1_ (40).jpg" src="placeholder.jpg" alt="Card 40" />
+        </div>
+        <div
+          class="card"
           data-number="41"
           data-name="血液達磨"
           data-cost="1"
@@ -99,11 +656,161 @@
           data-series="夏VS冬バトルセット"
           data-season="冬"
           data-type="道具札"
-          data-role="札除去"
+          data-role="札除去 自傷ダメ"
           data-keyword=""
           data-attribute="血液"
         >
           <img data-src="images/card_1_ (41).jpg" src="placeholder.jpg" alt="Card 41" />
+        </div>
+        <div
+          class="card"
+          data-number="42"
+          data-name="血を吸ったマフラー"
+          data-cost="3"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="道具札"
+          data-role="札無効 自傷ダメ"
+          data-keyword=""
+          data-attribute="血液"
+        >
+          <img data-src="images/card_1_ (42).jpg" src="placeholder.jpg" alt="Card 42" />
+        </div>
+        <div
+          class="card"
+          data-number="43"
+          data-name="野営"
+          data-cost="1"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="道具札"
+          data-role="ヒール"
+          data-keyword=""
+          data-attribute="野営"
+        >
+          <img data-src="images/card_1_ (43).jpg" src="placeholder.jpg" alt="Card 43" />
+        </div>
+        <div
+          class="card"
+          data-number="44"
+          data-name="蘇り藁人形"
+          data-cost="5"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="道具札"
+          data-role="回収 魂利用"
+          data-keyword=""
+          data-attribute="人形 藁人形 蘇生"
+        >
+          <img data-src="images/card_1_ (44).jpg" src="placeholder.jpg" alt="Card 44" />
+        </div>
+        <div
+          class="card"
+          data-number="45"
+          data-name="人魚の活き血"
+          data-cost="8"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="道具札"
+          data-role="魂利用 踏み倒し"
+          data-keyword=""
+          data-attribute="人魚 血液"
+        >
+          <img data-src="images/card_1_ (45).jpg" src="placeholder.jpg" alt="Card 45" />
+        </div>
+        <div
+          class="card"
+          data-number="46"
+          data-name="凍てつく時間"
+          data-cost="9"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="冬"
+          data-type="季節札"
+          data-role="バフ"
+          data-keyword=""
+          data-attribute="幻 幽霊"
+        >
+          <img data-src="images/card_1_ (46).jpg" src="placeholder.jpg" alt="Card 46" />
+        </div>
+        <div
+          class="card"
+          data-number="47"
+          data-name="身投げ岬"
+          data-cost="2"
+          data-power="4"
+          data-series="夏VS冬バトルセット"
+          data-season="秋"
+          data-type="場所札"
+          data-role=""
+          data-keyword=""
+          data-attribute="岬"
+        >
+          <img data-src="images/card_1_ (47).jpg" src="placeholder.jpg" alt="Card 47" />
+        </div>
+        <div
+          class="card"
+          data-number="48"
+          data-name="燃ゆる茸"
+          data-cost="3"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="秋"
+          data-type="怪異札"
+          data-role="回収 除外戻し"
+          data-keyword=""
+          data-attribute="菌"
+        >
+          <img data-src="images/card_1_ (48).jpg" src="placeholder.jpg" alt="Card 48" />
+        </div>
+        <div
+          class="card"
+          data-number="49"
+          data-name="悪習の古記"
+          data-cost="1"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="秋"
+          data-type="道具札"
+          data-role="「起き」"
+          data-keyword=""
+          data-attribute="古書"
+        >
+          <img data-src="images/card_1_ (49).jpg" src="placeholder.jpg" alt="Card 49" />
+        </div>
+        <div
+          class="card"
+          data-number="50"
+          data-name="散華淵"
+          data-cost="1"
+          data-power="1"
+          data-series="夏VS冬バトルセット"
+          data-season="春"
+          data-type="場所札"
+          data-role="ヒール"
+          data-keyword="不屈"
+          data-attribute="古書"
+        >
+          <img data-src="images/card_1_ (50).jpg" src="placeholder.jpg" alt="Card 50" />
+        </div>
+        <div
+          class="card"
+          data-number="51"
+          data-name="大蛇"
+          data-cost="4"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="春"
+          data-type="怪異札"
+          data-role="ヒール 直接ダメ"
+          data-keyword=""
+          data-attribute="大蛇"
+        >
+          <img data-src="images/card_1_ (51).jpg" src="placeholder.jpg" alt="Card 51" />
         </div>
         <div
           class="card"
@@ -114,9 +821,24 @@
           data-series="夏VS冬バトルセット"
           data-season="春"
           data-type="道具札"
-          data-role="札除去"
+          data-role="札除去 「伏せ」"
           data-keyword=""
           data-attribute="古書"
+        >
+          <img data-src="images/card_1_ (52).jpg" src="placeholder.jpg" alt="Card 52" />
+        </div>
+        <div
+          class="card"
+          data-number="53"
+          data-name="れもんちゃん"
+          data-cost="20"
+          data-power="0"
+          data-series="夏VS冬バトルセット"
+          data-season="混化"
+          data-type=""
+          data-role=""
+          data-keyword=""
+          data-attribute=""
         >
           <img data-src="images/card_1_ (52).jpg" src="placeholder.jpg" alt="Card 52" />
         </div>
@@ -2687,6 +3409,21 @@
         </div>
         <div
           class="card"
+          data-number="282"
+          data-name="本物のお化け屋敷"
+          data-cost="0"
+          data-power="2"
+          data-series="百鬼夜行"
+          data-season="冬"
+          data-type="場所札"
+          data-role="ランデス"
+          data-keyword="速攻 襲撃"
+          data-attribute="うつしよ 血液 人形 殺人"
+        >
+          <img data-src="images/card_3_ (82).jpg" src="placeholder.jpg" alt="Card 282" />
+        </div>
+        <div
+          class="card"
           data-number="283"
           data-name="お墓参り"
           data-cost="4"
@@ -2732,6 +3469,21 @@
         </div>
         <div
           class="card"
+          data-number="286"
+          data-name="がしゃどくろ"
+          data-cost="7"
+          data-power="0"
+          data-series="百鬼夜行"
+          data-season="無"
+          data-type="怪異札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="妖怪 髑髏"
+        >
+          <img data-src="images/card_3_ (86).jpg" src="placeholder.jpg" alt="Card 286" />
+        </div>
+        <div
+          class="card"
           data-number="287"
           data-name="かごめかごめ"
           data-cost="6"
@@ -2744,6 +3496,21 @@
           data-attribute="罪 呪"
         >
           <img data-src="images/card_3_ (87).jpg" src="placeholder.jpg" alt="Card 287" />
+        </div>
+        <div
+          class="card"
+          data-number="288"
+          data-name="全部私が独りで"
+          data-cost="12"
+          data-power="8"
+          data-series="百鬼夜行"
+          data-season="混化"
+          data-type="場所札"
+          data-role="直接ダメ"
+          data-keyword=""
+          data-attribute="廃屋 怨念"
+        >
+          <img data-src="images/card_3_ (88).jpg" src="placeholder.jpg" alt="Card 288" />
         </div>
         <div
           class="card"
@@ -2871,6 +3638,7 @@
       <button onclick="toggleFilterCard('role', 'ランデス')">ランデス</button>
       <button onclick="toggleFilterCard('role', 'ハンデス')">ハンデス</button>
       <button onclick="toggleFilterCard('role', 'デッキ破壊')">デッキ破壊</button>
+      <button onclick="toggleFilterCard('role', '手札公開')">手札公開</button>
       <button onclick="toggleFilterCard('role', '底送り')">底送り</button>
       <button onclick="toggleFilterCard('role', '札ダメ')">札ダメ</button>
       <button onclick="toggleFilterCard('role', '直接ダメ')">直接ダメ</button>
@@ -2879,6 +3647,7 @@
       <button onclick="toggleFilterCard('role', '力固定')">力固定</button>
       <button onclick="toggleFilterCard('role', '札除去')">札除去</button>
       <button onclick="toggleFilterCard('role', 'バウンス')">バウンス</button>
+      <button onclick="toggleFilterCard('role', '札無効')">札無効</button>
       <button onclick="toggleFilterCard('role', '踏み倒し')">踏み倒し</button>
       <button onclick="toggleFilterCard('role', 'コスト軽減')">コスト軽減</button>
       <button onclick="toggleFilterCard('role', 'バニラ')">バニラ</button>
@@ -2890,12 +3659,12 @@
       <button onclick="toggleFilterCard('role', '効果無効')">効果無効</button>
       <button onclick="toggleFilterCard('role', 'ダメ無効')">ダメ無効</button>
       <button onclick="toggleFilterCard('role', '除去無効')">除去無効</button>
-      <button onclick="toggleFilterCard('role', '2種類札')">2種類札</button>
       <button onclick="toggleFilterCard('role', 'ヒール')">ヒール</button>
       <button onclick="toggleFilterCard('role', 'ドレイン')">ドレイン</button>
       <button onclick="toggleFilterCard('role', 'ヒール無効')">ヒール無効</button>
       <button onclick="toggleFilterCard('role', '神秘付与')">神秘付与</button>
       <button onclick="toggleFilterCard('role', '手札入替')">手札入替</button>
+      <button onclick="toggleFilterCard('role', '2種類札')">2種類札</button>
       <button onclick="toggleFilterCard('role', '「起き」')">「起き」</button>
       <button onclick="toggleFilterCard('role', '「伏せ」')">「伏せ」</button>
     </div>
@@ -2904,16 +3673,16 @@
       <button onclick="toggleFilterCard('keyword', '速攻')">速攻</button>
       <button onclick="toggleFilterCard('keyword', '襲撃')">襲撃</button>
       <button onclick="toggleFilterCard('keyword', '逆境')">逆境</button>
-      <button onclick="toggleFilterCard('keyword', '楽園')">楽園</button>
-      <button onclick="toggleFilterCard('keyword', '呪い')">呪い</button>
+      <button onclick="toggleFilterCard('keyword', '不屈')">不屈</button>
+      <button onclick="toggleFilterCard('keyword', '憤怒')">憤怒</button>
       <button onclick="toggleFilterCard('keyword', '神秘')">神秘</button>
       <button onclick="toggleFilterCard('keyword', '秘境')">秘境</button>
       <button onclick="toggleFilterCard('keyword', '結界')">結界</button>
       <button onclick="toggleFilterCard('keyword', '追撃')">追撃</button>
+      <button onclick="toggleFilterCard('keyword', '楽園')">楽園</button>
+      <button onclick="toggleFilterCard('keyword', '呪い')">呪い</button>
       <button onclick="toggleFilterCard('keyword', '鮮明')">鮮明</button>
       <button onclick="toggleFilterCard('keyword', '四季欲')">四季欲</button>
-      <button onclick="toggleFilterCard('keyword', '不屈')">不屈</button>
-      <button onclick="toggleFilterCard('keyword', '憤怒')">憤怒</button>
       <button onclick="toggleFilterCard('keyword', '秘境')">秘境</button>
       <button onclick="toggleFilterCard('keyword', '妬み')">妬み</button>
       <button onclick="toggleFilterCard('keyword', '徳')">徳</button>
@@ -2925,13 +3694,10 @@
       <button onclick="toggleFilterCard('attribute', '怨霊')">怨霊</button>
       <button onclick="toggleFilterCard('attribute', '血液')">血液</button>
       <button onclick="toggleFilterCard('attribute', '交通事故')">交通事故</button>
-
+      <button onclick="toggleFilterCard('attribute', '人形')">人形</button>
+      <button onclick="toggleFilterCard('attribute', '動物')">動物</button>
+      <button onclick="toggleFilterCard('attribute', '噂')">噂</button>
       <button onclick="toggleFilterCard('attribute', '神')">神</button>
-      <button onclick="toggleFilterCard('attribute', '園')">園</button>
-      <button onclick="toggleFilterCard('attribute', '廃集落')">廃集落</button>
-      <button onclick="toggleFilterCard('attribute', '神隠し')">神隠し</button>
-      <button onclick="toggleFilterCard('attribute', '廃線')">廃線</button>
-      <button onclick="toggleFilterCard('attribute', '解脱')">解脱</button>
     </div>
     <div id="series" class="filter-content" style="display: none">
       <button onclick="toggleFilterCard('series', '夏VS冬バトルセット')">夏VS冬バトルセット</button>
