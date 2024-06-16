@@ -15,6 +15,9 @@ const filters = {
 let sortCriteria = null;
 let sortOrder = 'asc';
 
+// スクロール位置を保持する変数
+let scrollPosition = 0;
+
 // ページロード後にDOMの初期設定を行う
 document.addEventListener('DOMContentLoaded', () => {
   // 検索ボックスにイベントリスナーを追加
@@ -24,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // カード画像にクリックイベントを追加（モバイル用）
   const cards = document.querySelectorAll('.card img');
   cards.forEach((card) => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (event) => {
+      event.stopPropagation(); // イベントの伝播を停止
       if (window.innerWidth <= 768) {
         openImageModal(card.src);
       }
@@ -205,6 +209,8 @@ const openModal = (filterId) => {
   });
 
   modal.style.display = 'block';
+  scrollPosition = window.pageYOffset; // スクロール位置を保存
+  document.body.style.top = `-${scrollPosition}px`;
   document.body.classList.add('no-scroll'); // スクロールを無効にする
 };
 
@@ -213,6 +219,8 @@ const closeModal = () => {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
   document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
+  window.scrollTo(0, scrollPosition); // スクロール位置を復元
+  document.body.style.top = '';
 };
 
 // 背景をタップしてモーダルを閉じる関数
@@ -228,6 +236,8 @@ const openImageModal = (src) => {
   const modalImage = document.getElementById('modal-image');
   modalImage.src = src;
   modal.style.display = 'flex';
+  scrollPosition = window.pageYOffset; // スクロール位置を保存
+  document.body.style.top = `-${scrollPosition}px`;
   document.body.classList.add('no-scroll'); // スクロールを無効にする
 };
 
@@ -236,4 +246,24 @@ const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
   document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
+  window.scrollTo(0, scrollPosition); // スクロール位置を復元
+  document.body.style.top = '';
 };
+
+// ページの上部にスクロールする関数
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// スクロール時にボタンを表示・非表示にする関数
+const handleScroll = () => {
+  const topButton = document.getElementById('topButton');
+  if (window.pageYOffset > 300) {
+    topButton.classList.add('show');
+  } else {
+    topButton.classList.remove('show');
+  }
+};
+
+// スクロールイベントリスナーを追加
+window.addEventListener('scroll', handleScroll);
