@@ -213,6 +213,13 @@ const closeModal = () => {
   modal.style.display = 'none';
 };
 
+// 背景をタップしてモーダルを閉じる関数
+const closeModalOnClick = (event) => {
+  if (event.target.id === 'modal') {
+    closeModal();
+  }
+};
+
 // 画像モーダルを開く関数
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
