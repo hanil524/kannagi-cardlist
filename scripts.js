@@ -205,12 +205,14 @@ const openModal = (filterId) => {
   });
 
   modal.style.display = 'block';
+  document.body.classList.add('no-scroll'); // スクロールを無効にする
 };
 
 // モーダルを閉じる関数
 const closeModal = () => {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
+  document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
 };
 
 // 背景をタップしてモーダルを閉じる関数
@@ -226,10 +228,12 @@ const openImageModal = (src) => {
   const modalImage = document.getElementById('modal-image');
   modalImage.src = src;
   modal.style.display = 'flex';
+  document.body.classList.add('no-scroll'); // スクロールを無効にする
 };
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
+  document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
 };
