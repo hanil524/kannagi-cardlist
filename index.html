@@ -2,7 +2,8 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
     <title>巫カードリスト</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon/favicon.ico" />
@@ -296,7 +297,7 @@
           data-series="夏VS冬バトルセット"
           data-season="夏"
           data-type="怪異札"
-          data-role="直接ダメ"
+          data-role="直接ダメ 除外加速"
           data-keyword=""
           data-attribute="神 狐 狐面の神"
         >
@@ -3621,7 +3622,7 @@
       </section>
     </main>
 
-    <div id="modal" class="modal">
+    <div id="modal" class="modal" onclick="closeModalOnClick(event)">
       <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <div id="modal-buttons" class="modal-buttons"></div>
