@@ -20,6 +20,13 @@ let scrollPosition = 0;
 
 // ページロード後にDOMの初期設定を行う
 document.addEventListener('DOMContentLoaded', () => {
+  // ページが完全に読み込まれたときに呼び出される
+  window.addEventListener('load', () => {
+    // ローディングスピナーを非表示にし、コンテンツを表示
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  });
+
   // 検索ボックスにイベントリスナーを追加
   const searchBox = document.getElementById('search-box');
   searchBox.addEventListener('input', filterCardsByName);
