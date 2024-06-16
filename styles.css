@@ -156,12 +156,15 @@ main {
   }
 }
 
+/* スマホ表示のスタイル */
 @media (max-width: 768px) {
   .card {
-    flex-basis: calc(33.33% - 10px);
+    flex-basis: calc(50% - 10px);
   }
   .card:hover {
-    transform: none; /* スマホ表示でのマウスオーバー機能を無効化 */
+    transform: none; /* 拡大を無効にする */
+    box-shadow: none; /* 影を無効にする */
+    z-index: auto; /* z-indexをリセット */
   }
 }
 
@@ -380,10 +383,8 @@ header input {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8); /* 影を追加 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* 影を追加 */
   transition: opacity 0.3s ease, box-shadow 0.3s ease; /* 影の遷移を追加 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: opacity 0.3s ease;
   opacity: 0;
   visibility: hidden;
   z-index: 1000;
@@ -393,4 +394,5 @@ header input {
 .top-button.show {
   opacity: 1;
   visibility: visible;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* ホバー時の影のスタイルを追加 */
 }
