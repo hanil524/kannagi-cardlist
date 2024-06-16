@@ -145,7 +145,7 @@ main {
 }
 
 .card:hover {
-  transform: scale(1.45);
+  transform: scale(1.4);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 1); /* 影のスタイルを追加 */
   z-index: 10; /* 拡大時に最前面に表示 */
 }
