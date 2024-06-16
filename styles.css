@@ -139,7 +139,7 @@ main {
   height: auto;
   border-radius: 15px;
   /* 画像が読み込まれるまでの間に何も表示されないように */
-  background: url('path/to/placeholder-image.png') center center no-repeat;
+  background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
 }
 
@@ -325,4 +325,8 @@ header input {
   padding: 10px; /* 内側の余白調整 */
   display: block;
   box-sizing: border-box; /* パディングを含む幅調整 */
+}
+
+.no-scroll {
+  overflow: hidden;
 }
