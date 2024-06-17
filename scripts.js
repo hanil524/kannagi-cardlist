@@ -27,9 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('content').style.display = 'block';
   });
 
-  // 検索ボックスにイベントリスナーを追加
+  // PC版の検索ボックスにイベントリスナーを追加
   const searchBox = document.getElementById('search-box');
   searchBox.addEventListener('input', filterCardsByName);
+
+  // モバイル版の検索ボックスにイベントリスナーを追加
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+  mobileSearchBox.addEventListener('input', filterCardsByName);
 
   // カード画像にクリックイベントを追加（モバイル用）
   const cards = document.querySelectorAll('.card img');
