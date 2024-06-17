@@ -23,8 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // ページが完全に読み込まれたときに呼び出される
   window.addEventListener('load', () => {
     // ローディングスピナーを非表示にし、コンテンツを表示
-    document.getElementById('loading-overlay').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'none';
+    }
+
+    const content = document.getElementById('content');
+    if (content) {
+      content.style.display = 'block';
+    }
   });
 
   // PC版の検索ボックスにイベントリスナーを追加
@@ -53,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
       event.stopPropagation();
       const attribute = button.getAttribute('data-filter');
       const value = button.innerText.trim();
-      toggleFilterCard(attribute, value);
+      if (attribute) {
+        toggleFilterCard(attribute, value);
+      } else {
+        console.error('Attribute is null or undefined.');
+      }
     });
   });
 
