@@ -10,7 +10,7 @@ header {
   color: white;
   padding: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   position: fixed;
   width: 100%;
@@ -19,19 +19,55 @@ header {
   transition: padding-right 0.3s ease;
 }
 
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* 必要に応じて調整 */
+}
+
 header a {
   color: white;
   text-decoration: none;
   margin-right: 20px;
+  white-space: nowrap; /* リンクを改行させない */
 }
 
-header input {
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 300px; /* 検索バーの幅を広げる */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.search-container input {
+  width: 100%;
+  padding-right: 30px; /* ×ボタンのスペースを確保 */
+  box-sizing: border-box;
   padding: 5px;
   border: none;
   border-radius: 5px;
-  max-width: 200px; /* 検索バーの幅を調整 */
-  flex-grow: 1;
-  text-align: center; /* 中央に配置 */
+  text-align: center;
+}
+
+.clear-button {
+  position: absolute;
+  right: 10px; /* 右端からの距離を調整 */
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: gray;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.clear-button:hover {
+  color: black;
 }
 
 .mobile-header {
@@ -304,13 +340,6 @@ main {
   height: auto;
 }
 
-#search-box {
-  width: calc(100% - 20px); /* 余白を含む幅調整 */
-  padding: 10px; /* 内側の余白調整 */
-  display: block;
-  box-sizing: border-box; /* パディングを含む幅調整 */
-}
-
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -393,4 +422,40 @@ main {
 body.modal-open {
   overflow: hidden;
   padding-right: var(--scrollbar-width);
+}
+
+/* スマホ表示のスタイル */
+@media (max-width: 768px) {
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .clear-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: gray;
+    padding: 0;
+  }
+
+  .clear-button:hover {
+    color: black;
+  }
+
+  .search-container input {
+    width: 100%;
+    padding-right: 30px; /* ×ボタンのスペースを確保 */
+    box-sizing: border-box;
+  }
+}
+
+header input::placeholder,
+.mobile-header input::placeholder {
+  text-align: center;
 }
