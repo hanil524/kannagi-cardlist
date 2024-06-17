@@ -16,6 +16,7 @@ header {
   width: 100%;
   top: 0;
   z-index: 1000;
+  transition: padding-right 0.3s ease;
 }
 
 header a {
@@ -388,4 +389,9 @@ main {
   header {
     justify-content: center;
   }
+}
+
+body.modal-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
 }
