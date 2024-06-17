@@ -192,7 +192,32 @@ const filterCards = () => {
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 };
 
-// モーダルを開く関数
+// スクロールバーの幅を取得する関数
+const getScrollbarWidth = () => {
+  const outer = document.createElement('div');
+  outer.style.visibility = 'hidden';
+  outer.style.width = '100px';
+  outer.style.msOverflowStyle = 'scrollbar'; // for Internet Explorer
+  document.body.appendChild(outer);
+
+  const widthNoScroll = outer.offsetWidth;
+  // Force scrollbars
+  outer.style.overflow = 'scroll';
+
+  // Add inner div
+  const inner = document.createElement('div');
+  inner.style.width = '100%';
+  outer.appendChild(inner);
+
+  const widthWithScroll = inner.offsetWidth;
+
+  // Remove divs
+  outer.parentNode.removeChild(outer);
+
+  return widthNoScroll - widthWithScroll;
+};
+
+// モーダルを開く関数を更新
 const openModal = (filterId) => {
   const modal = document.getElementById('modal');
   const modalButtons = document.getElementById('modal-buttons');
@@ -215,19 +240,21 @@ const openModal = (filterId) => {
     modalButtons.appendChild(newButton);
   });
 
+  const scrollbarWidth = getScrollbarWidth();
   modal.style.display = 'block';
   scrollPosition = window.pageYOffset; // スクロール位置を保存
-  document.body.style.top = `-${scrollPosition}px`;
-  document.body.classList.add('no-scroll'); // スクロールを無効にする
+  document.body.style.paddingRight = `${scrollbarWidth}px`; // スクロールバー幅分のパディングを追加
+  document.body.classList.add('modal-open'); // クラスを追加してスクロールを無効にし、パディングを追加
 };
 
-// モーダルを閉じる関数
+// モーダルを閉じる関数を更新
 const closeModal = () => {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
-  document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
+  document.body.classList.remove('modal-open'); // クラスを削除してスクロールを有効に戻し、パディングをリセット
   window.scrollTo(0, scrollPosition); // スクロール位置を復元
   document.body.style.top = '';
+  document.body.style.paddingRight = ''; // パディングをリセット
 };
 
 // 背景をタップしてモーダルを閉じる関数
