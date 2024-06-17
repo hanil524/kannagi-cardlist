@@ -12,6 +12,10 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
 }
 
 header a {
@@ -24,6 +28,9 @@ header input {
   padding: 5px;
   border: none;
   border-radius: 5px;
+  max-width: 200px; /* 検索バーの幅を調整 */
+  flex-grow: 1;
+  text-align: center; /* 中央に配置 */
 }
 
 .mobile-header {
@@ -35,30 +42,6 @@ header input {
   width: 100%;
   top: 0;
   z-index: 1000;
-}
-
-.hamburger-menu {
-  font-size: 24px;
-  cursor: pointer;
-}
-
-#mobile-menu {
-  display: none;
-  flex-direction: column;
-  background: #000;
-  padding: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1001;
-}
-
-.close-menu {
-  font-size: 24px;
-  cursor: pointer;
-  align-self: flex-end;
 }
 
 main {
@@ -170,50 +153,42 @@ main {
   }
 }
 
+/* スマホ表示のヘッダーを表示する */
 @media (max-width: 600px) {
   .mobile-header {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px; /* 必要に応じて調整 */
+    box-sizing: border-box; /* パディングを含む幅調整 */
   }
   header {
     display: none;
   }
-  .card {
-    flex-basis: calc(50% - 10px);
-  }
+}
+
+/* スマホ表示でのヘッダー内の検索バーを中央揃え */
+.mobile-header input {
+  width: calc(100% - 20px); /* 親要素のパディングを考慮して幅を設定 */
+  max-width: 100%; /* 検索バーの最大幅を100%に設定 */
+  margin: 0; /* マージンをリセット */
+  padding: 5px; /* 内側のパディングを追加 */
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  box-sizing: border-box; /* パディングを含む幅調整 */
+}
+
+/* プレースホルダーテキストのスタイルを統一 */
+.mobile-header input::placeholder {
+  text-align: center; /* プレースホルダーテキストを中央揃え */
 }
 
 @media (max-width: 400px) {
   .card {
     flex-basis: 100%;
   }
-}
-
-header {
-  background: #333;
-  color: white;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
-header a {
-  color: white;
-  text-decoration: none;
-  margin-right: 10px;
-}
-
-header input {
-  padding: 5px;
-  border: none;
-  border-radius: 5px;
-  max-width: 200px; /* 検索バーの幅を調整 */
-  flex-grow: 1;
-  text-align: center; /* 中央に配置 */
 }
 
 .pc-only {
@@ -227,6 +202,7 @@ header input {
 
   header input {
     max-width: 90%; /* スマホの検索バー幅を調整 */
+    margin: 0 5%; /* 左右に均等な余白を追加 */
   }
 
   .card {
@@ -367,6 +343,7 @@ header input {
 }
 
 .no-scroll {
+  overflow: hidden;
   position: fixed;
   width: 100%;
 }
@@ -397,4 +374,18 @@ header input {
   opacity: 1;
   visibility: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* ホバー時の影のスタイルを追加 */
+}
+
+/* PCだけモーダル起動時にスクロールバー拡大 */
+@media (min-width: 768px) {
+  body.modal-open {
+    overflow: hidden;
+    padding-right: 17px; /* 一般的なスクロールバーの幅 */
+  }
+}
+
+@media (min-width: 768px) {
+  header {
+    justify-content: center;
+  }
 }
