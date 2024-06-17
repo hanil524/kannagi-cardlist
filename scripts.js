@@ -29,7 +29,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 検索ボックスにイベントリスナーを追加
   const searchBox = document.getElementById('search-box');
-  searchBox.addEventListener('input', filterCardsByName);
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+  const clearButton = document.querySelector('.clear-button');
+
+  const updateClearButtonVisibility = (inputId, buttonId) => {
+    const input = document.getElementById(inputId);
+    const button = document.getElementById(buttonId);
+    button.style.display = input.value ? 'flex' : 'none';
+  };
+
+  searchBox.addEventListener('input', () => {
+    filterCardsByName({ target: searchBox });
+    updateClearButtonVisibility('search-box', 'clear-button-desktop');
+  });
+
+  mobileSearchBox.addEventListener('input', () => {
+    filterCardsByName({ target: mobileSearchBox });
+    updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
+  });
+
+  // 初期状態を設定
+  updateClearButtonVisibility('search-box', 'clear-button-desktop');
+  updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
 
   // カード画像にクリックイベントを追加（モバイル用）
   const cards = document.querySelectorAll('.card img');
@@ -98,7 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// カード名でのフィルタリングを行う関数
+// 入力中の文字をクリアする関数をグローバルに定義
+function clearSearch(inputId, buttonId) {
+  const input = document.getElementById(inputId);
+  input.value = '';
+  filterCardsByName({ target: input });
+  const button = document.getElementById(buttonId);
+  button.style.display = 'none';
+}
+
 const filterCardsByName = (event) => {
   const query = event.target.value.toLowerCase();
   const cards = document.querySelectorAll('.card');
