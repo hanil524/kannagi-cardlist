@@ -79,7 +79,7 @@ main {
   flex-wrap: wrap;
   justify-content: space-around;
   margin-bottom: 20px; /* フィルターボタンからカード画像までの間隔を広げる */
-  gap: 10px;
+  gap: 5px;
 }
 
 /* フィルターボタンからカード画像までの間隔を広げる（PC表示のみ） */
@@ -91,10 +91,11 @@ main {
 
 .filter-group {
   margin: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffffff;
   padding: 10px;
   border-radius: 5px;
-  background-color: #f9f9f9;
+  color: #fff;
+  background-color: #919191;
   display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
   justify-content: center;
