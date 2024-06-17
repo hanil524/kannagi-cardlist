@@ -99,7 +99,7 @@ main {
   display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   gap: 10px; /* ボタン間の隙間を調整 */
   font-weight: bold;
 }
