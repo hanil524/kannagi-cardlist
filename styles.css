@@ -28,8 +28,9 @@ header {
 
 header a {
   color: white;
-  text-decoration: none;
-  margin-right: 20px;
+  text-decoration: none; /* リンクのアンダーバーを削除 */
+  margin-right: 10px;
+  margin-left: 10px;
   white-space: nowrap; /* リンクを改行させない */
 }
 
@@ -37,7 +38,7 @@ header a {
   position: relative;
   display: flex;
   align-items: center;
-  max-width: 300px; /* 検索バーの幅を広げる */
+  max-width: 250px; /* 検索バーの幅を広げる */
   width: 100%;
   margin: 0 auto;
 }
@@ -127,8 +128,7 @@ main {
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  cursor: pointer;
+  gap: 8px;
 }
 
 .filter-content {
@@ -229,6 +229,14 @@ main {
 
 .pc-only {
   display: block;
+  background-color: none; /* 初期背景色 */
+  border-radius: 25px;
+  padding: 3px; /* 要素の内側に余白を追加してマウスオーバー可能な範囲を広げる */
+  transition: background-color 0.2s ease, box-shadow 0.4s ease; /* 背景色の変化を0.2秒かけて行う */
+}
+.pc-only:hover {
+  background-color: rgba(255, 255, 255, 0.5); /* 薄い白色 */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* ボックスシャドウで範囲を広げる */
 }
 
 @media (max-width: 768px) {
@@ -279,7 +287,7 @@ main {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 3px solid #888;
   width: 80%;
   max-width: 600px;
   position: relative;
@@ -290,7 +298,9 @@ main {
   font-size: 28px;
   font-weight: bold;
   position: absolute;
-  top: -5px; /* モーダルの外側に配置 */
+  padding-left: 125px;
+  padding-right: 125px;
+  top: -8px; /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
 }
@@ -314,11 +324,13 @@ main {
   border-radius: 5px;
   background-color: #f9f9f9;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s;
 }
 
 .modal-buttons button:hover {
-  background-color: #ccc;
+  background-color: #383838;
+  border: 1px solid black;
+  color: #fff;
 }
 
 /* 画像モーダル */
