@@ -273,6 +273,10 @@ const openModal = (filterId) => {
   scrollPosition = window.pageYOffset; // スクロール位置を保存
   document.body.style.paddingRight = `${scrollbarWidth}px`; // スクロールバー幅分のパディングを追加
   document.body.classList.add('modal-open'); // クラスを追加してスクロールを無効にし、パディングを追加
+
+  // ヘッダーのコンテンツにパディングを適用
+  const headerContent = document.querySelector('.header-content');
+  headerContent.style.paddingRight = `${scrollbarWidth}px`;
 };
 
 // モーダルを閉じる関数を更新
@@ -283,6 +287,10 @@ const closeModal = () => {
   window.scrollTo(0, scrollPosition); // スクロール位置を復元
   document.body.style.top = '';
   document.body.style.paddingRight = ''; // パディングをリセット
+
+  // ヘッダーのコンテンツのパディングもリセット
+  const headerContent = document.querySelector('.header-content');
+  headerContent.style.paddingRight = '';
 
   // フィルターリセットのチェック
   if (
