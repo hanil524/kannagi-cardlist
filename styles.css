@@ -628,7 +628,6 @@ header input::placeholder,
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    position: relative;
   }
 
   .search-container {
