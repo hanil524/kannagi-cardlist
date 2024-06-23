@@ -32,6 +32,7 @@ header a {
   margin-right: 10px;
   margin-left: 10px;
   white-space: nowrap; /* リンクを改行させない */
+  font-weight: bold;
 }
 
 .search-container {
@@ -41,6 +42,13 @@ header a {
   max-width: 250px; /* 検索バーの幅を広げる */
   width: 100%;
   margin: 0 auto;
+}
+
+/* ヘッダー検索バーの左側に間隔を空ける（PC表示のみ） */
+@media (min-width: 768px) {
+  .search-container {
+    padding-left: 28px;
+  }
 }
 
 .search-container input {
@@ -190,7 +198,7 @@ main {
 }
 
 /* スマホ表示のヘッダーを表示する */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .mobile-header {
     display: flex;
     justify-content: center;
