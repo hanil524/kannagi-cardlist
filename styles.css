@@ -590,7 +590,7 @@ header input::placeholder,
   top: 60px;
   left: 0;
   width: 80%;
-  background-color: #333;
+  background-color: #f8f8f8;
   z-index: 999;
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5); /* 右側に影を追加してメニューを強調 */
 }
@@ -607,14 +607,14 @@ header input::placeholder,
 
 .mobile-nav a {
   display: block;
-  color: white;
+  color: rgb(43, 43, 43);
   text-decoration: none;
   padding: 12px 20px;
+  font-weight: bold;
 }
 
 .mobile-nav .close-menu {
-  background-color: #555; /* 「メニューを閉じる」の背景色を変更 */
-  text-align: center;
+  background-color: #d3d3d3; /* 「メニューを閉じる」の背景色を変更 */
 }
 
 /* スマートフォン用スタイル */
