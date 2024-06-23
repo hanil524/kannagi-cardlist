@@ -655,4 +655,15 @@ header input::placeholder,
   .mobile-nav.active {
     display: block;
   }
+
+  /* ヘッダー右側にある画像 */
+  .header-icon {
+    position: absolute;
+    right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px; /* 画像の幅を適切に調整してください */
+    height: auto; /* 画像のアスペクト比を維持しながら高さを自動調整します */
+    border-radius: 25%;
+  }
 }
