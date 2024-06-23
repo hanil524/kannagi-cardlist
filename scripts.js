@@ -350,3 +350,29 @@ const handleScroll = () => {
 
 // スクロールイベントリスナーを追加
 window.addEventListener('scroll', handleScroll);
+
+// 追加（ハンバーガーメニュー系）
+document.addEventListener('DOMContentLoaded', function () {
+  const hamburgerMenu = document.querySelector('.hamburger-menu');
+  const mobileNav = document.querySelector('.mobile-nav');
+  const closeMenuButton = document.querySelector('.close-menu');
+
+  hamburgerMenu.addEventListener('click', function () {
+    this.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+  });
+
+  closeMenuButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    hamburgerMenu.classList.remove('active');
+    mobileNav.classList.remove('active');
+  });
+
+  // 画面サイズが変更されたときにモバイルナビゲーションを非表示にする
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) {
+      hamburgerMenu.classList.remove('active');
+      mobileNav.classList.remove('active');
+    }
+  });
+});
