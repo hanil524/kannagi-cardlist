@@ -566,7 +566,7 @@ header input::placeholder,
   display: none;
   cursor: pointer;
   text-align: center;
-  transform: scale(0.8);
+  transform: scale(0.9);
 }
 
 .hamburger-menu span {
@@ -662,7 +662,7 @@ header input::placeholder,
     right: 2%;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px; /* 画像の幅を適切に調整してください */
+    width: 38px; /* 画像の幅を適切に調整してください */
     height: auto; /* 画像のアスペクト比を維持しながら高さを自動調整します */
     border-radius: 25%;
   }
