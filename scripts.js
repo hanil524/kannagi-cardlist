@@ -355,24 +355,33 @@ window.addEventListener('scroll', handleScroll);
 document.addEventListener('DOMContentLoaded', function () {
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const mobileNav = document.querySelector('.mobile-nav');
+  const menuOverlay = document.querySelector('.menu-overlay');
   const closeMenuButton = document.querySelector('.close-menu');
 
-  hamburgerMenu.addEventListener('click', function () {
-    this.classList.toggle('active');
+  function toggleMenu() {
+    hamburgerMenu.classList.toggle('active');
     mobileNav.classList.toggle('active');
-  });
+    menuOverlay.classList.toggle('active');
+    document.body.classList.toggle('no-scroll');
+  }
 
-  closeMenuButton.addEventListener('click', function (e) {
-    e.preventDefault();
-    hamburgerMenu.classList.remove('active');
-    mobileNav.classList.remove('active');
-  });
+  hamburgerMenu.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', toggleMenu);
+
+  if (closeMenuButton) {
+    closeMenuButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      toggleMenu();
+    });
+  }
 
   // 画面サイズが変更されたときにモバイルナビゲーションを非表示にする
   window.addEventListener('resize', function () {
     if (window.innerWidth > 768) {
       hamburgerMenu.classList.remove('active');
       mobileNav.classList.remove('active');
+      menuOverlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
     }
   });
 });
