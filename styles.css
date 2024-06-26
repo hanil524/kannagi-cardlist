@@ -476,6 +476,7 @@ main {
   overflow: hidden;
   position: fixed;
   width: 100%;
+  overflow: hidden;
 }
 
 /* TOPに戻るボタン */
@@ -567,6 +568,7 @@ header input::placeholder,
   cursor: pointer;
   text-align: center;
   transform: scale(0.9);
+  z-index: 1002; /* オーバーレイより上に表示 */
 }
 
 .hamburger-menu span {
@@ -584,16 +586,19 @@ header input::placeholder,
   margin-top: 5px;
 }
 
-/* モバイルナビゲーション */
+/* 既存のモバイルナビゲーションスタイルを更新 */
 .mobile-nav {
-  display: none;
+  display: block; /* 'display: none' を削除 */
   position: fixed;
   top: 60px;
-  left: 0;
+  left: -80%; /* 初期位置を画面外に */
   width: 80%;
+  height: calc(100% - 60px);
   background-color: #f8f8f8;
-  z-index: 999;
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5); /* 右側に影を追加してメニューを強調 */
+  z-index: 1001; /* z-indexを上げる */
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease-in-out; /* スムーズな移動のためのトランジション */
+  overflow-y: auto; /* スクロール可能にする */
 }
 
 .mobile-nav ul {
@@ -637,6 +642,7 @@ header input::placeholder,
     transform: translateX(-50%);
     width: calc(100% - 100px); /* ハンバーガーメニューとの間隔を確保 */
     max-width: 250px;
+    z-index: 1002; /* オーバーレイより上に表示 */
   }
 
   /* ハンバーガーメニューがアクティブ時 */
@@ -654,6 +660,7 @@ header input::placeholder,
 
   .mobile-nav.active {
     display: block;
+    left: 0; /* 画面内に移動 */
   }
 
   /* ヘッダー右側にある画像 */
@@ -666,4 +673,23 @@ header input::placeholder,
     height: auto; /* 画像のアスペクト比を維持しながら高さを自動調整します */
     border-radius: 25%;
   }
+}
+
+/* オーバーレイ背景を追加 */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.menu-overlay.active {
+  display: block;
+  opacity: 1;
 }
