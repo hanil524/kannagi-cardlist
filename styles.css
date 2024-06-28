@@ -167,7 +167,6 @@ main {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 15px;
   /* 画像が読み込まれるまでの間に何も表示されないように */
   background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
@@ -371,7 +370,8 @@ main {
   object-fit: contain;
   display: block;
   border: none;
-  border-radius: 0;
+  border-radius: 16px; /* 拡大された画像に角丸を適用 */
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); /* 透明な白いオーラ効果 */
 }
 
 .image-modal .close-icon {
