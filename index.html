@@ -3833,9 +3833,14 @@
         <button onclick="toggleFilterCard('type', '道具札')">道具札</button>
         <button onclick="toggleFilterCard('type', '季節札')">季節札</button>
       </div>
+
       <div id="image-modal" class="image-modal">
-        <img id="modal-image" src="" alt="Card Image" onclick="closeImageModal()" />
+        <div class="modal-content">
+          <img id="modal-image" src="" alt="Card Image" />
+          <div class="close-icon">×</div>
+        </div>
       </div>
+
       <!-- TOPボタン -->
       <div id="topButton" class="top-button" onclick="scrollToTop()">TOP</div>
     </div>
