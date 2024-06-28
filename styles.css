@@ -371,12 +371,12 @@ main {
   display: block;
   border: none;
   border-radius: 16px; /* 拡大された画像に角丸を適用 */
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); /* 透明な白いオーラ効果 */
+  box-shadow: 0 0 45px rgba(255, 255, 255, 0.4); /* 透明な白いオーラ効果 */
 }
 
 .image-modal .close-icon {
   position: absolute;
-  bottom: -40px;
+  bottom: -60px;
   left: 50%;
   transform: translateX(-50%);
   color: white;
