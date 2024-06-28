@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 初期表示範囲の画像を選択し、それ以外の画像は遅延読み込み
-  const initialImages = document.querySelectorAll('#card-list .card:nth-child(-n+10) img'); // 初期表示範囲の画像を選択
-  const lazyImages = document.querySelectorAll('#card-list .card:nth-child(n+11) img'); // それ以降の画像
+  const initialImages = document.querySelectorAll('#card-list .card:nth-child(-n+10) img');
+  const lazyImages = document.querySelectorAll('#card-list .card:nth-child(n+11) img');
 
   // 初期表示範囲の画像は通常読み込み
   initialImages.forEach((img) => {
@@ -106,20 +106,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = entry.target;
         img.src = img.getAttribute('data-src');
         img.removeAttribute('data-src');
-        img.alt = img.getAttribute('data-alt'); // alt属性を復元
+        img.alt = img.getAttribute('data-alt');
         observer.unobserve(img);
       }
     });
   });
 
   lazyImages.forEach((img) => {
-    img.src = ''; // プレースホルダー画像を使わずにsrc属性を空に設定
-    img.alt = ''; // alt属性を一時的に空に設定
+    img.src = '';
+    img.alt = '';
     observer.observe(img);
+  });
+
+  // 画像モーダルのイベントリスナーを追加 (新規追加)
+  const imageModal = document.getElementById('image-modal');
+  imageModal.addEventListener('click', function (event) {
+    if (event.target === imageModal) {
+      closeImageModal();
+    }
   });
 });
 
-// 入力中の文字をクリアする関数をグローバルに定義
+// 以下の関数は変更なし
 function clearSearch(inputId, buttonId) {
   const input = document.getElementById(inputId);
   input.value = '';
@@ -138,13 +146,12 @@ const filterCardsByName = (event) => {
   });
 };
 
-// カードのソートを行う関数
 const sortCards = (criteria) => {
   if (sortCriteria === criteria) {
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   } else {
     sortCriteria = criteria;
-    sortOrder = criteria === 'number' ? 'desc' : 'asc'; // 'number'の場合、初回は'降順'に設定
+    sortOrder = criteria === 'number' ? 'desc' : 'asc';
   }
 
   const cardList = document.getElementById('card-list');
@@ -157,16 +164,14 @@ const sortCards = (criteria) => {
   cards.forEach((card) => cardList.appendChild(card));
 };
 
-// フィルターをリセットする関数
 const resetFilters = () => {
   Object.keys(filters).forEach((key) => filters[key].clear());
   const cards = document.querySelectorAll('.card');
-  cards.forEach((card) => (card.style.display = 'block')); // すべてのカードを再表示
+  cards.forEach((card) => (card.style.display = 'block'));
   document.getElementById('no-cards-message').style.display = 'none';
   resetSort();
 };
 
-// ソートをリセットする関数
 const resetSort = () => {
   sortCriteria = null;
   sortOrder = 'asc';
@@ -180,7 +185,6 @@ const resetSort = () => {
   cards.forEach((card) => cardList.appendChild(card));
 };
 
-// フィルター条件をトグルする関数
 const toggleFilterCard = (attribute, value) => {
   if (!attribute || !filters[attribute]) {
     console.error(`Attribute "${attribute}" not found in filters.`);
@@ -194,7 +198,6 @@ const toggleFilterCard = (attribute, value) => {
   filterCards();
 };
 
-// カードをフィルタリングする関数
 const filterCards = () => {
   const cards = document.querySelectorAll('.card');
   let anyVisible = false;
@@ -220,32 +223,27 @@ const filterCards = () => {
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 };
 
-// スクロールバーの幅を取得する関数
 const getScrollbarWidth = () => {
   const outer = document.createElement('div');
   outer.style.visibility = 'hidden';
   outer.style.width = '100px';
-  outer.style.msOverflowStyle = 'scrollbar'; // for Internet Explorer
+  outer.style.msOverflowStyle = 'scrollbar';
   document.body.appendChild(outer);
 
   const widthNoScroll = outer.offsetWidth;
-  // Force scrollbars
   outer.style.overflow = 'scroll';
 
-  // Add inner div
   const inner = document.createElement('div');
   inner.style.width = '100%';
   outer.appendChild(inner);
 
   const widthWithScroll = inner.offsetWidth;
 
-  // Remove divs
   outer.parentNode.removeChild(outer);
 
   return widthNoScroll - widthWithScroll;
 };
 
-// モーダルを開く関数を更新
 const openModal = (filterId) => {
   const modal = document.getElementById('modal');
   const modalButtons = document.getElementById('modal-buttons');
@@ -270,29 +268,25 @@ const openModal = (filterId) => {
 
   const scrollbarWidth = getScrollbarWidth();
   modal.style.display = 'block';
-  scrollPosition = window.pageYOffset; // スクロール位置を保存
-  document.body.style.paddingRight = `${scrollbarWidth}px`; // スクロールバー幅分のパディングを追加
-  document.body.classList.add('modal-open'); // クラスを追加してスクロールを無効にし、パディングを追加
+  scrollPosition = window.pageYOffset;
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+  document.body.classList.add('modal-open');
 
-  // ヘッダーのコンテンツにパディングを適用
   const headerContent = document.querySelector('.header-content');
   headerContent.style.paddingRight = `${scrollbarWidth}px`;
 };
 
-// モーダルを閉じる関数を更新
 const closeModal = () => {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
-  document.body.classList.remove('modal-open'); // クラスを削除してスクロールを有効に戻し、パディングをリセット
-  window.scrollTo(0, scrollPosition); // スクロール位置を復元
+  document.body.classList.remove('modal-open');
+  window.scrollTo(0, scrollPosition);
   document.body.style.top = '';
-  document.body.style.paddingRight = ''; // パディングをリセット
+  document.body.style.paddingRight = '';
 
-  // ヘッダーのコンテンツのパディングもリセット
   const headerContent = document.querySelector('.header-content');
   headerContent.style.paddingRight = '';
 
-  // フィルターリセットのチェック
   if (
     filters.series.size === 0 &&
     filters.season.size === 0 &&
@@ -306,7 +300,6 @@ const closeModal = () => {
   }
 };
 
-// 背景をタップしてモーダルを閉じる関数
 const closeModalOnClick = (event) => {
   if (event.target.id === 'modal') {
     closeModal();
@@ -319,50 +312,64 @@ const openImageModal = (src) => {
   const modalImage = document.getElementById('modal-image');
   modalImage.src = src;
   modal.style.display = 'flex';
-  scrollPosition = window.pageYOffset; // スクロール位置を保存
-  document.body.style.top = `-${scrollPosition}px`;
-  document.body.classList.add('no-scroll'); // スクロールを無効にする
+  document.body.style.overflow = 'hidden'; // スクロールを禁止
+  document.getElementById('topButton').style.display = 'none'; // TOP ボタンを非表示
 };
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
-  document.body.classList.remove('no-scroll'); // スクロールを有効に戻す
-  window.scrollTo(0, scrollPosition); // スクロール位置を復元
-  document.body.style.top = '';
+  document.body.style.overflow = ''; // スクロールを許可
+  handleScroll(); // TOP ボタンの表示を更新
 };
 
-// ページの上部にスクロールする関数
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// スクロール時にボタンを表示・非表示にする関数
+// handleScroll 関数を更新
 const handleScroll = () => {
   const topButton = document.getElementById('topButton');
-  if (window.pageYOffset > 300) {
+  const imageModal = document.getElementById('image-modal');
+  if (window.pageYOffset > 300 && imageModal.style.display !== 'flex') {
+    topButton.style.display = 'flex';
     topButton.classList.add('show');
   } else {
+    topButton.style.display = 'none';
     topButton.classList.remove('show');
   }
 };
 
-// スクロールイベントリスナーを追加
 window.addEventListener('scroll', handleScroll);
 
-// 追加（ハンバーガーメニュー系）
+// ハンバーガーメニュー関連 (更新)
 document.addEventListener('DOMContentLoaded', function () {
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const mobileNav = document.querySelector('.mobile-nav');
   const menuOverlay = document.querySelector('.menu-overlay');
   const closeMenuButton = document.querySelector('.close-menu');
 
+  // 画像モーダルのイベントリスナーを追加
+  const imageModal = document.getElementById('image-modal');
+  imageModal.addEventListener('click', function (event) {
+    // 画像モーダル内のどの要素をクリックしても閉じるようにする
+    // ただし、×アイコンはポインターイベントを無効にしているので影響しない
+    closeImageModal();
+  });
+
   function toggleMenu() {
     hamburgerMenu.classList.toggle('active');
     mobileNav.classList.toggle('active');
     menuOverlay.classList.toggle('active');
-    document.body.classList.toggle('no-scroll');
+
+    if (mobileNav.classList.contains('active')) {
+      // メニューを開く時だけスクロールを禁止
+      document.body.style.overflow = 'hidden';
+    } else {
+      // メニューを閉じる時はスクロールを許可
+      document.body.style.overflow = '';
+    }
   }
 
   hamburgerMenu.addEventListener('click', toggleMenu);
@@ -375,7 +382,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 画面サイズが変更されたときにモバイルナビゲーションを非表示にする
   window.addEventListener('resize', function () {
     if (window.innerWidth > 768) {
       hamburgerMenu.classList.remove('active');
