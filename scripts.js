@@ -310,10 +310,20 @@ const closeModalOnClick = (event) => {
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
   const modalImage = document.getElementById('modal-image');
+  const closeIcon = modal.querySelector('.close-icon');
+
   modalImage.src = src;
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden'; // スクロールを禁止
   document.getElementById('topButton').style.display = 'none'; // TOP ボタンを非表示
+
+  // ×マークを非表示にしてからモーダルを表示
+  closeIcon.classList.remove('show');
+
+  // 少し遅れて×マークを表示
+  setTimeout(() => {
+    closeIcon.classList.add('show');
+  }, 100); // 100ミリ秒後に表示開始（アニメーションは0.5秒遅延で開始）
 };
 
 // 画像モーダルを閉じる関数
