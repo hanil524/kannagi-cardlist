@@ -341,7 +341,6 @@ main {
   color: #fff;
 }
 
-/* 画像モーダル */
 .image-modal {
   display: none;
   position: fixed;
@@ -355,9 +354,49 @@ main {
   align-items: center;
 }
 
+.image-modal .modal-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
 .image-modal img {
-  width: 95%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border: none;
+  border-radius: 0;
+}
+
+.image-modal .close-icon {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 30px;
+  pointer-events: none;
+}
+
+/* カードの白い枠を完全に削除 */
+.card {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.card img {
+  width: 100%;
   height: auto;
+  display: block;
 }
 
 .loading-overlay {
@@ -489,7 +528,7 @@ main {
   background-color: #1f1f1f;
   color: rgb(236, 47, 47);
   border-radius: 50%;
-  display: flex;
+  display: none; /* 初期状態で非表示 */
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -502,6 +541,7 @@ main {
 }
 
 .top-button.show {
+  display: flex;
   opacity: 1;
   visibility: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* ホバー時の影のスタイルを追加 */
