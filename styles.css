@@ -156,7 +156,7 @@ main {
 
 .card {
   flex-basis: calc(20% - 10px);
-  border-radius: 10px;
+  border-radius: 16px;
   overflow: hidden;
   transition: transform 0.08s, box-shadow 0.15s; /* 影の遷移を追加 */
   position: relative; /* 影の位置調整のために必要 */
