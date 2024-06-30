@@ -147,48 +147,6 @@ main {
   gap: 8px;
 }
 
-/* ボタンスタイル */
-.sort-buttons button,
-.filter-buttons button,
-.filter-group button {
-  cursor: pointer;
-  border: 1px solid #ccc;
-  background-color: #f0f0f0;
-  font-size: 13px;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  transition: background-color 0.1s ease, transform 0.1s ease;
-}
-
-.sort-buttons button {
-  border-radius: 50px;
-}
-
-/* ホバーと焦点時の効果 */
-.sort-buttons button:hover,
-.sort-buttons button:focus,
-.filter-buttons button:hover,
-.filter-buttons button:focus,
-.filter-group button:hover,
-.filter-group button:focus {
-  background-color: #e0e0e0;
-  transform: scale(1.05);
-}
-
-/* アクティブ時とクリック時の効果 */
-.sort-buttons button:active,
-.sort-buttons button.active,
-.filter-buttons button:active,
-.filter-buttons button.active,
-.filter-group button:active,
-.filter-group button.active {
-  background-color: #d0d0d0;
-  transform: scale(0.96);
-}
-
 /* ボタンの縦幅を調整 */
 .filter-buttons button,
 .sort-buttons button {
@@ -198,24 +156,6 @@ main {
   align-items: center;
   justify-content: center;
   line-height: 1.2; /* テキストの行間を調整 */
-}
-
-.filter-group {
-  display: flex;
-  align-items: center; /* 垂直方向の中央揃え */
-}
-
-/* フィルターグループのラベルのスタイルを調整（必要に応じて） */
-.filter-group label {
-  margin-right: 10px; /* ラベルとボタンの間隔を調整 */
-}
-
-.filter-content {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
-  gap: 10px;
 }
 
 #card-list {
@@ -378,20 +318,20 @@ main {
 }
 
 .close {
-  color: #5f5f5f;
+  color: #3f3f3f;
   font-size: 28px;
   font-weight: bold;
   position: absolute;
   padding-left: 125px;
   padding-right: 125px;
-  top: -8px; /* モーダルの外側に配置 */
+  top: -6px; /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
 }
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: rgb(255, 255, 255);
   text-decoration: none;
   cursor: pointer;
 }
@@ -400,67 +340,6 @@ main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-}
-
-.modal-buttons button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.modal-buttons button:hover {
-  background-color: #383838;
-  border: 1px solid black;
-  color: #fff;
-}
-
-.image-modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  justify-content: center;
-  align-items: center;
-}
-
-.image-modal .modal-content {
-  position: relative;
-  max-width: 100%;
-  max-height: 100%;
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-}
-
-.image-modal img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-  border: none;
-  border-radius: 16px; /* 拡大された画像に角丸を適用 */
-  box-shadow: 0 0 45px rgba(255, 255, 255, 0.4); /* 透明な白いオーラ効果 */
-}
-
-.image-modal .close-icon {
-  position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 30px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
 }
 
 @keyframes fadeIn {
@@ -473,8 +352,8 @@ main {
 }
 
 .image-modal .close-icon.show {
-  animation: fadeIn 0.3s ease-in forwards;
-  animation-delay: 0.3s; /* 0.5秒の遅延後に表示開始 */
+  animation: fadeIn 0.2s ease-in forwards;
+  animation-delay: 0.2s; /* 0.5秒の遅延後に表示開始 */
 }
 
 /* カードの白い枠を完全に削除 */
@@ -699,24 +578,6 @@ header input::placeholder,
   text-align: center;
 }
 
-/* ハンバーガーメニュー */
-.hamburger-menu {
-  display: none;
-  cursor: pointer;
-  text-align: center;
-  transform: scale(0.9);
-  z-index: 1002; /* オーバーレイより上に表示 */
-}
-
-.hamburger-menu span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  margin: 5px auto;
-  background-color: white;
-  transition: all 0.3s ease-in-out;
-}
-
 .menu-text {
   color: white;
   font-size: 12px;
@@ -782,6 +643,17 @@ header input::placeholder,
     z-index: 1002; /* オーバーレイより上に表示 */
   }
 
+  /* ハンバーガーメニュー */
+
+  .hamburger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+  }
+
   /* ハンバーガーメニューがアクティブ時 */
   .hamburger-menu.active span:nth-child(2) {
     opacity: 0;
@@ -841,4 +713,264 @@ body {
 #filter-section {
   position: relative;
   z-index: 2;
+}
+
+/* フィルターボタンのデザイン */
+.filter-group {
+  background-color: rgba(60, 60, 60, 0.9); /* サイトの背景よりも少し明るく */
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  border: 1px solid rgba(100, 100, 100, 0.5); /* 境界線を追加 */
+}
+
+.filter-buttons button,
+.sort-buttons button {
+  background-color: rgba(100, 100, 100, 0.9);
+  color: #ffffff;
+  border: 1px solid #777777;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.filter-buttons button:hover,
+.sort-buttons button:hover {
+  background-color: rgba(120, 120, 120, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.filter-buttons button:active,
+.sort-buttons button:active,
+.filter-buttons button.active,
+.sort-buttons button.active {
+  background-color: rgba(140, 140, 140, 0.9);
+  color: #ffffff;
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+  border-color: #aaaaaa;
+}
+
+/* ボタングループのラベル */
+.filter-group label {
+  color: #e0e0e0;
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 15px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* フィルター解除ボタン */
+button[onclick='resetFilters()'] {
+  background-color: rgba(165, 70, 70, 0.9); /* より落ち着いた赤 */
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 8px 20px;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+button[onclick='resetFilters()']:hover {
+  background-color: rgba(185, 80, 80, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+button[onclick='resetFilters()']:active {
+  background-color: rgba(145, 60, 60, 0.9);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* モーダル内のフィルターボタン */
+.modal-buttons button {
+  background-color: rgba(80, 80, 80, 0.9);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 5px;
+}
+
+.modal-buttons button:hover {
+  background-color: rgba(100, 100, 100, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.modal-buttons button:active {
+  background-color: rgba(120, 120, 120, 0.9);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* モーダルの背景とコンテンツのスタイリング */
+.modal {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  background-color: rgba(40, 40, 40, 0.95);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* モーダルのクローズボタン */
+.close {
+  color: #ffffff;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+.mobile-nav {
+  background-color: rgba(30, 30, 30, 0.95);
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-nav ul {
+  padding: 20px 0;
+}
+
+.mobile-nav li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav a {
+  color: #e0e0e0;
+  padding: 15px 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.mobile-nav .close-menu {
+  background-color: rgba(165, 70, 70, 0.9);
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav .close-menu:hover {
+  background-color: rgba(185, 80, 80, 0.9);
+}
+
+/* ハンバーガー アイコン */
+.hamburger-menu span {
+  background-color: #e0e0e0;
+  height: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.menu-text {
+  color: #e0e0e0;
+  font-size: 12px;
+  margin-top: 5px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu:hover .menu-text {
+  color: #ffffff;
+}
+
+/* 画像の拡大表示（モーダル） */
+.image-modal .modal-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.image-modal .close-icon {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 30px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+.image-modal .modal-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* 幅を100%に設定 */
+}
+
+.image-modal img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
+}
+
+/* スマートフォン向けの調整 */
+@media (max-width: 768px) {
+  .image-modal .modal-content {
+    padding: 0 10px; /* 左右にわずかな余白を追加 */
+  }
+
+  .image-modal img {
+    width: auto; /* 幅を自動調整 */
+    height: auto; /* 高さを自動調整 */
+    max-width: 100%; /* 最大幅を画面幅に */
+    max-height: 90vh; /* 最大高さを画面の90%に */
+  }
 }
