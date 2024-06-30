@@ -407,14 +407,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ズームを防止する関数
 function preventZoom(e) {
+  if (e.touches.length > 1) {
+    e.preventDefault();
+    return; // マルチタッチの場合はここで終了
+  }
+
   var t2 = e.timeStamp;
-  var t1 = e.currentTarget.dataset.lastTouch || t2;
+  var t1 = e.target.dataset && e.target.dataset.lastTouch ? e.target.dataset.lastTouch : 0;
   var dt = t2 - t1;
   var fingers = e.touches.length;
-  e.currentTarget.dataset.lastTouch = t2;
 
-  if (!dt || dt > 500 || fingers > 1) return; // すべてのマルチタッチや長押しは無視する
+  if (!dt || dt > 500 || fingers > 1) return; // 長押しやマルチタッチは無視
 
   e.preventDefault();
   e.target.click();
+
+  // 最後のタッチ時間を更新
+  if (e.target.dataset) {
+    e.target.dataset.lastTouch = t2;
+  }
 }
