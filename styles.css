@@ -153,6 +153,7 @@ main {
   cursor: pointer;
   border: 1px solid #ccc;
   background-color: #f0f0f0;
+  font-size: 13px;
   outline: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
@@ -185,6 +186,27 @@ main {
 .filter-group button.active {
   background-color: #d0d0d0;
   transform: scale(0.96);
+}
+
+/* ボタンの縦幅を調整 */
+.filter-buttons button,
+.sort-buttons button {
+  height: 28px; /* ボタンの高さを増加 */
+  padding: 0 8px; /* 左右のパディングを設定 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2; /* テキストの行間を調整 */
+}
+
+.filter-group {
+  display: flex;
+  align-items: center; /* 垂直方向の中央揃え */
+}
+
+/* フィルターグループのラベルのスタイルを調整（必要に応じて） */
+.filter-group label {
+  margin-right: 10px; /* ラベルとボタンの間隔を調整 */
 }
 
 .filter-content {
