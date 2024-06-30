@@ -352,6 +352,8 @@ const handleScroll = () => {
 };
 
 window.addEventListener('scroll', handleScroll);
+// ページ読み込み時にも実行
+document.addEventListener('DOMContentLoaded', handleScroll);
 
 // ハンバーガーメニュー関連 (更新)
 document.addEventListener('DOMContentLoaded', function () {
