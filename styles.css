@@ -549,14 +549,14 @@ main {
   background-color: #1f1f1f;
   color: rgb(236, 47, 47);
   border-radius: 50%;
-  display: none; /* 初期状態で非表示 */
+  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* 影を追加 */
-  transition: opacity 0.3s ease, box-shadow 0.3s ease; /* 影の遷移を追加 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, box-shadow 0.3s ease;
   z-index: 1000;
   font-weight: bold;
 }
@@ -574,6 +574,10 @@ main {
     overflow: hidden;
     padding-right: 17px; /* 一般的なスクロールバーの幅 */
   }
+}
+
+.top-button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
 
 @media (min-width: 768px) {
