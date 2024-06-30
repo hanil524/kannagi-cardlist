@@ -8,11 +8,10 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: rgb(70, 69, 69);
 }
 
 header {
-  background: #333;
+  background: #414141;
   color: white;
   padding: 10px;
   display: flex;
@@ -87,7 +86,7 @@ header a {
 
 .mobile-header {
   display: none;
-  background: #333;
+  background: #414141;
   color: white;
   padding: 10px;
   position: fixed;
@@ -754,4 +753,59 @@ header input::placeholder,
 .menu-overlay.active {
   display: block;
   opacity: 1;
+}
+
+body {
+  background-color: #2a2a2a; /* ダークグレーの基本背景色 */
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0) 20%,
+      rgba(0, 0, 0, 0) 80%,
+      rgba(0, 0, 0, 0.7) 100%
+    ),
+    url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z" fill="%23333" fill-opacity="0.05" fill-rule="evenodd"/%3E%3C/svg%3E');
+  background-repeat: repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* PC用のスタイル */
+@media (min-width: 768px) {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+    pointer-events: none;
+  }
+}
+
+/* スマートフォン用のスタイル */
+@media (max-width: 767px) {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0) 10%,
+      rgba(0, 0, 0, 0) 90%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+/* フィルターセクションのz-indexを上げる */
+#filter-section {
+  position: relative;
+  z-index: 2;
 }
