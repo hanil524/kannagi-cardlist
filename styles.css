@@ -233,6 +233,12 @@ main {
   position: relative; /* 影の位置調整のために必要 */
 }
 
+@media (max-width: 768px) {
+  .card {
+    border-radius: 12px; /* スマートフォン表示時は角の丸みを減らす */
+  }
+}
+
 .card img {
   background-color: #f0f0f0; /* 適宜背景色を設定 */
   display: block;
