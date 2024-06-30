@@ -1,3 +1,9 @@
+html,
+body {
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
