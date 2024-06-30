@@ -11,7 +11,7 @@ body {
 }
 
 header {
-  background: #414141;
+  background: #1f1f1f;
   color: white;
   padding: 10px;
   display: flex;
@@ -86,7 +86,7 @@ header a {
 
 .mobile-header {
   display: none;
-  background: #414141;
+  background: #1f1f1f;
   color: white;
   padding: 10px;
   position: fixed;
@@ -123,6 +123,7 @@ main {
   }
 }
 
+/* フィルター左の文字 */
 .filter-group {
   margin: 10px;
   padding: 10px;
@@ -137,11 +138,53 @@ main {
   font-weight: bold;
 }
 
+/* フィルターボタン */
 .sort-buttons,
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* ボタンスタイル */
+.sort-buttons button,
+.filter-buttons button,
+.filter-group button {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 0.1s ease, transform 0.1s ease;
+}
+
+.sort-buttons button {
+  border-radius: 50px;
+}
+
+/* ホバーと焦点時の効果 */
+.sort-buttons button:hover,
+.sort-buttons button:focus,
+.filter-buttons button:hover,
+.filter-buttons button:focus,
+.filter-group button:hover,
+.filter-group button:focus {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+/* アクティブ時とクリック時の効果 */
+.sort-buttons button:active,
+.sort-buttons button.active,
+.filter-buttons button:active,
+.filter-buttons button.active,
+.filter-group button:active,
+.filter-group button.active {
+  background-color: #d0d0d0;
+  transform: scale(0.96);
 }
 
 .filter-content {
@@ -546,7 +589,7 @@ main {
   right: 20px;
   width: 50px;
   height: 50px;
-  background-color: #1f1f1f;
+  background-color: #363636;
   color: rgb(236, 47, 47);
   border-radius: 50%;
   display: flex;
@@ -760,15 +803,8 @@ header input::placeholder,
 }
 
 body {
-  background-color: #2a2a2a; /* ダークグレーの基本背景色 */
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0) 20%,
-      rgba(0, 0, 0, 0) 80%,
-      rgba(0, 0, 0, 0.7) 100%
-    ),
-    url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z" fill="%23333" fill-opacity="0.05" fill-rule="evenodd"/%3E%3C/svg%3E');
+  background-color: #404040; /* 中間的なグレーの基本背景色 */
+  background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z" fill="%23484848" fill-opacity="0.08" fill-rule="evenodd"/%3E%3C/svg%3E');
   background-repeat: repeat;
   background-position: center;
   background-attachment: fixed;
@@ -783,7 +819,19 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(64, 64, 64, 0) 0%,
+        rgba(64, 64, 64, 0) 70%,
+        rgba(0, 0, 0, 0.5) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0) 10%,
+        rgba(0, 0, 0, 0) 90%,
+        rgba(0, 0, 0, 0.5) 100%
+      );
     pointer-events: none;
   }
 }
@@ -798,12 +846,19 @@ body {
     right: 0;
     bottom: 0;
     background: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.5) 0%,
-      rgba(0, 0, 0, 0) 10%,
-      rgba(0, 0, 0, 0) 90%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
+        to bottom,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0) 10%,
+        rgba(0, 0, 0, 0) 90%,
+        rgba(0, 0, 0, 0.5) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0) 10%,
+        rgba(0, 0, 0, 0) 90%,
+        rgba(0, 0, 0, 0.5) 100%
+      );
     pointer-events: none;
   }
 }
