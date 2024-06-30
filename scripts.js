@@ -360,6 +360,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const menuOverlay = document.querySelector('.menu-overlay');
   const closeMenuButton = document.querySelector('.close-menu');
 
+  // タッチデバイスでのズームを防止
+  document.addEventListener('touchstart', preventZoom, { passive: false });
+
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
   imageModal.addEventListener('click', function (event) {
@@ -401,3 +404,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+// ズームを防止する関数
+function preventZoom(e) {
+  var t2 = e.timeStamp;
+  var t1 = e.currentTarget.dataset.lastTouch || t2;
+  var dt = t2 - t1;
+  var fingers = e.touches.length;
+  e.currentTarget.dataset.lastTouch = t2;
+
+  if (!dt || dt > 500 || fingers > 1) return; // すべてのマルチタッチや長押しは無視する
+
+  e.preventDefault();
+  e.target.click();
+}
