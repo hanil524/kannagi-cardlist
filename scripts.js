@@ -313,6 +313,7 @@ const closeModalOnClick = (event) => {
 };
 let savedScrollPosition = 0;
 
+// 画像モーダルを開く関数
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
   const modalImage = document.getElementById('modal-image');
@@ -326,18 +327,6 @@ const openImageModal = (src) => {
   document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
   document.getElementById('topButton').style.display = 'none';
-
-  // 画像を中央に配置
-  modalImage.style.position = 'fixed';
-  modalImage.style.top = '50%';
-  modalImage.style.left = '50%';
-  modalImage.style.transform = 'translate(-50%, -50%)';
-
-  // ×マークを画像の下に配置
-  closeIcon.style.position = 'fixed';
-  closeIcon.style.bottom = '180px';
-  closeIcon.style.left = '50%';
-  closeIcon.style.transform = 'translateX(-50%)';
 
   closeIcon.classList.remove('show');
   setTimeout(() => {
