@@ -962,6 +962,8 @@ button[onclick='resetFilters()']:active {
   }
 
   .image-modal img {
+    width: auto; /* 幅を自動調整 */
+    height: auto; /* 高さを自動調整 */
     max-width: 80%; /* 最大幅を画面幅に */
     max-height: 90vh; /* 最大高さを画面の90%に */
   }
