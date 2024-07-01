@@ -897,7 +897,8 @@ button[onclick='resetFilters()']:active {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* 上端揃えに変更 */
+  padding-top: 160px; /* 上から100pxの位置に配置 */
 }
 
 .image-modal .modal-content {
@@ -1026,17 +1027,19 @@ button[onclick='resetFilters()']:active {
 .modal-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 5px; /* ボタン間の間隔を縮小 */
+  gap: 7px; /* ボタン間の間隔を縮小 */
   padding: 13px;
   max-height: 75vh; /* モーダルの最大高さを制限 */
   overflow-y: auto; /* スクロール可能に */
 }
 
+/* モーダル内のボタンのテキスト */
 .modal-buttons button {
   width: 100%;
   min-height: 36px; /* ボタンの高さを少し縮小 */
   padding: 6px 8px; /* パディングを調整 */
   font-size: 12px; /* フォントサイズを小さく */
+  letter-spacing: 0.8px; /* 文字間隔を0.2px広げる */
   font-weight: bold;
   line-height: 1.2;
   text-align: center;
