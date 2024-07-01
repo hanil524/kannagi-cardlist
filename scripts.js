@@ -333,6 +333,12 @@ const openImageModal = (src) => {
   modalImage.style.left = '50%';
   modalImage.style.transform = 'translate(-50%, -50%)';
 
+  // ×マークを画像の下に配置
+  closeIcon.style.position = 'fixed';
+  closeIcon.style.bottom = '180px';
+  closeIcon.style.left = '50%';
+  closeIcon.style.transform = 'translateX(-50%)';
+
   closeIcon.classList.remove('show');
   setTimeout(() => {
     closeIcon.classList.add('show');
