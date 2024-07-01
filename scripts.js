@@ -266,9 +266,15 @@ const openModal = (filterId) => {
     modalButtons.appendChild(newButton);
   });
 
-  const scrollbarWidth = getScrollbarWidth();
-  modal.style.display = 'block';
+  // スクロール位置を保存
   scrollPosition = window.pageYOffset;
+
+  // スクロールバーの幅を計算
+  const scrollbarWidth = getScrollbarWidth();
+
+  // ボディにパディングを追加する前にモーダルを表示
+  modal.style.display = 'block';
+
   document.body.style.paddingRight = `${scrollbarWidth}px`;
   document.body.classList.add('modal-open');
 
@@ -305,6 +311,7 @@ const closeModalOnClick = (event) => {
     closeModal();
   }
 };
+let savedScrollPosition = 0;
 
 // 画像モーダルを開く関数
 const openImageModal = (src) => {
@@ -312,26 +319,34 @@ const openImageModal = (src) => {
   const modalImage = document.getElementById('modal-image');
   const closeIcon = modal.querySelector('.close-icon');
 
+  savedScrollPosition = window.pageYOffset;
   modalImage.src = src;
   modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden'; // スクロールを禁止
-  document.getElementById('topButton').style.display = 'none'; // TOP ボタンを非表示
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${savedScrollPosition}px`;
+  document.body.style.width = '100%';
+  document.getElementById('topButton').style.display = 'none';
 
-  // ×マークを非表示にしてからモーダルを表示
   closeIcon.classList.remove('show');
-
-  // 少し遅れて×マークを表示
   setTimeout(() => {
     closeIcon.classList.add('show');
-  }, 100); // 100ミリ秒後に表示開始（アニメーションは0.5秒遅延で開始）
+  }, 100);
 };
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
-  document.body.style.overflow = ''; // スクロールを許可
-  handleScroll(); // TOP ボタンの表示を更新
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  window.scrollTo(0, savedScrollPosition);
+
+  setTimeout(() => {
+    handleScroll();
+  }, 100);
 };
 
 const scrollToTop = () => {
