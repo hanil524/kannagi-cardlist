@@ -877,7 +877,6 @@ button[onclick='resetFilters()']:active {
 /* ハンバーガー アイコン */
 .hamburger-menu span {
   background-color: #e0e0e0;
-  height: 2px;
   transition: all 0.3s ease;
 }
 
@@ -970,7 +969,67 @@ button[onclick='resetFilters()']:active {
   .image-modal img {
     width: auto; /* 幅を自動調整 */
     height: auto; /* 高さを自動調整 */
-    max-width: 100%; /* 最大幅を画面幅に */
+    max-width: 80%; /* 最大幅を画面幅に */
     max-height: 90vh; /* 最大高さを画面の90%に */
+  }
+}
+
+.modal-buttons button:hover {
+  background-color: rgba(100, 100, 100, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.modal-buttons button:active {
+  background-color: rgba(120, 120, 120, 0.9);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* モーダルの背景とコンテンツのスタイリング */
+.modal-content {
+  background-color: rgba(40, 40, 40, 0.95);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+}
+
+.modal-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.modal-buttons button {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+  word-break: break-word;
+  hyphens: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(80, 80, 80, 0.9);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* スマートフォン向けの調整 */
+@media (max-width: 480px) {
+  .modal-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal-buttons button {
+    font-size: 12px;
+    padding: 6px 10px;
   }
 }
