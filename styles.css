@@ -351,11 +351,6 @@ main {
   }
 }
 
-.image-modal .close-icon.show {
-  animation: fadeIn 0.2s ease-in forwards;
-  animation-delay: 0.2s; /* 0.5秒の遅延後に表示開始 */
-}
-
 /* カードの白い枠を完全に削除 */
 .card {
   border: none;
@@ -967,11 +962,14 @@ button[onclick='resetFilters()']:active {
   }
 
   .image-modal img {
-    width: auto; /* 幅を自動調整 */
-    height: auto; /* 高さを自動調整 */
     max-width: 80%; /* 最大幅を画面幅に */
     max-height: 90vh; /* 最大高さを画面の90%に */
   }
+}
+
+.image-modal .close-icon.show {
+  animation: fadeIn 0.2s ease-in forwards;
+  animation-delay: 0.2s; /* 0.5秒の遅延後に表示開始 */
 }
 
 .modal-buttons button:hover {
