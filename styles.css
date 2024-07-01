@@ -714,7 +714,7 @@ body {
 .filter-group {
   background-color: rgba(60, 60, 60, 0.9); /* サイトの背景よりも少し明るく */
   border-radius: 10px;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   margin: 10px;
   border: 1px solid rgba(100, 100, 100, 0.5); /* 境界線を追加 */
@@ -726,10 +726,11 @@ body {
   color: #ffffff;
   border: 1px solid #777777;
   border-radius: 5px;
-  padding: 8px 15px;
-  font-size: 14px;
+  padding: 6px 8px;
+  font-size: 12px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
 
 .filter-buttons button:hover,
@@ -755,7 +756,7 @@ body {
   color: #e0e0e0;
   font-weight: bold;
   margin-right: 10px;
-  font-size: 15px;
+  font-size: 13px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
@@ -765,7 +766,7 @@ button[onclick='resetFilters()'] {
   color: #ffffff;
   font-weight: bold;
   border-radius: 25px;
-  padding: 8px 20px;
+  padding: 6px 16px;
   border: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
@@ -789,11 +790,12 @@ button[onclick='resetFilters()']:active {
   color: #ffffff;
   border: none;
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 8px 8px;
   font-size: 14px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  margin: 5px;
+  margin: 2px;
+  white-space: nowrap;
 }
 
 .modal-buttons button:hover {
@@ -1032,4 +1034,77 @@ button[onclick='resetFilters()']:active {
     font-size: 12px;
     padding: 6px 10px;
   }
+}
+
+/* モーダル内のフィルターボタンのスタイリング */
+.modal-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px; /* ボタン間の間隔を縮小 */
+  padding: 13px;
+  max-height: 75vh; /* モーダルの最大高さを制限 */
+  overflow-y: auto; /* スクロール可能に */
+}
+
+.modal-buttons button {
+  width: 100%;
+  min-height: 36px; /* ボタンの高さを少し縮小 */
+  padding: 6px 8px; /* パディングを調整 */
+  font-size: 13px; /* フォントサイズを小さく */
+  line-height: 1.2;
+  text-align: center;
+  word-break: break-word;
+  hyphens: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(80, 80, 80, 0.9);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px; /* 角丸を少し小さく */
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* スクロールバーのスタイリング */
+.modal-buttons::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-buttons::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.modal-buttons::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.modal-buttons::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* モーダルのスタイル */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  background-color: rgba(40, 40, 40, 0.95);
+  margin: 10vh auto 0; /* 上から10%の位置に配置 */
+  padding: 20px;
+  border: none;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
