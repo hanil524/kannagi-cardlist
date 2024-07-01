@@ -1033,30 +1033,3 @@ button[onclick='resetFilters()']:active {
     padding: 6px 10px;
   }
 }
-
-/* 画面が狭いスマホで、画面上部のフィルターボタンが1列に */
-@media (max-width: 480px) {
-  #filter-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-group {
-    width: 100%;
-    margin: 5px 0;
-  }
-
-  .filter-buttons,
-  .sort-buttons {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
-  }
-
-  .filter-buttons button,
-  .sort-buttons button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-  }
-}
