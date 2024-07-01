@@ -900,7 +900,7 @@ button[onclick='resetFilters()']:active {
   background-color: rgba(0, 0, 0, 0.9);
   justify-content: center;
   align-items: flex-start; /* 上端揃えに変更 */
-  padding-top: 55%; /* 上から%分の位置に配置 */
+  padding-top: 160px; /* 上から100pxの位置に配置 */
 }
 
 .image-modal .modal-content {
