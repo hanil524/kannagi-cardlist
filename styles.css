@@ -1114,23 +1114,28 @@ button[onclick='resetFilters()']:active {
 /* 個別の季節ボタンの背景色 */
 .modal-buttons button.haruiro {
   background-color: #f76969; /* ダークレッド */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.natsuiro {
   background-color: #46ce46; /* ダークグリーン */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.akiiro {
-  background-color: #ffa86e; /* サドルブラウン */
+  background-color: #ff915f; /* サドルブラウン */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.huyuiro {
-  background-color: #3f69dd; /* ダークブルー */
+  background-color: #4e78eb; /* ダークブルー */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.muiro {
   background-color: #ffffff;
   color: #333333; /* 濃いグレーのテキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 /* 混化ボタンの斜め2色デザイン */
@@ -1138,6 +1143,7 @@ button[onclick='resetFilters()']:active {
   background: linear-gradient(135deg, #f76969 50%, #46ce46 50%);
   position: relative;
   overflow: hidden;
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.konkairo::after {
@@ -1154,22 +1160,25 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.basyoiro {
   background-color: #f74848; /* 赤（場所札） */
   color: #ffffff; /* 白テキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.kaiiiro {
   background-color: #9370db; /* ミディアムパープル（怪異札） */
   color: #ffffff; /* 白テキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.douguiro {
   background-color: #f0f0f0; /* 薄いグレー（道具札） */
   color: #333333; /* 濃いグレーのテキスト */
-  border: 1px solid #cccccc; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.kisetsuiro {
   background-color: #ffd700; /* ゴールド（季節札） */
   color: #333333; /* 濃いグレーのテキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 /* シリーズボタンの基本スタイル */
@@ -1185,18 +1194,20 @@ button[onclick='resetFilters()']:active {
 
 /* 各ボタンの背景色設定 */
 .modal-buttons button.batoruiro {
-  background: linear-gradient(135deg, #46ce46 50%, #3f69dd 50%);
-  color: #333333; /* 濃いグレーのテキスト */
+  background: linear-gradient(135deg, #1b1b1b 50%, #f74848 50%);
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.sinkiiro {
   background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
   color: #333333; /* 濃いグレーのテキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.hyakkiiro {
   background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
   color: #333333; /* 濃いグレーのテキスト */
+  border: 2px solid #ffffff; /* 境界線を追加してボタンを目立たせる */
 }
 
 .modal-buttons button.puromoiro {
