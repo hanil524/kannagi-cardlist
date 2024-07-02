@@ -1109,7 +1109,6 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.muiro,
 .modal-buttons button.konkairo {
   color: #ffffff; /* テキストの色を白に設定 */
-  font-weight: bold; /* テキストを太字に */
 }
 
 /* 個別の季節ボタンの背景色 */
@@ -1150,14 +1149,6 @@ button[onclick='resetFilters()']:active {
   z-index: 1;
 }
 
-/* 札種類ボタンの基本スタイル */
-.modal-buttons button.basyoiro,
-.modal-buttons button.kaiiiro,
-.modal-buttons button.douguiro,
-.modal-buttons button.kisetsuiro {
-  font-weight: bold; /* テキストを太字に */
-}
-
 /* 個別の札種類ボタンの背景色 */
 .modal-buttons button.basyoiro {
   background-color: #f76969; /* 赤（場所札） */
@@ -1178,4 +1169,50 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.kisetsuiro {
   background-color: #ffd700; /* ゴールド（季節札） */
   color: #333333; /* 濃いグレーのテキスト */
+}
+
+/* シリーズボタンの基本スタイル */
+.modal-buttons button.batoruiro,
+.modal-buttons button.sinkiiro,
+.modal-buttons button.hyakkiiro,
+.modal-buttons button.puromoiro {
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* 各ボタンの背景色設定 */
+.modal-buttons button.batoruiro {
+  background: linear-gradient(135deg, #46ce46 50%, #3f69dd 50%);
+  color: #333333; /* 濃いグレーのテキスト */
+}
+
+.modal-buttons button.sinkiiro {
+  background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
+  color: #333333; /* 濃いグレーのテキスト */
+}
+
+.modal-buttons button.hyakkiiro {
+  background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
+  color: #333333; /* 濃いグレーのテキスト */
+}
+
+.modal-buttons button.puromoiro {
+  background-color: #ffffff;
+  color: #333333; /* 濃いグレーのテキスト */
+}
+
+/* テキストを中央に配置 */
+.modal-buttons button.batoruiro::after,
+.modal-buttons button.sinkiiro::after,
+.modal-buttons button.hyakkiiro::after,
+.modal-buttons button.puromoiro::after {
+  content: attr(onclick);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 2;
 }
