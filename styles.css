@@ -1129,7 +1129,8 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-buttons button.muiro {
-  background-color: #a9a9a9; /* ダークグレー */
+  background-color: #ffffff;
+  color: #333333; /* 濃いグレーのテキスト */
 }
 
 /* 混化ボタンの斜め2色デザイン */
