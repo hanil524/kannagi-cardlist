@@ -1100,3 +1100,82 @@ button[onclick='resetFilters()']:active {
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
+
+/* 季節ボタンの基本スタイル */
+.modal-buttons button.haruiro,
+.modal-buttons button.natsuiro,
+.modal-buttons button.akiiro,
+.modal-buttons button.huyuiro,
+.modal-buttons button.muiro,
+.modal-buttons button.konkairo {
+  color: #ffffff; /* テキストの色を白に設定 */
+  font-weight: bold; /* テキストを太字に */
+}
+
+/* 個別の季節ボタンの背景色 */
+.modal-buttons button.haruiro {
+  background-color: #f76969; /* ダークレッド */
+}
+
+.modal-buttons button.natsuiro {
+  background-color: #46ce46; /* ダークグリーン */
+}
+
+.modal-buttons button.akiiro {
+  background-color: #d88c44; /* サドルブラウン */
+}
+
+.modal-buttons button.huyuiro {
+  background-color: #3f69dd; /* ダークブルー */
+}
+
+.modal-buttons button.muiro {
+  background-color: #a9a9a9; /* ダークグレー */
+}
+
+/* 混化ボタンの斜め2色デザイン */
+.modal-buttons button.konkairo {
+  background: linear-gradient(135deg, #f76969 50%, #46ce46 50%);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-buttons button.konkairo::after {
+  content: '混化';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  z-index: 1;
+}
+
+/* 札種類ボタンの基本スタイル */
+.modal-buttons button.basyoiro,
+.modal-buttons button.kaiiiro,
+.modal-buttons button.douguiro,
+.modal-buttons button.kisetsuiro {
+  font-weight: bold; /* テキストを太字に */
+}
+
+/* 個別の札種類ボタンの背景色 */
+.modal-buttons button.basyoiro {
+  background-color: #f76969; /* 赤（場所札） */
+  color: #ffffff; /* 白テキスト */
+}
+
+.modal-buttons button.kaiiiro {
+  background-color: #9370db; /* ミディアムパープル（怪異札） */
+  color: #ffffff; /* 白テキスト */
+}
+
+.modal-buttons button.douguiro {
+  background-color: #f0f0f0; /* 薄いグレー（道具札） */
+  color: #333333; /* 濃いグレーのテキスト */
+  border: 1px solid #cccccc; /* 境界線を追加してボタンを目立たせる */
+}
+
+.modal-buttons button.kisetsuiro {
+  background-color: #ffd700; /* ゴールド（季節札） */
+  color: #333333; /* 濃いグレーのテキスト */
+}
