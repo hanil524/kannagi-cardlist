@@ -1152,7 +1152,7 @@ button[onclick='resetFilters()']:active {
 
 /* 個別の札種類ボタンの背景色 */
 .modal-buttons button.basyoiro {
-  background-color: #f76969; /* 赤（場所札） */
+  background-color: #f74848; /* 赤（場所札） */
   color: #ffffff; /* 白テキスト */
 }
 
