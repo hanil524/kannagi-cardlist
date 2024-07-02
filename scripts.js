@@ -263,6 +263,8 @@ const openModal = (filterId) => {
       toggleFilterCard(filterId, button.innerText.trim());
       closeModal();
     };
+    // 元のボタンのクラスを新しいボタンに追加
+    newButton.className = button.className;
     modalButtons.appendChild(newButton);
   });
 
