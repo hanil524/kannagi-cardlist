@@ -1250,3 +1250,23 @@ button[onclick='resetFilters()']:active {
   white-space: nowrap;
   z-index: 2;
 }
+
+/* 検索結果ナシ */
+#no-cards-message {
+  color: #ffffff; /* 文字色を白に設定 */
+  text-align: center; /* テキストを中央揃えに */
+  padding: 20px; /* 上下左右に余白を追加 */
+  font-size: 18px; /* フォントサイズを大きくする（必要に応じて調整） */
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒い背景（オプション） */
+  border-radius: 8px; /* 角を丸くする（オプション） */
+  margin: 20px 0; /* 上下のマージンを追加（必要に応じて調整） */
+}
+
+#no-cards-message p {
+  margin: 0; /* パラグラフのデフォルトマージンを削除 */
+  line-height: 1.5; /* 行間を調整 */
+}
+
+#no-cards-message p + p {
+  margin-top: 10px; /* 2つ目のパラグラフの上にマージンを追加 */
+}
