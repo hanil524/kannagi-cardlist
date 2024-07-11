@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hanil524.github.io/kannagi-cardlist/sitemap.xml
