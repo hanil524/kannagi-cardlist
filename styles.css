@@ -201,17 +201,17 @@ main {
 }
 
 .card img {
-  background-color: #f0f0f0; /* 薄いグレーの背景色 */
+  background-color: #f0f0f0; /* 適宜背景色を設定 */
   display: block;
   width: 100%;
   height: auto;
-  /* 画像が読み込まれるまでの間のプレースホルダー */
-  background: url('images/placeholder.jpg') center center no-repeat;
+  /* 画像が読み込まれるまでの間に何も表示されないように */
+  background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
 }
 
 .card:hover {
-  transform: scale(1.3);
+  transform: scale(1.4);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 1); /* 影のスタイルを追加 */
   z-index: 10; /* 拡大時に最前面に表示 */
 }
