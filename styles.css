@@ -11,7 +11,7 @@ body {
 }
 
 header {
-  background: #1f1f1f;
+  background: rgb(0, 0, 0);
   color: white;
   padding: 10px;
   display: flex;
