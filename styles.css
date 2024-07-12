@@ -201,12 +201,12 @@ main {
 }
 
 .card img {
-  background-color: #f0f0f0; /* 適宜背景色を設定 */
+  background-color: #f0f0f0; /* 薄いグレーの背景色 */
   display: block;
   width: 100%;
   height: auto;
-  /* 画像が読み込まれるまでの間に何も表示されないように */
-  background: url('path/to/placeholder-image.jpg') center center no-repeat;
+  /* 画像が読み込まれるまでの間のプレースホルダー */
+  background: url('images/placeholder.jpg') center center no-repeat;
   background-size: cover;
 }
 
