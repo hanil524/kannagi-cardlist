@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     img.onerror = function () {
       this.onerror = null;
       this.src = 'images/placeholder.jpg'; // デフォルト画像のパスを設定
+      console.error('Image load failed:', this.getAttribute('data-src'));
     };
     observer.observe(img);
   });
