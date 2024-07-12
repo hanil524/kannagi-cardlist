@@ -113,8 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   lazyImages.forEach((img) => {
-    img.src = '';
-    img.alt = '';
+    img.setAttribute('loading', 'lazy');
+    img.onerror = function () {
+      this.onerror = null;
+      this.src = 'images/placeholder.jpg'; // デフォルト画像のパスを設定
+    };
     observer.observe(img);
   });
 
