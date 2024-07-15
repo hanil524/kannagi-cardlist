@@ -1318,6 +1318,6 @@ button[onclick='resetFilters()']:active {
   }
 
   .submenu a:hover {
-    background-color: #f1f1f1;
+    background-color: #e6e6e6;
   }
 }
