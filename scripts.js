@@ -86,38 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 初期表示範囲の画像を選択し、それ以外の画像は遅延読み込み
-  const initialImages = document.querySelectorAll('#card-list .card:nth-child(-n+10) img');
-  const lazyImages = document.querySelectorAll('#card-list .card:nth-child(n+11) img');
-
-  // 初期表示範囲の画像は通常読み込み
-  initialImages.forEach((img) => {
-    const src = img.getAttribute('data-src');
-    if (src) {
-      img.src = src;
-      img.removeAttribute('data-src');
-    }
-  });
-
-  // それ以降の画像は遅延読み込みを設定
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.getAttribute('data-src');
-        img.removeAttribute('data-src');
-        img.alt = img.getAttribute('data-alt');
-        observer.unobserve(img);
-      }
-    });
-  });
-
-  lazyImages.forEach((img) => {
-    img.src = '';
-    img.alt = '';
-    observer.observe(img);
-  });
-
   // 画像モーダルのイベントリスナーを追加 (新規追加)
   const imageModal = document.getElementById('image-modal');
   imageModal.addEventListener('click', function (event) {
@@ -446,3 +414,73 @@ function preventZoom(e) {
     e.target.dataset.lastTouch = t2;
   }
 }
+
+document.querySelectorAll('.card-image-container').forEach((container) => {
+  container.addEventListener('mouseover', () => {
+    if (!container.querySelector('.card-image-hover')) {
+      const img = container.querySelector('img');
+      const hoverImg = img.cloneNode(true);
+      hoverImg.classList.add('card-image-hover');
+      container.appendChild(hoverImg);
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const options = {
+    root: null,
+    rootMargin: '200px',
+    threshold: 0.1
+  };
+
+  const loadImage = (img) => {
+    const src = img.getAttribute('data-src');
+    if (src && img.src !== src && !img.classList.contains('loaded')) {
+      img.src = src;
+      img.onload = () => {
+        img.style.opacity = '1';
+        img.classList.add('loaded');
+        console.log('Image loaded:', src);
+      };
+      img.removeAttribute('data-src'); // data-src属性を削除
+    }
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        loadImage(entry.target);
+      }
+    });
+  }, options);
+
+  const setupLazyLoading = () => {
+    const images = document.querySelectorAll('.card img:not(.loaded)');
+    images.forEach((img, index) => {
+      if (!img.classList.contains('loaded')) {
+        img.style.opacity = '0';
+        if (index < 20) {
+          loadImage(img);
+        } else {
+          observer.observe(img);
+        }
+      }
+    });
+  };
+
+  // 初期セットアップ
+  setupLazyLoading();
+
+  // フィルターや並び替え後に再セットアップ
+  const resetLazyLoading = () => {
+    observer.disconnect();
+    setupLazyLoading();
+  };
+
+  // フィルターボタンにイベントリスナーを追加
+  document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
+    button.addEventListener('click', () => {
+      setTimeout(resetLazyLoading, 100); // 少し遅延を入れて実行
+    });
+  });
+});
