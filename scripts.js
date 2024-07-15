@@ -446,7 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
       img.onload = () => {
         img.style.opacity = '1';
         img.classList.add('loaded');
-        console.log('Image loaded:', src);
       };
       img.removeAttribute('data-src');
     }
