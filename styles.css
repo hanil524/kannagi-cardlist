@@ -192,6 +192,11 @@ main {
   overflow: hidden;
   transition: transform 0.04s, box-shadow 0.06s; /* カードと影の遷移 */
   position: relative; /* 影の位置調整のために必要 */
+  border: none; /*カードの白い枠を完全に削除*/
+  background: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {
@@ -370,21 +375,6 @@ main {
   to {
     opacity: 1;
   }
-}
-
-/* カードの白い枠を完全に削除 */
-.card {
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.card img {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 .loading-overlay {
@@ -1282,4 +1272,14 @@ button[onclick='resetFilters()']:active {
     font-size: 16px;
     padding: 15px;
   }
+}
+
+/* 遅延読み込みの追加部分 */
+.card img {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card img.loaded {
+  opacity: 1;
 }
