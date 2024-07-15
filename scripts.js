@@ -426,7 +426,11 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
   });
 });
 
+// 遅延読み込みの追加部分
+
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOMContentLoaded event fired');
+
   const options = {
     root: null,
     rootMargin: '200px',
@@ -442,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.classList.add('loaded');
         console.log('Image loaded:', src);
       };
-      img.removeAttribute('data-src'); // data-src属性を削除
+      img.removeAttribute('data-src');
     }
   };
 
@@ -450,11 +454,13 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         loadImage(entry.target);
+        observer.unobserve(entry.target);
       }
     });
   }, options);
 
   const setupLazyLoading = () => {
+    console.log('Setting up lazy loading');
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
       if (!img.classList.contains('loaded')) {
@@ -468,8 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // 初期セットアップ
-  setupLazyLoading();
+  // 初期セットアップを遅延実行
+  setTimeout(setupLazyLoading, 100);
 
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
@@ -480,7 +486,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // フィルターボタンにイベントリスナーを追加
   document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
-      setTimeout(resetLazyLoading, 100); // 少し遅延を入れて実行
+      setTimeout(resetLazyLoading, 100);
     });
   });
+
+  // ページの完全な読み込み後にも確認
+  window.addEventListener('load', () => {
+    console.log('Window load event fired');
+    if (document.querySelectorAll('.card img:not(.loaded)').length > 0) {
+      console.log('Some images are still not loaded, re-running setup');
+      setupLazyLoading();
+    }
+  });
 });
+
+// 遅延読み込みの終わり部分
