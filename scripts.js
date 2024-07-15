@@ -437,6 +437,8 @@ document.addEventListener('DOMContentLoaded', () => {
     threshold: 0.1
   };
 
+  let isInitialSetup = true;
+
   const loadImage = (img) => {
     const src = img.getAttribute('data-src');
     if (src && img.src !== src && !img.classList.contains('loaded')) {
@@ -460,6 +462,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }, options);
 
   const setupLazyLoading = () => {
+    if (!isInitialSetup) {
+      console.log('Skipping redundant setup');
+      return;
+    }
     console.log('Setting up lazy loading');
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
@@ -472,6 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+    isInitialSetup = false;
   };
 
   // 初期セットアップを遅延実行
@@ -480,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
     observer.disconnect();
+    isInitialSetup = true;
     setupLazyLoading();
   };
 
@@ -495,6 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Window load event fired');
     if (document.querySelectorAll('.card img:not(.loaded)').length > 0) {
       console.log('Some images are still not loaded, re-running setup');
+      isInitialSetup = true;
       setupLazyLoading();
     }
   });
