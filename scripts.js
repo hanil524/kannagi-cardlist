@@ -431,7 +431,7 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
 document.addEventListener('DOMContentLoaded', () => {
   const options = {
     root: null,
-    rootMargin: '200px',
+    rootMargin: '400px', // 画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
@@ -456,6 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, options);
 
+  const preloadNextImages = (currentIndex, count = 5) => {
+    const images = document.querySelectorAll('.card img:not(.loaded)');
+    for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
+      loadImage(images[i]);
+    }
+  };
+
   const setupLazyLoading = () => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
@@ -472,9 +479,36 @@ document.addEventListener('DOMContentLoaded', () => {
     images.forEach((img, index) => {
       if (index < 20) {
         loadImage(img);
+        if (index === 19) {
+          preloadNextImages(index);
+        }
       }
     });
   };
+
+  // スクロールイベントの処理
+  let lastScrollTop = 0;
+  let scrollTimeout;
+  window.addEventListener(
+    'scroll',
+    () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > lastScrollTop) {
+          // 下スクロール時
+          const visibleImages = document.querySelectorAll('.card img.loaded');
+          if (visibleImages.length > 0) {
+            const lastVisibleImage = visibleImages[visibleImages.length - 1];
+            const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
+            preloadNextImages(index);
+          }
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+      }, 100);
+    },
+    false
+  );
 
   // ページロード完了後に遅延読み込みをセットアップ
   window.addEventListener('load', () => {
