@@ -1277,7 +1277,7 @@ button[onclick='resetFilters()']:active {
 /* 遅延読み込みの追加部分 */
 .card img {
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
 }
 
 .card img.loaded {
