@@ -431,7 +431,7 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
 document.addEventListener('DOMContentLoaded', () => {
   const options = {
     root: null,
-    rootMargin: '400px', // 画面外400pxの位置から読み込み開始
+    rootMargin: '600px', // 画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
