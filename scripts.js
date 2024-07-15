@@ -435,8 +435,6 @@ document.addEventListener('DOMContentLoaded', () => {
     threshold: 0.1
   };
 
-  let isInitialSetup = true;
-
   const loadImage = (img) => {
     const src = img.getAttribute('data-src');
     if (src && img.src !== src && !img.classList.contains('loaded')) {
@@ -459,31 +457,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }, options);
 
   const setupLazyLoading = () => {
-    if (!isInitialSetup) {
-      return;
-    }
-
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
       if (!img.classList.contains('loaded')) {
         img.style.opacity = '0';
-        if (index < 20) {
-          loadImage(img);
-        } else {
-          observer.observe(img);
-        }
+        observer.observe(img);
       }
     });
-    isInitialSetup = false;
   };
 
-  // 初期セットアップを遅延実行
-  setTimeout(setupLazyLoading, 100);
+  // 初期表示の画像数を制限
+  const loadInitialImages = () => {
+    const images = document.querySelectorAll('.card img:not(.loaded)');
+    images.forEach((img, index) => {
+      if (index < 20) {
+        loadImage(img);
+      }
+    });
+  };
+
+  // ページロード完了後に遅延読み込みをセットアップ
+  window.addEventListener('load', () => {
+    loadInitialImages();
+    setupLazyLoading();
+  });
 
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
     observer.disconnect();
-    isInitialSetup = true;
     setupLazyLoading();
   };
 
@@ -492,14 +493,6 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => {
       setTimeout(resetLazyLoading, 100);
     });
-  });
-
-  // ページの完全な読み込み後にも確認
-  window.addEventListener('load', () => {
-    if (document.querySelectorAll('.card img:not(.loaded)').length > 0) {
-      isInitialSetup = true;
-      setupLazyLoading();
-    }
   });
 });
 
