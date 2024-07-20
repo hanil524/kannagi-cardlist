@@ -431,7 +431,7 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
 document.addEventListener('DOMContentLoaded', () => {
   const options = {
     root: null,
-    rootMargin: '600px', // 画面外400pxの位置から読み込み開始
+    rootMargin: '1200px', // 画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
@@ -528,6 +528,39 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(resetLazyLoading, 100);
     });
   });
+
+  // PC用ヘッダーメニュー
+  const menuItem = document.querySelector('.menu-item');
+  const menuTrigger = menuItem.querySelector('.menu-trigger');
+  const submenu = menuItem.querySelector('.submenu');
+
+  const showSubmenu = () => {
+    if (window.innerWidth >= 769) {
+      submenu.style.display = 'block';
+    }
+  };
+
+  const hideSubmenu = () => {
+    submenu.style.display = 'none';
+  };
+
+  if (window.innerWidth >= 769) {
+    menuTrigger.addEventListener('mouseenter', showSubmenu);
+    menuItem.addEventListener('mouseleave', hideSubmenu);
+  }
+
+  // ウィンドウサイズが変更された場合の処理
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 769) {
+      menuTrigger.addEventListener('mouseenter', showSubmenu);
+      menuItem.addEventListener('mouseleave', hideSubmenu);
+    } else {
+      menuTrigger.removeEventListener('mouseenter', showSubmenu);
+      menuItem.removeEventListener('mouseleave', hideSubmenu);
+      hideSubmenu();
+    }
+  });
+
 });
 
 // 遅延読み込みの終わり部分
