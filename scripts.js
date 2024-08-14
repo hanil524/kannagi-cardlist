@@ -139,6 +139,7 @@ const resetFilters = () => {
   cards.forEach((card) => (card.style.display = 'block'));
   document.getElementById('no-cards-message').style.display = 'none';
   resetSort();
+  updateActiveFilters();
 };
 
 const resetSort = () => {
@@ -165,6 +166,7 @@ const toggleFilterCard = (attribute, value) => {
     filters[attribute].add(value);
   }
   filterCards();
+  updateActiveFilters(); // フィルター該当表示で追加
 };
 
 const filterCards = () => {
@@ -564,3 +566,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 遅延読み込みの終わり部分
+
+// フィルターの該当表示
+
+function updateActiveFilters() {
+  const activeFilters = [];
+  for (const [key, values] of Object.entries(filters)) {
+    if (values.size > 0) {
+      values.forEach((value) => {
+        activeFilters.push({ key, value });
+      });
+    }
+  }
+
+  const filterDisplay = activeFilters
+    .map(
+      (filter) =>
+        `<button class="filter-item" onclick="removeFilter('${filter.key}', '${filter.value}')">${filter.value}</button>`
+    )
+    .join('');
+
+  const pcElement = document.getElementById('active-filters-pc');
+  const mobileElement = document.getElementById('active-filters-mobile');
+
+  function setDisplayBasedOnScreenSize() {
+    const isMobile = window.innerWidth <= 768;
+    if (activeFilters.length > 0) {
+      pcElement.innerHTML = filterDisplay;
+      mobileElement.innerHTML = filterDisplay;
+      pcElement.style.display = isMobile ? 'none' : 'flex';
+      mobileElement.style.display = isMobile ? 'flex' : 'none';
+    } else {
+      pcElement.style.display = 'none';
+      mobileElement.style.display = 'none';
+    }
+  }
+
+  setDisplayBasedOnScreenSize();
+
+  window.addEventListener('resize', setDisplayBasedOnScreenSize);
+}
+
+function removeFilter(key, value) {
+  if (filters[key]) {
+    filters[key].delete(value);
+    filterCards();
+    updateActiveFilters();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateActiveFilters);
