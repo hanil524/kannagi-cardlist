@@ -1337,3 +1337,66 @@ button[onclick='resetFilters()']:active {
     background-color: #e6e6e6;
   }
 }
+
+/* フィルターの該当表示 */
+
+.active-filters-pc,
+.active-filters-mobile {
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.active-filters-pc {
+  max-width: 75%; /* PC表示時の最大幅を制限 */
+}
+
+.active-filters-pc .filter-item,
+.active-filters-mobile .filter-item {
+  display: inline-block;
+  white-space: nowrap;
+  margin: 2px 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.active-filters-pc .filter-item:hover,
+.active-filters-mobile .filter-item:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .active-filters-pc {
+    display: none;
+  }
+
+  .active-filters-mobile {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .active-filters-pc {
+    display: flex;
+  }
+
+  .active-filters-mobile {
+    display: none;
+  }
+}
