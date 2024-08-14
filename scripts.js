@@ -8,7 +8,8 @@ const filters = {
   type: new Set(),
   role: new Set(),
   keyword: new Set(),
-  attribute: new Set()
+  attribute: new Set(),
+  rare: new Set()
 };
 
 // ソート条件を保持する変数
@@ -560,7 +561,6 @@ document.addEventListener('DOMContentLoaded', () => {
       hideSubmenu();
     }
   });
-
 });
 
 // 遅延読み込みの終わり部分
