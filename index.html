@@ -192,12 +192,17 @@
               <button onclick="resetFilters()">フィルター解除</button>
             </div>
           </div>
+          <!-- 該当表示 -->
+          <div id="active-filters-pc" class="active-filters-pc" style="display: none"></div>
+          <div id="active-filters-mobile" class="active-filters-mobile" style="display: none"></div>
         </section>
+
         <section id="card-list">
           <div id="no-cards-message" style="display: none">
             <p><strong>該当カードがありません。</strong></p>
             <p><strong>「フィルター解除」を押してください。</strong></p>
           </div>
+
           <div
             class="card"
             data-number="1"
