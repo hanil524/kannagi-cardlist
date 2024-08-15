@@ -175,7 +175,12 @@ const filterCards = () => {
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
 
+  // 複製カードの削除
+  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
+
   cards.forEach((card) => {
+    if (card.hasAttribute('data-cloned')) return; // 複製カードはスキップ
+
     let shouldDisplay = true;
     for (const [attribute, values] of Object.entries(filters)) {
       if (values.size > 0) {
@@ -198,7 +203,7 @@ const filterCards = () => {
         const doubleFilters = doubleFor.split(',');
         const shouldDouble = doubleFilters.some((filter) => activeFilters.has(filter));
 
-        if (shouldDouble && !card.nextElementSibling?.hasAttribute('data-cloned')) {
+        if (shouldDouble) {
           const clone = card.cloneNode(true);
           clone.setAttribute('data-cloned', 'true');
           cardList.insertBefore(clone, card.nextSibling);
@@ -208,6 +213,8 @@ const filterCards = () => {
       card.style.display = 'none';
     }
   });
+
+  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
   // クローンの削除（フィルターが変更された場合）
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => {
