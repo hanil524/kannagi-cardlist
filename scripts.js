@@ -19,6 +19,14 @@ let sortOrder = 'asc';
 // スクロール位置を保持する変数
 let scrollPosition = 0;
 
+// フォントサイズをリセット
+function resetFontSize() {
+  document.body.style.WebkitTextSizeAdjust = '100%';
+  document.body.style.textSizeAdjust = '100%';
+}
+window.addEventListener('orientationchange', resetFontSize);
+window.addEventListener('resize', resetFontSize);
+
 // ページロード後にDOMの初期設定を行う
 document.addEventListener('DOMContentLoaded', () => {
   // ページが完全に読み込まれたときに呼び出される
@@ -52,6 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // 初期状態を設定
   updateClearButtonVisibility('search-box', 'clear-button-desktop');
   updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
+
+  resetFontSize(); // 初期化時にも実行
+
+  // ハンバーガーメニューの処理
+  const hamburgerMenu = document.querySelector('.hamburger-menu');
+  const mobileNav = document.querySelector('.mobile-nav');
+  const menuOverlay = document.querySelector('.menu-overlay');
+
+  function toggleMenu() {
+    hamburgerMenu.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+    resetFontSize(); // メニューを開閉する際にもフォントサイズをリセット
+  }
 
   // 複製カードにクリック判定を付与
   const cardList = document.getElementById('card-list');
