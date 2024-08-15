@@ -1365,9 +1365,9 @@ button[onclick='resetFilters()']:active {
 .active-filters-mobile .filter-item {
   display: inline-block;
   white-space: nowrap;
-  margin: 2px 5px;
+  margin: 5px 5px;
   background-color: rgba(255, 255, 255, 0.2);
-  padding: 3px 8px;
+  padding: 6px 12px;
   border-radius: 3px;
   border: none;
   color: white;
