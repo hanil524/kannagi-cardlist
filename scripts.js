@@ -53,6 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClearButtonVisibility('search-box', 'clear-button-desktop');
   updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
 
+  // 複製カードにクリック判定を付与
+  const cardList = document.getElementById('card-list');
+
+  cardList.addEventListener('click', (event) => {
+    if (window.innerWidth <= 768 && event.target.tagName === 'IMG') {
+      event.preventDefault();
+      openImageModal(event.target.src);
+    }
+  });
+
   // カード画像にクリックイベントを追加（モバイル用）
   const cards = document.querySelectorAll('.card img');
   cards.forEach((card) => {
