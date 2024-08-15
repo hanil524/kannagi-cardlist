@@ -1400,3 +1400,16 @@ button[onclick='resetFilters()']:active {
     display: none;
   }
 }
+
+.sort-buttons button.active {
+  background-color: #4a4a4a;
+  color: white;
+}
+
+.sort-buttons button.active.desc::after {
+  content: ' ▼';
+}
+
+.sort-buttons button.active:not(.desc)::after {
+  content: ' ▲';
+}
