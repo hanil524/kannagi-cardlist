@@ -127,10 +127,22 @@ const filterCardsByName = (event) => {
 
 const sortCards = (criteria) => {
   if (sortCriteria === criteria) {
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    if (criteria === 'type') {
+      // 種類の場合は現状の動作を維持
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      // No. コスト 力の場合は逆にする
+      sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+    }
   } else {
     sortCriteria = criteria;
-    sortOrder = 'asc';
+    if (criteria === 'type') {
+      // 種類の場合は最初が昇順
+      sortOrder = 'asc';
+    } else {
+      // No. コスト 力の場合は最初が降順
+      sortOrder = 'desc';
+    }
   }
 
   const cardList = document.getElementById('card-list');
@@ -165,7 +177,11 @@ const updateSortButtonsState = (activeCriteria) => {
     const buttonCriteria = button.getAttribute('data-filter');
     if (buttonCriteria === activeCriteria) {
       button.classList.add('active');
-      button.classList.toggle('desc', sortOrder === 'desc');
+      if (buttonCriteria === 'type') {
+        button.classList.toggle('desc', sortOrder === 'desc');
+      } else {
+        button.classList.toggle('desc', sortOrder === 'desc');
+      }
     } else {
       button.classList.remove('active', 'desc');
     }
@@ -174,6 +190,14 @@ const updateSortButtonsState = (activeCriteria) => {
 
 const resetFilters = () => {
   Object.keys(filters).forEach((key) => filters[key].clear());
+  // 複製カードを削除
+  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
+  // 元のカードの表示をリセット
+  const originalCards = document.querySelectorAll('.card:not([data-cloned])');
+  originalCards.forEach((card) => {
+    card.style.display = 'block';
+  });
+
   const cards = document.querySelectorAll('.card');
   cards.forEach((card) => (card.style.display = 'block'));
   document.getElementById('no-cards-message').style.display = 'none';
