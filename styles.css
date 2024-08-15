@@ -1413,3 +1413,11 @@ button[onclick='resetFilters()']:active {
 .sort-buttons button.active:not(.desc)::after {
   content: ' ▲';
 }
+
+.mobile-nav {
+  font-size: 14px; /* または適切なサイズ */
+}
+
+.mobile-nav a {
+  font-size: 14px; /* または適切なサイズ */
+}
