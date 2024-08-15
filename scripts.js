@@ -206,25 +206,19 @@ const filterCards = () => {
         if (shouldDouble) {
           const clone = card.cloneNode(true);
           clone.setAttribute('data-cloned', 'true');
+          // クローンの画像に対して即時読み込みを設定
+          const cloneImg = clone.querySelector('img');
+          if (cloneImg) {
+            cloneImg.src = cloneImg.getAttribute('data-src') || cloneImg.src;
+            cloneImg.removeAttribute('data-src');
+            cloneImg.classList.add('loaded');
+            cloneImg.style.opacity = '1';
+          }
           cardList.insertBefore(clone, card.nextSibling);
         }
       }
     } else {
       card.style.display = 'none';
-    }
-  });
-
-  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
-
-  // クローンの削除（フィルターが変更された場合）
-  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => {
-    const originalCard = clonedCard.previousElementSibling;
-    const doubleFor = originalCard.getAttribute('data-double-for');
-    const doubleFilters = doubleFor ? doubleFor.split(',') : [];
-    const shouldDouble = doubleFilters.some((filter) => activeFilters.has(filter));
-
-    if (!shouldDouble || clonedCard.style.display === 'none') {
-      clonedCard.remove();
     }
   });
 
