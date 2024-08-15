@@ -130,17 +130,46 @@ const sortCards = (criteria) => {
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   } else {
     sortCriteria = criteria;
-    sortOrder = criteria === 'number' ? 'desc' : 'asc';
+    sortOrder = 'asc';
   }
 
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
+
+  const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+
   cards.sort((a, b) => {
-    const aValue = parseInt(a.dataset[criteria]);
-    const bValue = parseInt(b.dataset[criteria]);
-    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    if (criteria === 'type') {
+      const aType = a.dataset.type;
+      const bType = b.dataset.type;
+      const aIndex = typeOrder.indexOf(aType);
+      const bIndex = typeOrder.indexOf(bType);
+      return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+    } else {
+      const aValue = parseInt(a.dataset[criteria]);
+      const bValue = parseInt(b.dataset[criteria]);
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    }
   });
+
   cards.forEach((card) => cardList.appendChild(card));
+
+  // ソートボタンのアクティブ状態を更新
+  updateSortButtonsState(criteria);
+};
+
+// ソートボタンの状態を更新する関数
+const updateSortButtonsState = (activeCriteria) => {
+  const sortButtons = document.querySelectorAll('.sort-buttons button');
+  sortButtons.forEach((button) => {
+    const buttonCriteria = button.getAttribute('data-filter');
+    if (buttonCriteria === activeCriteria) {
+      button.classList.add('active');
+      button.classList.toggle('desc', sortOrder === 'desc');
+    } else {
+      button.classList.remove('active', 'desc');
+    }
+  });
 };
 
 const resetFilters = () => {
@@ -150,6 +179,7 @@ const resetFilters = () => {
   document.getElementById('no-cards-message').style.display = 'none';
   resetSort();
   updateActiveFilters();
+  resetSortButtonsState();
 };
 
 const resetSort = () => {
@@ -163,6 +193,13 @@ const resetSort = () => {
     return aValue - bValue;
   });
   cards.forEach((card) => cardList.appendChild(card));
+};
+
+const resetSortButtonsState = () => {
+  const sortButtons = document.querySelectorAll('.sort-buttons button');
+  sortButtons.forEach((button) => {
+    button.classList.remove('active', 'desc');
+  });
 };
 
 const toggleFilterCard = (attribute, value) => {
