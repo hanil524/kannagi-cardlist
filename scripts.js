@@ -149,20 +149,14 @@ const filterCardsByName = (event) => {
 
 const sortCards = (criteria) => {
   if (sortCriteria === criteria) {
-    if (criteria === 'type') {
-      // 種類の場合は現状の動作を維持
-      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-    } else {
-      // No. コスト 力の場合は逆にする
-      sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
-    }
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   } else {
     sortCriteria = criteria;
-    if (criteria === 'type') {
-      // 種類の場合は最初が昇順
+    if (criteria === 'type' || criteria === 'cost') {
+      // 種類とコストの場合は最初が昇順
       sortOrder = 'asc';
     } else {
-      // No. コスト 力の場合は最初が降順
+      // No. と力の場合は最初が降順
       sortOrder = 'desc';
     }
   }
