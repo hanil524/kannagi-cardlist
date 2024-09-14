@@ -182,6 +182,9 @@ const sortCards = (criteria) => {
 
   cards.forEach((card) => cardList.appendChild(card));
 
+  resetLazyLoading();
+  loadVisibleImages();
+
   // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
 };
@@ -641,12 +644,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetLazyLoading = () => {
     observer.disconnect();
     setupLazyLoading();
+    loadVisibleImages(); // ソートやフィルター後に表示領域内の画像を即時読み込み
   };
 
-  // フィルターボタンにイベントリスナーを追加
   document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
-      setTimeout(resetLazyLoading, 100);
+      setTimeout(() => {
+        resetLazyLoading();
+        loadVisibleImages(); // ボタンクリック後に表示領域内の画像を即時読み込み
+      }, 100);
     });
   });
 
