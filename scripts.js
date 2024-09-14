@@ -182,6 +182,8 @@ const sortCards = (criteria) => {
 
   cards.forEach((card) => cardList.appendChild(card));
 
+  loadVisibleImages();
+
   // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
 };
@@ -621,6 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         lastScrollTop = st <= 0 ? 0 : st;
+        loadVisibleImages();
       }, 100);
     },
     false
@@ -732,3 +735,23 @@ function removeFilter(key, value) {
 }
 
 document.addEventListener('DOMContentLoaded', updateActiveFilters);
+
+const loadVisibleImages = () => {
+  const images = document.querySelectorAll('.card img:not(.loaded)');
+  const viewportHeight = window.innerHeight;
+
+  images.forEach((img) => {
+    const rect = img.getBoundingClientRect();
+    if (rect.top >= 0 && rect.top <= viewportHeight) {
+      const src = img.getAttribute('data-src');
+      if (src && img.src !== src) {
+        img.src = src;
+        img.onload = () => {
+          img.style.opacity = '1';
+          img.classList.add('loaded');
+        };
+        img.removeAttribute('data-src');
+      }
+    }
+  });
+};
