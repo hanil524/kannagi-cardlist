@@ -182,25 +182,17 @@ const sortCards = (criteria) => {
 
   cards.forEach((card) => cardList.appendChild(card));
 
-  resetLazyLoading();
-  loadVisibleImages();
-
   // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
 };
 
-// ソートボタンの状態を更新する関数
 const updateSortButtonsState = (activeCriteria) => {
   const sortButtons = document.querySelectorAll('.sort-buttons button');
   sortButtons.forEach((button) => {
     const buttonCriteria = button.getAttribute('data-filter');
     if (buttonCriteria === activeCriteria) {
       button.classList.add('active');
-      if (buttonCriteria === 'type') {
-        button.classList.toggle('desc', sortOrder === 'desc');
-      } else {
-        button.classList.toggle('desc', sortOrder === 'desc');
-      }
+      button.classList.toggle('desc', sortOrder === 'desc');
     } else {
       button.classList.remove('active', 'desc');
     }
@@ -644,14 +636,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetLazyLoading = () => {
     observer.disconnect();
     setupLazyLoading();
-    loadVisibleImages(); // ソートやフィルター後に表示領域内の画像を即時読み込み
+    // loadVisibleImages(); ソートやフィルター後に表示領域内の画像を即時読み込み
   };
 
   document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
       setTimeout(() => {
         resetLazyLoading();
-        loadVisibleImages(); // ボタンクリック後に表示領域内の画像を即時読み込み
+        // loadVisibleImages(); ボタンクリック後に表示領域内の画像を即時読み込み
       }, 100);
     });
   });
