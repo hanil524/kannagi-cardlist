@@ -1198,6 +1198,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.hyakkiiro,
 .modal-buttons button.puromoiro,
 .modal-buttons button.utukusiiro,
+.modal-buttons button.lemoniro,
 .modal-buttons button.oisyairo {
   position: relative;
   overflow: hidden;
@@ -1241,12 +1242,19 @@ button[onclick='resetFilters()']:active {
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
 
+.modal-buttons button.lemoniro {
+  background-color: #ebd036;
+  color: #222222; /* 濃いグレーのテキスト */
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+}
+
 /* テキストを中央に配置 */
 .modal-buttons button.batoruiro::after,
 .modal-buttons button.sinkiiro::after,
 .modal-buttons button.hyakkiiro::after,
 .modal-buttons button.puromoiro::after,
 .modal-buttons button.utukusiiro::after,
+.modal-buttons button.lemoniro::after,
 .modal-buttons button.oisyairo::after {
   content: attr(onclick);
   position: absolute;
