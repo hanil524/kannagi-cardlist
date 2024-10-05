@@ -348,8 +348,8 @@ main {
   font-size: 28px;
   font-weight: bold;
   position: absolute;
-  padding-left: 125px;
-  padding-right: 125px;
+  padding-left: 310px; /* ×マークの判定の長さ */
+  padding-right: 310px;
   top: -4px; /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
@@ -1120,6 +1120,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.muiro,
 .modal-buttons button.konkairo {
   color: #ffffff; /* テキストの色を白に設定 */
+  font-size: 13.5px; /* フォントサイズを大きく */
 }
 
 /* 個別の季節ボタンの背景色 */
@@ -1163,7 +1164,7 @@ button[onclick='resetFilters()']:active {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffffff;
+  color: #222222;
   z-index: 1;
 }
 
@@ -1172,24 +1173,28 @@ button[onclick='resetFilters()']:active {
   background-color: #f74848; /* 赤（場所札） */
   color: #ffffff; /* 白テキスト */
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  font-size: 13.5px; /* フォントサイズを大きく */
 }
 
 .modal-buttons button.kaiiiro {
   background-color: #9370db; /* ミディアムパープル（怪異札） */
   color: #ffffff; /* 白テキスト */
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  font-size: 13.5px; /* フォントサイズを大きく */
 }
 
 .modal-buttons button.douguiro {
   background-color: #f0f0f0; /* 薄いグレー（道具札） */
   color: #222222; /* 濃いグレーのテキスト */
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  font-size: 13.5px; /* フォントサイズを大きく */
 }
 
 .modal-buttons button.kisetsuiro {
   background-color: #ffd700; /* ゴールド（季節札） */
   color: #222222; /* 濃いグレーのテキスト */
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  font-size: 13.5px; /* フォントサイズを大きく */
 }
 
 /* シリーズボタンの基本スタイル */
