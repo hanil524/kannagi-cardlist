@@ -1434,31 +1434,3 @@ button[onclick='resetFilters()']:active {
 .mobile-nav a {
   font-size: 14px; /* または適切なサイズ */
 }
-
-/* カードの前後送りボタン */
-.nav-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  font-size: 24px;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 1002;
-}
-
-.nav-button.prev {
-  left: 10px;
-}
-
-.nav-button.next {
-  right: 10px;
-}
-
-@media (min-width: 769px) {
-  .nav-button {
-    display: none;
-  }
-}
