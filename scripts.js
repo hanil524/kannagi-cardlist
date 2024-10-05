@@ -381,16 +381,11 @@ const closeModal = () => {
   const headerContent = document.querySelector('.header-content');
   headerContent.style.paddingRight = '';
 
-  if (
-    filters.series.size === 0 &&
-    filters.season.size === 0 &&
-    filters.type.size === 0 &&
-    filters.role.size === 0 &&
-    filters.keyword.size === 0 &&
-    filters.attribute.size === 0
-  ) {
+  // フィルターが適用されていない場合のみ、カードの表示をリセット
+  if (Object.values(filters).every((filter) => filter.size === 0)) {
     document.getElementById('no-cards-message').style.display = 'none';
-    resetSort();
+    // ソート状態を維持したまま、カードの表示をリセット
+    filterCards();
   }
 };
 
