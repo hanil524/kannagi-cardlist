@@ -785,6 +785,15 @@ function loadImage(img) {
     img.src = img.dataset.src;
     img.removeAttribute('data-src');
     img.classList.add('loaded');
+
+    // カード一覧の対応する画像も更新
+    const cardNumber = img.closest('.card').dataset.number;
+    const listImg = document.querySelector(`.card[data-number="${cardNumber}"] img`);
+    if (listImg && listImg !== img) {
+      listImg.src = img.src;
+      listImg.removeAttribute('data-src');
+      listImg.classList.add('loaded');
+    }
   }
 }
 
@@ -810,6 +819,14 @@ function navigateImage(direction) {
         const nextImg = cards[currentCardIndex + 1].querySelector('img');
         if (nextImg) {
           loadImage(nextImg);
+        }
+      }
+
+      // 前の画像も読み込む
+      if (currentCardIndex > 0) {
+        const prevImg = cards[currentCardIndex - 1].querySelector('img');
+        if (prevImg) {
+          loadImage(prevImg);
         }
       }
     }
@@ -843,15 +860,66 @@ function initializeImageNavigation() {
           loadImage(nextImg);
         }
       }
+
+      // 前の画像も読み込む
+      if (index > 0) {
+        const prevImg = cards[index - 1].querySelector('img');
+        if (prevImg) {
+          loadImage(prevImg);
+        }
+      }
     });
   });
 }
 
-// 既存のopenImageModal関数を拡張（既存の関数がある場合）
+// 既存のopenImageModal関数を拡張
 const originalOpenImageModal = window.openImageModal || function () {};
 window.openImageModal = function (src) {
   originalOpenImageModal(src);
   currentCardIndex = cards.findIndex((card) => card.querySelector('img').src === src);
 };
 
-window.addEventListener('load', initializeImageNavigation);
+// closeImageModal関数を拡張
+const originalCloseImageModal = window.closeImageModal || function () {};
+window.closeImageModal = function () {
+  originalCloseImageModal();
+  // モーダルを閉じた後、表示されている画像を更新
+  loadVisibleImages();
+};
+
+// 既存のloadVisibleImages関数を置き換え
+window.loadVisibleImages = function () {
+  const viewportHeight = window.innerHeight;
+  cards.forEach((card) => {
+    const img = card.querySelector('img');
+    if (!img) return;
+
+    const rect = card.getBoundingClientRect();
+    if (rect.top >= -viewportHeight && rect.bottom <= viewportHeight * 2) {
+      if (img.classList.contains('loaded')) {
+        // 既に読み込まれている場合、srcを確認して更新
+        const cardNumber = card.dataset.number;
+        const modalImg = document.querySelector(`#image-modal .card[data-number="${cardNumber}"] img`);
+        if (modalImg && modalImg.src !== img.src) {
+          img.src = modalImg.src;
+        }
+      } else {
+        // まだ読み込まれていない場合、通常の読み込みを行う
+        loadImage(img);
+      }
+    }
+  });
+};
+
+// スクロールイベントリスナーを追加（既存のリスナーがない場合のみ）
+if (!window.imageNavigationScrollListenerAdded) {
+  window.addEventListener('scroll', () => {
+    requestAnimationFrame(window.loadVisibleImages);
+  });
+  window.imageNavigationScrollListenerAdded = true;
+}
+
+window.addEventListener('load', () => {
+  initializeImageNavigation();
+  loadVisibleImages();
+});
