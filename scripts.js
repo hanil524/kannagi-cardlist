@@ -750,3 +750,108 @@ const loadVisibleImages = () => {
     }
   });
 };
+
+// 画像の前後送りを実装 10/05
+let currentCardIndex = 0;
+let cards = [];
+
+function addNavigationButtons() {
+  const imageModal = document.getElementById('image-modal');
+  const prevButton = document.createElement('button');
+  const nextButton = document.createElement('button');
+
+  prevButton.innerHTML = '&#10094;'; // 左矢印
+  nextButton.innerHTML = '&#10095;'; // 右矢印
+
+  prevButton.className = 'nav-button prev';
+  nextButton.className = 'nav-button next';
+
+  imageModal.appendChild(prevButton);
+  imageModal.appendChild(nextButton);
+
+  prevButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigateImage('prev');
+  });
+
+  nextButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navigateImage('next');
+  });
+}
+
+function loadImage(img) {
+  if (img && img.dataset.src && !img.src.includes(img.dataset.src)) {
+    img.src = img.dataset.src;
+    img.removeAttribute('data-src');
+    img.classList.add('loaded');
+  }
+}
+
+function navigateImage(direction) {
+  if (!cards.length) return;
+
+  if (direction === 'prev' && currentCardIndex > 0) {
+    currentCardIndex--;
+  } else if (direction === 'next' && currentCardIndex < cards.length - 1) {
+    currentCardIndex++;
+  }
+
+  const currentCard = cards[currentCardIndex];
+  if (currentCard) {
+    const currentImg = currentCard.querySelector('img');
+    if (currentImg) {
+      loadImage(currentImg);
+      const modalImage = document.getElementById('modal-image');
+      modalImage.src = currentImg.src;
+
+      // 次の画像を読み込む
+      if (currentCardIndex < cards.length - 1) {
+        const nextImg = cards[currentCardIndex + 1].querySelector('img');
+        if (nextImg) {
+          loadImage(nextImg);
+        }
+      }
+    }
+  }
+}
+
+function initializeImageNavigation() {
+  cards = Array.from(document.querySelectorAll('.card'));
+  addNavigationButtons();
+
+  const imageModal = document.getElementById('image-modal');
+  const modalImage = document.getElementById('modal-image');
+
+  imageModal.addEventListener('click', (e) => {
+    if (e.target === imageModal) {
+      closeImageModal();
+    }
+  });
+
+  cards.forEach((card, index) => {
+    const img = card.querySelector('img');
+    img.addEventListener('click', () => {
+      currentCardIndex = index;
+      loadImage(img); // クリックされた画像を読み込む
+      modalImage.src = img.src;
+
+      // 次の画像を読み込む
+      if (index < cards.length - 1) {
+        const nextImg = cards[index + 1].querySelector('img');
+        if (nextImg) {
+          loadImage(nextImg);
+        }
+      }
+    });
+  });
+}
+
+// 既存のopenImageModal関数を拡張（既存の関数がある場合）
+const originalOpenImageModal = window.openImageModal || function () {};
+window.openImageModal = function (src) {
+  originalOpenImageModal(src);
+  currentCardIndex = cards.findIndex((card) => card.querySelector('img').src === src);
+};
+
+window.addEventListener('load', initializeImageNavigation);
