@@ -1205,6 +1205,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.utukusiiro,
 .modal-buttons button.saigoiro,
 .modal-buttons button.anatairo,
+.modal-buttons button.kaidaniro,
 .modal-buttons button.lemoniro,
 .modal-buttons button.oisyairo {
   position: relative;
@@ -1257,6 +1258,12 @@ button[onclick='resetFilters()']:active {
 
 .modal-buttons button.anatairo {
   background-color: #ff915f;
+  color: #ffffff; /* 濃いグレーのテキスト */
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+}
+
+.modal-buttons button.kaidaniro {
+  background-color: #5c5c5c;
   color: #ffffff; /* 濃いグレーのテキスト */
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
