@@ -33,7 +33,7 @@
     </div>
 
     <div id="content">
-      <!-- PCヘッダー -->
+      <!-- PC版のヘッダー -->
       <header id="main-header">
         <div class="header-content">
           <div class="menu-item">
@@ -213,14 +213,13 @@
           <div id="active-filters-mobile" class="active-filters-mobile" style="display: none"></div>
         </section>
 
-        <!-- フィルター解除 -->
+        <!-- カードリスト -->
         <section id="card-list">
           <div id="no-cards-message" style="display: none">
             <p><strong>該当カードがありません！</strong></p>
             <p><strong>「フィルター解除」を押してください。</strong></p>
           </div>
 
-          <!-- カードリスト -->
           <!-- 夏VS冬バトルセット -->
           <div
             class="card"
@@ -4031,7 +4030,6 @@
           >
             <img data-src="images/card_4_p (1).jpg" src="placeholder.jpg" alt="Card p1" />
           </div>
-
           <div
             class="card"
             data-number="1003"
@@ -4548,7 +4546,8 @@
           >
             <img data-src="images/card_5_p (20).jpg" src="placeholder.jpg" alt="Card p2_20" />
           </div>
-
+        </section>
+        <section id="card-list">
           <!-- さいごのうた -->
           <div
             class="card"
@@ -4631,6 +4630,22 @@
             data-attribute="交通事故"
           >
             <img data-src="images/card_6_p (7).jpg" src="placeholder.jpg" alt="Card p3_7" />
+          </div>
+          <div
+            class="card"
+            data-number="1208"
+            data-name="夜の鳥（よるのとり）"
+            data-cost="5"
+            data-power="4"
+            data-series="あなたのよこで"
+            data-rare="UC"
+            data-season="秋"
+            data-type="場所札"
+            data-role="手札公開 ハンデス"
+            data-keyword="四季欲"
+            data-attribute="廃円宿 火事"
+          >
+            <img data-src="images/card_6_p (8).jpg" src="placeholder.jpg" alt="Card p3_8" />
           </div>
           <div
             class="card"
@@ -4772,6 +4787,79 @@
           <div id="modal-buttons" class="modal-buttons"></div>
         </div>
       </div>
+
+      <!-- シリーズ -->
+      <div id="series" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('series', '夏VS冬バトルセット')" class="batoruiro">夏VS冬バトルセット</button>
+        <button onclick="toggleFilterCard('series', '新季の到来')" class="sinkiiro">新季の到来</button>
+        <button onclick="toggleFilterCard('series', '百鬼夜行')" class="hyakkiiro">百鬼夜行</button>
+        <button onclick="toggleFilterCard('series', 'うつくしいせかい')" class="utukusiiro">うつくしいせかい</button>
+        <button onclick="toggleFilterCard('series', 'おいしゃさんごっこ')" class="oisyairo">おいしゃさんごっこ</button>
+        <button onclick="toggleFilterCard('series', 'さいごのうた')" class="saigoiro">さいごのうた</button>
+        <button onclick="toggleFilterCard('series', 'あなたのよこで')" class="anatairo">あなたのよこで</button>
+        <button onclick="toggleFilterCard('series', '怪談師')" class="kaidaniro">怪談師</button>
+        <button onclick="toggleFilterCard('series', 'れもんちゃんデッキ')" class="lemoniro">れもんちゃんデッキ</button>
+        <button onclick="toggleFilterCard('series', 'プロモ')" class="puromoiro">プロモ</button>
+      </div>
+      <!-- キーワード -->
+      <div id="keyword" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('keyword', '召喚時')">召喚時</button>
+        <button onclick="toggleFilterCard('keyword', '速攻')">速攻</button>
+        <button onclick="toggleFilterCard('keyword', '襲撃')">襲撃</button>
+        <button onclick="toggleFilterCard('keyword', '逆境')">逆境</button>
+        <button onclick="toggleFilterCard('keyword', '憤怒')">憤怒</button>
+        <button onclick="toggleFilterCard('keyword', '追撃')">追撃</button>
+        <button onclick="toggleFilterCard('keyword', '神秘')">神秘</button>
+        <button onclick="toggleFilterCard('keyword', '秘境')">秘境</button>
+        <button onclick="toggleFilterCard('keyword', '不屈')">不屈</button>
+        <button onclick="toggleFilterCard('keyword', '楽園')">楽園</button>
+        <button onclick="toggleFilterCard('keyword', '呪い')">呪い</button>
+        <button onclick="toggleFilterCard('keyword', '鮮明')">鮮明</button>
+        <button onclick="toggleFilterCard('keyword', '四季欲')">四季欲</button>
+        <button onclick="toggleFilterCard('keyword', '妬み')">妬み</button>
+        <button onclick="toggleFilterCard('keyword', '結界')">結界</button>
+        <button onclick="toggleFilterCard('keyword', '徳')">徳</button>
+        <button onclick="toggleFilterCard('keyword', '学校の怪談')">学校の怪談</button>
+      </div>
+      <!-- 属性 -->
+      <div id="attribute" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('attribute', '蟲')">蟲</button>
+        <button onclick="toggleFilterCard('attribute', '幽霊')">幽霊</button>
+        <button onclick="toggleFilterCard('attribute', '怨霊')">怨霊</button>
+        <button onclick="toggleFilterCard('attribute', '血液')">血液</button>
+        <button onclick="toggleFilterCard('attribute', '交通事故')">交通事故</button>
+        <button onclick="toggleFilterCard('attribute', '人形')">人形</button>
+        <button onclick="toggleFilterCard('attribute', '動物')">動物</button>
+        <button onclick="toggleFilterCard('attribute', '噂')">噂</button>
+        <button onclick="toggleFilterCard('attribute', '妖怪')">妖怪</button>
+        <button onclick="toggleFilterCard('attribute', '神')">神</button>
+      </div>
+      <!-- 季節 -->
+      <div id="season" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('season', '春')" class="haruiro">春</button>
+        <button onclick="toggleFilterCard('season', '夏')" class="natsuiro">夏</button>
+        <button onclick="toggleFilterCard('season', '秋')" class="akiiro">秋</button>
+        <button onclick="toggleFilterCard('season', '冬')" class="huyuiro">冬</button>
+        <button onclick="toggleFilterCard('season', '冬')" class="muiro">無</button>
+        <button onclick="toggleFilterCard('season', '混化')" class="konkairo">混化</button>
+      </div>
+      <!-- 札種類 -->
+      <div id="type" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('type', '場所札')" class="basyoiro">場所札</button>
+        <button onclick="toggleFilterCard('type', '怪異札')" class="kaiiiro">怪異札</button>
+        <button onclick="toggleFilterCard('type', '道具札')" class="douguiro">道具札</button>
+        <button onclick="toggleFilterCard('type', '季節札')" class="kisetsuiro">季節札</button>
+      </div>
+      <!-- レア度 -->
+      <div id="rare" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('rare', 'C')">C</button>
+        <button onclick="toggleFilterCard('rare', 'UC')">UC</button>
+        <button onclick="toggleFilterCard('rare', 'R')">R</button>
+        <button onclick="toggleFilterCard('rare', 'SR')">SR</button>
+        <button onclick="toggleFilterCard('rare', 'SSR')">SSR</button>
+        <button onclick="toggleFilterCard('rare', 'KR')">KR</button>
+        <button onclick="toggleFilterCard('rare', '制限限定')">制限限定</button>
+      </div>
       <!-- 役割 -->
       <div id="role" class="filter-content" style="display: none">
         <button onclick="toggleFilterCard('role', 'ドロー')">ドロー</button>
@@ -4807,79 +4895,6 @@
         <button onclick="toggleFilterCard('role', 'トップ確認')">トップ確認</button>
         <button onclick="toggleFilterCard('role', '手札公開')">手札公開</button>
         <button onclick="toggleFilterCard('role', '2種類札')">2種類札</button>
-      </div>
-
-      <!-- キーワード -->
-      <div id="keyword" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('keyword', '召喚時')">召喚時</button>
-        <button onclick="toggleFilterCard('keyword', '速攻')">速攻</button>
-        <button onclick="toggleFilterCard('keyword', '襲撃')">襲撃</button>
-        <button onclick="toggleFilterCard('keyword', '逆境')">逆境</button>
-        <button onclick="toggleFilterCard('keyword', '憤怒')">憤怒</button>
-        <button onclick="toggleFilterCard('keyword', '追撃')">追撃</button>
-        <button onclick="toggleFilterCard('keyword', '神秘')">神秘</button>
-        <button onclick="toggleFilterCard('keyword', '秘境')">秘境</button>
-        <button onclick="toggleFilterCard('keyword', '不屈')">不屈</button>
-        <button onclick="toggleFilterCard('keyword', '楽園')">楽園</button>
-        <button onclick="toggleFilterCard('keyword', '呪い')">呪い</button>
-        <button onclick="toggleFilterCard('keyword', '鮮明')">鮮明</button>
-        <button onclick="toggleFilterCard('keyword', '四季欲')">四季欲</button>
-        <button onclick="toggleFilterCard('keyword', '妬み')">妬み</button>
-        <button onclick="toggleFilterCard('keyword', '結界')">結界</button>
-        <button onclick="toggleFilterCard('keyword', '徳')">徳</button>
-        <button onclick="toggleFilterCard('keyword', '学校の怪談')">学校の怪談</button>
-      </div>
-      <!-- 属性 -->
-      <div id="attribute" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('attribute', '蟲')">蟲</button>
-        <button onclick="toggleFilterCard('attribute', '幽霊')">幽霊</button>
-        <button onclick="toggleFilterCard('attribute', '怨霊')">怨霊</button>
-        <button onclick="toggleFilterCard('attribute', '血液')">血液</button>
-        <button onclick="toggleFilterCard('attribute', '交通事故')">交通事故</button>
-        <button onclick="toggleFilterCard('attribute', '人形')">人形</button>
-        <button onclick="toggleFilterCard('attribute', '動物')">動物</button>
-        <button onclick="toggleFilterCard('attribute', '噂')">噂</button>
-        <button onclick="toggleFilterCard('attribute', '妖怪')">妖怪</button>
-        <button onclick="toggleFilterCard('attribute', '神')">神</button>
-      </div>
-      <!-- シリーズ -->
-      <div id="series" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('series', '夏VS冬バトルセット')" class="batoruiro">夏VS冬バトルセット</button>
-        <button onclick="toggleFilterCard('series', '新季の到来')" class="sinkiiro">新季の到来</button>
-        <button onclick="toggleFilterCard('series', '百鬼夜行')" class="hyakkiiro">百鬼夜行</button>
-        <button onclick="toggleFilterCard('series', 'うつくしいせかい')" class="utukusiiro">うつくしいせかい</button>
-        <button onclick="toggleFilterCard('series', 'おいしゃさんごっこ')" class="oisyairo">おいしゃさんごっこ</button>
-        <button onclick="toggleFilterCard('series', 'さいごのうた')" class="saigoiro">さいごのうた</button>
-        <button onclick="toggleFilterCard('series', 'あなたのよこで')" class="anatairo">あなたのよこで</button>
-        <button onclick="toggleFilterCard('series', '怪談師')" class="kaidaniro">怪談師</button>
-        <button onclick="toggleFilterCard('series', 'れもんちゃんデッキ')" class="lemoniro">れもんちゃんデッキ</button>
-        <button onclick="toggleFilterCard('series', 'プロモ')" class="puromoiro">プロモ</button>
-      </div>
-      <!-- 季節 -->
-      <div id="season" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('season', '春')" class="haruiro">春</button>
-        <button onclick="toggleFilterCard('season', '夏')" class="natsuiro">夏</button>
-        <button onclick="toggleFilterCard('season', '秋')" class="akiiro">秋</button>
-        <button onclick="toggleFilterCard('season', '冬')" class="huyuiro">冬</button>
-        <button onclick="toggleFilterCard('season', '冬')" class="muiro">無</button>
-        <button onclick="toggleFilterCard('season', '混化')" class="konkairo">混化</button>
-      </div>
-      <!-- 札種類 -->
-      <div id="type" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('type', '場所札')" class="basyoiro">場所札</button>
-        <button onclick="toggleFilterCard('type', '怪異札')" class="kaiiiro">怪異札</button>
-        <button onclick="toggleFilterCard('type', '道具札')" class="douguiro">道具札</button>
-        <button onclick="toggleFilterCard('type', '季節札')" class="kisetsuiro">季節札</button>
-      </div>
-      <!-- レア度 -->
-      <div id="rare" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('rare', 'C')">C</button>
-        <button onclick="toggleFilterCard('rare', 'UC')">UC</button>
-        <button onclick="toggleFilterCard('rare', 'R')">R</button>
-        <button onclick="toggleFilterCard('rare', 'SR')">SR</button>
-        <button onclick="toggleFilterCard('rare', 'SSR')">SSR</button>
-        <button onclick="toggleFilterCard('rare', 'KR')">KR</button>
-        <button onclick="toggleFilterCard('rare', '制限限定')">制限限定</button>
       </div>
 
       <div id="image-modal" class="image-modal">
