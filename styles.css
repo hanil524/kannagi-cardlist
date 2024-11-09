@@ -623,6 +623,18 @@ header input::placeholder,
   font-weight: bold;
 }
 
+.mobile-nav a {
+  color: #e0e0e0;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 .mobile-nav .close-menu {
   background-color: #d3d3d3; /* 「メニューを閉じる」の背景色を変更 */
 }
@@ -820,18 +832,6 @@ button[onclick='resetFilters()']:active {
 
 .mobile-nav li {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.mobile-nav a {
-  color: #e0e0e0;
-  padding: 15px 20px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.mobile-nav a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
 }
 
 .mobile-nav .close-menu {
