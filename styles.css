@@ -280,7 +280,7 @@ main {
 .pc-only {
   display: block;
   background-color: none; /* 初期背景色 */
-  border-radius: 25px;
+  border-radius: 20px;
   padding: 3px; /* 要素の内側に余白を追加してマウスオーバー可能な範囲を広げる */
   transition: background-color 0.2s ease, box-shadow 0.4s ease; /* 背景色の変化を0.2秒かけて行う */
 }
@@ -601,7 +601,7 @@ header input::placeholder,
   background-color: #f8f8f8;
   z-index: 1001; /* z-indexを上げる */
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5);
-  transition: left 0.3s ease-in-out; /* スムーズな移動のためのトランジション */
+  transition: left 0.2s ease-in-out; /* スムーズな移動のためのトランジション */
   overflow-y: auto; /* スクロール可能にする */
 }
 
@@ -625,7 +625,7 @@ header input::placeholder,
 
 .mobile-nav a {
   color: #e0e0e0;
-  padding: 10px 20px;
+  padding: 8.5px 20px;
   font-size: 16px;
   transition: all 0.3s ease;
 }
