@@ -516,6 +516,18 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.classList.remove('no-scroll');
     }
   });
+
+  // ESCキーでフィルター解除を追加
+  document.addEventListener('keydown', function (event) {
+    // ESCキーが押され、モーダルが開いていない場合にフィルターをリセット
+    if (
+      event.key === 'Escape' &&
+      document.getElementById('modal').style.display !== 'block' &&
+      document.getElementById('image-modal').style.display !== 'flex'
+    ) {
+      resetFilters();
+    }
+  });
 });
 
 // ズームを防止する関数
