@@ -830,7 +830,7 @@ const loadFiltersFromLocalStorage = () => {
   const savedSortCriteria = localStorage.getItem('sortCriteria');
   if (savedSortCriteria) {
     sortCriteria = savedSortCriteria;
-    sortOrder = 'asc'; // 常に昇順でソート
+    sortOrder = 'desc'; // 常に降順でソート
     sortCards(sortCriteria);
   }
   // 「並び」ボタンのアクティブ状態をリセット
