@@ -152,11 +152,9 @@ const sortCards = (criteria) => {
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   } else {
     sortCriteria = criteria;
-    if (criteria === 'type' || criteria === 'cost') {
-      // 種類とコストの場合は最初が昇順
+    if (criteria === 'type' || criteria === 'cost' || criteria === 'season') {
       sortOrder = 'asc';
     } else {
-      // No. と力の場合は最初が降順
       sortOrder = 'desc';
     }
   }
@@ -186,6 +184,7 @@ const sortCards = (criteria) => {
 
   // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
+  saveFiltersToLocalStorage();
 };
 
 const updateSortButtonsState = (activeCriteria) => {
@@ -217,6 +216,19 @@ const resetFilters = () => {
   resetSort();
   updateActiveFilters();
   resetSortButtonsState();
+
+  // 季節の並び順をリセット
+  seasonSortOrder = null;
+  updateSeasonSortButtonState();
+
+  localStorage.removeItem('cardFilters');
+  localStorage.removeItem('seasonSortOrder');
+  localStorage.removeItem('sortCriteria');
+  localStorage.removeItem('sortOrder');
+
+  sortCriteria = null;
+  sortOrder = 'asc';
+  updateSortButtonsState(null);
 };
 
 const resetSort = () => {
@@ -251,6 +263,7 @@ const toggleFilterCard = (attribute, value) => {
   }
   filterCards();
   updateActiveFilters(); // フィルター該当表示で追加
+  saveFiltersToLocalStorage(); // フィルター条件が変更されたときにローカルストレージに保存（キャッシュ用）
 };
 
 const filterCards = () => {
@@ -750,3 +763,79 @@ const loadVisibleImages = () => {
     }
   });
 };
+
+// 並び「季節」の実装
+const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
+let seasonSortOrder = 'asc';
+
+const sortCardsBySeason = () => {
+  if (seasonSortOrder === null) {
+    seasonSortOrder = 'asc';
+  } else {
+    seasonSortOrder = seasonSortOrder === 'asc' ? 'desc' : 'asc';
+  }
+
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+
+  cards.sort((a, b) => {
+    const aValue = seasonOrder.indexOf(a.dataset.season);
+    const bValue = seasonOrder.indexOf(b.dataset.season);
+    return seasonSortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+  });
+
+  cards.forEach((card) => cardList.appendChild(card));
+
+  loadVisibleImages();
+
+  updateSeasonSortButtonState();
+  saveFiltersToLocalStorage();
+};
+
+const updateSeasonSortButtonState = () => {
+  const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+  seasonSortButton.classList.toggle('active', seasonSortOrder !== null);
+  seasonSortButton.classList.toggle('desc', seasonSortOrder === 'desc');
+};
+
+// フィルター条件をローカルストレージに保存する関数（キャッシュ機能）
+const saveFiltersToLocalStorage = () => {
+  const filtersToSave = {};
+  for (const [key, value] of Object.entries(filters)) {
+    filtersToSave[key] = Array.from(value);
+  }
+  localStorage.setItem('cardFilters', JSON.stringify(filtersToSave));
+  localStorage.setItem('seasonSortOrder', seasonSortOrder);
+  localStorage.setItem('sortCriteria', sortCriteria);
+  // localStorage.setItem('sortOrder', sortOrder); // ソート順序は保存しない
+};
+
+// ローカルストレージからフィルター条件を読み込む関数
+const loadFiltersFromLocalStorage = () => {
+  const savedFilters = JSON.parse(localStorage.getItem('cardFilters'));
+  if (savedFilters) {
+    for (const [key, value] of Object.entries(savedFilters)) {
+      filters[key] = new Set(value);
+    }
+    filterCards();
+    updateActiveFilters();
+  }
+
+  const savedSeasonSortOrder = localStorage.getItem('seasonSortOrder');
+  if (savedSeasonSortOrder) {
+    seasonSortOrder = savedSeasonSortOrder;
+    updateSeasonSortButtonState();
+  }
+
+  const savedSortCriteria = localStorage.getItem('sortCriteria');
+  if (savedSortCriteria) {
+    sortCriteria = savedSortCriteria;
+    sortOrder = 'asc'; // 常に昇順でソート
+    sortCards(sortCriteria);
+  }
+  // 「並び」ボタンのアクティブ状態をリセット
+  resetSortButtonsState();
+};
+
+// ページ読み込み時にローカルストレージからフィルター条件を読み込む
+document.addEventListener('DOMContentLoaded', loadFiltersFromLocalStorage);
