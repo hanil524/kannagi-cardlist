@@ -144,24 +144,21 @@ const filterCardsByName = (event) => {
 };
 
 const sortCards = (criteria) => {
-  if (sortCriteria === criteria) {
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-  } else {
+  // 既存のソート状態をクリア（seasonは除く）
+  if (criteria !== 'season' && sortCriteria !== criteria) {
     sortCriteria = criteria;
-    if (criteria === 'type' || criteria === 'cost' || criteria === 'season') {
-      sortOrder = 'asc';
-    } else {
-      sortOrder = 'desc';
-    }
+    sortOrder = 'asc';
+  } else if (criteria !== 'season') {
+    // 同じボタンを押した場合は順序を反転
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   }
 
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
-  const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
-
   cards.sort((a, b) => {
     if (criteria === 'type') {
+      const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
       const aType = a.dataset.type;
       const bType = b.dataset.type;
       const aIndex = typeOrder.indexOf(aType);
@@ -175,11 +172,12 @@ const sortCards = (criteria) => {
   });
 
   cards.forEach((card) => cardList.appendChild(card));
-
   loadVisibleImages();
 
   // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
+
+  // 状態を保存
   saveFiltersToLocalStorage();
 };
 
@@ -196,34 +194,34 @@ const updateSortButtonsState = (activeCriteria) => {
   });
 };
 
+// resetFilters関数を修正
 const resetFilters = () => {
   Object.keys(filters).forEach((key) => filters[key].clear());
-  // 複製カードを削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
-  // 元のカードの表示をリセット
   const originalCards = document.querySelectorAll('.card:not([data-cloned])');
   originalCards.forEach((card) => {
     card.style.display = 'block';
   });
 
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card) => (card.style.display = 'block'));
   document.getElementById('no-cards-message').style.display = 'none';
   resetSort();
   updateActiveFilters();
   resetSortButtonsState();
 
-  // 季節の並び順をリセット
-  seasonSortOrder = null;
-  updateSeasonSortButtonState();
-
-  localStorage.removeItem('cardFilters');
-  localStorage.removeItem('seasonSortOrder');
-  localStorage.removeItem('sortCriteria');
-  localStorage.removeItem('sortOrder');
-
+  // ソート状態のリセット
+  window.seasonSortOrder = null; // ここを変更
   sortCriteria = null;
   sortOrder = 'asc';
+
+  // ローカルストレージのクリア
+  localStorage.removeItem('cardFilters');
+  localStorage.removeItem('sortState');
+
+  // ボタンの状態をリセット
+  const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+  if (seasonSortButton) {
+    seasonSortButton.classList.remove('active', 'desc');
+  }
   updateSortButtonsState(null);
 };
 
@@ -776,6 +774,10 @@ const loadVisibleImages = () => {
 const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
 
 const sortCardsBySeason = () => {
+  // 季節ボタンがクリックされたら、sortCriteriaを'season'に設定
+  sortCriteria = 'season';
+
+  // 順序を反転
   if (window.seasonSortOrder === 'asc') {
     window.seasonSortOrder = 'desc';
   } else {
@@ -785,6 +787,7 @@ const sortCardsBySeason = () => {
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
+  // 以下のソートロジックは同じ
   cards.sort((a, b) => {
     const aSeasons = a.dataset.season.split(' ');
     const bSeasons = b.dataset.season.split(' ');
@@ -793,34 +796,28 @@ const sortCardsBySeason = () => {
     const bHasMixed = bSeasons.includes('混化');
 
     if (aHasMixed && bHasMixed) {
-      // 両方とも混化の場合、そのままの順序を維持
       return 0;
     } else if (aHasMixed) {
-      // aが混化の場合
-      return seasonSortOrder === 'asc' ? 1 : -1;
+      return window.seasonSortOrder === 'asc' ? 1 : -1;
     } else if (bHasMixed) {
-      // bが混化の場合
-      return seasonSortOrder === 'asc' ? -1 : 1;
+      return window.seasonSortOrder === 'asc' ? -1 : 1;
     } else {
-      // 既定の季節同士の比較
       const aSeasonIndex = seasonOrder.indexOf(aSeasons[0]);
       const bSeasonIndex = seasonOrder.indexOf(bSeasons[0]);
-      return seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
+      return window.seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
     }
   });
 
   cards.forEach((card) => cardList.appendChild(card));
-
   loadVisibleImages();
-
   updateSeasonSortButtonState();
   saveFiltersToLocalStorage();
 };
 
 const updateSeasonSortButtonState = () => {
   const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
-  seasonSortButton.classList.toggle('active', seasonSortOrder !== null);
-  seasonSortButton.classList.toggle('desc', seasonSortOrder === 'desc');
+  seasonSortButton.classList.toggle('active', true); // 常にアクティブ
+  seasonSortButton.classList.toggle('desc', window.seasonSortOrder === 'desc');
 };
 
 // フィルター条件をローカルストレージに保存する関数（キャッシュ機能）
@@ -829,36 +826,110 @@ const saveFiltersToLocalStorage = () => {
   for (const [key, value] of Object.entries(filters)) {
     filtersToSave[key] = Array.from(value);
   }
+
+  // 現在のソート状態を保存
+  const sortState = {
+    seasonSortOrder: window.seasonSortOrder,
+    sortCriteria: sortCriteria,
+    sortOrder: sortOrder
+  };
+
   localStorage.setItem('cardFilters', JSON.stringify(filtersToSave));
-  localStorage.setItem('seasonSortOrder', window.seasonSortOrder);
-  localStorage.setItem('sortCriteria', sortCriteria);
+  localStorage.setItem('sortState', JSON.stringify(sortState));
 };
 
 // ローカルストレージからフィルター条件を読み込む関数
 const loadFiltersFromLocalStorage = () => {
+  // 保存されたデータを一度に読み込み
   const savedFilters = JSON.parse(localStorage.getItem('cardFilters'));
+  const savedSortState = JSON.parse(localStorage.getItem('sortState'));
+
+  // フィルターの適用
   if (savedFilters) {
     for (const [key, value] of Object.entries(savedFilters)) {
       filters[key] = new Set(value);
     }
+  }
+
+  // ソート状態の復元
+  if (savedSortState) {
+    window.seasonSortOrder = savedSortState.seasonSortOrder;
+    sortCriteria = savedSortState.sortCriteria;
+    sortOrder = savedSortState.sortOrder;
+
+    // DOMの更新を一度にまとめる
+    requestAnimationFrame(() => {
+      const cardList = document.getElementById('card-list');
+      const cards = Array.from(document.querySelectorAll('.card'));
+
+      if (sortCriteria === 'season') {
+        // 季節ソートの場合
+        cards.sort((a, b) => {
+          const aSeasons = a.dataset.season.split(' ');
+          const bSeasons = b.dataset.season.split(' ');
+          const aHasMixed = aSeasons.includes('混化');
+          const bHasMixed = bSeasons.includes('混化');
+
+          if (aHasMixed && bHasMixed) {
+            return 0;
+          } else if (aHasMixed) {
+            return window.seasonSortOrder === 'asc' ? 1 : -1;
+          } else if (bHasMixed) {
+            return window.seasonSortOrder === 'asc' ? -1 : 1;
+          } else {
+            const aSeasonIndex = seasonOrder.indexOf(aSeasons[0]);
+            const bSeasonIndex = seasonOrder.indexOf(bSeasons[0]);
+            return window.seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
+          }
+        });
+
+        // 季節ボタンの状態を更新
+        const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+        if (seasonSortButton) {
+          seasonSortButton.classList.add('active');
+          seasonSortButton.classList.toggle('desc', window.seasonSortOrder === 'desc');
+        }
+      } else if (sortCriteria) {
+        // 通常のソートの場合
+        if (sortCriteria === 'type') {
+          const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+          cards.sort((a, b) => {
+            const aType = a.dataset.type;
+            const bType = b.dataset.type;
+            const aIndex = typeOrder.indexOf(aType);
+            const bIndex = typeOrder.indexOf(bType);
+            return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+          });
+        } else {
+          cards.sort((a, b) => {
+            const aValue = parseInt(a.dataset[sortCriteria]);
+            const bValue = parseInt(b.dataset[sortCriteria]);
+            return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+          });
+        }
+
+        // ソートボタンの状態を更新
+        const sortButton = document.querySelector(`.sort-buttons button[data-filter="${sortCriteria}"]`);
+        if (sortButton) {
+          sortButton.classList.add('active');
+          sortButton.classList.toggle('desc', sortOrder === 'desc');
+        }
+      }
+
+      // パフォーマンス改善: DocumentFragment を使用
+      const fragment = document.createDocumentFragment();
+      cards.forEach((card) => fragment.appendChild(card));
+      cardList.appendChild(fragment);
+
+      // フィルターとアクティブ表示の更新
+      filterCards();
+      updateActiveFilters();
+    });
+  } else {
+    // ソート状態がない場合は単純にフィルターを適用
     filterCards();
     updateActiveFilters();
   }
-
-  const savedSeasonSortOrder = localStorage.getItem('seasonSortOrder');
-  if (savedSeasonSortOrder) {
-    seasonSortOrder = savedSeasonSortOrder;
-    updateSeasonSortButtonState();
-  }
-
-  const savedSortCriteria = localStorage.getItem('sortCriteria');
-  if (savedSortCriteria) {
-    sortCriteria = savedSortCriteria;
-    sortOrder = 'desc'; // 常に降順でソート
-    sortCards(sortCriteria);
-  }
-  // 「並び」ボタンのアクティブ状態をリセット
-  resetSortButtonsState();
 };
 
 // ページ読み込み時にローカルストレージからフィルター条件を読み込む
