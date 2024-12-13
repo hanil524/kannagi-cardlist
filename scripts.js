@@ -1,5 +1,8 @@
-// ページがロードされた際の初期設定
-console.log('JavaScript is loaded');
+// 最初にすべてのグローバル変数を定義
+window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
+let sortCriteria = null;
+let sortOrder = 'asc';
+let scrollPosition = 0;
 
 // フィルター条件を保持するオブジェクト
 const filters = {
@@ -11,13 +14,6 @@ const filters = {
   attribute: new Set(),
   rare: new Set()
 };
-
-// ソート条件を保持する変数
-let sortCriteria = null;
-let sortOrder = 'asc';
-
-// スクロール位置を保持する変数
-let scrollPosition = 0;
 
 // フォントサイズをリセット
 function resetFontSize() {
@@ -262,8 +258,11 @@ const toggleFilterCard = (attribute, value) => {
     filters[attribute].add(value);
   }
   filterCards();
-  updateActiveFilters(); // フィルター該当表示で追加
-  saveFiltersToLocalStorage(); // フィルター条件が変更されたときにローカルストレージに保存（キャッシュ用）
+  updateActiveFilters();
+  saveFiltersToLocalStorage();
+
+  // モーダルを確実に閉じる
+  closeModal();
 };
 
 const filterCards = () => {
@@ -358,29 +357,26 @@ const openModal = (filterId) => {
   filterContent.forEach((button) => {
     const newButton = document.createElement('button');
     newButton.innerText = button.innerText;
-    newButton.onclick = () => {
-      toggleFilterCard(filterId, button.innerText.trim());
-      closeModal();
-    };
-    // 元のボタンのクラスを新しいボタンに追加
     newButton.className = button.className;
+    newButton.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFilterCard(filterId, button.innerText.trim());
+    };
     modalButtons.appendChild(newButton);
   });
 
-  // スクロール位置を保存
   scrollPosition = window.pageYOffset;
-
-  // スクロールバーの幅を計算
   const scrollbarWidth = getScrollbarWidth();
 
-  // ボディにパディングを追加する前にモーダルを表示
   modal.style.display = 'block';
-
   document.body.style.paddingRight = `${scrollbarWidth}px`;
   document.body.classList.add('modal-open');
 
   const headerContent = document.querySelector('.header-content');
-  headerContent.style.paddingRight = `${scrollbarWidth}px`;
+  if (headerContent) {
+    headerContent.style.paddingRight = `${scrollbarWidth}px`;
+  }
 };
 
 const closeModal = () => {
@@ -780,10 +776,10 @@ const loadVisibleImages = () => {
 const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
 
 const sortCardsBySeason = () => {
-  if (seasonSortOrder === 'asc') {
-    seasonSortOrder = 'desc';
+  if (window.seasonSortOrder === 'asc') {
+    window.seasonSortOrder = 'desc';
   } else {
-    seasonSortOrder = 'asc';
+    window.seasonSortOrder = 'asc';
   }
 
   const cardList = document.getElementById('card-list');
@@ -834,9 +830,8 @@ const saveFiltersToLocalStorage = () => {
     filtersToSave[key] = Array.from(value);
   }
   localStorage.setItem('cardFilters', JSON.stringify(filtersToSave));
-  localStorage.setItem('seasonSortOrder', seasonSortOrder);
+  localStorage.setItem('seasonSortOrder', window.seasonSortOrder);
   localStorage.setItem('sortCriteria', sortCriteria);
-  // localStorage.setItem('sortOrder', sortOrder); // ソート順序は保存しない
 };
 
 // ローカルストレージからフィルター条件を読み込む関数
