@@ -1150,22 +1150,43 @@ button[onclick='resetFilters()']:active {
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
 
-/* 混化ボタンの斜め2色デザイン */
 .modal-buttons button.konkairo {
+  background-color: #535353;
+  color: #ffffff; /* 濃いグレーのテキスト */
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+}
+
+/* 混化ボタンの斜め2色デザイン */
+.modal-buttons button.harunatsuiro {
+  color: #ffffff;
   background: linear-gradient(135deg, #f76969 50%, #46ce46 50%);
   position: relative;
   overflow: hidden;
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
 
-.modal-buttons button.konkairo::after {
-  content: '混化';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #222222;
-  z-index: 1;
+.modal-buttons button.haruhuyuiro {
+  color: #ffffff;
+  background: linear-gradient(135deg, #f76969 50%, #4e78eb 50%);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+}
+
+.modal-buttons button.akinatsuiro {
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff915f 50%, #46ce46 50%);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+}
+
+.modal-buttons button.akihuyuiro {
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff915f 50%, #4e78eb 50%);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
 
 /* 個別の札種類ボタンの背景色 */
