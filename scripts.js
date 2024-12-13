@@ -778,22 +778,39 @@ const loadVisibleImages = () => {
 
 // 並び「季節」の実装
 const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
-let seasonSortOrder = 'asc';
 
 const sortCardsBySeason = () => {
-  if (seasonSortOrder === null) {
-    seasonSortOrder = 'asc';
+  if (seasonSortOrder === 'asc') {
+    seasonSortOrder = 'desc';
   } else {
-    seasonSortOrder = seasonSortOrder === 'asc' ? 'desc' : 'asc';
+    seasonSortOrder = 'asc';
   }
 
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
   cards.sort((a, b) => {
-    const aValue = seasonOrder.indexOf(a.dataset.season);
-    const bValue = seasonOrder.indexOf(b.dataset.season);
-    return seasonSortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    const aSeasons = a.dataset.season.split(' ');
+    const bSeasons = b.dataset.season.split(' ');
+
+    const aHasMixed = aSeasons.includes('混化');
+    const bHasMixed = bSeasons.includes('混化');
+
+    if (aHasMixed && bHasMixed) {
+      // 両方とも混化の場合、そのままの順序を維持
+      return 0;
+    } else if (aHasMixed) {
+      // aが混化の場合
+      return seasonSortOrder === 'asc' ? 1 : -1;
+    } else if (bHasMixed) {
+      // bが混化の場合
+      return seasonSortOrder === 'asc' ? -1 : 1;
+    } else {
+      // 既定の季節同士の比較
+      const aSeasonIndex = seasonOrder.indexOf(aSeasons[0]);
+      const bSeasonIndex = seasonOrder.indexOf(bSeasons[0]);
+      return seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
+    }
   });
 
   cards.forEach((card) => cardList.appendChild(card));
