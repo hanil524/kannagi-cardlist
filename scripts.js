@@ -122,6 +122,49 @@ document.addEventListener('DOMContentLoaded', () => {
       closeImageModal();
     }
   });
+
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  prevButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPreviousImage();
+  });
+
+  nextButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showNextImage();
+  });
+
+  // スワイプ操作のサポート（オプション）
+  let touchStartX = 0;
+  const modalImage = document.getElementById('modal-image');
+
+  modalImage.addEventListener(
+    'touchstart',
+    (e) => {
+      touchStartX = e.touches[0].clientX;
+    },
+    { passive: true }
+  );
+
+  modalImage.addEventListener(
+    'touchend',
+    (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > 50) {
+        // 50pxのスワイプで判定
+        if (diff > 0) {
+          showNextImage();
+        } else {
+          showPreviousImage();
+        }
+      }
+    },
+    { passive: true }
+  );
 });
 
 // 以下の関数は変更なし
@@ -403,11 +446,23 @@ const closeModalOnClick = (event) => {
 };
 let savedScrollPosition = 0;
 
-// 画像モーダルを開く関数
+// 現在の画像のインデックスを追跡
+let currentImageIndex = 0;
+let visibleCards = [];
+
+// 画像モーダルを開く関数を修正
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
   const modalImage = document.getElementById('modal-image');
   const closeIcon = modal.querySelector('.close-icon');
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  // 現在表示されているカードを取得
+  visibleCards = Array.from(document.querySelectorAll('.card')).filter((card) => card.style.display !== 'none');
+
+  // クリックされた画像のインデックスを見つける
+  currentImageIndex = visibleCards.findIndex((card) => card.querySelector('img').src === src);
 
   savedScrollPosition = window.pageYOffset;
   modalImage.src = src;
@@ -418,10 +473,10 @@ const openImageModal = (src) => {
   document.body.style.width = '100%';
   document.getElementById('topButton').style.display = 'none';
 
+  updateNavigationButtons();
+
   closeIcon.classList.remove('show');
-  setTimeout(() => {
-    closeIcon.classList.add('show');
-  }, 100);
+  setTimeout(() => closeIcon.classList.add('show'), 100);
 };
 
 // 画像モーダルを閉じる関数
@@ -929,6 +984,35 @@ const loadFiltersFromLocalStorage = () => {
     // ソート状態がない場合は単純にフィルターを適用
     filterCards();
     updateActiveFilters();
+  }
+};
+
+// ナビゲーションボタンの状態を更新
+const updateNavigationButtons = () => {
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  prevButton.disabled = currentImageIndex <= 0;
+  nextButton.disabled = currentImageIndex >= visibleCards.length - 1;
+};
+
+// 前の画像に移動
+const showPreviousImage = () => {
+  if (currentImageIndex > 0) {
+    currentImageIndex--;
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = visibleCards[currentImageIndex].querySelector('img').src;
+    updateNavigationButtons();
+  }
+};
+
+// 次の画像に移動
+const showNextImage = () => {
+  if (currentImageIndex < visibleCards.length - 1) {
+    currentImageIndex++;
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = visibleCards[currentImageIndex].querySelector('img').src;
+    updateNavigationButtons();
   }
 };
 
