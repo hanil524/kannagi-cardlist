@@ -1494,3 +1494,38 @@ main {
     padding-bottom: 80px;
   }
 }
+
+/* 画像を前後送り */
+.image-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 15px 15px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  transition: opacity 0.3s ease;
+}
+
+.image-nav-button.prev {
+  left: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+.image-nav-button.next {
+  right: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.image-nav-button:disabled {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .image-nav-button {
+    display: none;
+  }
+}
