@@ -458,10 +458,8 @@ const openImageModal = (src) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
-  // 現在表示されているカードを取得
   visibleCards = Array.from(document.querySelectorAll('.card')).filter((card) => card.style.display !== 'none');
 
-  // クリックされた画像のインデックスを見つける
   currentImageIndex = visibleCards.findIndex((card) => card.querySelector('img').src === src);
 
   savedScrollPosition = window.pageYOffset;
@@ -474,6 +472,8 @@ const openImageModal = (src) => {
   document.getElementById('topButton').style.display = 'none';
 
   updateNavigationButtons();
+  // モーダルを開いた時点で周辺画像をプリロード
+  preloadAdjacentImages();
 
   closeIcon.classList.remove('show');
   setTimeout(() => closeIcon.classList.add('show'), 100);
@@ -996,23 +996,77 @@ const updateNavigationButtons = () => {
   nextButton.disabled = currentImageIndex >= visibleCards.length - 1;
 };
 
+// 画像のプリロード関数を追加
+const preloadModalImage = (targetImg) => {
+  if (targetImg && targetImg.hasAttribute('data-src')) {
+    const src = targetImg.getAttribute('data-src');
+    targetImg.src = src;
+    targetImg.removeAttribute('data-src');
+    targetImg.classList.add('loaded');
+    targetImg.style.opacity = '1';
+  }
+};
+
+// 周辺画像のプリロード
+const preloadAdjacentImages = () => {
+  // 前の画像をプリロード
+  if (currentImageIndex > 0) {
+    const prevCard = visibleCards[currentImageIndex - 1];
+    preloadModalImage(prevCard.querySelector('img'));
+  }
+
+  // 次の画像をプリロード
+  if (currentImageIndex < visibleCards.length - 1) {
+    const nextCard = visibleCards[currentImageIndex + 1];
+    preloadModalImage(nextCard.querySelector('img'));
+  }
+};
+
 // 前の画像に移動
 const showPreviousImage = () => {
   if (currentImageIndex > 0) {
     currentImageIndex--;
     const modalImage = document.getElementById('modal-image');
-    modalImage.src = visibleCards[currentImageIndex].querySelector('img').src;
+    const targetCard = visibleCards[currentImageIndex];
+    const targetImg = targetCard.querySelector('img');
+
+    const src = targetImg.getAttribute('data-src') || targetImg.src;
+    modalImage.src = src;
+
+    if (targetImg.hasAttribute('data-src')) {
+      targetImg.src = src;
+      targetImg.removeAttribute('data-src');
+      targetImg.classList.add('loaded');
+      targetImg.style.opacity = '1';
+    }
+
     updateNavigationButtons();
+    // 移動後に周辺画像をプリロード
+    preloadAdjacentImages();
   }
 };
 
-// 次の画像に移動
+// showNextImage関数を修正
 const showNextImage = () => {
   if (currentImageIndex < visibleCards.length - 1) {
     currentImageIndex++;
     const modalImage = document.getElementById('modal-image');
-    modalImage.src = visibleCards[currentImageIndex].querySelector('img').src;
+    const targetCard = visibleCards[currentImageIndex];
+    const targetImg = targetCard.querySelector('img');
+
+    const src = targetImg.getAttribute('data-src') || targetImg.src;
+    modalImage.src = src;
+
+    if (targetImg.hasAttribute('data-src')) {
+      targetImg.src = src;
+      targetImg.removeAttribute('data-src');
+      targetImg.classList.add('loaded');
+      targetImg.style.opacity = '1';
+    }
+
     updateNavigationButtons();
+    // 移動後に周辺画像をプリロード
+    preloadAdjacentImages();
   }
 };
 
