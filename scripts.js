@@ -457,41 +457,28 @@ const openImageModal = (src) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
-  // ビューポートメタタグを探すか作成
-  let viewportMeta = document.querySelector('meta[name="viewport"]');
-  if (!viewportMeta) {
-    viewportMeta = document.createElement('meta');
-    viewportMeta.name = 'viewport';
-    document.head.appendChild(viewportMeta);
-  }
-  viewportMeta.content =
-    'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no, minimal-ui';
-
-  // apple-mobile-web-app-capable メタタグの追加
-  let appleMobileWebAppCapable = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
-  if (!appleMobileWebAppCapable) {
-    appleMobileWebAppCapable = document.createElement('meta');
-    appleMobileWebAppCapable.name = 'apple-mobile-web-app-capable';
-    appleMobileWebAppCapable.content = 'yes';
-    document.head.appendChild(appleMobileWebAppCapable);
-  }
-
-  // モーダル表示時にビューポートを変更
-  viewportMeta.content =
-    'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no, minimal-ui, standalone';
-
   visibleCards = Array.from(document.querySelectorAll('.card')).filter((card) => card.style.display !== 'none');
-
   currentImageIndex = visibleCards.findIndex((card) => card.querySelector('img').src === src);
 
-  savedScrollPosition = window.pageYOffset;
+  // 画像を最初は透明に
+  modalImage.style.opacity = '0';
   modalImage.src = src;
+
+  // モーダルを開いた時にスクロールを停止
+  savedScrollPosition = window.pageYOffset;
+
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
   document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
   document.getElementById('topButton').style.display = 'none';
+
+  // フェードイン効果を適用
+  requestAnimationFrame(() => {
+    modalImage.style.transition = 'opacity 0.3s ease';
+    modalImage.style.opacity = '1';
+  });
 
   updateNavigationButtons();
   // モーダルを開いた時点で周辺画像をプリロード
@@ -501,20 +488,6 @@ const openImageModal = (src) => {
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
-
-  // ビューポートを元に戻す
-  const viewportMeta = document.querySelector('meta[name="viewport"]');
-  if (viewportMeta) {
-    viewportMeta.content =
-      'width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no';
-  }
-
-  // apple-mobile-web-app-capable メタタグを削除
-  const appleMobileWebAppCapable = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
-  if (appleMobileWebAppCapable) {
-    appleMobileWebAppCapable.remove();
-  }
-
   modal.style.display = 'none';
   document.body.style.overflow = '';
   document.body.style.position = '';
