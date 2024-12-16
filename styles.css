@@ -888,18 +888,6 @@ button[onclick='resetFilters()']:active {
   margin: 0;
 }
 
-.image-modal .close-icon {
-  position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 30px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
-}
-
 /* 画像モーダルのベース設定 */
 .image-modal {
   position: fixed;
@@ -998,11 +986,6 @@ button[onclick='resetFilters()']:active {
     height: auto; /* 高さを自動調整 */
     max-width: 80%; /* 最大幅を画面幅に */
   }
-}
-
-.image-modal .close-icon.show {
-  animation: fadeIn 0.2s ease-in forwards;
-  animation-delay: 0.2s; /* 0.5秒の遅延後に表示開始 */
 }
 
 /* モーダルの背景とコンテンツのスタイリング */
