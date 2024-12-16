@@ -683,10 +683,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('image-modal').style.display === 'flex') {
       return;
     }
-    // スクロール中は処理をスキップ
-    if (isScrolling) {
-      return;
-    }
     // IntersectionObserverのリセット
     if (observer) {
       observer.disconnect();
