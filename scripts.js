@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.classList.remove('loaded');
       }
     });
-  }, 5 * 60 * 1000); // 5分間隔
+  }, 3 * 60 * 1000); // 5分間隔
 
   const preloadNextImages = (currentIndex, count = 5) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
