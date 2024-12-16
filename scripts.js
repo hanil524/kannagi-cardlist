@@ -834,6 +834,8 @@ function removeFilter(key, value) {
     filters[key].delete(value);
     filterCards();
     updateActiveFilters();
+    // フィルター削除時にもローカルストレージを更新
+    saveFiltersToLocalStorage();
   }
 }
 
