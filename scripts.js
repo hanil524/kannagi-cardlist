@@ -84,29 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // カード画像にクリックイベントを追加（モバイル用）
   const cards = document.querySelectorAll('.card img');
   cards.forEach((card) => {
-    let isScrolling = false;
-    let scrollTimeout;
-
-    // スクロール状態を監視
-    window.addEventListener('scroll', () => {
-      isScrolling = true;
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false;
-      }, 50); // スクロール停止の判定時間
+    card.addEventListener('click', (event) => {
+      event.stopPropagation(); // イベントの伝播を停止
+      if (window.innerWidth <= 768) {
+        openImageModal(card.src);
+      }
     });
-
-    card.addEventListener(
-      'click',
-      (event) => {
-        event.stopPropagation();
-        if (window.innerWidth <= 768) {
-          // スクロール中でもタップを有効に
-          openImageModal(card.src);
-        }
-      },
-      { passive: false }
-    ); // スクロールの即時停止を可能に
   });
 
   // フィルターボタンにクリックイベントを追加
