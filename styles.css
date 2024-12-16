@@ -935,7 +935,7 @@ button[onclick='resetFilters()']:active {
   /* Safari UI要素を考慮した高さ調整 */
   max-height: calc(100vh - env(safe-area-inset-bottom) - env(safe-area-inset-top));
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   object-fit: contain;
   margin: auto;
   border: none;
