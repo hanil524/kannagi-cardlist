@@ -677,19 +677,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, options);
 
-  // クリーンアップ処理を追加
-  setInterval(() => {
-    // ユーザーが画像モーダルを開いている時は処理をスキップ
-    if (document.getElementById('image-modal').style.display === 'flex') {
-      return;
+  // クリーンアップ イベントでタブのアクティブ状態を監視
+  document.addEventListener('visibilitychange', () => {
+    // タブがアクティブになった時
+    if (document.visibilityState === 'visible') {
+      // モーダルが開いていない時だけリセット
+      if (document.getElementById('image-modal').style.display !== 'flex') {
+        if (observer) {
+          observer.disconnect();
+          setupLazyLoading();
+        }
+      }
     }
+  });
 
-    // IntersectionObserverのリセットのみ実行
-    if (observer) {
-      observer.disconnect();
-      setupLazyLoading();
-    }
-  }, 3 * 60 * 1000); // 3分間隔
   const preloadNextImages = (currentIndex, count = 5) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
