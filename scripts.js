@@ -454,7 +454,6 @@ let visibleCards = [];
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
   const modalImage = document.getElementById('modal-image');
-  const closeIcon = modal.querySelector('.close-icon');
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
@@ -474,9 +473,6 @@ const openImageModal = (src) => {
   updateNavigationButtons();
   // モーダルを開いた時点で周辺画像をプリロード
   preloadAdjacentImages();
-
-  closeIcon.classList.remove('show');
-  setTimeout(() => closeIcon.classList.add('show'), 100);
 };
 
 // 画像モーダルを閉じる関数
