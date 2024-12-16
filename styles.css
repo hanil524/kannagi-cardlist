@@ -900,39 +900,91 @@ button[onclick='resetFilters()']:active {
   transition: opacity 0.3s ease-in;
 }
 
+/* 画像モーダルのベース設定 */
 .image-modal {
-  display: none;
   position: fixed;
-  z-index: 1000;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* モーダルコンテンツのコンテナ */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
   justify-content: center;
-  align-items: flex-start; /* 上端揃えに変更 */
-  padding-top: 160px; /* 上から100pxの位置に配置 */
+  align-items: center;
+  height: 100%;
+  /* Safari UI要素の高さを考慮 */
+  height: -webkit-fill-available;
+  padding: 20px;
 }
 
 .image-modal .modal-content {
   position: relative;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* 幅を100%に設定 */
+  /* Safari UIの変化に対応するためのパディング */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* モーダル内の画像設定 */
 .image-modal img {
-  max-width: 100%;
-  max-height: 100%;
-  max-height: calc(100vh - 60px); /* アドレスバーの高さを考慮 */
+  max-width: 95%;
+  max-height: 90vh;
+  /* Safari UI要素を考慮した高さ調整 */
+  max-height: calc(100vh - env(safe-area-inset-bottom) - env(safe-area-inset-top));
   object-fit: contain;
-  display: block;
+  margin: auto;
   border: none;
   border-radius: 16px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
+}
+
+/* iPhoneのSafari向け特別対応 */
+@supports (-webkit-touch-callout: none) {
+  .image-modal .modal-content {
+    /* ノッチ等のある端末での表示調整 */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .image-modal img {
+    /* タブバーの高さを動的に考慮 */
+    max-height: calc(100vh - 120px);
+  }
+}
+
+/* 横向き時の対応 */
+@media screen and (orientation: landscape) {
+  .image-modal img {
+    max-height: 85vh;
+    max-width: 85vw;
+  }
+}
+
+/* スマートフォン向けの調整 */
+@media (max-width: 768px) {
+  .image-modal .modal-content {
+    padding: 10px;
+  }
+
+  .image-modal img {
+    max-width: 95%;
+    /* モバイルでの表示調整 */
+    height: auto;
+  }
 }
 
 /* スマートフォン向けの調整 */
@@ -1120,40 +1172,40 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.muiro,
 .modal-buttons button.konkairo {
   color: #ffffff; /* テキストの色を白に設定 */
-  font-size: 13.5px; /* フォントサイズを大きく */
+  font-size: 13.5px;
 }
 
 /* 個別の季節ボタンの背景色 */
 .modal-buttons button.haruiro {
-  background-color: #f76969; /* ダークレッド */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  background-color: #f76969;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.natsuiro {
-  background-color: #46ce46; /* ダークグリーン */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  background-color: #46ce46;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akiiro {
-  background-color: #ff915f; /* サドルブラウン */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  background-color: #ff915f;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.huyuiro {
-  background-color: #4e78eb; /* ダークブルー */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  background-color: #4e78eb;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.muiro {
   background-color: #ffffff;
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #222222;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.konkairo {
   background-color: #535353;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 /* 混化ボタンの斜め2色デザイン */
@@ -1162,7 +1214,7 @@ button[onclick='resetFilters()']:active {
   background: linear-gradient(135deg, #f76969 50%, #46ce46 50%);
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.haruhuyuiro {
@@ -1170,7 +1222,7 @@ button[onclick='resetFilters()']:active {
   background: linear-gradient(135deg, #f76969 50%, #4e78eb 50%);
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akinatsuiro {
@@ -1178,7 +1230,7 @@ button[onclick='resetFilters()']:active {
   background: linear-gradient(135deg, #ff915f 50%, #46ce46 50%);
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akihuyuiro {
@@ -1186,36 +1238,36 @@ button[onclick='resetFilters()']:active {
   background: linear-gradient(135deg, #ff915f 50%, #4e78eb 50%);
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
 }
 
 /* 個別の札種類ボタンの背景色 */
 .modal-buttons button.basyoiro {
-  background-color: #f74848; /* 赤（場所札） */
-  color: #ffffff; /* 白テキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
-  font-size: 13.5px; /* フォントサイズを大きく */
+  background-color: #f74848;
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
+  font-size: 13.5px;
 }
 
 .modal-buttons button.kaiiiro {
-  background-color: #9370db; /* ミディアムパープル（怪異札） */
-  color: #ffffff; /* 白テキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
-  font-size: 13.5px; /* フォントサイズを大きく */
+  background-color: #9370db;
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
+  font-size: 13.5px;
 }
 
 .modal-buttons button.douguiro {
-  background-color: #f0f0f0; /* 薄いグレー（道具札） */
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
-  font-size: 13.5px; /* フォントサイズを大きく */
+  background-color: #f0f0f0;
+  color: #222222;
+  border: 2px solid #1d1d1d;
+  font-size: 13.5px;
 }
 
 .modal-buttons button.kisetsuiro {
-  background-color: #ffd700; /* ゴールド（季節札） */
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
-  font-size: 13.5px; /* フォントサイズを大きく */
+  background-color: #ffd700;
+  color: #222222;
+  border: 2px solid #1d1d1d;
+  font-size: 13.5px;
 }
 
 /* シリーズボタンの基本スタイル */
@@ -1291,7 +1343,7 @@ button[onclick='resetFilters()']:active {
 
 .modal-buttons button.lemoniro {
   background-color: #ebd036;
-  color: #222222; /* 濃いグレーのテキスト */
+  color: #222222;
   border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
 }
 
