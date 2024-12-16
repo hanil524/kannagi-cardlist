@@ -677,6 +677,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, options);
 
+  // クリーンアップ処理を追加
+  setInterval(() => {
+    // ユーザーが画像モーダルを開いている時は処理をスキップ
+    if (document.getElementById('image-modal').style.display === 'flex') {
+      return;
+    }
+    // スクロール中は処理をスキップ
+    if (isScrolling) {
+      return;
+    }
+    // IntersectionObserverのリセット
+    if (observer) {
+      observer.disconnect();
+      setupLazyLoading();
+    }
+
+    // 画面外の画像データをクリア
+    const images = document.querySelectorAll('.card img');
+    images.forEach((img) => {
+      if (!isElementInViewport(img) && img.classList.contains('loaded')) {
+        img.src = img.getAttribute('data-src') || 'placeholder.jpg';
+        img.classList.remove('loaded');
+      }
+    });
+  }, 5 * 60 * 1000); // 5分間隔
+
   const preloadNextImages = (currentIndex, count = 5) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
