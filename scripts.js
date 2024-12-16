@@ -25,6 +25,8 @@ window.addEventListener('resize', resetFontSize);
 
 // ページロード後にDOMの初期設定を行う
 document.addEventListener('DOMContentLoaded', () => {
+  // 強制的にページトップに移動
+  window.scrollTo(0, 0);
   // ページが完全に読み込まれたときに呼び出される
   window.addEventListener('load', () => {
     // ローディングスピナーを非表示にし、コンテンツを表示
