@@ -938,8 +938,6 @@ button[onclick='resetFilters()']:active {
   align-items: center;
   /* Safari UIの変化に対応するためのパディング */
   padding-bottom: env(safe-area-inset-bottom);
-  /* スムーズな移動のための設定を追加 */
-  transition: transform 0.3s ease, padding-bottom 0.3s ease;
 }
 
 /* モーダル内の画像設定 */
@@ -953,8 +951,6 @@ button[onclick='resetFilters()']:active {
   border: none;
   border-radius: 16px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
-  /* 画像自体の移動もスムーズに */
-  transition: transform 0.3s ease, max-height 0.3s ease;
 }
 
 /* iPhoneのSafari向け特別対応 */
@@ -962,21 +958,11 @@ button[onclick='resetFilters()']:active {
   .image-modal .modal-content {
     /* ノッチ等のある端末での表示調整 */
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    /* Safari UIの変更に対してスムーズに対応 */
-    transition: all 0.3s ease;
   }
 
   .image-modal img {
     /* タブバーの高さを動的に考慮 */
     max-height: calc(100vh - 120px);
-    /* 位置やサイズの変更をスムーズに */
-    transition: all 0.3s ease;
-  }
-}
-/* タブグループ表示時の調整 */
-@media screen and (height < 100vh) {
-  .image-modal .modal-content {
-    transform: translateY(-40px); /* タブグループの高さに応じて調整 */
   }
 }
 
