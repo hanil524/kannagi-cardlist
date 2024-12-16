@@ -3,6 +3,18 @@ window.onbeforeunload = function () {
   window.scrollTo(0, 0);
 };
 
+// Safari用の追加対策
+window.onpageshow = function (event) {
+  if (event.persisted) {
+    window.scrollTo(0, 0);
+  }
+};
+
+// 既存の対策を維持しつつ、より早いタイミングも追加
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
 // バックアップとして他のタイミングでも実行
 document.addEventListener('readystatechange', function (event) {
   if (document.readyState === 'interactive') {
