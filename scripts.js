@@ -1,3 +1,15 @@
+// ページ更新時に最上部にスクロール（最優先で実行）
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+};
+
+// バックアップとして他のタイミングでも実行
+document.addEventListener('readystatechange', function (event) {
+  if (document.readyState === 'interactive') {
+    window.scrollTo(0, 0);
+  }
+});
+
 // 最初にすべてのグローバル変数を定義
 window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
 let sortCriteria = null;
@@ -192,12 +204,18 @@ const sortCards = (criteria) => {
   // 既存のソート状態をクリア（seasonは除く）
   if (criteria !== 'season' && sortCriteria !== criteria) {
     sortCriteria = criteria;
-    sortOrder = 'asc';
+    // No.と力の場合は初期値をdescに
+    if (criteria === 'number' || criteria === 'power') {
+      sortOrder = 'desc';
+    } else {
+      sortOrder = 'asc';
+    }
   } else if (criteria !== 'season') {
     // 同じボタンを押した場合は順序を反転
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   }
 
+  // 以下は既存のコードと同じ
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
@@ -218,11 +236,7 @@ const sortCards = (criteria) => {
 
   cards.forEach((card) => cardList.appendChild(card));
   loadVisibleImages();
-
-  // ソートボタンのアクティブ状態を更新
   updateSortButtonsState(criteria);
-
-  // 状態を保存
   saveFiltersToLocalStorage();
 };
 
