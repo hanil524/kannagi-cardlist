@@ -227,7 +227,6 @@ const sortCards = (criteria) => {
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   }
 
-  // 以下は既存のコードと同じ
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
@@ -265,7 +264,7 @@ const updateSortButtonsState = (activeCriteria) => {
   });
 };
 
-// resetFilters関数を修正
+// resetFilters関数
 const resetFilters = () => {
   Object.keys(filters).forEach((key) => filters[key].clear());
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
@@ -280,7 +279,7 @@ const resetFilters = () => {
   resetSortButtonsState();
 
   // ソート状態のリセット
-  window.seasonSortOrder = null; // ここを変更
+  window.seasonSortOrder = null;
   sortCriteria = null;
   sortOrder = 'asc';
 
@@ -478,7 +477,7 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 画像モーダルを開く関数を修正
+// 画像モーダルを開く関数
 const openImageModal = (src) => {
   const modal = document.getElementById('image-modal');
   const modalImage = document.getElementById('modal-image');
@@ -1096,7 +1095,7 @@ const showPreviousImage = () => {
   }
 };
 
-// showNextImage関数を修正
+// showNextImage関数
 const showNextImage = () => {
   if (currentImageIndex < visibleCards.length - 1) {
     currentImageIndex++;
