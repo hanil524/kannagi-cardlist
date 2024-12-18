@@ -299,12 +299,14 @@ const resetFilters = () => {
   const searchBox = document.getElementById('search-box');
   const mobileSearchBox = document.getElementById('mobile-search-box');
 
-  // デスクトップとモバイルの検索欄をリセット
+  // input イベントを発火させて検索欄をクリア
   if (searchBox) {
     searchBox.value = '';
+    searchBox.dispatchEvent(new Event('input'));
   }
   if (mobileSearchBox) {
     mobileSearchBox.value = '';
+    mobileSearchBox.dispatchEvent(new Event('input'));
   }
 };
 
