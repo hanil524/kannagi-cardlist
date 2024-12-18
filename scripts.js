@@ -266,6 +266,7 @@ const updateSortButtonsState = (activeCriteria) => {
 
 // resetFilters関数
 const resetFilters = () => {
+  // 既存のフィルターリセット処理
   Object.keys(filters).forEach((key) => filters[key].clear());
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
   const originalCards = document.querySelectorAll('.card:not([data-cloned])');
@@ -293,6 +294,18 @@ const resetFilters = () => {
     seasonSortButton.classList.remove('active', 'desc');
   }
   updateSortButtonsState(null);
+
+  // 検索欄のリセット処理を追加
+  const searchBox = document.getElementById('search-box');
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+
+  // デスクトップとモバイルの検索欄をリセット
+  if (searchBox) {
+    searchBox.value = '';
+  }
+  if (mobileSearchBox) {
+    mobileSearchBox.value = '';
+  }
 };
 
 const resetSort = () => {
