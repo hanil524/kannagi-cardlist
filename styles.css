@@ -190,6 +190,9 @@ main {
   flex-basis: calc(20% - 10px);
   border-radius: 16px;
   overflow: hidden;
+  aspect-ratio: 5/7; /* カードゲームの一般的なアスペクト比 */
+  min-height: 200px; /* 画像読み込み前の最小の高さ */
+  background-color: #f0f0f0; /* 画像読み込み前の背景色 */
   transition: transform 0.04s, box-shadow 0.06s; /* カードと影の遷移 */
   position: relative; /* 影の位置調整のために必要 */
   border: none; /*カードの白い枠を完全に削除*/
@@ -209,7 +212,8 @@ main {
   background-color: #f0f0f0; /* 適宜背景色を設定 */
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover; /* 画像比率を保持 */
   /* 画像が読み込まれるまでの間に何も表示されないように */
   background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
@@ -1564,5 +1568,35 @@ main {
 @media (min-width: 769px) {
   .image-nav-button {
     display: none;
+  }
+}
+
+/* PC表示（5列） */
+@media (min-width: 769px) {
+  .card {
+    width: calc(20% - 10px); /* 5列 - マージン */
+  }
+}
+
+/* スマホ表示（2列） */
+@media (max-width: 768px) {
+  .card {
+    width: calc(50% - 10px); /* 2列 - マージン */
+  }
+}
+
+/* スケルトンローディング効果の追加 */
+.card:empty {
+  animation: loading 1.5s infinite;
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
