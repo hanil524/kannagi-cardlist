@@ -265,6 +265,33 @@ const updateSortButtonsState = (activeCriteria) => {
 };
 
 // resetFilters関数
+// スムーズスクロール用の関数を最初に定義
+const smoothScrollToTop = (duration = 500) => {
+  const startPosition = window.pageYOffset;
+  const startTime = performance.now();
+
+  const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+  const animation = (currentTime) => {
+    const elapsedTime = currentTime - startTime;
+    const progress = Math.min(elapsedTime / duration, 1);
+
+    window.scrollTo(0, startPosition * (1 - easeInOutQuad(progress)));
+
+    if (progress < 1) {
+      requestAnimationFrame(animation);
+    }
+  };
+
+  requestAnimationFrame(animation);
+};
+
+// TOPボタンのクリックハンドラを修正
+window.scrollToTop = () => {
+  smoothScrollToTop();
+};
+
+// resetFilters関数
 const resetFilters = () => {
   // 既存のフィルターリセット処理
   Object.keys(filters).forEach((key) => filters[key].clear());
@@ -308,7 +335,36 @@ const resetFilters = () => {
     mobileSearchBox.value = '';
     mobileSearchBox.dispatchEvent(new Event('input'));
   }
+
+  // カスタムスムーズスクロールを実行
+  smoothScrollToTop();
 };
+
+// キーボードイベントリスナーを更新
+document.addEventListener('keydown', function (event) {
+  // ESCキーが押され、モーダルが開いていない場合にフィルターをリセットしてトップにスクロール
+  if (
+    event.key === 'Escape' &&
+    document.getElementById('modal').style.display !== 'block' &&
+    document.getElementById('image-modal').style.display !== 'flex'
+  ) {
+    resetFilters();
+  }
+
+  // ↑キーが押された場合、ページトップにスクロール
+  if (
+    event.key === 'ArrowUp' &&
+    !event.ctrlKey &&
+    !event.altKey &&
+    !event.shiftKey &&
+    !event.metaKey &&
+    document.activeElement.tagName !== 'INPUT' &&
+    document.activeElement.tagName !== 'TEXTAREA'
+  ) {
+    event.preventDefault();
+    smoothScrollToTop();
+  }
+});
 
 const resetSort = () => {
   sortCriteria = null;
