@@ -1571,17 +1571,34 @@ main {
   }
 }
 
-/* PC表示（5列） */
+/* PC表示 */
 @media (min-width: 769px) {
   .card {
-    width: calc(20% - 10px); /* 5列 - マージン */
+    width: calc(20% - 10px); /* 5列 */
+    min-height: 300px; /* PCは大きめに */
   }
 }
 
-/* スマホ表示（2列） */
+/* タブレット表示 */
+@media (max-width: 1024px) {
+  .card {
+    width: calc(25% - 10px); /* 4列 */
+    min-height: 250px;
+  }
+}
+
+/* スマホ表示 */
 @media (max-width: 768px) {
   .card {
-    width: calc(50% - 10px); /* 2列 - マージン */
+    width: calc(50% - 10px); /* 2列 */
+    min-height: 180px; /* スマホは小さめに */
+  }
+}
+
+/* 極小画面 */
+@media (max-width: 400px) {
+  .card {
+    min-height: 150px; /* さらに小さく */
   }
 }
 
