@@ -499,6 +499,12 @@ const openImageModal = (src) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
+  // 0.5秒後にボタンを表示
+  setTimeout(() => {
+    prevButton.classList.add('visible');
+    nextButton.classList.add('visible');
+  }, 200);
+
   visibleCards = Array.from(document.querySelectorAll('.card')).filter((card) => card.style.display !== 'none');
   currentImageIndex = visibleCards.findIndex((card) => card.querySelector('img').src === src);
 
@@ -529,6 +535,13 @@ const openImageModal = (src) => {
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  // visibleクラスを削除
+  prevButton.classList.remove('visible');
+  nextButton.classList.remove('visible');
+
   const modal = document.getElementById('image-modal');
   modal.style.display = 'none';
   document.body.style.overflow = '';
