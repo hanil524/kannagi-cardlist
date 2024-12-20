@@ -570,9 +570,14 @@ header input::placeholder,
 }
 
 .menu-text {
-  color: white;
+  color: #e0e0e0;
   font-size: 12px;
   margin-top: 5px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu:hover .menu-text {
+  color: #ffffff;
 }
 
 /* 既存のモバイルナビゲーションスタイルを更新 */
@@ -807,17 +812,6 @@ button[onclick='resetFilters()']:active {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-.menu-text {
-  color: #e0e0e0;
-  font-size: 12px;
-  margin-top: 5px;
-  transition: all 0.3s ease;
-}
-
-.hamburger-menu:hover .menu-text {
-  color: #ffffff;
-}
-
 /* モーダルのスタイル */
 .modal {
   display: none;
@@ -940,11 +934,6 @@ button[onclick='resetFilters()']:active {
     height: auto; /* 高さを自動調整 */
     max-width: 80%; /* 最大幅を画面幅に */
   }
-}
-
-/* モーダルの背景とコンテンツのスタイリング */
-.modal {
-  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* モーダルの背景とコンテンツのスタイリング */
