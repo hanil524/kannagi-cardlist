@@ -1538,6 +1538,8 @@ main {
 
 /* 画像を前後送り */
 .image-nav-button {
+  opacity: 0; /* 初期状態は非表示 */
+  transition: opacity 0.3s ease; /* フェードイン用のトランジション */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -1549,6 +1551,11 @@ main {
   cursor: pointer;
   z-index: 1001;
   transition: opacity 0.3s ease;
+}
+
+/* 表示状態のクラス */
+.image-nav-button.visible {
+  opacity: 1;
 }
 
 .image-nav-button.prev {
