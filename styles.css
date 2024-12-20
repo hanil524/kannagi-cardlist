@@ -28,7 +28,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* 必要に応じて調整 */
+  gap: 20px;
 }
 
 header a {
@@ -38,6 +38,49 @@ header a {
   margin-left: 10px;
   white-space: nowrap; /* リンクを改行させない */
   font-weight: bold;
+}
+
+.mobile-header {
+  display: none;
+  background: #1f1f1f;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+/* スマホ表示のヘッダーを表示する */
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px; /* 必要に応じて調整 */
+    box-sizing: border-box; /* パディングを含む幅調整 */
+  }
+  header {
+    display: none;
+  }
+}
+
+/* スマホ表示でのヘッダー内の検索バーを中央揃え */
+.mobile-header input {
+  width: calc(100% - 20px); /* 親要素のパディングを考慮して幅を設定 */
+  max-width: 100%; /* 検索バーの最大幅を100%に設定 */
+  margin: 0; /* マージンをリセット */
+  padding: 5px; /* 内側のパディングを追加 */
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  box-sizing: border-box; /* パディングを含む幅調整 */
+}
+
+/* プレースホルダーテキストのスタイルを統一 */
+.mobile-header input::placeholder {
+  text-align: center; /* プレースホルダーテキストを中央揃え */
 }
 
 .search-container {
@@ -84,25 +127,16 @@ header a {
   color: black;
 }
 
-.mobile-header {
-  display: none;
-  background: #1f1f1f;
-  color: white;
-  padding: 10px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
+/* メインコンテンツの上部マージンを調整 */
 main {
-  margin-top: 60px;
+  margin-top: 35px;
   padding: 20px;
-  padding-bottom: 100px; /* 下に余白を追加 */
+  padding-bottom: 100px;
 }
 
 @media (max-width: 768px) {
   main {
+    margin-top: 60px; /* ヘッダーの高さに合わせて調整 */
     padding: 10px;
     padding-bottom: 80px;
   }
@@ -130,20 +164,21 @@ main {
   }
 }
 
-/* フィルター左の文字 */
+/* フィルターボタンのデザイン */
 .filter-group {
-  margin: 10px;
-  padding: 10px;
-  border-radius: 5px;
   color: #fff;
-  background-color: #919191;
   display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
   justify-content: center;
   font-size: 13px;
   gap: 10px; /* ボタン間の隙間を調整 */
   font-weight: bold;
-  box-shadow: 0 4px 8px rgb(32, 32, 32);
+  background-color: rgba(60, 60, 60, 0.9); /* サイトの背景よりも少し明るく */
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  border: 1px solid rgba(100, 100, 100, 0.5); /* 境界線を追加 */
 }
 
 /* フィルターボタン */
@@ -186,11 +221,22 @@ main {
   }
 }
 
+@media (min-width: 1024px) {
+  #card-list {
+    max-width: 75%; /* PC画面での最大幅を設定 */
+    margin: 0 auto; /* 中央に配置 */
+  }
+}
+
+/* カード表示エリアのスタイル */
+#card-list {
+  padding: 0px; /* カード一覧の両端に余白を追加 */
+}
+
 .card {
   flex-basis: calc(20% - 10px);
   border-radius: 16px;
   overflow: hidden;
-  aspect-ratio: 5/7; /* カードゲームの一般的なアスペクト比 */
   min-height: 200px; /* 画像読み込み前の最小の高さ */
   background-color: #f0f0f0; /* 画像読み込み前の背景色 */
   transition: transform 0.04s, box-shadow 0.06s; /* カードと影の遷移 */
@@ -209,14 +255,20 @@ main {
 }
 
 .card img {
-  background-color: #f0f0f0; /* 適宜背景色を設定 */
+  background-color: #f0f0f0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover; /* 画像比率を保持 */
-  /* 画像が読み込まれるまでの間に何も表示されないように */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  /* 画像が読み込まれるまでの間に何も表示されないように。透明のカードを表示してる */
   background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
+}
+/* 読み込み完了時にloadedクラスが付与され、滑らかに表示（opacity: 1）*/
+.card img.loaded {
+  opacity: 1;
 }
 
 .card:hover {
@@ -235,50 +287,51 @@ main {
 @media (max-width: 768px) {
   .card {
     flex-basis: calc(50% - 10px);
+    width: calc(50% - 10px);
   }
   .card:hover {
-    transform: none; /* 拡大を無効にする */
-    box-shadow: none; /* 影を無効にする */
-    z-index: auto; /* z-indexをリセット */
+    transform: none;
+    box-shadow: none;
+    z-index: auto;
   }
-}
-
-/* スマホ表示のヘッダーを表示する */
-@media (max-width: 768px) {
-  .mobile-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 10px; /* 必要に応じて調整 */
-    box-sizing: border-box; /* パディングを含む幅調整 */
-  }
-  header {
-    display: none;
-  }
-}
-
-/* スマホ表示でのヘッダー内の検索バーを中央揃え */
-.mobile-header input {
-  width: calc(100% - 20px); /* 親要素のパディングを考慮して幅を設定 */
-  max-width: 100%; /* 検索バーの最大幅を100%に設定 */
-  margin: 0; /* マージンをリセット */
-  padding: 5px; /* 内側のパディングを追加 */
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-  box-sizing: border-box; /* パディングを含む幅調整 */
-}
-
-/* プレースホルダーテキストのスタイルを統一 */
-.mobile-header input::placeholder {
-  text-align: center; /* プレースホルダーテキストを中央揃え */
 }
 
 @media (max-width: 400px) {
   .card {
     flex-basis: 100%;
   }
+}
+
+/* PC表示 */
+@media (min-width: 769px) {
+  .card {
+    width: calc(20% - 10px); /* 5列 */
+    min-height: 300px; /* PCは大きめに */
+  }
+}
+
+/* タブレット表示 */
+@media (max-width: 1024px) {
+  .card {
+    width: calc(25% - 10px); /* 4列 */
+    min-height: 250px;
+  }
+}
+
+/* 極小画面でも2列を維持 */
+@media (max-width: 400px) {
+  .card {
+    flex-basis: calc(50% - 8px); /* 2列（間隔を少し狭める） */
+    min-height: 150px; /* さらに小さく */
+    width: calc(50% - 8px);
+  }
+}
+
+/* スケルトンローディング効果の追加 */
+.card:empty {
+  animation: loading 1.5s infinite;
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
 }
 
 .pc-only {
@@ -303,48 +356,9 @@ main {
     margin: 0 5%; /* 左右に均等な余白を追加 */
   }
 
-  .card {
-    flex-basis: calc(50% - 10px);
-  }
-
   main {
     margin-top: 60px; /* ヘッダーの高さ分のマージンを追加 */
   }
-}
-
-/* カード表示エリアのスタイル */
-#card-list {
-  padding: 0px; /* カード一覧の両端に余白を追加 */
-}
-
-@media (min-width: 1024px) {
-  #card-list {
-    max-width: 75%; /* PC画面での最大幅を設定 */
-    margin: 0 auto; /* 中央に配置 */
-  }
-}
-
-/* モーダルのスタイル */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 3px solid #888;
-  width: 80%;
-  max-width: 600px;
-  position: relative;
 }
 
 .close {
@@ -366,12 +380,6 @@ main {
   cursor: pointer;
 }
 
-.modal-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -387,7 +395,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: rgb(41, 33, 33);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -480,24 +488,10 @@ main {
   }
 }
 
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
 .no-scroll {
   overflow: hidden;
   position: fixed;
   width: 100%;
-  overflow: hidden;
 }
 
 /* TOPに戻るボタン */
@@ -529,14 +523,6 @@ main {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* ホバー時の影のスタイルを追加 */
 }
 
-/* PCだけモーダル起動時にスクロールバー拡大 */
-@media (min-width: 768px) {
-  body.modal-open {
-    overflow: hidden;
-    padding-right: 17px; /* 一般的なスクロールバーの幅 */
-  }
-}
-
 .top-button:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
 }
@@ -545,11 +531,6 @@ main {
   header {
     justify-content: center;
   }
-}
-
-body.modal-open {
-  overflow: hidden;
-  padding-right: var(--scrollbar-width);
 }
 
 /* スマホ表示のスタイル */
@@ -602,11 +583,12 @@ header input::placeholder,
   left: -80%; /* 初期位置を画面外に */
   width: 80%;
   height: calc(100% - 60px);
-  background-color: #f8f8f8;
   z-index: 1001; /* z-indexを上げる */
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5);
   transition: left 0.2s ease-in-out; /* スムーズな移動のためのトランジション */
   overflow-y: auto; /* スクロール可能にする */
+  background-color: rgba(30, 30, 30, 0.95);
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
+  font-size: 14px;
 }
 
 .mobile-nav ul {
@@ -616,22 +598,23 @@ header input::placeholder,
 }
 
 .mobile-nav li {
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.mobile-nav a {
-  display: block;
-  color: rgb(43, 43, 43);
-  text-decoration: none;
-  padding: 12px 20px;
-  font-weight: bold;
-}
-
+/* スマホのサイドメニュー */
 .mobile-nav a {
   color: #e0e0e0;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
   padding: 8.5px 20px;
-  font-size: 16px;
   transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.mobile-nav.active {
+  display: block;
+  left: 0; /* 画面内に移動 */
 }
 
 .mobile-nav a:hover {
@@ -640,7 +623,16 @@ header input::placeholder,
 }
 
 .mobile-nav .close-menu {
-  background-color: #d3d3d3; /* 「メニューを閉じる」の背景色を変更 */
+  background-color: rgba(165, 70, 70, 0.9);
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav .close-menu:hover {
+  background-color: rgba(185, 80, 80, 0.9);
 }
 
 /* スマートフォン用スタイル */
@@ -689,11 +681,6 @@ header input::placeholder,
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  .mobile-nav.active {
-    display: block;
-    left: 0; /* 画面内に移動 */
-  }
-
   /* ヘッダー右側にある画像 */
   .header-icon {
     position: absolute;
@@ -735,16 +722,6 @@ body {
 #filter-section {
   position: relative;
   z-index: 2;
-}
-
-/* フィルターボタンのデザイン */
-.filter-group {
-  background-color: rgba(60, 60, 60, 0.9); /* サイトの背景よりも少し明るく */
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  margin: 10px;
-  border: 1px solid rgba(100, 100, 100, 0.5); /* 境界線を追加 */
 }
 
 .filter-buttons button,
@@ -812,45 +789,6 @@ button[onclick='resetFilters()']:active {
   transform: translateY(1px);
   box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
 }
-
-.modal-buttons button:hover {
-  background-color: rgba(100, 100, 100, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.modal-buttons button:active {
-  background-color: rgba(120, 120, 120, 0.9);
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
-}
-
-.mobile-nav {
-  background-color: rgba(30, 30, 30, 0.95);
-  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
-}
-
-.mobile-nav ul {
-  padding: 20px 0;
-}
-
-.mobile-nav li {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.mobile-nav .close-menu {
-  background-color: rgba(165, 70, 70, 0.9);
-  color: #ffffff;
-  text-align: center;
-  padding: 15px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.mobile-nav .close-menu:hover {
-  background-color: rgba(185, 80, 80, 0.9);
-}
-
 /* ハンバーガー アイコン */
 .hamburger-menu span {
   background-color: #e0e0e0;
@@ -878,6 +816,29 @@ button[onclick='resetFilters()']:active {
 
 .hamburger-menu:hover .menu-text {
   color: #ffffff;
+}
+
+/* モーダルのスタイル */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 3px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
 }
 
 /* 画像の拡大表示（モーダル） */
@@ -968,20 +929,7 @@ button[onclick='resetFilters()']:active {
   }
 }
 
-/* スマートフォン向けの調整 */
-@media (max-width: 768px) {
-  .image-modal .modal-content {
-    padding: 10px;
-  }
-
-  .image-modal img {
-    max-width: 95%;
-    /* モバイルでの表示調整 */
-    height: auto;
-  }
-}
-
-/* スマートフォン向けの調整 */
+/* スマートフォン向けのモーダル調整 */
 @media (max-width: 768px) {
   .image-modal .modal-content {
     padding: 0 10px; /* 左右にわずかな余白を追加 */
@@ -999,11 +947,13 @@ button[onclick='resetFilters()']:active {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+/* モーダルの背景とコンテンツのスタイリング */
 .modal-content {
   background-color: rgba(40, 40, 40, 0.95);
   border: none;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 20px;
 }
 
 /* モーダルのクローズボタン */
@@ -1017,52 +967,14 @@ button[onclick='resetFilters()']:active {
   opacity: 1;
 }
 
-.modal-buttons button:hover {
-  background-color: rgba(100, 100, 100, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.modal-buttons button:active {
-  background-color: rgba(120, 120, 120, 0.9);
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
-}
-
-/* モーダルの背景とコンテンツのスタイリング */
-.modal-content {
-  background-color: rgba(40, 40, 40, 0.95);
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-}
-
+/* モーダル内のフィルターボタンのスタイリング */
 .modal-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 10px;
-}
-
-.modal-buttons button {
-  width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  font-size: 12px;
-  line-height: 1.2;
-  text-align: center;
-  word-break: break-word;
-  hyphens: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(80, 80, 80, 0.9);
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  gap: 7px; /* ボタン間の間隔を縮小 */
+  padding: 13px;
+  max-height: 75vh; /* モーダルの最大高さを制限 */
+  overflow-y: auto; /* スクロール可能に */
 }
 
 /* スマートフォン向けの調整 */
@@ -1075,16 +987,6 @@ button[onclick='resetFilters()']:active {
     font-size: 12px;
     padding: 6px 10px;
   }
-}
-
-/* モーダル内のフィルターボタンのスタイリング */
-.modal-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px; /* ボタン間の間隔を縮小 */
-  padding: 13px;
-  max-height: 75vh; /* モーダルの最大高さを制限 */
-  overflow-y: auto; /* スクロール可能に */
 }
 
 /* モーダル内のボタンのテキスト */
@@ -1108,6 +1010,18 @@ button[onclick='resetFilters()']:active {
   border-radius: 4px; /* 角丸を少し小さく */
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.modal-buttons button:hover {
+  background-color: rgba(100, 100, 100, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.modal-buttons button:active {
+  background-color: rgba(120, 120, 120, 0.9);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* スクロールバーのスタイリング */
@@ -1160,7 +1074,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.huyuiro,
 .modal-buttons button.muiro,
 .modal-buttons button.konkairo {
-  color: #ffffff; /* テキストの色を白に設定 */
+  color: #ffffff;
   font-size: 13.5px;
 }
 
@@ -1279,61 +1193,74 @@ button[onclick='resetFilters()']:active {
 /* 各ボタンの背景色設定 */
 .modal-buttons button.batoruiro {
   background: linear-gradient(135deg, #1b1b1b 50%, #f74848 50%);
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.sinkiiro {
   background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #222222;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.hyakkiiro {
   background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #222222;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.puromoiro {
   background-color: #ffffff;
-  color: #222222; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #222222;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.utukusiiro {
   background-color: #27c42e;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.oisyairo {
   background-color: #285ec2;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.saigoiro {
   background-color: #f76969;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.anatairo {
   background-color: #ff915f;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.kaidaniro {
   background-color: #5c5c5c;
-  color: #ffffff; /* 濃いグレーのテキスト */
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.lemoniro {
   background-color: #ebd036;
   color: #222222;
-  border: 2px solid #1d1d1d; /* 境界線を追加してボタンを目立たせる */
+  border: 2px solid #1d1d1d;
+}
+
+/* PCだけモーダル起動時にスクロールバー拡大 */
+@media (min-width: 768px) {
+  body.modal-open {
+    overflow: hidden;
+    padding-right: 17px; /* 一般的なスクロールバーの幅 */
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
 }
 
 /* 検索結果ナシ */
@@ -1367,16 +1294,6 @@ button[onclick='resetFilters()']:active {
     font-size: 16px;
     padding: 15px;
   }
-}
-
-/* 遅延読み込みの追加部分 */
-.card img {
-  opacity: 0;
-  transition: opacity 0.1s ease-in-out;
-}
-
-.card img.loaded {
-  opacity: 1;
 }
 
 /* サブメニュー追加 */
@@ -1493,14 +1410,6 @@ button[onclick='resetFilters()']:active {
   content: ' ▲';
 }
 
-.mobile-nav {
-  font-size: 14px; /* または適切なサイズ */
-}
-
-.mobile-nav a {
-  font-size: 14px; /* または適切なサイズ */
-}
-
 /* 更新情報のスタイル */
 .update-info {
   color: white;
@@ -1521,25 +1430,10 @@ button[onclick='resetFilters()']:active {
   }
 }
 
-/* メインコンテンツの上部マージンを調整 */
-main {
-  margin-top: 35px;
-  padding: 20px;
-  padding-bottom: 100px;
-}
-
-@media (max-width: 768px) {
-  main {
-    margin-top: 60px; /* ヘッダーの高さに合わせて調整 */
-    padding: 10px;
-    padding-bottom: 80px;
-  }
-}
-
 /* 画像を前後送り */
 .image-nav-button {
   opacity: 0; /* 初期状態は非表示 */
-  transition: opacity 0.3s ease; /* フェードイン用のトランジション */
+  transition: opacity 0.2s ease; /* フェードイン用のトランジション */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -1550,7 +1444,6 @@ main {
   font-size: 20px;
   cursor: pointer;
   z-index: 1001;
-  transition: opacity 0.3s ease;
 }
 
 /* 表示状態のクラス */
@@ -1576,44 +1469,6 @@ main {
   .image-nav-button {
     display: none;
   }
-}
-
-/* PC表示 */
-@media (min-width: 769px) {
-  .card {
-    width: calc(20% - 10px); /* 5列 */
-    min-height: 300px; /* PCは大きめに */
-  }
-}
-
-/* タブレット表示 */
-@media (max-width: 1024px) {
-  .card {
-    width: calc(25% - 10px); /* 4列 */
-    min-height: 250px;
-  }
-}
-
-/* スマホ表示 */
-@media (max-width: 768px) {
-  .card {
-    width: calc(50% - 10px); /* 2列 */
-    min-height: 180px; /* スマホは小さめに */
-  }
-}
-
-/* 極小画面 */
-@media (max-width: 400px) {
-  .card {
-    min-height: 150px; /* さらに小さく */
-  }
-}
-
-/* スケルトンローディング効果の追加 */
-.card:empty {
-  animation: loading 1.5s infinite;
-  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
-  background-size: 200% 100%;
 }
 
 @keyframes loading {
