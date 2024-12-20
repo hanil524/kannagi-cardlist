@@ -726,23 +726,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadInitialImages = () => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
-      if (index < 10) {
-        // 最初の10枚は即時読み込み
-        const src = img.getAttribute('data-src');
-        if (src) {
-          img.src = src;
-          img.removeAttribute('data-src');
-          img.removeAttribute('loading'); // lazyを削除
-          img.classList.add('loaded');
-          img.style.opacity = '1';
-        }
-      } else if (index < 20) {
-        // 11-20枚目はプリロード
+      if (index < 20) {
+        // 最初の20枚
         loadImage(img);
-      }
-
-      if (index === 19) {
-        preloadNextImages(index);
+        if (index === 19) {
+          preloadNextImages(index);
+        }
       }
     });
   };
