@@ -261,7 +261,7 @@ main {
   height: 100%;
   object-fit: cover; /* 画像比率を保持 */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
   /* 画像が読み込まれるまでの間に何も表示されないように。透明のカードを表示してる */
   background: url('path/to/placeholder-image.jpg') center center no-repeat;
   background-size: cover;
