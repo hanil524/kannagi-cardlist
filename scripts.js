@@ -94,6 +94,10 @@ window.addEventListener('resize', resetFontSize);
 
 // ★ページロード後にDOMの初期化設定を行う
 document.addEventListener('DOMContentLoaded', () => {
+  // モバイルでのプルトゥリフレッシュを防止
+  document.body.style.overscrollBehavior = 'none';
+  document.documentElement.style.overscrollBehavior = 'none';
+
   // 強制的にページトップに移動
   window.scrollTo(0, 0);
   // ページが完全に読み込まれたときに呼び出される
@@ -1676,7 +1680,6 @@ const deckBuilder = {
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
-  // デッキを開く
   // デッキビルダーのopen/close関数
   open() {
     const modal = document.getElementById('deck-modal');
