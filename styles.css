@@ -1951,7 +1951,7 @@ body.modal-open {
 }
 @media (max-width: 768px) {
   .deck-display {
-    padding-top: 34px;
+    padding-top: 30px;
   }
 }
 
