@@ -2135,6 +2135,8 @@ body.modal-open {
   white-space: nowrap;
   z-index: 2502;
   margin: 0 auto; /* 水平方向の中央揃え */
+  max-width: 300px; /* 必要に応じて調整 */
+  overflow: hidden; /* テキストが長すぎる場合は隠す */
 }
 
 /* モーダル内の画像設定 */
