@@ -2661,7 +2661,19 @@ const deckManager = {
 
     if (newName && newName.trim()) {
       button.textContent = newName.trim();
-      this.saveDeck(deckId);
+
+      // デッキ名のみを更新
+      if (this.decks[deckId]) {
+        this.decks[deckId].name = newName.trim();
+      } else {
+        this.decks[deckId] = {
+          name: newName.trim(),
+          cards: [] // 新規デッキの場合は空の配列を設定
+        };
+      }
+
+      // デッキ内容は変更せずに保存
+      this.saveToLocalStorage();
     }
   }
 };
