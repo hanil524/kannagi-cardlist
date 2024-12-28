@@ -1539,68 +1539,6 @@ body.modal-open {
   white-space: nowrap;
 }
 
-/* ヘルプ（？）ボタンを通常のボタンと同じ見た目に修正 */
-.deck-help-button {
-  background-color: #444;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: clamp(11px, 1.5vw, 14px);
-  font-weight: bold;
-  width: clamp(28px, 4vh, 36px);
-  height: clamp(28px, 4vh, 36px);
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.deck-menu-button:hover,
-.deck-help-button:hover {
-  background-color: #555;
-}
-
-/* ヘルプポップアップ */
-.deck-help-popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(40, 40, 40, 0.95);
-  padding: 25px 30px; /* パディングを広げて */
-  border-radius: 12px;
-  color: white;
-  z-index: 2500;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  width: clamp(280px, 80vw, 450px); /* 最小幅280px、最大幅450px */
-  text-align: left;
-  font-size: clamp(14px, 2vw, 16px); /* フォントサイズも調整 */
-  line-height: 1.6; /* 行間を広げて */
-}
-
-/* スマートフォン対応 */
-@media (max-width: 480px) {
-  .deck-help-popup {
-    padding: 20px;
-    width: 75vw; /* スマホではビューポート幅の85%に */
-  }
-}
-
-/* オーバーレイ */
-.deck-help-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2400;
-}
-
 /* スマートフォン対応 */
 @media (max-width: 360px) {
   .deck-menu {
@@ -1612,12 +1550,6 @@ body.modal-open {
     padding: 4px 8px;
     font-size: 11px;
     min-width: 50px;
-  }
-
-  .deck-help-button {
-    width: 26px;
-    height: 26px;
-    min-width: 26px; /* 明示的に最小幅を設定 */
   }
 
   .deck-counter {
@@ -1786,11 +1718,6 @@ body.modal-open {
 }
 
 /* デッキカードのホバー効果 */
-.deck-card {
-  position: relative;
-  transition: box-shadow 0.2s ease;
-}
-
 .deck-card:hover {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
@@ -2007,14 +1934,10 @@ body.modal-open {
 .deck-display {
   display: grid;
   gap: 1px;
-  box-sizing: border-box;
-  width: 95%;
-  max-width: 1000px;
-  margin: 0 auto;
+  width: fit-content; /* コンテンツ幅に合わせる */
+  margin: 0 auto; /* 中央寄せ */
   padding-top: 40px;
-  max-height: calc(100vh - 70px);
-  grid-auto-rows: 1fr;
-  position: relative;
+  place-content: center;
   /* スクロール防止 */
   touch-action: none; /* タッチによるスクロールも防止 */
   -webkit-overflow-scrolling: none; /* iOSのスクロールも防止 */
@@ -2022,90 +1945,56 @@ body.modal-open {
   -webkit-overscroll-behavior: none;
 }
 
-/* 固定グリッド（40枚以下）のスタイル */
+/* 40枚以下の固定グリッド */
 .deck-display.fixed-grid {
-  /* スマホ用レイアウト */
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    padding-top: 35px;
-    aspect-ratio: 5/8;
-    height: calc(100vh - 60px);
-
-    /* 横向きの場合 */
-    @media (orientation: landscape) {
-      width: auto;
-      height: calc(100vh - 60px);
-      aspect-ratio: 8/5;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-    }
+  /* スマホ縦向き */
+  @media (max-width: 768px) and (orientation: portrait) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(8, auto);
   }
 
-  /* タブレット用レイアウト */
-  @media (min-width: 769px) and (max-width: 1024px) {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    aspect-ratio: 8/5;
-    height: calc(100vh - 70px);
-  }
-
-  /* PC用レイアウト */
-  @media (min-width: 1025px) {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    aspect-ratio: 8/5;
-    height: calc(100vh - 80px);
+  /* スマホ横向き・PC */
+  @media (min-width: 769px), (orientation: landscape) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(5, auto);
   }
 }
 
-/* レスポンシブグリッド（41枚以上）のスタイル */
+/* 41枚以上の可変グリッド */
 .deck-display:not(.fixed-grid) {
-  /* スマホ用レイアウト */
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(5, 1fr);
-
-    @media (orientation: landscape) {
-      grid-template-columns: repeat(8, 1fr);
-    }
+  /* スマホ縦向き */
+  @media (max-width: 768px) and (orientation: portrait) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-rows: auto;
   }
 
-  /* タブレット/PC用レイアウト */
-  @media (min-width: 769px) {
-    grid-template-columns: repeat(8, 1fr);
+  /* スマホ横向き・PC */
+  @media (min-width: 769px), (orientation: landscape) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: auto;
   }
-}
-
-.deck-card[data-empty='true'] {
-  opacity: 0.3;
-  pointer-events: none;
-  transition: none;
-}
-
-.deck-card[data-empty='true']:hover {
-  box-shadow: none;
-  transform: none;
-}
-
-.deck-card[data-empty='true'] img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 12px;
 }
 
 .deck-card {
   position: relative;
   width: 100%;
-  height: 100%;
-  transition: transform 0.2s ease;
+  width: var(--card-width); /* JSで動的に設定 */
+  aspect-ratio: 745/1041;
+}
+
+.deck-card::before {
+  content: '';
+  display: block;
+  padding-top: calc(1041 / 745 * 100%); /* アスペクト比を維持 */
 }
 
 .deck-card img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
 }
 
 /* PC用のデッキ内画像 */
@@ -2126,6 +2015,26 @@ body.modal-open {
   .deck-card {
     border-radius: 8px;
   }
+}
+
+/* 空のカードスロットを埋める透明くん */
+.deck-card[data-empty='true'] {
+  opacity: 0.3;
+  pointer-events: none;
+  transition: none;
+  aspect-ratio: 745/1041;
+}
+
+.deck-card[data-empty='true']:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.deck-card[data-empty='true'] img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
 }
 
 /* モーダル内の画像コンテナ */
