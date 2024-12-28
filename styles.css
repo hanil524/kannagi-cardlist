@@ -2137,7 +2137,7 @@ body.modal-open {
   margin: 0 auto; /* 水平方向の中央揃え */
 }
 
-/* モーダル内の画像設定 */
+/* モーダル内の拡大画像設定 */
 .image-modal .image-container img {
   max-width: 95%;
   max-height: 90vh;
@@ -2171,6 +2171,9 @@ body.modal-open {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box; /* ボーダーの影響を防ぐ */
+  overflow: hidden; /* アイコンやテキストのはみ出しを防ぐ */
+  will-change: transform; /* ハードウェアアクセラレーションを有効化 */
 }
 
 .card-control-button:hover {
