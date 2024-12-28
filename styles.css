@@ -108,6 +108,7 @@ header a {
   border: none;
   border-radius: 5px;
   text-align: center;
+  height: 30px; /* ヘッダー検索欄の縦幅 */
 }
 
 .clear-button {
