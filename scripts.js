@@ -10,7 +10,7 @@ window.onpageshow = function (event) {
   }
 };
 
-// 既存の対策を維持しつつ、より早いタイミングも追加
+// 既存の対策を維持しつつ、より早いタイミングでも
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 画像モーダルのイベントリスナーを追加 (新規追加)
+  // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
   imageModal.addEventListener('click', function (event) {
     if (event.target === imageModal) {
@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // デッキ画面でのカードクリックイベント
   const deckDisplay = document.getElementById('deck-display');
   if (deckDisplay) {
-    // カードの生成関数を修正
+    // カードの生成関数
     const createDeckCard = (card) => {
       const cardElement = document.createElement('div');
       cardElement.className = 'deck-card';
@@ -750,7 +750,7 @@ const smoothScrollToTop = (duration = 500) => {
   requestAnimationFrame(animation);
 };
 
-// TOPボタンのクリックハンドラを修正
+// TOPボタンのクリックハンドラ
 window.scrollToTop = () => {
   smoothScrollToTop();
 };
@@ -1018,7 +1018,7 @@ const closeModal = () => {
   window.scrollTo(0, scrollPosition);
   document.body.style.top = '';
   document.body.style.paddingRight = '';
-  document.body.style.overflow = ''; // スクロール制御を追加
+  document.body.style.overflow = '';
 
   const headerContent = document.querySelector('.header-content');
   headerContent.style.paddingRight = '';
@@ -1272,7 +1272,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // ESCキーでフィルター解除を追加
+  // ESCキーでフィルター解除
   document.addEventListener('keydown', function (event) {
     // ESCキーが押され、モーダルが開いていない場合にフィルターをリセット
     if (event.key === 'Escape' && document.getElementById('modal').style.display !== 'block' && document.getElementById('image-modal').style.display !== 'flex') {
@@ -1572,7 +1572,7 @@ const preloadAdjacentImages = () => {
   }
 };
 
-// showNextImage関数を修正
+// showNextImage関数
 const showNextImage = () => {
   if (currentImageIndex >= visibleCards.length - 1) return;
 
@@ -1674,10 +1674,10 @@ const deckBuilder = {
   maxCards: 4,
   restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '悠習の古日記（ゆうしゅうのこにっき）']),
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
-  savedScrollPosition: 0, // スクロール位置保存用の変数を追加
+  savedScrollPosition: 0, // スクロール位置保存用の変数
 
   // デッキを開く
-  // デッキビルダーのopen/close関数を修正
+  // デッキビルダーのopen/close関数
   open() {
     const modal = document.getElementById('deck-modal');
     modal.style.display = 'block';
@@ -1894,7 +1894,7 @@ const deckBuilder = {
     return cardElement;
   },
 
-  // resizeDisplayメソッドを追加
+  // resizeDisplayメソッド
   resizeDisplay() {
     const display = document.getElementById('deck-display');
     if (!display) return;
@@ -1941,9 +1941,9 @@ const deckBuilder = {
   },
 
   // デッキをソート
-  // sortDeck関数の修正
+  // sortDeck関数
   sortDeck(cards) {
-    // cardsが配列でない場合や空の場合のチェックを追加
+    // cardsが配列でない場合や空の場合のチェック
     if (!Array.isArray(cards) || cards.length === 0) {
       return [];
     }
@@ -1951,7 +1951,7 @@ const deckBuilder = {
     const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
     const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
 
-    // カードを名前でグループ化する前に、有効なデータのチェックを追加
+    // カードを名前でグループ化する前に、有効なデータのチェック
     const cardGroups = cards.reduce((groups, card) => {
       if (card && card.dataset && card.dataset.name) {
         const name = card.dataset.name;
@@ -2267,13 +2267,18 @@ function resetDeck(confirmed) {
   const popup = document.querySelector('.confirm-popup');
   if (confirmed) {
     deckBuilder.deck = [];
-    deckBuilder.saveToLocalStorage();
     deckBuilder.updateDisplay();
+    deckManager.saveDeck(deckManager.currentDeckId);
+
+    // フェードアウトアニメーション
+    popup.style.opacity = '0';
+    setTimeout(() => popup.remove(), 300);
+  } else {
+    popup.remove();
   }
-  popup.remove();
 }
 
-// 前後に移動可能かチェックする関数を追加
+// 前後に移動可能かチェックする関数
 function canNavigateToPrevious(currentIndex, currentName) {
   // インデックス0の場合でも、前に同名カードがあれば移動可能
   return currentIndex > 0;
@@ -2297,7 +2302,7 @@ function createCardWithButtons(card, isInDeck = false) {
   img.src = card.querySelector('img').src;
   img.alt = card.dataset.name;
 
-  // ボタングループを追加
+  // ボタングループ
   const buttons = document.createElement('div');
   buttons.className = 'card-buttons';
 
@@ -2336,7 +2341,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// キーボードイベントのリスナーを追加
+// キーボードイベントのリスナー
 document.addEventListener('keydown', (e) => {
   // 画像モーダルが表示中の場合のみ
   if (document.getElementById('image-modal').style.display === 'flex') {
@@ -2503,7 +2508,7 @@ const deckManager = {
     }
   },
 
-  // ここに setupEventListeners メソッドを追加
+  // setupEventListeners メソッド
   setupEventListeners() {
     const modal = document.getElementById('deck-list-modal');
     const closeButton = modal.querySelector('.deck-list-close');
@@ -2596,7 +2601,7 @@ const deckManager = {
     const saveData = {
       currentDeckId: this.currentDeckId,
       decks: this.decks,
-      version: '2' // バージョン管理を追加
+      version: '2'
     };
     localStorage.setItem('kannagi-deck-manager-v2', JSON.stringify(saveData));
   },
