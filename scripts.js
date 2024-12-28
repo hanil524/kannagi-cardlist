@@ -2170,33 +2170,37 @@ document.addEventListener('keydown', (e) => {
 // 零探し機能
 function performZeroSearch() {
   let modal = document.querySelector('.zero-search-modal');
-  const typeOrder = ['場所札', '怪異札', '道具札', '季節札']; // 種類の優先順位を定義
+  const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
 
-  const selectedCards = [...deckBuilder.deck]
-    // まずランダムに8枚選択
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 8)
-    // 選択したカードを種類とコストで並び替え
-    .sort((a, b) => {
-      // まず札種類でソート
-      const typeA = typeOrder.indexOf(a.dataset.type);
-      const typeB = typeOrder.indexOf(b.dataset.type);
-      if (typeA !== typeB) return typeA - typeB;
+  // Fisher-Yatesシャッフルで40枚から完全にランダムに8枚を選ぶ
+  function getRandomCards(deck, count) {
+    const shuffled = [...deck];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
+  }
 
-      // 同じ種類の場合はコストでソート
-      return parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
-    });
+  // 完全にランダムに8枚を選択し、その後で種類とコストで並び替え
+  const selectedCards = getRandomCards(deckBuilder.deck, 8).sort((a, b) => {
+    const typeA = typeOrder.indexOf(a.dataset.type);
+    const typeB = typeOrder.indexOf(b.dataset.type);
+    if (typeA !== typeB) return typeA - typeB;
+    return parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
+  });
 
+  // 以降のモーダル表示処理は変更なし
   const content = `
       <div class="zero-search-content">
           <div class="zero-search-result">
               ${selectedCards
                 .map(
                   (card) => `
-                  <div class="deck-card">
-                      <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
-                  </div>
-              `
+                      <div class="deck-card">
+                          <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
+                      </div>
+                  `
                 )
                 .join('')}
           </div>
