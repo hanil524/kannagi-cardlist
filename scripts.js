@@ -1822,10 +1822,14 @@ const deckBuilder = {
         emptyCard.className = 'deck-card';
         emptyCard.setAttribute('data-empty', 'true');
 
-        // 透明カード用の画像要素
         const img = document.createElement('img');
         img.src =
-          'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 252"%3E%3Crect width="180" height="252" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="2" rx="8" /%3E%3C/svg%3E';
+          'data:image/svg+xml,' +
+          encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 745 1041">
+    <rect width="745" height="1041" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="2" rx="8" />
+  </svg>
+`);
         img.alt = 'Empty Card Slot';
 
         emptyCard.appendChild(img);
@@ -1905,42 +1909,45 @@ const deckBuilder = {
     const deckMenu = document.querySelector('.deck-menu');
     const menuHeight = deckMenu ? deckMenu.offsetHeight : 0;
     const windowHeight = window.innerHeight;
-    const availableHeight = windowHeight - menuHeight - 20;
-
-    display.style.height = `${availableHeight}px`;
+    const windowWidth = window.innerWidth;
+    const maxHeight = windowHeight - menuHeight - 20;
 
     const cards = display.getElementsByClassName('deck-card');
     if (cards.length === 0) return;
 
     const isFixedGrid = display.classList.contains('fixed-grid');
-    const isMobile = window.innerWidth <= 768;
-    const isLandscape = window.innerWidth > window.innerHeight;
+    const isMobile = windowWidth <= 768;
+    const isLandscape = windowWidth > windowHeight;
 
-    if (isFixedGrid) {
-      // 40枚以下の場合の固定グリッド
-      const cols = isMobile ? (isLandscape ? 8 : 5) : 8;
-      const rows = isMobile ? (isLandscape ? 5 : 8) : 5;
+    // グリッドの列数を決定
+    const cols = isMobile ? (isLandscape ? 8 : 5) : 8;
+    // 必要な行数を計算
+    const rows = isFixedGrid ? (isMobile ? (isLandscape ? 5 : 8) : 5) : Math.ceil(cards.length / cols);
 
-      const cardWidth = display.offsetWidth / cols - 1;
-      const cardHeight = display.offsetHeight / rows - 1;
+    const aspectRatio = 1041 / 745;
 
-      Array.from(cards).forEach((card) => {
-        card.style.width = `${cardWidth}px`;
-        card.style.height = `${cardHeight}px`;
-      });
-    } else {
-      // 41枚以上の場合のレスポンシブグリッド
-      const cols = isMobile ? (isLandscape ? 8 : 5) : 8;
-      const rows = Math.ceil(cards.length / cols);
+    // 利用可能な最大幅と高さから、カードの最大サイズを計算
+    const maxCardWidth = (windowWidth * 0.95 - (cols - 1)) / cols;
+    const maxCardHeight = (maxHeight - (rows - 1)) / rows;
 
-      const cardWidth = display.offsetWidth / cols - 1;
-      const cardHeight = display.offsetHeight / rows - 1;
+    // アスペクト比を維持しながら、画面に収まる最大サイズを計算
+    let cardWidth = Math.min(maxCardWidth, maxCardHeight / aspectRatio);
+    let cardHeight = cardWidth * aspectRatio;
 
-      Array.from(cards).forEach((card) => {
-        card.style.width = `${cardWidth}px`;
-        card.style.height = `${cardHeight}px`;
-      });
-    }
+    // グリッド全体の幅を計算（カード幅 × 列数 + 隙間）
+    const totalWidth = cardWidth * cols + (cols - 1);
+
+    // スタイルを適用
+    display.style.width = `${totalWidth}px`;
+    display.style.height = `${cardHeight * rows + (rows - 1)}px`;
+    display.style.justifyContent = 'center';
+    display.style.alignContent = 'center';
+
+    // 各カードにサイズを適用
+    Array.from(cards).forEach((card) => {
+      card.style.width = `${cardWidth}px`;
+      card.style.height = `${cardHeight}px`;
+    });
   },
 
   // デッキをソート
