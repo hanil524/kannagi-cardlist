@@ -685,17 +685,6 @@ header input::placeholder,
   .hamburger-menu.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
-
-  /* ヘッダー右側にある画像 */
-  .header-icon {
-    position: absolute;
-    right: 2%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 38px; /* 画像の幅を適切に調整してください */
-    height: auto; /* 画像のアスペクト比を維持しながら高さを自動調整します */
-    border-radius: 25%;
-  }
 }
 
 /* オーバーレイ背景を追加 */
@@ -2449,8 +2438,8 @@ body.modal-open {
 /* 右上のデッキアイコン */
 .deck-icon-container {
   position: absolute;
-  right: 2.5%;
-  top: 54%;
+  right: 3%;
+  top: 56%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
