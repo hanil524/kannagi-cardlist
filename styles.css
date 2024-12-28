@@ -1733,6 +1733,30 @@ body.modal-open {
   box-shadow: none;
 }
 
+/* デッキカードのホバー効果をスマホでは無効化 */
+@media (max-width: 768px) {
+  .deck-card:hover {
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* スマホ表示では光るエフェクトを全て無効化 */
+  .card:hover,
+  .deck-card:hover {
+    box-shadow: none;
+  }
+
+  /* 通常のカードホバーエフェクトも無効化 */
+  .card-buttons {
+    display: none;
+  }
+
+  /* カードのトランジション効果も無効化 */
+  .deck-card {
+    transition: none;
+  }
+}
+
 .card-buttons {
   position: absolute;
   bottom: 10px;
