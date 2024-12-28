@@ -1238,6 +1238,13 @@ button[onclick='resetFilters()']:active {
 body.modal-open {
   overflow: hidden;
   padding-right: var(--scrollbar-width);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 /* PCでのみモーダル起動時にスクロールバー拡大 */
@@ -1480,6 +1487,22 @@ body.modal-open {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* スクロール防止 */
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+}
+
+/* スマホ表示時の追加制御 */
+@media (max-width: 768px) {
+  .deck-modal.active {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+  }
 }
 
 .deck-modal.active {
@@ -2001,6 +2024,12 @@ body.modal-open {
   padding-top: 40px;
   max-height: calc(100vh - 70px);
   grid-auto-rows: 1fr;
+  position: relative;
+  /* スクロール防止 */
+  touch-action: none; /* タッチによるスクロールも防止 */
+  -webkit-overflow-scrolling: none; /* iOSのスクロールも防止 */
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 /* 固定グリッド（40枚以下）のスタイル */
@@ -2593,4 +2622,13 @@ body.modal-open {
 
 .deck-edit-button i {
   font-size: 14px;
+}
+
+/* プルトゥリフレッシュの無効化 */
+html,
+body {
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+  touch-action: pan-x pan-y;
+  -webkit-touch-action: pan-x pan-y;
 }
