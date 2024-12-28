@@ -580,7 +580,7 @@ header input::placeholder,
   color: #ffffff;
 }
 
-/* 既存のモバイルナビゲーションスタイルを更新 */
+/* スマホのサイドメニュー */
 .mobile-nav {
   display: block; /* 'display: none' を削除 */
   position: fixed;
@@ -594,6 +594,7 @@ header input::placeholder,
   background-color: rgba(30, 30, 30, 0.95);
   box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
   font-size: 14px;
+  margin-top: -10px; /* 上からの位置 */
 }
 
 .mobile-nav ul {
@@ -606,7 +607,7 @@ header input::placeholder,
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* スマホのサイドメニュー */
+/* スマホ サイドメニューの文字 */
 .mobile-nav a {
   color: #e0e0e0;
   display: block;
