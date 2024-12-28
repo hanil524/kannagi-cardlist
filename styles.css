@@ -1932,7 +1932,7 @@ body.modal-open {
 /* デッキ作成画面の調整 */
 .deck-display {
   display: grid;
-  gap: 1px;
+  gap: 0px;
   width: fit-content; /* コンテンツ幅に合わせる */
   margin: 0 auto; /* 中央寄せ */
   padding-top: 35px;
