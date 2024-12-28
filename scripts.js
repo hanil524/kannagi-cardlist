@@ -2228,12 +2228,14 @@ function performZeroSearch() {
     }
   });
 
+  document.body.classList.add('modal-open');
   requestAnimationFrame(() => modal.classList.add('active'));
 }
 
 function closeZeroSearch() {
   const modal = document.querySelector('.zero-search-modal');
   modal.classList.remove('active');
+  document.body.classList.remove('modal-open');
   setTimeout(() => modal.remove(), 300);
 }
 
@@ -2263,6 +2265,7 @@ function confirmReset() {
     }
   });
 
+  document.body.classList.add('modal-open');
   document.body.appendChild(confirmPopup);
 }
 
@@ -2272,13 +2275,9 @@ function resetDeck(confirmed) {
     deckBuilder.deck = [];
     deckBuilder.updateDisplay();
     deckManager.saveDeck(deckManager.currentDeckId);
-
-    // フェードアウトアニメーション
-    popup.style.opacity = '0';
-    setTimeout(() => popup.remove(), 300);
-  } else {
-    popup.remove();
   }
+  document.body.classList.remove('modal-open');
+  popup.remove();
 }
 
 // 前後に移動可能かチェックする関数
@@ -2546,6 +2545,7 @@ const deckManager = {
   openDeckList() {
     const modal = document.getElementById('deck-list-modal');
     modal.style.display = 'block';
+    document.body.classList.add('modal-open');
     requestAnimationFrame(() => {
       modal.classList.add('active');
     });
@@ -2557,6 +2557,7 @@ const deckManager = {
   closeDeckList() {
     const modal = document.getElementById('deck-list-modal');
     modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
     setTimeout(() => {
       modal.style.display = 'none';
     }, 300);
