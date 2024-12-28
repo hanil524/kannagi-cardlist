@@ -2135,6 +2135,7 @@ body.modal-open {
   white-space: nowrap;
   z-index: 2502;
   margin: 0 auto; /* 水平方向の中央揃え */
+  overflow: visible; /* 子要素が切り取られないようにする */
 }
 
 /* モーダル内の拡大画像設定 */
@@ -2158,9 +2159,9 @@ body.modal-open {
 }
 
 .card-control-button {
+  /* 既存のスタイル */
   width: 40px;
   height: 40px;
-  aspect-ratio: 1 / 1; /* 正方形を維持 */
   border-radius: 50%;
   background-color: rgba(60, 60, 60, 0.9);
   border: 2px solid rgba(255, 255, 255, 0.8);
@@ -2171,9 +2172,26 @@ body.modal-open {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-sizing: border-box; /* ボーダーの影響を防ぐ */
-  overflow: hidden; /* アイコンやテキストのはみ出しを防ぐ */
-  will-change: transform; /* ハードウェアアクセラレーションを有効化 */
+
+  /* iOS対策を追加 */
+  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0; /* パディングをリセット */
+  min-width: 40px; /* 最小幅を設定 */
+  min-height: 40px; /* 最小高さを設定 */
+  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
+}
+
+/* PCとスマホで微調整 */
+@media (max-width: 768px) {
+  .card-control-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 20px;
+  }
 }
 
 .card-control-button:hover {
