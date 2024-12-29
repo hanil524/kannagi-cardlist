@@ -1693,29 +1693,14 @@ const deckBuilder = {
     document.body.style.width = '100%';
     document.body.style.top = `-${this.savedScrollPosition}px`;
 
-    // モバイル向けの追加処理
+    // スマホの場合、UIを隠すために少しスクロール
     if (window.innerWidth <= 768) {
-      // 100vh問題に対応するため、実際の画面の高さを使用
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-      // ブラウザUIを隠すための試み
       setTimeout(() => {
         window.scrollTo(0, 1);
-
-        // iOS 15以降のSafariでも効果がある場合がある
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-          document.documentElement.webkitRequestFullscreen();
-        }
       }, 100);
-
-      // 画面回転時の対応
-      window.addEventListener('resize', this.handleResize);
-      window.addEventListener('orientationchange', this.handleResize);
     }
 
+    // フェードイン
     requestAnimationFrame(() => {
       modal.classList.add('active');
       this.resizeDisplay();
