@@ -1676,16 +1676,16 @@ const loadDeckState = () => {
 function openDeckBuilder() {
   const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || window.scrollY || 0;
 
-  // スマホの場合、先にスクロールしてからモーダルを表示
-  if (window.innerWidth <= 768) {
-    window.scrollTo(0, scrollPosition + 200);
+  const modal = document.getElementById('deck-modal');
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
 
-    setTimeout(() => {
-      showDeckModal(scrollPosition);
-    }, 50);
-  } else {
-    showDeckModal(scrollPosition);
-  }
+  // フェードイン
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+    deckBuilder.savedScrollPosition = scrollPosition;
+    deckBuilder.resizeDisplay(); // サイズを調整
+  });
 }
 
 // デッキビルダーの状態管理
