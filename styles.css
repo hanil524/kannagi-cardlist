@@ -1438,8 +1438,8 @@ body.modal-open {
   background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 15px 15px;
-  font-size: 20px;
+  padding: 25px 25px; /* ボタンサイズを大きく */
+  font-size: 24px; /* 矢印を大きく */
   cursor: pointer;
   z-index: 2501;
   display: none;
@@ -1456,13 +1456,28 @@ body.modal-open {
 }
 
 .image-nav-button.prev {
-  left: 10px;
-  border-radius: 0 5px 5px 0;
+  left: 30%; /* カードの横に配置 */
+  border-radius: 10px;
 }
 
 .image-nav-button.next {
-  right: 10px;
-  border-radius: 5px 0 0 5px;
+  right: 30%; /* カードの横に配置 */
+  border-radius: 10px;
+}
+
+/* スマホでの配置 */
+@media (max-width: 768px) {
+  .image-nav-button.prev {
+    left: 0;
+    border-radius: 0 5px 5px 0;
+    padding: 35px 18px; /* スマホでより大きく */
+  }
+
+  .image-nav-button.next {
+    right: 0;
+    border-radius: 5px 0 0 5px;
+    padding: 35px 18px; /* スマホでより大きく */
+  }
 }
 
 @media (max-width: 768px) {
@@ -2142,6 +2157,7 @@ body.modal-open {
   /* 既存のスタイル */
   width: 40px;
   height: 40px;
+  position: relative;
   border-radius: 50%;
   background-color: rgba(60, 60, 60, 0.9);
   border: 2px solid rgba(255, 255, 255, 0.8);
@@ -2171,6 +2187,27 @@ body.modal-open {
     min-width: 36px;
     min-height: 36px;
     font-size: 20px;
+  }
+}
+
+/* タッチ判定用の疑似要素（拡大） */
+.card-control-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px; /* ボタンの2倍 */
+  height: 80px; /* ボタンの2倍 */
+  background: transparent;
+  cursor: pointer;
+}
+
+/* スマホでさらに大きく */
+@media (max-width: 768px) {
+  .card-control-button::before {
+    width: 100px;
+    height: 100px;
   }
 }
 
