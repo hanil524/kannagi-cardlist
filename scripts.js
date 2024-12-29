@@ -1683,25 +1683,18 @@ const deckBuilder = {
   // デッキビルダーのopen/close関数
   open() {
     const modal = document.getElementById('deck-modal');
-    modal.style.display = 'block';
 
-    // スクロール位置を保存
-    this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-
-    // body要素の固定
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${this.savedScrollPosition}px`;
-    document.body.style.width = '100%';
-
-    // スマホの場合の追加処理
+    // スマホの場合、下方向へのスクロールを実行
     if (window.innerWidth <= 768) {
-      document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.position = 'relative';
-      document.documentElement.style.height = '100%';
+      this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo(0, this.savedScrollPosition + 150); // アドレスバーを隠すために下にスクロール
     }
 
-    // フェードイン
+    modal.style.display = 'block';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = `-${this.savedScrollPosition}px`;
+
     requestAnimationFrame(() => {
       modal.classList.add('active');
       this.resizeDisplay();
