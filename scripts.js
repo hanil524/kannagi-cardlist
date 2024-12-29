@@ -1672,7 +1672,7 @@ const loadDeckState = () => {
   }
 };
 
-// デッキビルダーを開く関数
+// デッキビルダーを開く関数  PCの処理
 function openDeckBuilder() {
   const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || window.scrollY || 0;
 
@@ -1687,7 +1687,7 @@ function openDeckBuilder() {
     deckBuilder.resizeDisplay(); // サイズを調整
   });
 }
-
+console.log('アプデ完了');
 // デッキビルダーの状態管理
 const deckBuilder = {
   deck: [],
@@ -1696,8 +1696,11 @@ const deckBuilder = {
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
-  // デッキビルダーのopen/close関数
+  // デッキビルダーのopen/close関数  スマホの処理
   open() {
+    const modal = document.getElementById('deck-modal');
+    modal.style.display = 'block';
+
     // スクロール位置を保存
     this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -1705,6 +1708,12 @@ const deckBuilder = {
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
     document.body.style.top = `-${this.savedScrollPosition}px`;
+
+    // フェードイン
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+      this.resizeDisplay();
+    });
   },
 
   close() {
