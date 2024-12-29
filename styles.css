@@ -580,21 +580,31 @@ header input::placeholder,
   color: #ffffff;
 }
 
+.scroll-locked {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+}
+
 /* スマホのサイドメニュー */
 .mobile-nav {
   display: block; /* 'display: none' を削除 */
   position: fixed;
-  top: 60px;
+  top: 50px; /* ヘッダーの高さ分 */
   left: -80%; /* 初期位置を画面外に */
-  width: 80%;
-  height: calc(100% - 60px);
+  width: 75%;
+  height: calc(100% - 60px); /* 上下幅100%から、px数分を底上げする */
   z-index: 1001; /* z-indexを上げる */
   transition: left 0.2s ease-in-out; /* スムーズな移動のためのトランジション */
   overflow-y: auto; /* スクロール可能にする */
+  -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+  overscroll-behavior-y: contain; /* スクロールの伝播を防止 */
   background-color: rgba(30, 30, 30, 0.95);
   box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
   font-size: 14px;
-  margin-top: -10px; /* 上からの位置 */
 }
 
 .mobile-nav ul {
@@ -619,8 +629,9 @@ header input::placeholder,
 }
 
 .mobile-nav.active {
-  display: block;
   left: 0; /* 画面内に移動 */
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 .mobile-nav a:hover {
@@ -690,7 +701,6 @@ header input::placeholder,
 
 /* オーバーレイ背景を追加 */
 .menu-overlay {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -699,12 +709,18 @@ header input::placeholder,
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 .menu-overlay.active {
-  display: block;
   opacity: 1;
+  visibility: visible;
+  display: block;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 /* 背景を少しだけドット柄に */
