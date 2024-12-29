@@ -1689,15 +1689,16 @@ const deckBuilder = {
     this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
     // body要素の固定
+    document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
     document.body.style.top = `-${this.savedScrollPosition}px`;
+    document.body.style.width = '100%';
 
-    // スマホの場合、UIを隠すために少しスクロール
+    // スマホの場合の追加処理
     if (window.innerWidth <= 768) {
-      setTimeout(() => {
-        window.scrollTo(0, 1);
-      }, 100);
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.position = 'relative';
+      document.documentElement.style.height = '100%';
     }
 
     // フェードイン
@@ -1707,46 +1708,28 @@ const deckBuilder = {
     });
   },
 
-  // リサイズハンドラを追加
-  handleResize() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    setTimeout(() => {
-      window.scrollTo(0, 1);
-    }, 100);
-  },
-
   close() {
     const modal = document.getElementById('deck-modal');
     modal.classList.remove('active');
 
+    // スクロール位置を復元
+    const scrollPosition = this.savedScrollPosition;
+
+    // body要素のスタイルを解除
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+
+    // スマホの場合の追加処理を解除
     if (window.innerWidth <= 768) {
-      // フルスクリーン状態をチェックしてから実行
-      if (document.fullscreenElement || document.webkitFullscreenElement) {
-        try {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
-        } catch (e) {
-          console.log('Fullscreen exit failed:', e);
-        }
-      }
-
-      // リサイズイベントリスナーを削除
-      window.removeEventListener('resize', this.handleResize);
-      window.removeEventListener('orientationchange', this.handleResize);
-
-      // カスタムプロパティをリセット
-      document.documentElement.style.removeProperty('--vh');
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.position = '';
+      document.documentElement.style.height = '';
     }
 
-    // 既存の処理
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, this.savedScrollPosition);
+    // スクロール位置を復元
+    window.scrollTo(0, scrollPosition);
 
     setTimeout(() => {
       modal.style.display = 'none';
