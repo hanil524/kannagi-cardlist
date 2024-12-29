@@ -1698,14 +1698,13 @@ const deckBuilder = {
 
   // デッキビルダーのopen/close関数
   open() {
-    const modal = document.getElementById('deck-modal');
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    // スクロール位置を保存
+    this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-    requestAnimationFrame(() => {
-      modal.classList.add('active');
-      this.resizeDisplay();
-    });
+    // body要素の固定
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = `-${this.savedScrollPosition}px`;
   },
 
   close() {
