@@ -1672,6 +1672,22 @@ const loadDeckState = () => {
   }
 };
 
+// デッキビルダーを開く関数
+function openDeckBuilder() {
+  const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || window.scrollY || 0;
+
+  // スマホの場合、先にスクロールしてからモーダルを表示
+  if (window.innerWidth <= 768) {
+    window.scrollTo(0, scrollPosition + 200);
+
+    setTimeout(() => {
+      showDeckModal(scrollPosition);
+    }, 50);
+  } else {
+    showDeckModal(scrollPosition);
+  }
+}
+
 // デッキビルダーの状態管理
 const deckBuilder = {
   deck: [],
@@ -1683,17 +1699,8 @@ const deckBuilder = {
   // デッキビルダーのopen/close関数
   open() {
     const modal = document.getElementById('deck-modal');
-
-    // スマホの場合、下方向へのスクロールを実行
-    if (window.innerWidth <= 768) {
-      this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-      window.scrollTo(0, this.savedScrollPosition + 150); // アドレスバーを隠すために下にスクロール
-    }
-
     modal.style.display = 'block';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = `-${this.savedScrollPosition}px`;
+    document.body.style.overflow = 'hidden';
 
     requestAnimationFrame(() => {
       modal.classList.add('active');
@@ -2102,19 +2109,16 @@ const deckBuilder = {
   }
 };
 
-// デッキビルダーを開く関数
-function openDeckBuilder() {
-  const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || window.scrollY || 0;
-
+// モーダル表示処理を分離
+function showDeckModal(scrollPosition) {
   const modal = document.getElementById('deck-modal');
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
 
-  // フェードイン
   requestAnimationFrame(() => {
     modal.classList.add('active');
     deckBuilder.savedScrollPosition = scrollPosition;
-    deckBuilder.resizeDisplay(); // サイズを調整
+    deckBuilder.resizeDisplay();
   });
 }
 
