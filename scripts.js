@@ -1689,59 +1689,78 @@ const deckBuilder = {
     this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
     // body要素の固定
-    document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.top = `-${this.savedScrollPosition}px`;
     document.body.style.width = '100%';
+    document.body.style.top = `-${this.savedScrollPosition}px`;
 
-    // モバイル用の処理を追加
+    // モバイル向けの追加処理
     if (window.innerWidth <= 768) {
-      // iOS Safariのアドレスバーを隠す
-      document.documentElement.style.minHeight = '100vh';
-      document.documentElement.style.height = '100vh';
-      document.body.style.minHeight = '100vh';
-      document.body.style.height = '100vh';
+      // 100vh問題に対応するため、実際の画面の高さを使用
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-      // Androidのアドレスバーを隠す
-      window.scrollTo(0, 1);
+      // ブラウザUIを隠すための試み
+      setTimeout(() => {
+        window.scrollTo(0, 1);
 
-      // 画面の向きが変わった時も対応
-      window.addEventListener('orientationchange', () => {
-        setTimeout(() => {
-          window.scrollTo(0, 1);
-        }, 200);
-      });
+        // iOS 15以降のSafariでも効果がある場合がある
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          document.documentElement.webkitRequestFullscreen();
+        }
+      }, 100);
+
+      // 画面回転時の対応
+      window.addEventListener('resize', this.handleResize);
+      window.addEventListener('orientationchange', this.handleResize);
     }
 
-    // フェードイン
     requestAnimationFrame(() => {
       modal.classList.add('active');
       this.resizeDisplay();
     });
   },
 
+  // リサイズハンドラを追加
+  handleResize() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    setTimeout(() => {
+      window.scrollTo(0, 1);
+    }, 100);
+  },
+
   close() {
     const modal = document.getElementById('deck-modal');
     modal.classList.remove('active');
 
-    // スクロール位置を復元
-    const scrollPosition = this.savedScrollPosition;
-
-    // モバイル用の処理をリセット
     if (window.innerWidth <= 768) {
-      document.documentElement.style.minHeight = '';
-      document.documentElement.style.height = '';
-      document.body.style.minHeight = '';
-      document.body.style.height = '';
+      // フルスクリーン状態をチェックしてから実行
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        try {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        } catch (e) {
+          console.log('Fullscreen exit failed:', e);
+        }
+      }
+
+      // リサイズイベントリスナーを削除
+      window.removeEventListener('resize', this.handleResize);
+      window.removeEventListener('orientationchange', this.handleResize);
+
+      // カスタムプロパティをリセット
+      document.documentElement.style.removeProperty('--vh');
     }
 
-    // body要素のスタイルを解除
-    document.body.style.overflow = '';
+    // 既存の処理
     document.body.style.position = '';
-    document.body.style.top = '';
     document.body.style.width = '';
-
-    // スクロール位置を復元
+    document.body.style.top = '';
     window.scrollTo(0, this.savedScrollPosition);
 
     setTimeout(() => {
