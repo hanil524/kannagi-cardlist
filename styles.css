@@ -1530,6 +1530,12 @@ body.modal-open {
 .deck-modal.active {
   opacity: 1;
   visibility: visible;
+
+  /* タブるグループを消したい試み */
+  height: 100vh; /* フォールバック */
+  height: calc(var(--vh, 1vh) * 100);
+  max-height: -webkit-fill-available;
+  overflow: hidden;
 }
 
 .deck-modal-content {
@@ -2142,12 +2148,13 @@ body.modal-open {
   object-fit: contain;
   margin: auto;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
 }
 
 @media (min-width: 769px) {
   .image-modal .image-container img {
+    border-radius: 28px;
     max-width: 70%;
     max-height: 70vh;
   }
