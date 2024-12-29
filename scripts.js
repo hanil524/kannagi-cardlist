@@ -155,7 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburgerMenu.classList.toggle('active');
     mobileNav.classList.toggle('active');
     menuOverlay.classList.toggle('active');
-    resetFontSize(); // メニューを開閉する際にもフォントサイズをリセット
+
+    // 背景のスクロールを制御
+    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+    document.documentElement.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+
+    resetFontSize();
   }
 
   // 複製カードにクリック判定を付与
@@ -1225,7 +1230,7 @@ window.addEventListener('scroll', handleScroll);
 // ページ読み込み時にも実行
 document.addEventListener('DOMContentLoaded', handleScroll);
 
-// ハンバーガーメニュー関連 (更新)
+// ハンバーガーメニュー関連
 document.addEventListener('DOMContentLoaded', function () {
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const mobileNav = document.querySelector('.mobile-nav');
