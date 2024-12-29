@@ -1694,11 +1694,23 @@ const deckBuilder = {
     document.body.style.top = `-${this.savedScrollPosition}px`;
     document.body.style.width = '100%';
 
-    // スマホの場合の追加処理
+    // モバイル用の処理を追加
     if (window.innerWidth <= 768) {
-      document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.position = 'relative';
-      document.documentElement.style.height = '100%';
+      // iOS Safariのアドレスバーを隠す
+      document.documentElement.style.minHeight = '100vh';
+      document.documentElement.style.height = '100vh';
+      document.body.style.minHeight = '100vh';
+      document.body.style.height = '100vh';
+
+      // Androidのアドレスバーを隠す
+      window.scrollTo(0, 1);
+
+      // 画面の向きが変わった時も対応
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          window.scrollTo(0, 1);
+        }, 200);
+      });
     }
 
     // フェードイン
@@ -1715,21 +1727,22 @@ const deckBuilder = {
     // スクロール位置を復元
     const scrollPosition = this.savedScrollPosition;
 
+    // モバイル用の処理をリセット
+    if (window.innerWidth <= 768) {
+      document.documentElement.style.minHeight = '';
+      document.documentElement.style.height = '';
+      document.body.style.minHeight = '';
+      document.body.style.height = '';
+    }
+
     // body要素のスタイルを解除
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.width = '';
 
-    // スマホの場合の追加処理を解除
-    if (window.innerWidth <= 768) {
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.position = '';
-      document.documentElement.style.height = '';
-    }
-
     // スクロール位置を復元
-    window.scrollTo(0, scrollPosition);
+    window.scrollTo(0, this.savedScrollPosition);
 
     setTimeout(() => {
       modal.style.display = 'none';
