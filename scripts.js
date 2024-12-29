@@ -146,23 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ハンバーガーメニューの処理
-  const hamburgerMenu = document.querySelector('.hamburger-menu');
-  const mobileNav = document.querySelector('.mobile-nav');
-  const menuOverlay = document.querySelector('.menu-overlay');
-
-  function toggleMenu() {
-    hamburgerMenu.classList.toggle('active');
-    mobileNav.classList.toggle('active');
-    menuOverlay.classList.toggle('active');
-
-    // 背景のスクロールを制御
-    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-    document.documentElement.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-
-    resetFontSize();
-  }
-
   // 複製カードにクリック判定を付与
   const cardList = document.getElementById('card-list');
 
@@ -1248,18 +1231,30 @@ document.addEventListener('DOMContentLoaded', function () {
     closeImageModal();
   });
 
+  // DOMContentLoaded イベントリスナー内の toggleMenu 関数
   function toggleMenu() {
     hamburgerMenu.classList.toggle('active');
     mobileNav.classList.toggle('active');
     menuOverlay.classList.toggle('active');
 
     if (mobileNav.classList.contains('active')) {
-      // メニューを開く時だけスクロールを禁止
-      document.body.style.overflow = 'hidden';
+      // 現在のスクロール位置を保存
+      const scrollPosition = window.pageYOffset;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${scrollPosition}px`;
+      document.body.style.touchAction = 'none';
     } else {
-      // メニューを閉じる時はスクロールを許可
-      document.body.style.overflow = '';
+      // スクロール位置を復元
+      const scrollPosition = Math.abs(parseInt(document.body.style.top || '0'));
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      document.body.style.touchAction = '';
+      window.scrollTo(0, scrollPosition);
     }
+
+    resetFontSize();
   }
 
   hamburgerMenu.addEventListener('click', toggleMenu);
