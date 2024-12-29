@@ -1530,12 +1530,6 @@ body.modal-open {
 .deck-modal.active {
   opacity: 1;
   visibility: visible;
-
-  /* タブるグループを消したい試み */
-  height: 100vh; /* フォールバック */
-  height: calc(var(--vh, 1vh) * 100);
-  max-height: -webkit-fill-available;
-  overflow: hidden;
 }
 
 .deck-modal-content {
