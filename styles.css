@@ -639,11 +639,12 @@ header input::placeholder,
   color: #ffffff;
 }
 
+/* スマホ サイドメニューの閉じるボタン */
 .mobile-nav .close-menu {
   background-color: rgba(165, 70, 70, 0.9);
   color: #ffffff;
   text-align: center;
-  padding: 15px;
+  padding: 10px;
   font-weight: bold;
   transition: all 0.3s ease;
 }
