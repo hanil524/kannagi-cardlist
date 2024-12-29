@@ -1687,7 +1687,7 @@ function openDeckBuilder() {
     deckBuilder.resizeDisplay(); // サイズを調整
   });
 }
-console.log('アプデ完了');
+
 // デッキビルダーの状態管理
 const deckBuilder = {
   deck: [],
@@ -1705,9 +1705,17 @@ const deckBuilder = {
     this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
     // body要素の固定
+    document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
     document.body.style.top = `-${this.savedScrollPosition}px`;
+    document.body.style.width = '100%';
+
+    // スマホの場合の追加処理
+    if (window.innerWidth <= 768) {
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.position = 'relative';
+      document.documentElement.style.height = '100%';
+    }
 
     // フェードイン
     requestAnimationFrame(() => {
