@@ -2705,7 +2705,6 @@ function loadHtml2Canvas() {
 }
 
 // デッキ画像の保存機能
-// デッキ画像の保存機能
 async function captureDeck() {
   try {
     // 保存中メッセージを表示
@@ -2734,56 +2733,71 @@ async function captureDeck() {
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
       scale: 4,
-      logging: false,
+      logging: true, // デバッグ用にログを有効化
       allowTaint: true,
       useCORS: true,
-      imageTimeout: 0
+      imageTimeout: 0,
+      removeContainer: true // Safariでの問題対策
     });
 
     // キャプチャ用クラスを削除
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // モバイルデバイスの判定（より厳密に）
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    // より確実なモバイル判定
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
     if (isMobile) {
-      // モバイルの場合は画像モーダルを表示
-      const imageModal = document.createElement('div');
-      imageModal.className = 'deck-image-modal';
+      try {
+        // DataURLを生成（エラーハンドリング付き）
+        const dataUrl = await new Promise((resolve, reject) => {
+          try {
+            const url = canvas.toDataURL('image/png');
+            resolve(url);
+          } catch (e) {
+            reject(e);
+          }
+        });
 
-      // DataURLを生成（一度だけ）
-      const dataUrl = canvas.toDataURL('image/png');
+        // モーダルを生成
+        const imageModal = document.createElement('div');
+        imageModal.className = 'deck-image-modal';
 
-      imageModal.innerHTML = `
-        <div class="deck-image-container">
-          <img src="${dataUrl}" alt="${deckName}">
-          <p class="save-instruction">画像を長押し保存してください</p>
-          <button class="modal-close-button">戻る</button>
-        </div>
-      `;
+        imageModal.innerHTML = `
+          <div class="deck-image-container">
+            <img src="${dataUrl}" alt="${deckName}">
+            <p class="save-instruction">画像を長押し保存してください</p>
+            <button class="modal-close-button">戻る</button>
+          </div>
+        `;
 
-      // モーダルクリックで閉じる
-      imageModal.addEventListener('click', (e) => {
-        if (e.target === imageModal) {
-          imageModal.remove();
+        // イベントリスナーを追加
+        const closeButton = imageModal.querySelector('.modal-close-button');
+        if (closeButton) {
+          closeButton.addEventListener('click', () => {
+            imageModal.remove();
+          });
         }
-      });
 
-      // 戻るボタンクリックで閉じる
-      const closeButton = imageModal.querySelector('.modal-close-button');
-      closeButton.addEventListener('click', () => {
-        imageModal.remove();
-      });
+        imageModal.addEventListener('click', (e) => {
+          if (e.target === imageModal) {
+            imageModal.remove();
+          }
+        });
 
-      document.body.appendChild(imageModal);
+        // DOMに追加
+        document.body.appendChild(imageModal);
 
-      // モーダルをフェードイン
-      requestAnimationFrame(() => {
-        imageModal.classList.add('active');
-      });
+        // 少し遅延してからフェードイン（Safari対策）
+        setTimeout(() => {
+          imageModal.classList.add('active');
+        }, 50);
+      } catch (error) {
+        console.error('モーダル表示エラー:', error);
+        alert('画像の表示に失敗しました。');
+      }
     } else {
-      // PCの場合はダウンロードフォルダに直接保存
+      // PCの場合は通常のダウンロード
       const link = document.createElement('a');
       link.download = `${deckName}.png`;
       link.href = canvas.toDataURL('image/png');
