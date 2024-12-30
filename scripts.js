@@ -2710,7 +2710,7 @@ async function captureDeck() {
     // 保存中メッセージを表示
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = 'デッキ画像を取得中...';
+    messageDiv.textContent = '画像を取得中...';
     document.body.appendChild(messageDiv);
 
     // html2canvasの読み込み
@@ -2732,7 +2732,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 4,
+      scale: 5, // 長押し保存方式なので4倍でOK
       logging: false,
       allowTaint: true,
       useCORS: true,
@@ -2747,27 +2747,46 @@ async function captureDeck() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // モバイルの場合は写真フォルダに直接保存
-      const dataUrl = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = `${deckName}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // モバイルの場合は画像モーダルを表示
+      const imageModal = document.createElement('div');
+      imageModal.className = 'deck-image-modal';
+      imageModal.innerHTML = `
+  <div class="deck-image-container">
+    <img src="${canvas.toDataURL('image/png')}" alt="${deckName}">
+    <p class="save-instruction">画像を長押し保存してください</p>
+    <button class="modal-close-button">戻る</button>
+  </div>
+`;
+
+      // モーダルクリックで閉じる
+      imageModal.addEventListener('click', (e) => {
+        if (e.target === imageModal) {
+          imageModal.remove();
+        }
+      });
+
+      // 戻るボタンクリックで閉じる
+      const closeButton = imageModal.querySelector('.modal-close-button');
+      closeButton.addEventListener('click', () => {
+        imageModal.remove();
+      });
+
+      document.body.appendChild(imageModal);
+
+      // モーダルをフェードイン
+      requestAnimationFrame(() => {
+        imageModal.classList.add('active');
+      });
     } else {
       // PCの場合はダウンロードフォルダに直接保存
       const link = document.createElement('a');
-      link.download = `${deckName}.png`;
+      link.download = `${deckName}.png`; // デッキ名を反映
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
-
-    // 保存完了メッセージを表示
-    deckBuilder.showMessage('デッキ画像を保存しました');
   } catch (error) {
-    console.error('デッキの画像保存に失敗しました:', error);
-    alert('デッキの画像保存に失敗しました。');
+    console.error('デッキの画像生成に失敗しました:', error);
+    alert('デッキの画像生成に失敗しました。');
   } finally {
     // 保存中メッセージを削除
     const messageDiv = document.querySelector('.saving-message');
