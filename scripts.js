@@ -2707,6 +2707,12 @@ function loadHtml2Canvas() {
 // デッキ画像の保存機能
 async function captureDeck() {
   try {
+    // 保存中メッセージを表示
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'saving-message';
+    messageDiv.textContent = 'デッキ画像を取得中...';
+    document.body.appendChild(messageDiv);
+
     // html2canvasの読み込み
     const html2canvas = await loadHtml2Canvas();
 
@@ -2726,24 +2732,51 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 4, // 4倍に増やして高画質化
+      scale: 4,
       logging: false,
-      allowTaint: true, // クロスオリジン画像の使用を許可
+      allowTaint: true,
       useCORS: true,
-      imageTimeout: 0 // タイムアウトを無制限に
+      imageTimeout: 0
     });
 
     // キャプチャ用クラスを削除
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // 画像のダウンロード
-    const link = document.createElement('a');
-    link.download = `${deckName}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    // Blobとして画像を生成
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/png');
+    });
+
+    // モバイルデバイスの判定
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // モバイルの場合は写真アプリに直接保存
+      try {
+        const file = new File([blob], `${deckName}.png`, { type: 'image/png' });
+        await navigator.share({
+          files: [file]
+        });
+      } catch (error) {
+        console.error('画像の保存に失敗しました:', error);
+        alert('画像の保存に失敗しました。');
+      }
+    } else {
+      // PCの場合はダウンロードフォルダに直接保存
+      const link = document.createElement('a');
+      link.download = `${deckName}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
   } catch (error) {
     console.error('デッキの画像保存に失敗しました:', error);
     alert('デッキの画像保存に失敗しました。');
+  } finally {
+    // 保存中メッセージを削除
+    const messageDiv = document.querySelector('.saving-message');
+    if (messageDiv) {
+      messageDiv.remove();
+    }
   }
 }
