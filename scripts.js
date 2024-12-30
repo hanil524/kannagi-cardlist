@@ -2772,7 +2772,7 @@ async function captureDeck() {
   <a href="${dataUrl}" download="${deckName}.png">
     <img src="${dataUrl}" alt="${deckName}">
   </a>
-  <p class="save-instruction">画像を長押しまたはタップして保存してください</p>
+  <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
   <button class="modal-close-button">戻る</button>
 </div>
 `;
