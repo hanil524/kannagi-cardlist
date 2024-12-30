@@ -2650,3 +2650,19 @@ body {
   line-height: 1; /* 行の高さを調整して中央揃えを維持 */
   padding: 0 10px; /* ×用に特別な余白設定 */
 }
+
+/* 保存中メッセージのスタイル */
+.saving-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  z-index: 10000;
+  font-size: 16px;
+  text-align: center;
+  pointer-events: none; /* メッセージがクリックを妨げないように */
+}
