@@ -2766,12 +2766,15 @@ async function captureDeck() {
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
+        // モーダルのHTML生成部分
         imageModal.innerHTML = `
-  <div class="deck-image-container">
+<div class="deck-image-container">
+  <a href="${dataUrl}" download="${deckName}.png">
     <img src="${dataUrl}" alt="${deckName}">
-    <p class="save-instruction">画像を長押し保存してください</p>
-    <button class="modal-close-button">戻る</button>
-  </div>
+  </a>
+  <p class="save-instruction">画像を長押しまたはタップして保存してください</p>
+  <button class="modal-close-button">戻る</button>
+</div>
 `;
 
         // イベントリスナーを追加
