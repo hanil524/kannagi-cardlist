@@ -648,6 +648,11 @@ document.addEventListener('DOMContentLoaded', () => {
       hideTooltip();
     });
   });
+
+  const captureButton = document.getElementById('deck-capture');
+  if (captureButton) {
+    captureButton.addEventListener('click', captureDeck);
+  }
 });
 
 // 以下の関数は変更なし
@@ -2484,7 +2489,7 @@ const deckManager = {
     if (helpButton) {
       const saveButton = document.createElement('button');
       saveButton.className = 'deck-menu-button';
-      saveButton.textContent = 'デッキ切替';
+      saveButton.textContent = '切替';
       saveButton.onclick = () => this.openDeckList();
       helpButton.parentNode.replaceChild(saveButton, helpButton);
     }
@@ -2682,3 +2687,63 @@ const deckManager = {
     }
   }
 };
+
+// html2canvasライブラリを動的に読み込む
+function loadHtml2Canvas() {
+  return new Promise((resolve, reject) => {
+    if (window.html2canvas) {
+      resolve(window.html2canvas);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    script.onload = () => resolve(window.html2canvas);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// デッキ画像の保存機能
+async function captureDeck() {
+  try {
+    // html2canvasの読み込み
+    const html2canvas = await loadHtml2Canvas();
+
+    // デッキ表示エリアの取得
+    const deckDisplay = document.getElementById('deck-display');
+    const modalContent = document.querySelector('.deck-modal-content');
+
+    // キャプチャ用のクラスを追加
+    deckDisplay.classList.add('capturing');
+    modalContent.classList.add('capturing-deck');
+
+    // 現在のデッキ名を取得
+    const currentDeckId = deckManager.currentDeckId;
+    const deckButton = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+    const deckName = deckButton ? deckButton.textContent : `デッキ${currentDeckId}`;
+
+    // html2canvasでキャプチャ
+    const canvas = await html2canvas(deckDisplay, {
+      backgroundColor: '#2a2a2a',
+      scale: 4, // 4倍に増やして高画質化
+      logging: false,
+      allowTaint: true, // クロスオリジン画像の使用を許可
+      useCORS: true,
+      imageTimeout: 0 // タイムアウトを無制限に
+    });
+
+    // キャプチャ用クラスを削除
+    deckDisplay.classList.remove('capturing');
+    modalContent.classList.remove('capturing-deck');
+
+    // 画像のダウンロード
+    const link = document.createElement('a');
+    link.download = `${deckName}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (error) {
+    console.error('デッキの画像保存に失敗しました:', error);
+    alert('デッキの画像保存に失敗しました。');
+  }
+}
