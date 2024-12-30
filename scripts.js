@@ -2706,14 +2706,17 @@ function loadHtml2Canvas() {
 
 // デッキ画像の保存機能
 async function captureDeck() {
-  try {
-    // 保存中メッセージを表示
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'saving-message';
-    messageDiv.textContent = '画像を取得中...';
-    document.body.appendChild(messageDiv);
+  // 保存中メッセージを表示（最初に表示）
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'saving-message';
+  messageDiv.textContent = '画像を取得中...';
+  document.body.appendChild(messageDiv);
 
-    // html2canvasの読み込み
+  // 確実にメッセージが表示されるよう少し待機
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  try {
+    // 以降は既存の処理
     const html2canvas = await loadHtml2Canvas();
 
     // デッキ表示エリアの取得
@@ -2732,12 +2735,12 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 4,
-      logging: true, // デバッグ用にログを有効化
+      scale: 3, // 4から3に変更
+      logging: true,
       allowTaint: true,
       useCORS: true,
       imageTimeout: 0,
-      removeContainer: true // Safariでの問題対策
+      removeContainer: true
     });
 
     // キャプチャ用クラスを削除
@@ -2764,45 +2767,12 @@ async function captureDeck() {
         imageModal.className = 'deck-image-modal';
 
         imageModal.innerHTML = `
-          <div class="deck-image-container">
-            <img 
-              src="${dataUrl}" 
-              alt="${deckName}"
-              style="-webkit-user-select: none;"
-              contextmenu="return false;"
-              loading="lazy"
-              crossorigin="anonymous"
-            >
-            <p class="save-instruction">画像を長押し保存してください</p>
-            <button class="modal-close-button">戻る</button>
-          </div>
-        `;
-
-        // 画像の右クリック/長押しメニューを有効にする
-        const img = imageModal.querySelector('img');
-        if (img) {
-          img.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            return false;
-          });
-
-          // タッチデバイス用のイベント
-          img.addEventListener(
-            'touchstart',
-            (e) => {
-              e.preventDefault();
-            },
-            { passive: false }
-          );
-
-          img.addEventListener(
-            'touchend',
-            (e) => {
-              e.preventDefault();
-            },
-            { passive: false }
-          );
-        }
+  <div class="deck-image-container">
+    <img src="${dataUrl}" alt="${deckName}">
+    <p class="save-instruction">画像を長押し保存してください</p>
+    <button class="modal-close-button">戻る</button>
+  </div>
+`;
 
         // イベントリスナーを追加
         const closeButton = imageModal.querySelector('.modal-close-button');
