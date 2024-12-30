@@ -33,6 +33,11 @@ header {
   justify-content: center;
   align-items: center;
   gap: 20px;
+  padding-right: var(--scrollbar-width, 17px);
+}
+
+body.modal-open .header-content {
+  padding-right: calc(var(--scrollbar-width, 17px) * 2);
 }
 
 header a {
@@ -2770,4 +2775,30 @@ textarea {
 
 .deck-image-container {
   touch-action: pan-x pan-y; /* コンテナ内のスクロールは許可 */
+}
+
+/* スクロールバー分の余白を常に確保 */
+html {
+  overflow-y: scroll;
+}
+
+/* モーダル表示時のスクロールバー調整 */
+body.modal-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 17px); /* スクロールバー幅を動的に設定 */
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+}
+
+/* PCでのみモーダル起動時にスクロールバー拡大 */
+@media (min-width: 768px) {
+  body.modal-open {
+    overflow: hidden;
+    padding-right: var(--scrollbar-width, 17px);
+  }
 }
