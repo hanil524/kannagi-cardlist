@@ -2735,11 +2735,11 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 3, // 4から3に変更
-      logging: true,
+      scale: 2, // 4から3に変更
+      logging: false,
       allowTaint: true,
       useCORS: true,
-      imageTimeout: 0,
+      imageTimeout: 1000, // 画像読み込みタイムアウトを1秒に設定
       removeContainer: true
     });
 
