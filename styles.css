@@ -1497,25 +1497,23 @@ body.modal-open {
 }
 
 .deck-modal {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* 以下を追加 */
-  height: -webkit-fill-available; /* Safari対応 */
-  max-height: 100%; /* 最大高さを制限 */
-  padding-bottom: env(safe-area-inset-bottom); /* SafariのUI考慮 */
-  /* スクロール関連 */
-  overflow: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
-  /* 表示制御 */
   background-color: rgba(0, 0, 0, 0.95);
   z-index: 2000;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* スクロール防止 */
+  touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
 }
 
 /* スマホ表示時の追加制御 */
