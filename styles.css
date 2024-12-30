@@ -2666,3 +2666,79 @@ body {
   text-align: center;
   pointer-events: none; /* メッセージがクリックを妨げないように */
 }
+
+/* デッキ画像モーダル */
+.deck-image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.deck-image-modal.active {
+  opacity: 1;
+}
+
+.deck-image-container {
+  max-width: 90%;
+  max-height: 90%;
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.deck-image-container img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.save-instruction {
+  color: white;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* 閉じるボタンのスタイル */
+.modal-close-button {
+  margin-top: 15px;
+  padding: 8px 20px;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: #5a5a5a;
+}
+
+/* 既存のスタイルを調整 */
+.deck-image-container {
+  max-width: 90%;
+  max-height: 90%;
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.save-instruction {
+  color: white;
+  margin: 10px 0;
+  font-size: 14px;
+}
