@@ -2732,7 +2732,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 3,
+      scale: 4,
       logging: false,
       allowTaint: true,
       useCORS: true,
@@ -2743,25 +2743,18 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // Blobとして画像を生成
-    const blob = await new Promise((resolve) => {
-      canvas.toBlob(resolve, 'image/png');
-    });
-
     // モバイルデバイスの判定
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // モバイルの場合は写真アプリに直接保存
-      try {
-        const file = new File([blob], `${deckName}.png`, { type: 'image/png' });
-        await navigator.share({
-          files: [file]
-        });
-      } catch (error) {
-        console.error('画像の保存に失敗しました:', error);
-        alert('画像の保存に失敗しました。');
-      }
+      // モバイルの場合は写真フォルダに直接保存
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `${deckName}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     } else {
       // PCの場合はダウンロードフォルダに直接保存
       const link = document.createElement('a');
@@ -2769,6 +2762,9 @@ async function captureDeck() {
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
+
+    // 保存完了メッセージを表示
+    deckBuilder.showMessage('デッキ画像を保存しました');
   } catch (error) {
     console.error('デッキの画像保存に失敗しました:', error);
     alert('デッキの画像保存に失敗しました。');
