@@ -1559,15 +1559,13 @@ body.modal-open {
 }
 
 .deck-menu-button {
-  padding: 4px 12px;
+  padding: 4px 8px;
   background-color: #444;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: clamp(11px, 1.5vw, 14px); /* フォントサイズの最小値を縮小 */
-  min-width: clamp(60px, 12vw, 90px); /* 最小幅を縮小 */
   text-align: center;
   font-weight: bold;
   height: clamp(28px, 4vh, 36px); /* 高さも調整 */
@@ -2624,4 +2622,31 @@ body {
   -webkit-overscroll-behavior: none;
   touch-action: pan-x pan-y;
   -webkit-touch-action: pan-x pan-y;
+}
+
+/* デッキ画像保存時のスタイル */
+.deck-display.capturing {
+  background: #2b2b2b;
+  padding: 10px;
+  border-radius: 8px;
+  width: fit-content;
+  margin: auto;
+}
+
+/* キャプチャ中は不要な要素を非表示 */
+.capturing-deck .deck-menu,
+.capturing-deck .deck-back-button {
+  display: none !important;
+}
+
+/* 画像保存ボタンのホバーエフェクト */
+#deck-capture:hover {
+  background-color: #1f1f1f;
+}
+
+/* メニューバーの×ボタンのスタイル調整 */
+#back-to-gallery {
+  font-size: 24px; /* ×のサイズを大きく */
+  line-height: 1; /* 行の高さを調整して中央揃えを維持 */
+  padding: 0 10px; /* ×用に特別な余白設定 */
 }
