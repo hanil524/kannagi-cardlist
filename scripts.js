@@ -2735,7 +2735,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 4, // 4から3に変更
+      scale: 3, // 4から3に変更 iPhoneがなぜか重い
       logging: false,
       allowTaint: true,
       useCORS: true,
