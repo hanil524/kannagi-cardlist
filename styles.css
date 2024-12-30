@@ -2651,7 +2651,7 @@ body {
   padding: 0 10px; /* ×用に特別な余白設定 */
 }
 
-/* 保存中メッセージのスタイル */
+/* 保存中メッセージのスタイル追加 */
 .saving-message {
   position: fixed;
   top: 50%;
@@ -2661,10 +2661,10 @@ body {
   color: white;
   padding: 15px 25px;
   border-radius: 8px;
-  z-index: 10000;
+  z-index: 10001; /* モーダルより上に表示 */
   font-size: 16px;
   text-align: center;
-  pointer-events: none; /* メッセージがクリックを妨げないように */
+  pointer-events: none;
 }
 
 /* デッキ画像モーダル */
