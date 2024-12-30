@@ -2705,12 +2705,13 @@ function loadHtml2Canvas() {
 }
 
 // デッキ画像の保存機能
+// デッキ画像の保存機能
 async function captureDeck() {
   try {
     // 保存中メッセージを表示
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = '画像を取得中...';
+    messageDiv.textContent = 'デッキ画像を取得中...';
     document.body.appendChild(messageDiv);
 
     // html2canvasの読み込み
@@ -2732,7 +2733,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 5, // 長押し保存方式なので4倍でOK
+      scale: 4,
       logging: false,
       allowTaint: true,
       useCORS: true,
@@ -2743,20 +2744,24 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // モバイルデバイスの判定
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    // モバイルデバイスの判定（より厳密に）
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
     if (isMobile) {
       // モバイルの場合は画像モーダルを表示
       const imageModal = document.createElement('div');
       imageModal.className = 'deck-image-modal';
+
+      // DataURLを生成（一度だけ）
+      const dataUrl = canvas.toDataURL('image/png');
+
       imageModal.innerHTML = `
-  <div class="deck-image-container">
-    <img src="${canvas.toDataURL('image/png')}" alt="${deckName}">
-    <p class="save-instruction">画像を長押し保存してください</p>
-    <button class="modal-close-button">戻る</button>
-  </div>
-`;
+        <div class="deck-image-container">
+          <img src="${dataUrl}" alt="${deckName}">
+          <p class="save-instruction">画像を長押し保存してください</p>
+          <button class="modal-close-button">戻る</button>
+        </div>
+      `;
 
       // モーダルクリックで閉じる
       imageModal.addEventListener('click', (e) => {
@@ -2780,7 +2785,7 @@ async function captureDeck() {
     } else {
       // PCの場合はダウンロードフォルダに直接保存
       const link = document.createElement('a');
-      link.download = `${deckName}.png`; // デッキ名を反映
+      link.download = `${deckName}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
