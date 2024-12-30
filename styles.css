@@ -2742,3 +2742,11 @@ textarea {
   -ms-user-select: text;
   user-select: text;
 }
+
+/* モーダル表示時のスクロール禁止用 */
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
