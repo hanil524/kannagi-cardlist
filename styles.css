@@ -1522,6 +1522,9 @@ body.modal-open {
     position: fixed;
     width: 100vw;
     height: 100vh;
+    height: 100dvh; /* これだけを追加 */
+    top: 0;
+    left: 0;
     overscroll-behavior: none;
     -webkit-overscroll-behavior: none;
   }
