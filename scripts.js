@@ -2716,7 +2716,7 @@ async function captureDeck() {
   await new Promise((resolve) => setTimeout(resolve, 100));
 
   try {
-    // 以降は既存の処理
+    // html2canvasの読み込み
     const html2canvas = await loadHtml2Canvas();
 
     // デッキ表示エリアの取得
@@ -2782,12 +2782,14 @@ async function captureDeck() {
         if (closeButton) {
           closeButton.addEventListener('click', () => {
             imageModal.remove();
+            document.body.classList.remove('modal-open');
           });
         }
 
         imageModal.addEventListener('click', (e) => {
           if (e.target === imageModal) {
             imageModal.remove();
+            document.body.classList.remove('modal-open');
           }
         });
 
