@@ -2710,7 +2710,7 @@ async function captureDeck() {
     // 保存中メッセージを表示
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = 'デッキ画像を取得中...';
+    messageDiv.textContent = '画像を取得中...';
     document.body.appendChild(messageDiv);
 
     // html2canvasの読み込み
@@ -2765,11 +2765,44 @@ async function captureDeck() {
 
         imageModal.innerHTML = `
           <div class="deck-image-container">
-            <img src="${dataUrl}" alt="${deckName}">
+            <img 
+              src="${dataUrl}" 
+              alt="${deckName}"
+              style="-webkit-user-select: none;"
+              contextmenu="return false;"
+              loading="lazy"
+              crossorigin="anonymous"
+            >
             <p class="save-instruction">画像を長押し保存してください</p>
             <button class="modal-close-button">戻る</button>
           </div>
         `;
+
+        // 画像の右クリック/長押しメニューを有効にする
+        const img = imageModal.querySelector('img');
+        if (img) {
+          img.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+          });
+
+          // タッチデバイス用のイベント
+          img.addEventListener(
+            'touchstart',
+            (e) => {
+              e.preventDefault();
+            },
+            { passive: false }
+          );
+
+          img.addEventListener(
+            'touchend',
+            (e) => {
+              e.preventDefault();
+            },
+            { passive: false }
+          );
+        }
 
         // イベントリスナーを追加
         const closeButton = imageModal.querySelector('.modal-close-button');
