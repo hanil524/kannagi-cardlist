@@ -8,6 +8,10 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 header {
@@ -2728,17 +2732,42 @@ body {
 
 /* body全体に適用 */
 body {
-  -webkit-user-select: none; /* Safari用 */
-  -moz-user-select: none; /* Firefox用 */
-  -ms-user-select: none; /* IE/Edge用 */
-  user-select: none; /* 標準 */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* 入力欄（input, textarea）では選択を許可 */
 input,
 textarea {
+  user-select: text;
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
-  user-select: text;
+}
+
+/* 画像とリンクのタッチ操作を最適化 */
+.deck-image-link {
+  -webkit-touch-callout: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.deck-captured-image {
+  -webkit-touch-callout: default;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: auto;
+  touch-action: auto;
+}
+
+/* モーダル自体のタッチ操作も最適化 */
+.deck-image-modal {
+  touch-action: none; /* モーダル背景のスクロールを防止 */
+}
+
+.deck-image-container {
+  touch-action: pan-x pan-y; /* コンテナ内のスクロールは許可 */
 }
