@@ -2747,11 +2747,10 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // より確実なモバイル判定とiOS判定を追加
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    // iOSの判定（けむかDB方式）
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
-    if (isMobile) {
+    if (isIOS) {
       try {
         // DataURLを生成（エラーハンドリング付き）
         const dataUrl = await new Promise((resolve, reject) => {
@@ -2763,25 +2762,15 @@ async function captureDeck() {
           }
         });
 
-        // モーダルを生成
+        // モーダルを生成（iOSのみ）
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        // iOSのSafariの場合は長押し保存のみ、それ以外はリンクタップも可能
-        const modalHTML = isIOS
-          ? `
+        // iOSはシンプルな長押し保存のみのモーダル
+        const modalHTML = `
           <div class="deck-image-container">
             <img src="${dataUrl}" alt="${deckName}">
             <p class="save-instruction">画像を長押し保存してください</p>
-            <button class="modal-close-button">戻る</button>
-          </div>
-        `
-          : `
-          <div class="deck-image-container">
-            <a href="${dataUrl}" download="${deckName}.png">
-              <img src="${dataUrl}" alt="${deckName}">
-            </a>
-            <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
             <button class="modal-close-button">戻る</button>
           </div>
         `;
@@ -2816,7 +2805,7 @@ async function captureDeck() {
         alert('画像の表示に失敗しました。');
       }
     } else {
-      // PCの場合は通常のダウンロード
+      // PCとAndroidは直接保存
       const link = document.createElement('a');
       link.download = `${deckName}.png`;
       link.href = canvas.toDataURL('image/png');
