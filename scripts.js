@@ -2710,7 +2710,7 @@ async function captureDeck() {
     // 保存中メッセージを表示
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = 'デッキ画像を取得中...';
+    messageDiv.textContent = '画像を作成中...';
     document.body.appendChild(messageDiv);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -2729,7 +2729,7 @@ async function captureDeck() {
 
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 2,
+      scale: 3,
       logging: false,
       allowTaint: true,
       useCORS: true,
@@ -2741,7 +2741,7 @@ async function captureDeck() {
     modalContent.classList.remove('capturing-deck');
 
     // デバイス判定
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
 
     if (isIOS) {
