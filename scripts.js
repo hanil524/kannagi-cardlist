@@ -2749,6 +2749,7 @@ async function captureDeck() {
 
     // より確実なモバイル判定
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if (isMobile) {
       try {
@@ -2767,15 +2768,23 @@ async function captureDeck() {
         imageModal.className = 'deck-image-modal';
 
         // モーダルのHTML生成部分
-        imageModal.innerHTML = `
-<div class="deck-image-container">
-  <a href="${dataUrl}" download="${deckName}.png">
-    <img src="${dataUrl}" alt="${deckName}">
-  </a>
-  <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
-  <button class="modal-close-button">戻る</button>
-</div>
-`;
+        imageModal.innerHTML = isIOS
+          ? `
+      <div class="deck-image-container">
+        <img src="${dataUrl}" alt="${deckName}">
+        <p class="save-instruction">画像を長押し保存してください</p>
+        <button class="modal-close-button">戻る</button>
+      </div>
+    `
+          : `
+      <div class="deck-image-container">
+        <a href="${dataUrl}" download="${deckName}.png">
+          <img src="${dataUrl}" alt="${deckName}">
+        </a>
+        <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
+        <button class="modal-close-button">戻る</button>
+      </div>
+    `;
 
         // イベントリスナーを追加
         const closeButton = imageModal.querySelector('.modal-close-button');
