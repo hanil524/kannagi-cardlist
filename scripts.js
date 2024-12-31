@@ -2709,7 +2709,7 @@ async function captureDeck() {
   try {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = '画像を処理中...';
+    messageDiv.textContent = '画像を作成中...';
     document.body.appendChild(messageDiv);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -2739,8 +2739,10 @@ async function captureDeck() {
     modalContent.classList.remove('capturing-deck');
 
     // デバイス判定を論理的な順序で行う
-    const isPc = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+    const isPc = !isAndroid && !isIOS;
 
     if (isPc) {
       // PCの場合：直接保存
