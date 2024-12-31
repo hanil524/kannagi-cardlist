@@ -2709,7 +2709,7 @@ async function captureDeck() {
   try {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = '画像を作成中...';
+    messageDiv.textContent = '画像を処理中...';
     document.body.appendChild(messageDiv);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -2738,19 +2738,24 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // Androidかどうかを判定
+    // デバイス判定を論理的な順序で行う
+    const isPc = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
-    // iPhoneかどうかを判定（より確実に）
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (isAndroid || !isIOS) {
-      // Android もしくは PC の場合：直接保存
+    if (isPc) {
+      // PCの場合：直接保存
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = `${deckName}.png`;
+      link.click();
+    } else if (isAndroid) {
+      // Androidの場合：直接保存
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = `${deckName}.png`;
       link.click();
     } else {
-      // iPhone の場合：モーダル表示
+      // iPhoneおよびその他のデバイス：モーダル表示
       const imageModal = document.createElement('div');
       imageModal.className = 'deck-image-modal';
 
