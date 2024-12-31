@@ -2747,9 +2747,17 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // より確実なモバイル判定
+    // より確実なモバイル判定とiOS判定を追加
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) && /Safari/i.test(navigator.userAgent);
+    const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+
+    console.log('Device Detection:', {
+      userAgent: navigator.userAgent,
+      isMobile: isMobile,
+      isIOS: isIOS,
+      isSafari: isSafari
+    });
 
     if (isMobile) {
       try {
@@ -2767,24 +2775,30 @@ async function captureDeck() {
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        // モーダルのHTML生成部分
-        imageModal.innerHTML = isIOS
+        // iOSのSafariの場合は長押し保存のみ、それ以外はリンクタップも可能
+        const isIOSSafari = isIOS && isSafari;
+        console.log('Creating modal for iOS Safari:', isIOSSafari);
+
+        const modalHTML = isIOSSafari
           ? `
-      <div class="deck-image-container">
-        <img src="${dataUrl}" alt="${deckName}">
-        <p class="save-instruction">画像を長押し保存してください</p>
-        <button class="modal-close-button">戻る</button>
-      </div>
-    `
+          <div class="deck-image-container">
+            <img src="${dataUrl}" alt="${deckName}">
+            <p class="save-instruction">画像を長押し保存してください</p>
+            <button class="modal-close-button">戻る</button>
+          </div>
+        `
           : `
-      <div class="deck-image-container">
-        <a href="${dataUrl}" download="${deckName}.png">
-          <img src="${dataUrl}" alt="${deckName}">
-        </a>
-        <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
-        <button class="modal-close-button">戻る</button>
-      </div>
-    `;
+          <div class="deck-image-container">
+            <a href="${dataUrl}" download="${deckName}.png">
+              <img src="${dataUrl}" alt="${deckName}">
+            </a>
+            <p class="save-instruction">画像リンクをタップ、または長押し保存してください</p>
+            <button class="modal-close-button">戻る</button>
+          </div>
+        `;
+
+        console.log('Modal HTML type:', isIOSSafari ? 'iOS Safari version' : 'Other mobile version');
+        imageModal.innerHTML = modalHTML;
 
         // イベントリスナーを追加
         const closeButton = imageModal.querySelector('.modal-close-button');
