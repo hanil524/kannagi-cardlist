@@ -2749,8 +2749,7 @@ async function captureDeck() {
       link.click();
     } else {
       // 既存のモバイル判定（iPhoneとPC用）
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && (/Safari/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
       if (isMobile) {
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
