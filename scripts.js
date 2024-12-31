@@ -2709,7 +2709,7 @@ async function captureDeck() {
   try {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'saving-message';
-    messageDiv.textContent = '画像を作成中...';
+    messageDiv.textContent = '画像を処理中...';
     document.body.appendChild(messageDiv);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -2741,62 +2741,69 @@ async function captureDeck() {
     // デバイス判定を論理的な順序で行う
     const isAndroid = /Android/.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
     const isPc = !isAndroid && !isIOS;
 
+    console.log('User Agent:', navigator.userAgent);
+    console.log('Device checks:', { isPc, isAndroid, isIOS });
+
     if (isPc) {
+      console.log('Executing PC branch');
       // PCの場合：直接保存
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = `${deckName}.png`;
       link.click();
     } else if (isAndroid) {
+      console.log('Executing Android branch');
       // Androidの場合：直接保存
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = `${deckName}.png`;
       link.click();
     } else {
-      // iPhoneおよびその他のデバイス：モーダル表示
+      console.log('Executing iOS/Other branch');
+      // iPhoneの場合：モーダル表示
       const imageModal = document.createElement('div');
       imageModal.className = 'deck-image-modal';
 
-      const dataUrl = await new Promise((resolve, reject) => {
-        try {
-          const url = canvas.toDataURL('image/png');
-          resolve(url);
-        } catch (e) {
-          reject(e);
-        }
-      });
+      try {
+        console.log('Converting canvas to data URL...');
+        const dataUrl = canvas.toDataURL('image/png');
+        console.log('Data URL created successfully');
 
-      imageModal.innerHTML = `
-        <div class="deck-image-container">
-          <img src="${dataUrl}" alt="${deckName}" class="deck-captured-image">
-          <p class="save-instruction">画像を長押し保存してください</p>
-          <button class="modal-close-button">戻る</button>
-        </div>
-      `;
+        imageModal.innerHTML = `
+          <div class="deck-image-container">
+            <img src="${dataUrl}" alt="${deckName}" class="deck-captured-image">
+            <p class="save-instruction">画像を長押し保存してください</p>
+            <button class="modal-close-button">戻る</button>
+          </div>
+        `;
 
-      document.body.classList.add('modal-open');
+        document.body.classList.add('modal-open');
+        document.body.appendChild(imageModal);
 
-      const closeButton = imageModal.querySelector('.modal-close-button');
-      closeButton.addEventListener('click', () => {
-        imageModal.remove();
-        document.body.classList.remove('modal-open');
-      });
+        console.log('Modal appended, waiting for animation frame...');
+        await new Promise((resolve) => requestAnimationFrame(resolve));
 
-      imageModal.addEventListener('click', (e) => {
-        if (e.target === imageModal) {
+        console.log('Adding active class to modal');
+        imageModal.classList.add('active');
+
+        const closeButton = imageModal.querySelector('.modal-close-button');
+        closeButton.addEventListener('click', () => {
           imageModal.remove();
           document.body.classList.remove('modal-open');
-        }
-      });
+        });
 
-      document.body.appendChild(imageModal);
-      requestAnimationFrame(() => {
-        imageModal.classList.add('active');
-      });
+        imageModal.addEventListener('click', (e) => {
+          if (e.target === imageModal) {
+            imageModal.remove();
+            document.body.classList.remove('modal-open');
+          }
+        });
+      } catch (e) {
+        console.error('Error in modal creation:', e);
+        throw e;
+      }
     }
   } catch (error) {
     console.error('デッキの画像生成に失敗しました:', error);
