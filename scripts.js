@@ -2740,8 +2740,7 @@ async function captureDeck() {
       allowTaint: true,
       useCORS: true,
       imageTimeout: 0, // タイムアウトを無効化して処理を高速化
-      removeContainer: true,
-      foreignObjectRendering: true // 高速なレンダリングを有効化
+      removeContainer: true
     });
 
     // キャプチャ用クラスを削除
