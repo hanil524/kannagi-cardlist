@@ -2739,15 +2739,16 @@ async function captureDeck() {
       logging: false,
       allowTaint: true,
       useCORS: true,
-      imageTimeout: 1000, // 画像読み込みタイムアウトを1秒に設定
-      removeContainer: true
+      imageTimeout: 0, // タイムアウトを無効化して処理を高速化
+      removeContainer: true,
+      foreignObjectRendering: true // 高速なレンダリングを有効化
     });
 
     // キャプチャ用クラスを削除
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOSの判定（けむかDB方式）
+    // iOSの判定（新しい方式）
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
     if (isIOS) {
