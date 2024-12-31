@@ -2749,15 +2749,7 @@ async function captureDeck() {
 
     // より確実なモバイル判定とiOS判定を追加
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) && /Safari/i.test(navigator.userAgent);
-    const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
-
-    console.log('Device Detection:', {
-      userAgent: navigator.userAgent,
-      isMobile: isMobile,
-      isIOS: isIOS,
-      isSafari: isSafari
-    });
+    const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
     if (isMobile) {
       try {
@@ -2776,10 +2768,7 @@ async function captureDeck() {
         imageModal.className = 'deck-image-modal';
 
         // iOSのSafariの場合は長押し保存のみ、それ以外はリンクタップも可能
-        const isIOSSafari = isIOS && isSafari;
-        console.log('Creating modal for iOS Safari:', isIOSSafari);
-
-        const modalHTML = isIOSSafari
+        const modalHTML = isIOS
           ? `
           <div class="deck-image-container">
             <img src="${dataUrl}" alt="${deckName}">
@@ -2797,7 +2786,6 @@ async function captureDeck() {
           </div>
         `;
 
-        console.log('Modal HTML type:', isIOSSafari ? 'iOS Safari version' : 'Other mobile version');
         imageModal.innerHTML = modalHTML;
 
         // イベントリスナーを追加
@@ -2822,7 +2810,7 @@ async function captureDeck() {
         // 少し遅延してからフェードイン（Safari対策）
         setTimeout(() => {
           imageModal.classList.add('active');
-        }, 50);
+        }, 200);
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
