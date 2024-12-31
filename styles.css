@@ -884,6 +884,7 @@ button[onclick='resetFilters()']:active {
   display: none;
   z-index: 2500; /* デッキモーダル(2000)より大きい値 */
   overflow: hidden;
+  touch-action: none; /* タッチスクロールを無効化 */
 }
 
 /* モーダルコンテンツのコンテナ */
@@ -900,6 +901,7 @@ button[onclick='resetFilters()']:active {
   /* Safari UI要素の高さを考慮 */
   height: -webkit-fill-available;
   padding: 20px;
+  overflow: hidden; /* スクロールを防止 */
 }
 
 /* モーダル内の画像設定 */
@@ -915,6 +917,7 @@ button[onclick='resetFilters()']:active {
   border: none;
   border-radius: 16px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
+  touch-action: none; /* タッチスクロールを無効化 */
 }
 
 /* iPhoneのSafari向け特別対応 */
