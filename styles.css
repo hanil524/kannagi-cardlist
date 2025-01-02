@@ -1433,6 +1433,17 @@ body.modal-open {
   box-sizing: border-box; /* パディングを含めたwidth計算 */
 }
 
+/* 更新日のリンクスタイル */
+.update-info a {
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.update-info a:hover {
+  opacity: 0.8;
+}
+
 @media (max-width: 768px) {
   .update-info {
     text-align: right;
@@ -1947,13 +1958,15 @@ body.modal-open {
   margin: auto;
 }
 
+/* 零探しの結果表示 */
 .zero-search-result {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+  gap: 6px;
   margin-bottom: 20px;
 }
 
+/* 零探し下のボタン */
 .zero-search-buttons {
   display: flex;
   justify-content: center;
@@ -2804,4 +2817,15 @@ body.modal-open {
     overflow: hidden;
     padding-right: var(--scrollbar-width, 17px);
   }
+}
+
+/* 「零探し」選択されたカードのエフェクト */
+.deck-card.selected {
+  box-shadow: 0 0 15px 3px rgb(255, 73, 73);
+}
+
+/* 選択可能なカードにホバーエフェクト */
+.deck-card.selectable:hover {
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+  cursor: pointer;
 }
