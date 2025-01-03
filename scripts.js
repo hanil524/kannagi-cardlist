@@ -2752,7 +2752,6 @@ async function captureDeck() {
 
     if (isIOS) {
       try {
-        // Blobを使用した実装
         const blob = await new Promise((resolve) => {
           canvas.toBlob(
             (blob) => {
@@ -2760,52 +2759,44 @@ async function captureDeck() {
             },
             'image/jpeg',
             1.0
-          ); // JPEGフォーマットを使用
+          );
         });
 
         const imageUrl = URL.createObjectURL(blob);
 
-        // モーダルを生成
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
         const modalHTML = `
           <div class="deck-image-container">
-            <img src="${imageUrl}" alt="${deckName}">
+            <img src="${imageUrl}" alt="デッキ画像">
             <p class="save-instruction">画像を長押し保存してください</p>
-            <button class="modal-close-button">戻る</button>
+            <button class="modal-close-button">閉じる</button>
           </div>
         `;
 
         imageModal.innerHTML = modalHTML;
 
-        // イベントリスナーを追加
         const closeButton = imageModal.querySelector('.modal-close-button');
-        if (closeButton) {
-          closeButton.addEventListener('click', () => {
+        closeButton.addEventListener('click', () => {
+          imageModal.classList.remove('active');
+          setTimeout(() => {
             imageModal.remove();
             URL.revokeObjectURL(imageUrl);
-            document.body.classList.remove('modal-open');
-          });
-        }
-
-        imageModal.addEventListener('click', (e) => {
-          if (e.target === imageModal) {
-            imageModal.remove();
-            URL.revokeObjectURL(imageUrl);
-            document.body.classList.remove('modal-open');
-          }
+          }, 300);
         });
 
-        // DOMに追加して即座に表示
         document.body.appendChild(imageModal);
-        imageModal.classList.add('active');
+
+        // フェードイン
+        requestAnimationFrame(() => {
+          imageModal.classList.add('active');
+        });
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
       }
     } else {
-      // PCとAndroidは直接保存
       const link = document.createElement('a');
       link.download = `${deckName}.png`;
       link.href = canvas.toDataURL('image/png');
