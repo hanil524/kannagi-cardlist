@@ -2752,24 +2752,26 @@ async function captureDeck() {
 
     if (isIOS) {
       try {
-        // DataURLを生成（エラーハンドリング付き）
-        const dataUrl = await new Promise((resolve, reject) => {
-          try {
-            const url = canvas.toDataURL('image/png');
-            resolve(url);
-          } catch (e) {
-            reject(e);
-          }
+        // Blobを使用した実装
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob(
+            (blob) => {
+              resolve(blob);
+            },
+            'image/jpeg',
+            1.0
+          ); // JPEGフォーマットを使用
         });
 
-        // モーダルを生成（iOSのみ）
+        const imageUrl = URL.createObjectURL(blob);
+
+        // モーダルを生成
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        // iOSはシンプルな長押し保存のみのモーダル
         const modalHTML = `
           <div class="deck-image-container">
-            <img src="${dataUrl}" alt="${deckName}">
+            <img src="${imageUrl}" alt="${deckName}">
             <p class="save-instruction">画像を長押し保存してください</p>
             <button class="modal-close-button">戻る</button>
           </div>
@@ -2782,6 +2784,7 @@ async function captureDeck() {
         if (closeButton) {
           closeButton.addEventListener('click', () => {
             imageModal.remove();
+            URL.revokeObjectURL(imageUrl);
             document.body.classList.remove('modal-open');
           });
         }
@@ -2789,32 +2792,14 @@ async function captureDeck() {
         imageModal.addEventListener('click', (e) => {
           if (e.target === imageModal) {
             imageModal.remove();
+            URL.revokeObjectURL(imageUrl);
             document.body.classList.remove('modal-open');
           }
         });
 
-        // DOMに追加
+        // DOMに追加して即座に表示
         document.body.appendChild(imageModal);
-
-        // フェードインとタッチイベントの制御
-        requestAnimationFrame(() => {
-          imageModal.classList.add('active');
-
-          // モーダルが表示された直後にタッチイベントを発火
-          const imageElement = imageModal.querySelector('img');
-          if (imageElement) {
-            try {
-              const touchEvent = new TouchEvent('touchstart', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-              });
-              imageElement.dispatchEvent(touchEvent);
-            } catch (e) {
-              console.warn('タッチイベントの発火に失敗しました:', e);
-            }
-          }
-        });
+        imageModal.classList.add('active');
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
