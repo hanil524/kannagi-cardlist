@@ -2706,15 +2706,6 @@ function loadHtml2Canvas() {
 
 // デッキ画像の保存機能
 async function captureDeck() {
-  // 保存中メッセージを表示（最初に表示）
-  const messageDiv = document.createElement('div');
-  messageDiv.className = 'saving-message';
-  messageDiv.textContent = '画像を作成中...';
-  document.body.appendChild(messageDiv);
-
-  // 確実にメッセージが表示されるよう少し待機
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
   try {
     // html2canvasの読み込み
     const html2canvas = await loadHtml2Canvas();
@@ -2739,7 +2730,7 @@ async function captureDeck() {
       logging: false,
       allowTaint: true,
       useCORS: true,
-      imageTimeout: 0, // タイムアウトを無効化して処理を高速化
+      imageTimeout: 0,
       removeContainer: true
     });
 
@@ -2747,56 +2738,52 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOSの判定（新しい方式）
+    // iOSの判定
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
     if (isIOS) {
-      try {
-        const blob = await new Promise((resolve) => {
-          canvas.toBlob(
-            (blob) => {
-              resolve(blob);
-            },
-            'image/jpeg',
-            1.0
-          );
-        });
+      // toBlobを使用して画像を生成
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            throw new Error('画像の生成に失敗しました');
+          }
 
-        const imageUrl = URL.createObjectURL(blob);
+          const url = URL.createObjectURL(blob);
 
-        const imageModal = document.createElement('div');
-        imageModal.className = 'deck-image-modal';
+          // モーダルを生成
+          const imageModal = document.createElement('div');
+          imageModal.className = 'deck-image-modal';
 
-        const modalHTML = `
+          imageModal.innerHTML = `
           <div class="deck-image-container">
-            <img src="${imageUrl}" alt="デッキ画像">
+            <img src="${url}" alt="${deckName}">
             <p class="save-instruction">画像を長押し保存してください</p>
             <button class="modal-close-button">閉じる</button>
           </div>
         `;
 
-        imageModal.innerHTML = modalHTML;
+          // クリーンアップ用のイベントリスナー
+          const closeButton = imageModal.querySelector('.modal-close-button');
+          closeButton.addEventListener('click', () => {
+            imageModal.classList.remove('active');
+            setTimeout(() => {
+              imageModal.remove();
+              URL.revokeObjectURL(url);
+            }, 300);
+          });
 
-        const closeButton = imageModal.querySelector('.modal-close-button');
-        closeButton.addEventListener('click', () => {
-          imageModal.classList.remove('active');
-          setTimeout(() => {
-            imageModal.remove();
-            URL.revokeObjectURL(imageUrl);
-          }, 300);
-        });
-
-        document.body.appendChild(imageModal);
-
-        // フェードイン
-        requestAnimationFrame(() => {
-          imageModal.classList.add('active');
-        });
-      } catch (error) {
-        console.error('モーダル表示エラー:', error);
-        alert('画像の表示に失敗しました。');
-      }
+          // DOMに追加して即座に表示
+          document.body.appendChild(imageModal);
+          requestAnimationFrame(() => {
+            imageModal.classList.add('active');
+          });
+        },
+        'image/jpeg',
+        1.0
+      ); // JPEG形式、最高品質で出力
     } else {
+      // PCとAndroidは直接保存
       const link = document.createElement('a');
       link.download = `${deckName}.png`;
       link.href = canvas.toDataURL('image/png');
