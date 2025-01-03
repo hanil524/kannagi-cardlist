@@ -2796,32 +2796,25 @@ async function captureDeck() {
         // DOMに追加
         document.body.appendChild(imageModal);
 
-        // フェードイン（Safari対策）とその後のタッチイベント発火
-        setTimeout(() => {
+        // フェードインとタッチイベントの制御
+        requestAnimationFrame(() => {
           imageModal.classList.add('active');
 
-          // モーダルのフェードイン完了後にタッチイベントを発火
-          setTimeout(() => {
-            const imageElement = imageModal.querySelector('img');
-            if (imageElement) {
-              try {
-                const touchEvent = new TouchEvent('touchstart', {
-                  bubbles: true,
-                  cancelable: true,
-                  view: window
-                });
-                imageElement.dispatchEvent(touchEvent);
-              } catch (e) {
-                console.warn('タッチイベントの発火に失敗しました:', e);
-              }
+          // モーダルが表示された直後にタッチイベントを発火
+          const imageElement = imageModal.querySelector('img');
+          if (imageElement) {
+            try {
+              const touchEvent = new TouchEvent('touchstart', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              });
+              imageElement.dispatchEvent(touchEvent);
+            } catch (e) {
+              console.warn('タッチイベントの発火に失敗しました:', e);
             }
-          }, 300); // フェードイン完了後（200ms + 追加の100ms）
-        }, 200);
-
-        // 少し遅延してからフェードイン（Safari対策）
-        setTimeout(() => {
-          imageModal.classList.add('active');
-        }, 200);
+          }
+        });
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
