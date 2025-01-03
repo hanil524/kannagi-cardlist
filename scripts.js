@@ -2796,6 +2796,23 @@ async function captureDeck() {
         // DOMに追加
         document.body.appendChild(imageModal);
 
+        // タッチイベントを発火（iOSの長押し保存問題を回避）
+        const imageElement = imageModal.querySelector('img');
+        if (imageElement) {
+          setTimeout(() => {
+            try {
+              const touchEvent = new TouchEvent('touchstart', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+              });
+              imageElement.dispatchEvent(touchEvent);
+            } catch (e) {
+              console.warn('タッチイベントの発火に失敗しました:', e);
+            }
+          }, 100);
+        }
+
         // 少し遅延してからフェードイン（Safari対策）
         setTimeout(() => {
           imageModal.classList.add('active');
