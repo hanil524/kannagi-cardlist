@@ -2735,7 +2735,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 3,
+      scale: 4,
       logging: false,
       allowTaint: true,
       useCORS: true,
