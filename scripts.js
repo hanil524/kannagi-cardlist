@@ -1813,6 +1813,9 @@ const deckBuilder = {
     const display = document.getElementById('deck-display');
     if (!display) return;
 
+    // アニメーション中のちらつきを防ぐ
+    display.style.willChange = 'contents';
+
     // 既存の内容をクリア
     display.innerHTML = '';
 
@@ -2134,6 +2137,11 @@ const deckBuilder = {
 
   // カード分布モーダルを表示する関数
   showDistributionModal() {
+    // モーダル表示時にスクロール禁止
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed'; // より確実なスクロール禁止
+    document.body.style.width = '100%';
+
     const modal = document.createElement('div');
     modal.className = 'distribution-modal';
 
@@ -2176,30 +2184,39 @@ const deckBuilder = {
     closeButton.innerHTML = '×';
     closeButton.onclick = (e) => {
       e.stopPropagation();
-      modal.classList.remove('active');
-      setTimeout(() => {
-        modal.remove();
-        document.body.style.overflow = '';
-      }, 300);
+      closeModal();
     };
     content.appendChild(closeButton);
 
     modal.appendChild(content);
     document.body.appendChild(modal);
 
-    document.body.style.overflow = 'hidden';
-
     requestAnimationFrame(() => {
       modal.classList.add('active');
     });
 
+    // モーダルを閉じる処理
+    const closeModal = () => {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modal.remove();
+        // スクロール禁止を解除
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }, 300);
+    };
+
+    // ×ボタンのクリックイベント
+    closeButton.onclick = (e) => {
+      e.stopPropagation();
+      closeModal();
+    };
+
+    // モーダル外クリックイベント
     modal.onclick = (e) => {
       if (e.target === modal) {
-        modal.classList.remove('active');
-        setTimeout(() => {
-          modal.remove();
-          document.body.style.overflow = '';
-        }, 300);
+        closeModal();
       }
     };
   },
