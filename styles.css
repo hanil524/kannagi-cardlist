@@ -3013,6 +3013,7 @@ body.modal-open {
   cursor: pointer;
   transition: background-color 0.2s ease;
   z-index: 1001;
+
   /* iPhoneでの丸潰れ防止 */
   -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
   -moz-appearance: none;
@@ -3021,6 +3022,9 @@ body.modal-open {
   min-width: 30px; /* 最小幅を設定 */
   min-height: 30px; /* 最小高さを設定 */
   aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
+
+  /* ×マークの位置調整 */
+  line-height: 1;
 }
 
 /* スマホ表示時の調整 */
