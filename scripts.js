@@ -1856,6 +1856,13 @@ const deckBuilder = {
     this.resizeDisplay();
     this.updateDeckCount();
     updateCardCountBadges();
+
+    // デッキカウンターをボタン化
+    const deckCounter = document.querySelector('.deck-counter');
+    if (deckCounter) {
+      deckCounter.classList.add('deck-counter-button');
+      deckCounter.onclick = () => this.showDistributionModal();
+    }
   },
 
   // createDeckCard関数
@@ -2019,6 +2026,10 @@ const deckBuilder = {
       } else {
         deckCounter.classList.remove('warning');
       }
+
+      // ここでもクリックイベントを設定（念のため）
+      deckCounter.classList.add('deck-counter-button');
+      deckCounter.onclick = () => this.showDistributionModal();
     }
 
     const deckButton = document.getElementById('deckButton');
@@ -2119,6 +2130,236 @@ const deckBuilder = {
         this.updateDeckCount();
       }
     }
+  },
+
+  // カード分布モーダルを表示する関数
+  showDistributionModal() {
+    const modal = document.createElement('div');
+    modal.className = 'distribution-modal';
+
+    const content = document.createElement('div');
+    content.className = 'distribution-content';
+
+    // コスト分布エリア
+    const costContent = this.createCostDistribution();
+    content.appendChild(costContent);
+
+    // 季節分布エリア
+    const seasonContainer = document.createElement('div');
+    seasonContainer.className = 'season-distribution';
+
+    const seasonTitle = document.createElement('div');
+    seasonTitle.className = 'area-title';
+    seasonTitle.textContent = '季節';
+    seasonContainer.appendChild(seasonTitle);
+
+    const seasonContent = this.createSeasonDistribution();
+    seasonContainer.appendChild(seasonContent);
+    content.appendChild(seasonContainer);
+
+    // 札種類分布エリア
+    const typeContainer = document.createElement('div');
+    typeContainer.className = 'type-distribution';
+
+    const typeTitle = document.createElement('div');
+    typeTitle.className = 'area-title';
+    typeTitle.textContent = '札種類';
+    typeContainer.appendChild(typeTitle);
+
+    const typeContent = this.createTypeDistribution();
+    typeContainer.appendChild(typeContent);
+    content.appendChild(typeContainer);
+
+    // 閉じるボタン
+    const closeButton = document.createElement('button');
+    closeButton.className = 'distribution-close';
+    closeButton.innerHTML = '×';
+    closeButton.onclick = (e) => {
+      e.stopPropagation();
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+      }, 300);
+    };
+    content.appendChild(closeButton);
+
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    document.body.style.overflow = 'hidden';
+
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+    });
+
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+          modal.remove();
+          document.body.style.overflow = '';
+        }, 300);
+      }
+    };
+  },
+
+  // コスト分布グラフの作成
+  createCostDistribution() {
+    const costContainer = document.createElement('div');
+    costContainer.className = 'cost-distribution';
+
+    // コストごとの枚数をカウント
+    const costCounts = new Array(11).fill(0);
+    this.deck.forEach((card) => {
+      const cost = parseInt(card.dataset.cost);
+      if (cost >= 10) {
+        costCounts[10]++;
+      } else {
+        costCounts[cost]++;
+      }
+    });
+
+    // 最大枚数を取得
+    const maxCount = Math.max(...costCounts);
+
+    // グラフの作成
+    const graphContainer = document.createElement('div');
+    graphContainer.className = 'cost-graph-container';
+
+    costCounts.forEach((count, index) => {
+      const bar = document.createElement('div');
+      bar.className = 'cost-bar';
+
+      const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
+      bar.style.height = `${height}%`;
+      bar.setAttribute('data-count', count);
+
+      // 枚数表示を追加
+      const countDisplay = document.createElement('div');
+      countDisplay.className = 'cost-bar-count';
+      countDisplay.textContent = count > 0 ? count : '';
+      bar.appendChild(countDisplay);
+
+      const label = document.createElement('div');
+      label.className = 'cost-label';
+      label.setAttribute('data-cost', index === 10 ? '10↑' : index);
+
+      const barWrapper = document.createElement('div');
+      barWrapper.className = 'cost-bar-wrapper';
+      barWrapper.appendChild(bar);
+      barWrapper.appendChild(label);
+
+      graphContainer.appendChild(barWrapper);
+    });
+
+    costContainer.appendChild(graphContainer);
+    return costContainer;
+  },
+
+  // 季節分布の作成
+  createSeasonDistribution() {
+    const seasonContent = document.createElement('div');
+    seasonContent.className = 'season-content'; // 専用クラスに変更
+
+    // 季節ごとの枚数をカウント
+    const seasonCounts = {};
+    const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
+
+    this.deck.forEach((card) => {
+      const seasons = card.dataset.season.split(' ');
+      seasons.forEach((season) => {
+        seasonCounts[season] = (seasonCounts[season] || 0) + 1;
+      });
+    });
+
+    // 季節の表示（2列ずつ）
+    const seasonRows = document.createElement('div');
+    seasonRows.className = 'season-rows';
+
+    let currentRow = document.createElement('div');
+    currentRow.className = 'season-row';
+    let count = 0;
+
+    seasonOrder.forEach((season) => {
+      if (seasonCounts[season]) {
+        // 季節の表示テキストを作成
+        const seasonText = document.createElement('div');
+        seasonText.className = 'season-text';
+        // 混化の場合は専用のクラスを追加
+        if (season === '混化') {
+          seasonText.classList.add('kanji-adjust');
+        }
+        seasonText.textContent = `${season}：${seasonCounts[season]}枚`;
+
+        currentRow.appendChild(seasonText);
+        count++;
+
+        if (count === 2) {
+          seasonRows.appendChild(currentRow);
+          currentRow = document.createElement('div');
+          currentRow.className = 'season-row';
+          count = 0;
+        }
+      }
+    });
+
+    // 残りの要素があれば追加
+    if (count > 0) {
+      seasonRows.appendChild(currentRow);
+    }
+
+    seasonContent.appendChild(seasonRows);
+    return seasonContent;
+  },
+
+  // 札種類分布の作成
+  createTypeDistribution() {
+    const typeContent = document.createElement('div');
+    typeContent.className = 'type-content'; // 専用クラスに変更
+
+    // 札種類ごとの枚数をカウント
+    const typeCounts = {};
+    const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+
+    this.deck.forEach((card) => {
+      const type = card.dataset.type;
+      typeCounts[type] = (typeCounts[type] || 0) + 1;
+    });
+
+    // 札種類の表示（2列ずつ）
+    const typeRows = document.createElement('div');
+    typeRows.className = 'type-rows';
+
+    let currentRow = document.createElement('div');
+    currentRow.className = 'type-row';
+    let count = 0;
+
+    typeOrder.forEach((type) => {
+      if (typeCounts[type]) {
+        const typeText = document.createElement('div');
+        typeText.className = 'type-text';
+        typeText.textContent = `${type}：${typeCounts[type]}枚`;
+
+        currentRow.appendChild(typeText);
+        count++;
+
+        if (count === 2) {
+          typeRows.appendChild(currentRow);
+          currentRow = document.createElement('div');
+          currentRow.className = 'type-row';
+          count = 0;
+        }
+      }
+    });
+
+    // 残りの要素があれば追加
+    if (count > 0) {
+      typeRows.appendChild(currentRow);
+    }
+
+    typeContent.appendChild(typeRows);
+    return typeContent;
   }
 };
 
@@ -2735,7 +2976,7 @@ async function captureDeck() {
     // html2canvasでキャプチャ
     const canvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
-      scale: 4,
+      scale: 3,
       logging: false,
       allowTaint: true,
       useCORS: true,
