@@ -2960,6 +2960,14 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* iOS対策を追加 */
+  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0; /* パディングをリセット */
+  min-width: 20px; /* 最小幅を設定 */
+  min-height: 20px; /* 最小高さを設定 */
+  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
 }
 
 /* 枚数が1以上の場合のみ表示 */
@@ -3006,10 +3014,13 @@ body.modal-open {
   transition: background-color 0.2s ease;
   z-index: 1001;
   /* iPhoneでの丸潰れ防止 */
-  -webkit-appearance: none;
-  appearance: none; /* 標準プロパティを追加 */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0; /* パディングをリセット */
+  min-width: 30px; /* 最小幅を設定 */
+  min-height: 30px; /* 最小高さを設定 */
+  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
 }
 
 /* スマホ表示時の調整 */
