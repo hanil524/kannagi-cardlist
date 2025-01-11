@@ -3004,7 +3004,12 @@ body.modal-open {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  z-index: 1001; /* より前面に表示 */
+  z-index: 1001;
+  /* iPhoneでの丸潰れ防止 */
+  -webkit-appearance: none;
+  appearance: none; /* 標準プロパティを追加 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* スマホ表示時の調整 */
