@@ -2849,7 +2849,7 @@ body.modal-open {
   text-orientation: upright;
   color: white;
   font-size: 13px;
-  padding: 10px 2px;
+  padding: 10px 1px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
@@ -3067,11 +3067,6 @@ body.modal-open {
   background: #666;
 }
 
-/* 混化の位置調整 */
-.kanji-adjust {
-  margin-left: -1em; /* 漢字1文字分左にずらす */
-}
-
 /* 各エリアのコンテンツ部分 */
 .area-content {
   flex: 1;
@@ -3130,7 +3125,6 @@ body.modal-open {
 /* 中段のエリアタイトル調整 */
 .middle-section .area-title {
   position: absolute;
-  left: 5px;
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
