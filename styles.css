@@ -2819,7 +2819,7 @@ body.modal-open {
   }
 }
 
-/* カード分布モーダル */
+/* ★カード分布モーダル */
 .distribution-modal {
   position: fixed;
   top: 0;
@@ -2839,6 +2839,28 @@ body.modal-open {
   opacity: 1;
 }
 
+.area-title {
+  width: 30px; /* タイトル用の固定幅 */
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  color: white;
+  font-size: 14px;
+  padding: 10px 2px;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  height: auto;
+  letter-spacing: 3px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
 .distribution-content {
   background: #2a2a2a;
   padding: 20px 30px; /* 左右の余白を追加 */
@@ -2853,44 +2875,64 @@ body.modal-open {
   box-sizing: border-box; /* パディングを幅に含める */
 }
 
-/* スマホ表示時の調整 */
-@media (max-width: 768px) {
-  .distribution-content {
-    padding: 15px 20px; /* パディングを少し縮小 */
-    width: 95%; /* 幅を広げる */
-  }
-}
-
 /* 各セクションの共通スタイル */
 .cost-distribution,
 .season-distribution,
-.type-distribution {
-  background: rgba(255, 255, 255, 0.05); /* 薄い灰色の背景 */
+.type-distribution,
+.attribute-distribution {
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   padding: 15px;
-  min-height: 150px; /* 最小の高さを確保 */
+  min-height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 中央揃え */
-  position: relative; /* タイトル配置のため */
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* エリアタイトルのスタイル */
-.area-title {
-  position: absolute;
-  left: 1px;
-  top: 0;
-  bottom: 0;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  color: white;
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.1); /* 薄い背景色 */
-  padding: 5px 2px;
+/* 各セクションのコンテンツ */
+.season-rows,
+.type-rows,
+.attribute-rows {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 4px;
+  gap: 8px;
+  width: calc(100% - 35px);
+  margin-left: 35px;
+}
+
+/* テキスト表示のスタイル */
+.season-text,
+.type-text,
+.attribute-text {
+  font-size: 14px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* 3列のグリッド */
+  align-items: center;
+  white-space: nowrap;
+  color: white;
+  width: 100%;
+  font-weight: bold;
+}
+
+/* data属性を使用して中央揃えを実現 */
+.season-text::before,
+.type-text::before,
+.attribute-text::before {
+  content: attr(data-name);
+  text-align: right;
+  margin-right: 4px; /* ：との間隔 */
+}
+
+.season-text::after,
+.type-text::after,
+.attribute-text::after {
+  content: attr(data-count);
+  text-align: left;
+  margin-left: -4px; /* ：との間隔を調整 */
 }
 
 /* コスト分布エリアはタイトル不要 */
@@ -2983,16 +3025,10 @@ body.modal-open {
 .season-distribution,
 .type-distribution {
   color: white;
-  padding: 10px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-weight: bold;
-}
-
-.season-row,
-.type-row {
-  flex: 1;
+  padding: 15px;
 }
 
 /* ×ボタンのスタイル */
@@ -3027,31 +3063,6 @@ body.modal-open {
   line-height: 1;
 }
 
-/* スマホ表示時の調整 */
-@media (max-width: 768px) {
-  .distribution-content {
-    padding: 15px;
-    width: calc(100% - 30px);
-    gap: 10px;
-  }
-
-  .cost-distribution,
-  .season-distribution,
-  .type-distribution {
-    padding: 10px;
-    min-height: 120px; /* スマホでは少し低く */
-  }
-
-  .season-row,
-  .type-row {
-    gap: 15px; /* スマホでの間隔をさらに縮小 */
-  }
-
-  .cost-graph-container {
-    gap: 1px; /* コストバーの間隔をさらに縮小 */
-  }
-}
-
 .distribution-close:hover {
   background: #666;
 }
@@ -3059,18 +3070,6 @@ body.modal-open {
 /* 混化の位置調整 */
 .kanji-adjust {
   margin-left: -1em; /* 漢字1文字分左にずらす */
-}
-
-/* エリアタイトルのスタイル */
-.area-title {
-  writing-mode: vertical-rl; /* 縦書き */
-  text-orientation: upright; /* 文字を縦向きに */
-  color: white;
-  font-size: 14px;
-  padding: 0 9px;
-  display: flex;
-  align-items: center;
-  letter-spacing: 3px;
 }
 
 /* 各エリアのコンテンツ部分 */
@@ -3110,4 +3109,92 @@ body.modal-open {
 
 .deck-header button:disabled:hover {
   transform: none;
+}
+
+/* 中段のコンテナ */
+.middle-section {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+/* 中段コンテナ内の季節と札種類で別々に指定 */
+.middle-section .season-distribution,
+.middle-section .type-distribution {
+  flex: 1;
+  min-height: 120px;
+  width: calc(50% - 10px);
+  position: relative;
+}
+
+/* 中段のエリアタイトル調整 */
+.middle-section .area-title {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+/* 中段のコンテンツエリア */
+.middle-section .season-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 35px);
+  margin-left: 40px;
+}
+
+/* 札種類のコンテンツエリアを明示的に指定 */
+.middle-section .type-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 35px);
+  margin-left: 50px; /* 右側だからか、謎の微調整が必要 */
+}
+
+/* スマホ表示時の調整 */
+@media (max-width: 768px) {
+  .distribution-content {
+    padding: 15px;
+    width: calc(100% - 30px);
+    gap: 10px;
+  }
+
+  .middle-section {
+    flex-direction: row; /* columnからrowに変更 */
+    gap: 10px; /* ギャップを少し縮小 */
+  }
+
+  .middle-section .season-distribution,
+  .middle-section .type-distribution {
+    width: calc(50% - 5px); /* ギャップを考慮した幅に調整 */
+    min-height: 100px; /* スマホでは高さを少し小さく */
+  }
+
+  .cost-graph-container {
+    gap: 1px;
+  }
+
+  .area-title {
+    width: 24px; /* スマホではタイトル幅を小さく */
+  }
+
+  .season-rows,
+  .type-rows,
+  .attribute-rows {
+    width: calc(100% - 34px); /* タイトル幅(24px)と余白(10px)を引く */
+    margin-left: 34px; /* タイトル幅(24px)と余白(10px)分ずらす */
+  }
+
+  .season-text,
+  .type-text,
+  .attribute-text {
+    font-size: 13px;
+    min-width: 100px;
+  }
 }
