@@ -2840,16 +2840,16 @@ body.modal-open {
 }
 
 .area-title {
-  width: 25px; /* タイトル用の固定幅 */
+  width: 25px;
   position: absolute;
-  left: 5px;
+  left: 8px; /* 左からの距離を微調整 */
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: white;
-  font-size: 13px;
-  padding: 10px 1px;
+  font-size: 14px;
+  padding: 8px 2px; /* 左右対称にする */
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
@@ -2857,9 +2857,15 @@ body.modal-open {
   letter-spacing: 4px;
   z-index: 1;
   display: flex;
-  justify-content: center; /* 水平方向中央 */
-  align-items: center; /* 垂直方向中央 */
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
+  box-sizing: border-box;
+}
+
+/* 札種類のタイトル位置調整 */
+.middle-section .type-distribution .area-title {
+  left: 8px; /* 左の位置を統一 */
 }
 
 .distribution-content {
@@ -2891,6 +2897,7 @@ body.modal-open {
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  min-height: 130px; /* 全体の高さを縮小 */
 }
 
 /* 各セクションのコンテンツ */
@@ -2900,7 +2907,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 1px;
   width: calc(100% - 35px);
   margin-left: 35px;
 }
@@ -3136,7 +3143,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   width: calc(100% - 35px);
   margin-left: 40px;
 }
@@ -3146,7 +3153,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   width: calc(100% - 35px);
   margin-left: 50px; /* 右側だからか、謎の微調整が必要 */
 }
@@ -3156,12 +3163,12 @@ body.modal-open {
   .distribution-content {
     padding: 15px;
     width: calc(100% - 30px);
-    gap: 10px;
+    gap: 10px; /* モーダル同士の間隔 */
   }
 
   .middle-section {
     flex-direction: row; /* columnからrowに変更 */
-    gap: 10px; /* ギャップを少し縮小 */
+    gap: 10px; /* モーダル同士の間隔 */
   }
 
   .middle-section .season-distribution,
@@ -3172,10 +3179,6 @@ body.modal-open {
 
   .cost-graph-container {
     gap: 1px;
-  }
-
-  .area-title {
-    width: 24px; /* スマホではタイトル幅を小さく */
   }
 
   .season-rows,
@@ -3190,5 +3193,71 @@ body.modal-open {
   .attribute-text {
     font-size: 13px;
     min-width: 100px;
+  }
+}
+
+/* スマホ横向きなど、高さが狭い場合の調整 */
+@media screen and (max-height: 700px) {
+  /* モーダル自体の調整 */
+  .distribution-content {
+    gap: 10px; /* セクション間の間隔を縮小 */
+  }
+
+  .middle-section {
+    gap: 10px; /* 中段モーダル同士の間隔を縮小 */
+  }
+
+  /* コストグラフを小さく */
+  .cost-distribution {
+    height: 120px;
+  }
+
+  /* 各セクションの高さを調整 */
+  .cost-distribution,
+  .season-distribution,
+  .type-distribution,
+  .attribute-distribution {
+    min-height: 120px; /* 最小の高さを縮小 */
+    padding: 10px; /* パディングも縮小 */
+  }
+
+  /* フォントサイズを少し小さく */
+  .season-text,
+  .type-text,
+  .attribute-text {
+    font-size: 13px;
+  }
+}
+
+/* さらに画面が小さい場合 */
+@media screen and (max-height: 600px) {
+  .distribution-content {
+    gap: 4px; /* 中段モーダルと上下モーダルの間隔 */
+  }
+
+  .cost-distribution {
+    height: 100px;
+  }
+
+  .cost-distribution,
+  .season-distribution,
+  .type-distribution,
+  .attribute-distribution {
+    min-height: 100px;
+    padding: 2px; /* 中段モーダル内の広さを調整 */
+  }
+
+  /* テキスト間をさらに詰める */
+  .season-rows,
+  .type-rows,
+  .attribute-rows {
+    gap: 2px;
+  }
+
+  /* フォントサイズをさらに小さく */
+  .season-text,
+  .type-text,
+  .attribute-text {
+    font-size: 12px;
   }
 }
