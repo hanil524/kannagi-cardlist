@@ -2854,10 +2854,11 @@ body.modal-open {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   height: auto;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   z-index: 1;
   display: flex;
-  align-items: center;
+  justify-content: center; /* 水平方向中央 */
+  align-items: center; /* 垂直方向中央 */
   font-weight: bold;
 }
 
@@ -2915,7 +2916,6 @@ body.modal-open {
   white-space: nowrap;
   color: white;
   width: 100%;
-  font-weight: bold;
 }
 
 /* data属性を使用して中央揃えを実現 */
@@ -2996,8 +2996,8 @@ body.modal-open {
 .cost-label::before {
   content: attr(data-cost);
   background: #4a4a4a;
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   border-radius: 50%;
   display: flex;
   align-items: center;
