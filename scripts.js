@@ -2152,31 +2152,44 @@ const deckBuilder = {
     const costContent = this.createCostDistribution();
     content.appendChild(costContent);
 
-    // 季節分布エリア
+    // 中段のコンテナを作成
+    const middleSection = document.createElement('div');
+    middleSection.className = 'middle-section';
+
+    // 季節分布（中段左）
     const seasonContainer = document.createElement('div');
     seasonContainer.className = 'season-distribution';
-
     const seasonTitle = document.createElement('div');
     seasonTitle.className = 'area-title';
     seasonTitle.textContent = '季節';
     seasonContainer.appendChild(seasonTitle);
-
     const seasonContent = this.createSeasonDistribution();
     seasonContainer.appendChild(seasonContent);
-    content.appendChild(seasonContainer);
+    middleSection.appendChild(seasonContainer);
 
-    // 札種類分布エリア
+    // 札種類分布（中段右）
     const typeContainer = document.createElement('div');
     typeContainer.className = 'type-distribution';
-
     const typeTitle = document.createElement('div');
     typeTitle.className = 'area-title';
     typeTitle.textContent = '札種類';
     typeContainer.appendChild(typeTitle);
-
     const typeContent = this.createTypeDistribution();
     typeContainer.appendChild(typeContent);
-    content.appendChild(typeContainer);
+    middleSection.appendChild(typeContainer);
+
+    content.appendChild(middleSection);
+
+    // 属性分布（下段）
+    const attributeContainer = document.createElement('div');
+    attributeContainer.className = 'attribute-distribution';
+    const attributeTitle = document.createElement('div');
+    attributeTitle.className = 'area-title';
+    attributeTitle.textContent = '主な属性';
+    attributeContainer.appendChild(attributeTitle);
+    const attributeContent = this.createAttributeDistribution();
+    attributeContainer.appendChild(attributeContent);
+    content.appendChild(attributeContainer);
 
     // 閉じるボタン
     const closeButton = document.createElement('button');
@@ -2277,7 +2290,7 @@ const deckBuilder = {
   // 季節分布の作成
   createSeasonDistribution() {
     const seasonContent = document.createElement('div');
-    seasonContent.className = 'season-content'; // 専用クラスに変更
+    seasonContent.className = 'season-content';
 
     // 季節ごとの枚数をカウント
     const seasonCounts = {};
@@ -2290,41 +2303,19 @@ const deckBuilder = {
       });
     });
 
-    // 季節の表示（2列ずつ）
+    // 季節の表示
     const seasonRows = document.createElement('div');
     seasonRows.className = 'season-rows';
 
-    let currentRow = document.createElement('div');
-    currentRow.className = 'season-row';
-    let count = 0;
-
     seasonOrder.forEach((season) => {
       if (seasonCounts[season]) {
-        // 季節の表示テキストを作成
         const seasonText = document.createElement('div');
         seasonText.className = 'season-text';
-        // 混化の場合は専用のクラスを追加
-        if (season === '混化') {
-          seasonText.classList.add('kanji-adjust');
-        }
-        seasonText.textContent = `${season}：${seasonCounts[season]}枚`;
-
-        currentRow.appendChild(seasonText);
-        count++;
-
-        if (count === 2) {
-          seasonRows.appendChild(currentRow);
-          currentRow = document.createElement('div');
-          currentRow.className = 'season-row';
-          count = 0;
-        }
+        seasonText.setAttribute('data-name', season);
+        seasonText.setAttribute('data-count', `：${seasonCounts[season]}枚`);
+        seasonRows.appendChild(seasonText);
       }
     });
-
-    // 残りの要素があれば追加
-    if (count > 0) {
-      seasonRows.appendChild(currentRow);
-    }
 
     seasonContent.appendChild(seasonRows);
     return seasonContent;
@@ -2333,7 +2324,7 @@ const deckBuilder = {
   // 札種類分布の作成
   createTypeDistribution() {
     const typeContent = document.createElement('div');
-    typeContent.className = 'type-content'; // 専用クラスに変更
+    typeContent.className = 'type-content';
 
     // 札種類ごとの枚数をカウント
     const typeCounts = {};
@@ -2344,39 +2335,59 @@ const deckBuilder = {
       typeCounts[type] = (typeCounts[type] || 0) + 1;
     });
 
-    // 札種類の表示（2列ずつ）
+    // 札種類の表示
     const typeRows = document.createElement('div');
     typeRows.className = 'type-rows';
-
-    let currentRow = document.createElement('div');
-    currentRow.className = 'type-row';
-    let count = 0;
 
     typeOrder.forEach((type) => {
       if (typeCounts[type]) {
         const typeText = document.createElement('div');
         typeText.className = 'type-text';
-        typeText.textContent = `${type}：${typeCounts[type]}枚`;
-
-        currentRow.appendChild(typeText);
-        count++;
-
-        if (count === 2) {
-          typeRows.appendChild(currentRow);
-          currentRow = document.createElement('div');
-          currentRow.className = 'type-row';
-          count = 0;
-        }
+        typeText.setAttribute('data-name', type);
+        typeText.setAttribute('data-count', `：${typeCounts[type]}枚`);
+        typeRows.appendChild(typeText);
       }
     });
 
-    // 残りの要素があれば追加
-    if (count > 0) {
-      typeRows.appendChild(currentRow);
-    }
-
     typeContent.appendChild(typeRows);
     return typeContent;
+  },
+
+  // 属性分布の作成
+  createAttributeDistribution() {
+    const attributeContent = document.createElement('div');
+    attributeContent.className = 'attribute-content';
+
+    // 属性ごとの枚数をカウント
+    const attributeCounts = {};
+    this.deck.forEach((card) => {
+      if (card.dataset.attribute) {
+        const attributes = card.dataset.attribute.split(' ');
+        attributes.forEach((attr) => {
+          attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+        });
+      }
+    });
+
+    // 属性を枚数順にソート
+    const sortedAttributes = Object.entries(attributeCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 5); // 上位5つのみを取得
+
+    // 属性の表示
+    const attributeRows = document.createElement('div');
+    attributeRows.className = 'attribute-rows';
+
+    sortedAttributes.forEach(([attribute, count]) => {
+      const attributeText = document.createElement('div');
+      attributeText.className = 'attribute-text';
+      attributeText.setAttribute('data-name', attribute);
+      attributeText.setAttribute('data-count', `：${count}枚`);
+      attributeRows.appendChild(attributeText);
+    });
+
+    attributeContent.appendChild(attributeRows);
+    return attributeContent;
   }
 };
 
