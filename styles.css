@@ -2832,7 +2832,7 @@ body.modal-open {
   align-items: center;
   z-index: 3000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 .distribution-modal.active {
@@ -2840,7 +2840,7 @@ body.modal-open {
 }
 
 .area-title {
-  width: 30px; /* タイトル用の固定幅 */
+  width: 25px; /* タイトル用の固定幅 */
   position: absolute;
   left: 5px;
   top: 50%;
