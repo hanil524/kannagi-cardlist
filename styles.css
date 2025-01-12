@@ -2849,7 +2849,7 @@ body.modal-open {
   text-orientation: upright;
   color: white;
   font-size: 13px;
-  padding: 10px 4px;
+  padding: 10px 2px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
