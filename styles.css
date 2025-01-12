@@ -2848,8 +2848,8 @@ body.modal-open {
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: white;
-  font-size: 14px;
-  padding: 10px 1px;
+  font-size: 13px;
+  padding: 10px 4px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
