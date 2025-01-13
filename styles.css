@@ -2652,7 +2652,7 @@ body {
 /* デッキ画像保存時のスタイル */
 .deck-display.capturing {
   background: #2b2b2b;
-  padding: 10px;
+  padding: 5px;
   border-radius: 8px;
   width: fit-content;
   margin: auto;
