@@ -2842,17 +2842,16 @@ body.modal-open {
 .area-title {
   width: 25px;
   position: absolute;
-  left: 0px; /* 左からの距離を微調整 */
+  left: 6px; /* 左からの距離を微調整 */
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: white;
   font-size: 14px;
-  padding: 14px 2px;
+  padding: 12px 2px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
   height: auto;
   letter-spacing: 4px;
   z-index: 1;
@@ -2865,7 +2864,7 @@ body.modal-open {
 
 /* 札種類のタイトル位置調整 */
 .middle-section .type-distribution .area-title {
-  left: 0px; /* 左の位置を統一 */
+  left: 6px; /* 左の位置を統一 */
 }
 
 .distribution-content {
