@@ -2842,14 +2842,14 @@ body.modal-open {
 .area-title {
   width: 25px;
   position: absolute;
-  left: 6px; /* 左からの距離を微調整 */
+  left: 10px; /* 左からの距離を微調整 */
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: white;
   font-size: 14px;
-  padding: 12px 2px;
+  padding: 12px 1px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   height: auto;
@@ -2864,7 +2864,7 @@ body.modal-open {
 
 /* 札種類のタイトル位置調整 */
 .middle-section .type-distribution .area-title {
-  left: 6px; /* 左の位置を統一 */
+  left: 10px; /* 左の位置を統一 */
 }
 
 .distribution-content {
@@ -2875,7 +2875,7 @@ body.modal-open {
   max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   position: relative; /* ×ボタンの位置決めのため */
   margin: 0 15px; /* 左右の余白を均等に */
   box-sizing: border-box; /* パディングを幅に含める */
@@ -2949,7 +2949,7 @@ body.modal-open {
 /* コスト分布グラフの調整 */
 .cost-distribution {
   height: 150px; /* グラフの高さを調整 */
-  padding: 10px 0;
+  padding: 10px 5px; /* 内側の余白 */
 }
 
 .cost-graph-container {
@@ -2970,7 +2970,7 @@ body.modal-open {
 }
 
 .cost-bar {
-  width: 90%; /* バーの幅を少し細く */
+  width: 85%; /* バーの幅を少し細く */
   background: rgba(236, 47, 47, 0.8);
   transition: height 0.3s ease;
   border-radius: 4px 4px 0 0;
@@ -2983,7 +2983,7 @@ body.modal-open {
 
 .cost-bar-count {
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   position: absolute;
   font-weight: bold;
 }
@@ -2991,7 +2991,7 @@ body.modal-open {
 .cost-label {
   margin-top: 8px;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   width: 100%;
   text-align: center;
   display: flex;
@@ -3115,7 +3115,7 @@ body.modal-open {
 /* 中段のコンテナ */
 .middle-section {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
 }
 
