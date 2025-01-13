@@ -2172,7 +2172,7 @@ const deckBuilder = {
     typeContainer.className = 'type-distribution';
     const typeTitle = document.createElement('div');
     typeTitle.className = 'area-title';
-    typeTitle.textContent = '札種類';
+    typeTitle.textContent = '種類';
     typeContainer.appendChild(typeTitle);
     const typeContent = this.createTypeDistribution();
     typeContainer.appendChild(typeContent);
@@ -2343,7 +2343,7 @@ const deckBuilder = {
       if (typeCounts[type]) {
         const typeText = document.createElement('div');
         typeText.className = 'type-text';
-        typeText.setAttribute('data-name', type.replace('札', '')); // 「札」を削除
+        typeText.setAttribute('data-name', type);
         typeText.setAttribute('data-count', `：${typeCounts[type]}枚`);
         typeRows.appendChild(typeText);
       }
