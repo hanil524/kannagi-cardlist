@@ -667,11 +667,52 @@ function clearSearch(inputId, buttonId) {
 const filterCardsByName = (event) => {
   const query = event.target.value.toLowerCase();
   const cards = document.querySelectorAll('.card');
+
   cards.forEach((card) => {
-    const name = card.dataset.name.toLowerCase();
-    const attributes = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
-    card.style.display = name.includes(query) || attributes.includes(query) ? 'block' : 'none';
+    // フィルター条件に合致するかどうかを確認
+    const matchesFilters = checkFilters(card);
+
+    if (query === '') {
+      // 検索欄が空の場合は、フィルター条件のみで表示/非表示を決定
+      card.style.display = matchesFilters ? 'block' : 'none';
+    } else {
+      // 検索文字列がある場合は、フィルター条件に加えて検索条件も確認
+      const name = card.dataset.name.toLowerCase();
+      const matchesSearch = name.includes(query);
+
+      // フィルター条件と検索条件の両方に合致する場合のみ表示
+      card.style.display = matchesFilters && matchesSearch ? 'block' : 'none';
+    }
   });
+
+  // 検索結果が0件の場合のメッセージ表示
+  const anyVisible = Array.from(cards).some((card) => card.style.display !== 'none');
+  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+};
+
+// フィルター条件のチェック関数
+const checkFilters = (card) => {
+  // 各フィルター条件をチェック
+  const checks = {
+    series: () => filters.series.size === 0 || filters.series.has(card.dataset.series),
+    season: () => filters.season.size === 0 || filters.season.has(card.dataset.season),
+    type: () => filters.type.size === 0 || filters.type.has(card.dataset.type),
+    role: () => {
+      if (filters.role.size === 0) return true;
+      const cardRoles = card.dataset.role.split(' ');
+      return [...filters.role].some((role) => cardRoles.includes(role));
+    },
+    keyword: () => filters.keyword.size === 0 || filters.keyword.has(card.dataset.keyword),
+    attribute: () => {
+      if (filters.attribute.size === 0) return true;
+      const cardAttributes = card.dataset.attribute.split(' ');
+      return [...filters.attribute].some((attr) => cardAttributes.includes(attr));
+    },
+    rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare)
+  };
+
+  // すべての条件を満たす場合のみtrue
+  return Object.values(checks).every((check) => check());
 };
 
 const sortCards = (criteria) => {
