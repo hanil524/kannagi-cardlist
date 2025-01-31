@@ -946,7 +946,7 @@ const openModal = (filterId) => {
     tooltip.textContent = text;
     tooltip.style.animation = 'none'; // アニメーションをリセット
     tooltip.offsetHeight;
-    tooltip.style.animation = 'fadeOut 2s forwards'; // マウスオーバーで説明を表示する秒数
+    tooltip.style.animation = 'fadeOut 1.4s forwards'; // マウスオーバーで説明を表示する秒数
 
     const rect = target.getBoundingClientRect();
     tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
