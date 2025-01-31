@@ -2699,6 +2699,7 @@ body.modal-open {
   align-items: center; /* アイコンを縦方向中央に */
   justify-content: center; /* アイコンを横方向中央に */
   align-self: center; /* ボタン自体を親要素の中央に */
+  margin-right: -10px; /* 編集ボタンの右側の余白を減らす */
 }
 
 .deck-edit-button i {
