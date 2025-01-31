@@ -2599,9 +2599,24 @@ function confirmReset() {
 function resetDeck(confirmed) {
   const popup = document.querySelector('.confirm-popup');
   if (confirmed) {
+    // デッキ内容をリセット
     deckBuilder.deck = [];
     deckBuilder.updateDisplay();
+
+    // デッキ名をデフォルトに戻す
+    const currentDeckId = deckManager.currentDeckId;
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+    if (button) {
+      button.textContent = `デッキ${currentDeckId}`;
+      // デッキマネージャーのデータも更新
+      if (deckManager.decks[currentDeckId]) {
+        deckManager.decks[currentDeckId].name = `デッキ${currentDeckId}`;
+      }
+    }
+
+    // 変更を保存
     deckManager.saveDeck(deckManager.currentDeckId);
+    deckManager.saveToLocalStorage();
   }
   document.body.classList.remove('modal-open');
   popup.remove();
@@ -2878,6 +2893,8 @@ const deckManager = {
     });
     // 現在のデッキをハイライト
     this.updateActiveButton();
+    // プレビュー画像を更新
+    this.updateDeckPreviews();
   },
 
   // デッキ一覧を閉じる
@@ -2898,20 +2915,21 @@ const deckManager = {
       deckBuilder.deck = deck.cards.map((cardData) => {
         const card = document.createElement('div');
         card.className = 'card';
-
-        // データ属性を設定
         Object.assign(card.dataset, cardData.dataset);
-
-        // 画像要素を作成
         const img = document.createElement('img');
         img.src = cardData.src;
         img.alt = cardData.dataset.name;
-
         card.appendChild(img);
         return card;
       });
     } else {
       deckBuilder.deck = [];
+      // デッキが空の場合、プレビュー画像を非表示にする
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
     }
     deckBuilder.updateDisplay();
     deckBuilder.updateDeckCount();
@@ -2994,6 +3012,58 @@ const deckManager = {
 
       // デッキ内容は変更せずに保存
       this.saveToLocalStorage();
+    }
+  },
+
+  // デッキのプレビュー画像を更新
+  updateDeckPreviews() {
+    Object.entries(this.decks).forEach(([deckId, deck]) => {
+      if (!deck || !deck.cards || deck.cards.length === 0) {
+        // デッキが空の場合、プレビュー画像を非表示にする
+        const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+        if (previewImg) {
+          previewImg.style.display = 'none';
+          previewImg.src = '';
+        }
+        return;
+      }
+
+      // コストが最も高いカードを見つける
+      const highestCostCard = deck.cards.reduce((highest, current) => {
+        const currentCost = parseInt(current.dataset.cost) || 0;
+        const highestCost = parseInt(highest.dataset.cost) || 0;
+        return currentCost > highestCost ? current : highest;
+      }, deck.cards[0]);
+
+      // プレビュー画像を更新
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg && highestCostCard) {
+        // srcプロパティを直接参照
+        previewImg.src = highestCostCard.src || '';
+        previewImg.style.display = 'block';
+      }
+    });
+  },
+
+  // デッキを消去
+  clearDeck(deckId) {
+    if (this.decks[deckId]) {
+      this.decks[deckId] = { cards: [] };
+      this.saveDeckToLocalStorage(deckId);
+
+      // プレビュー画像を即座に非表示にする
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
+
+      // 現在表示中のデッキが消去された場合は表示をクリア
+      if (this.currentDeckId === deckId) {
+        deckBuilder.deck = [];
+        deckBuilder.updateDisplay();
+        deckBuilder.updateDeckCount();
+      }
     }
   }
 };
