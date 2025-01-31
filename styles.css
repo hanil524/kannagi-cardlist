@@ -2620,14 +2620,7 @@ body.modal-open {
   .deck-list-close:hover {
     background-color: #4a4a4a;
     color: #ffffff;
-    transform: scale(1.05);
   }
-}
-
-/* アクティブ時（クリック時）のエフェクト */
-.deck-list-close:active {
-  background-color: #2a2a2a;
-  transform: scale(0.95);
 }
 
 .deck-list-items {
