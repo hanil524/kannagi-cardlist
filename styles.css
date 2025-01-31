@@ -2589,7 +2589,7 @@ body.modal-open {
 /* 閉じるボタンの位置調整 */
 .deck-list-close {
   position: absolute;
-  right: 10px; /* 右端からの距離 */
+  right: 0px; /* 右端からの距離 */
   top: 50%;
   transform: translateY(-50%); /* 縦方向の中央揃え */
   z-index: 1;
@@ -2597,7 +2597,7 @@ body.modal-open {
   height: 36px;
   background-color: #3a3a3a;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   color: #e0e0e0;
   font-size: 24px;
   cursor: pointer;
