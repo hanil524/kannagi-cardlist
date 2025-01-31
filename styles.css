@@ -2542,6 +2542,7 @@ body.modal-open {
   z-index: 3000;
   opacity: 0;
   transition: opacity 0.3s ease;
+  overflow: hidden; /* モーダル自体はスクロールしない */
 }
 
 .deck-list-modal.active {
@@ -2559,7 +2560,10 @@ body.modal-open {
   border-radius: 8px;
   width: 90%;
   max-width: 400px;
+  max-height: 80vh; /* ビューポートの80%を最大高さに設定 */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column; /* ヘッダーとコンテンツを縦に配置 */
 }
 
 .deck-list-header {
@@ -2568,6 +2572,7 @@ body.modal-open {
   align-items: center;
   margin-bottom: 20px;
   color: white;
+  flex-shrink: 0; /* ヘッダーは縮まない */
 }
 
 .deck-list-header h2 {
@@ -2588,12 +2593,34 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow-y: auto; /* 縦方向のスクロールを有効化 */
+  flex-grow: 1; /* 残りのスペースを全て使用 */
+  padding-right: 10px; /* スクロールバー分の余白 */
 }
 
 .deck-list-item {
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+/* スクロールバーのスタイリング */
+.deck-list-items::-webkit-scrollbar {
+  width: 8px;
+}
+
+.deck-list-items::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.deck-list-items::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.deck-list-items::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .deck-select-button {
