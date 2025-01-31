@@ -1187,6 +1187,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.saigoiro,
 .modal-buttons button.anatairo,
 .modal-buttons button.kaidaniro,
+.modal-buttons button.sssiro,
 .modal-buttons button.lemoniro,
 .modal-buttons button.oisyairo {
   position: relative;
@@ -1244,7 +1245,13 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-buttons button.kaidaniro {
-  background-color: #5c5c5c;
+  background-color: #111111;
+  color: #ffffff;
+  border: 2px solid #1d1d1d;
+}
+
+.modal-buttons button.sssiro {
+  background-color: #474747;
   color: #ffffff;
   border: 2px solid #1d1d1d;
 }
