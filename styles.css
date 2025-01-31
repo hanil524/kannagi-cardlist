@@ -2566,27 +2566,68 @@ body.modal-open {
   flex-direction: column; /* ヘッダーとコンテンツを縦に配置 */
 }
 
+/* デッキ一覧のヘッダー部分の調整 */
 .deck-list-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 中央揃えに変更 */
   align-items: center;
   margin-bottom: 20px;
   color: white;
-  flex-shrink: 0; /* ヘッダーは縮まない */
+  flex-shrink: 0;
+  position: relative;
+  padding: 0 10px; /* 左右に余白を追加 */
 }
 
+/* デッキ一覧のヘッダータイトルのスタイル調整 */
 .deck-list-header h2 {
-  margin: 0;
   font-size: 18px;
+  margin: 0;
+  text-align: center;
+  pointer-events: none;
 }
 
+/* 閉じるボタンの位置調整 */
 .deck-list-close {
-  background: none;
+  position: absolute;
+  right: 10px; /* 右端からの距離 */
+  top: 50%;
+  transform: translateY(-50%); /* 縦方向の中央揃え */
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  background-color: #3a3a3a;
   border: none;
-  color: white;
+  border-radius: 8px;
+  color: #e0e0e0;
   font-size: 24px;
   cursor: pointer;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  /* iOSでのボタン最適化 */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-width: 36px;
+  min-height: 36px;
+  aspect-ratio: 1 / 1;
+}
+
+/* ホバー時のエフェクト（PC用） */
+@media (min-width: 769px) {
+  .deck-list-close:hover {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    transform: scale(1.05);
+  }
+}
+
+/* アクティブ時（クリック時）のエフェクト */
+.deck-list-close:active {
+  background-color: #2a2a2a;
+  transform: scale(0.95);
 }
 
 .deck-list-items {
