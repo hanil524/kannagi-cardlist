@@ -2637,23 +2637,17 @@ body.modal-open {
   align-items: center;
 }
 
-/* スクロールバーのスタイリング */
+/* デッキ一覧アイテムのコンテナ */
+.deck-list-items {
+  overflow-y: auto;
+  flex-grow: 1;
+  -ms-overflow-style: none; /* IE, Edgeのスクロールバーを非表示 */
+  scrollbar-width: none; /* Firefoxのスクロールバーを非表示 */
+}
+
+/* Chromeなどのスクロールバーを非表示 */
 .deck-list-items::-webkit-scrollbar {
-  width: 8px;
-}
-
-.deck-list-items::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-.deck-list-items::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-}
-
-.deck-list-items::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  display: none;
 }
 
 .deck-select-button {
