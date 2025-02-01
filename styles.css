@@ -2597,7 +2597,7 @@ body.modal-open {
   height: 36px;
   background-color: #3a3a3a;
   border: none;
-  border-radius: 50px;
+  border-radius: 8px;
   color: #e0e0e0;
   font-size: 24px;
   cursor: pointer;
@@ -2629,7 +2629,6 @@ body.modal-open {
   gap: 10px;
   overflow-y: auto; /* 縦方向のスクロールを有効化 */
   flex-grow: 1; /* 残りのスペースを全て使用 */
-  padding-right: 10px; /* スクロールバー分の余白 */
 }
 
 .deck-list-item {
@@ -2699,7 +2698,6 @@ body.modal-open {
   align-items: center; /* アイコンを縦方向中央に */
   justify-content: center; /* アイコンを横方向中央に */
   align-self: center; /* ボタン自体を親要素の中央に */
-  margin-right: -10px; /* 編集ボタンの右側の余白を減らす */
 }
 
 .deck-edit-button i {
