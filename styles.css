@@ -2580,7 +2580,7 @@ body.modal-open {
 
 /* デッキ一覧のヘッダータイトルのスタイル調整 */
 .deck-list-header h2 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   text-align: center;
   pointer-events: none;
@@ -2626,7 +2626,7 @@ body.modal-open {
 .deck-list-items {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
   overflow-y: auto; /* 縦方向のスクロールを有効化 */
   flex-grow: 1; /* 残りのスペースを全て使用 */
 }
@@ -2652,7 +2652,7 @@ body.modal-open {
 
 .deck-select-button {
   flex-grow: 1;
-  padding: 12px 15px;
+  padding: 9px 15px;
   border: none;
   border-radius: 4px;
   background-color: #3a3a3a;
@@ -3329,7 +3329,7 @@ body.modal-open {
 }
 
 .deck-preview-image {
-  height: 40px; /* デッキ名ボタンと同じ高さ */
+  height: 37px; /* デッキ名ボタンと同じ高さ */
   width: auto;
   object-fit: contain;
   display: none; /* 初期状態は非表示 */
