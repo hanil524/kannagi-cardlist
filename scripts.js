@@ -2298,7 +2298,19 @@ const deckBuilder = {
     const graphContainer = document.createElement('div');
     graphContainer.className = 'cost-graph-container';
 
+    // 背景バーの高さを計算（グラフ領域の最大高さ）
+    const graphHeight = 100; // 100%
+
     costCounts.forEach((count, index) => {
+      const barWrapper = document.createElement('div');
+      barWrapper.className = 'cost-bar-wrapper';
+
+      // 背景バーを追加
+      const background = document.createElement('div');
+      background.className = 'cost-bar-background';
+      background.style.height = `${graphHeight}%`;
+      barWrapper.appendChild(background);
+
       const bar = document.createElement('div');
       bar.className = 'cost-bar';
 
@@ -2316,8 +2328,6 @@ const deckBuilder = {
       label.className = 'cost-label';
       label.setAttribute('data-cost', index === 10 ? '10↑' : index);
 
-      const barWrapper = document.createElement('div');
-      barWrapper.className = 'cost-bar-wrapper';
       barWrapper.appendChild(bar);
       barWrapper.appendChild(label);
 
