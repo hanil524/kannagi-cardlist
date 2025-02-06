@@ -3007,29 +3007,50 @@ body.modal-open {
 
 /* コスト分布グラフの調整 */
 .cost-distribution {
-  height: 150px; /* グラフの高さを調整 */
-  padding: 10px 5px; /* 内側の余白 */
+  height: 150px;
+  padding: 10px 5px;
+  box-sizing: border-box;
 }
 
 .cost-graph-container {
   display: flex;
   justify-content: space-between;
-  height: 100%;
-  gap: 4px;
-  padding: 0px 6px 0px; /* 上、左右、下の余白を追加 */
+  height: calc(100% - 24px);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin-bottom: 24px;
+  gap: clamp(2px, 1%, 4px);
 }
 
 .cost-bar-wrapper {
   flex: 1;
+  max-width: clamp(2px, 8%, 32px);
+  min-width: 2px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 下揃えに変更 */
+  justify-content: flex-end;
   height: 100%;
-  align-items: center; /* バーを中央揃えに */
+  align-items: center;
+  position: relative;
+}
+
+/* 背景バーと赤いバーの幅を統一 */
+.cost-bar-background,
+.cost-bar {
+  width: 100%;
+}
+
+/* 背景バーのスタイルを追加 */
+.cost-bar-background {
+  position: absolute;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1); /* 灰色の背景 */
+  border-radius: 4px 4px 0 0;
+  z-index: 1; /* 赤いバーの後ろに配置 */
 }
 
 .cost-bar {
-  width: 85%; /* バーの幅を少し細く */
   background: rgba(236, 47, 47, 0.8);
   transition: height 0.3s ease;
   border-radius: 4px 4px 0 0;
@@ -3038,6 +3059,7 @@ body.modal-open {
   justify-content: center;
   align-items: center;
   min-height: 1px; /* 0枚でも1pxは表示 */
+  z-index: 2; /* 背景バーの前面に配置 */
 }
 
 .cost-bar-count {
@@ -3047,34 +3069,36 @@ body.modal-open {
   font-weight: bold;
 }
 
+/* コストラベルのベース部分 */
 .cost-label {
-  margin-top: 8px;
-  color: white;
-  font-size: 11px;
-  width: 100%;
-  text-align: center;
+  position: absolute;
+  bottom: -24px;
+  width: 100%; /* バーの幅に合わせる */
+  height: 100%; /* 幅と同じ高さを保持 */
+  max-height: 24px; /* 高さの上限を設定 */
   display: flex;
   justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: clamp(10px, 3vw, 12px); /* フォントサイズも調整 */
 }
 
-/* コスト値を丸で囲む */
+/* コスト値の表示 */
 .cost-label::before {
   content: attr(data-cost);
-  background: #4a4a4a;
-  width: 23px;
-  height: 23px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* iOS対策を追加 */
-  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  width: 100%;
+  height: 100%;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  /* iOS対策 */
+  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 0; /* パディングをリセット */
-  min-width: 20px; /* 最小幅を設定 */
-  min-height: 20px; /* 最小高さを設定 */
-  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
 }
 
 /* 枚数が1以上の場合のみ表示 */
@@ -3252,6 +3276,10 @@ body.modal-open {
     font-size: 13px;
     min-width: 100px;
   }
+
+  .cost-graph-container {
+    gap: 4px; /* PCと同じ間隔を維持 */
+  }
 }
 
 /* スマホ横向きなど、高さが狭い場合の調整 */
@@ -3267,7 +3295,8 @@ body.modal-open {
 
   /* コストグラフを小さく */
   .cost-distribution {
-    height: 120px;
+    height: 150px;
+    padding: 10px 5px 0; /* 上部のパディングを調整 */
   }
 
   /* 各セクションの高さを調整 */
