@@ -2900,13 +2900,13 @@ body.modal-open {
 
 .area-title {
   position: absolute;
-  left: 10px; /* 左からの距離を微調整 */
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;
   text-orientation: upright;
   color: white;
-  font-size: 14px;
+  font-size: clamp(13px, 2vw, 14px);
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   z-index: 1;
@@ -2915,14 +2915,23 @@ body.modal-open {
   align-items: center;
   font-weight: bold;
   box-sizing: border-box;
-  /* ... existing code ... */
-  width: 28px; /* 幅を少し広げる */
-  padding: 16px 0; /* 上下のパディングを均等に、左右は0に */
-  height: fit-content; /* コンテンツに合わせて高さを設定 */
-  letter-spacing: 2px; /* 文字間隔を少し狭める */
+  width: 28px;
+  padding: 16px 0;
+  height: fit-content;
+  letter-spacing: 2px;
 
-  /* 文字サイズの調整 */
-  font-size: clamp(13px, 2vw, 14px); /* レスポンシブな文字サイズ */
+  /* 文字の位置調整を追加 */
+  text-align: center;
+  line-height: 28px; /* widthと同じ値 */
+  transform-origin: center center;
+}
+
+@media (max-width: 768px) {
+  .area-title {
+    width: 24px;
+    padding: 12px 0;
+    line-height: 24px; /* スマホ用のwidthと同じ値 */
+  }
 }
 
 /* 札種類のタイトル位置調整 */
@@ -3283,11 +3292,6 @@ body.modal-open {
 
   .cost-graph-container {
     gap: 4px; /* PCと同じ間隔を維持 */
-  }
-
-  .area-title {
-    width: 24px; /* スマートフォンでは幅を少し狭める */
-    padding: 12px 0; /* パディングも調整 */
   }
 }
 
