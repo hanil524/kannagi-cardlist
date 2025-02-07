@@ -2899,7 +2899,6 @@ body.modal-open {
 }
 
 .area-title {
-  width: 25px;
   position: absolute;
   left: 10px; /* 左からの距離を微調整 */
   top: 50%;
@@ -2908,17 +2907,22 @@ body.modal-open {
   text-orientation: upright;
   color: white;
   font-size: 14px;
-  padding: 12px 1px;
   white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
-  height: auto;
-  letter-spacing: 4px;
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   box-sizing: border-box;
+  /* ... existing code ... */
+  width: 28px; /* 幅を少し広げる */
+  padding: 16px 0; /* 上下のパディングを均等に、左右は0に */
+  height: fit-content; /* コンテンツに合わせて高さを設定 */
+  letter-spacing: 2px; /* 文字間隔を少し狭める */
+
+  /* 文字サイズの調整 */
+  font-size: clamp(13px, 2vw, 14px); /* レスポンシブな文字サイズ */
 }
 
 /* 札種類のタイトル位置調整 */
@@ -3279,6 +3283,11 @@ body.modal-open {
 
   .cost-graph-container {
     gap: 4px; /* PCと同じ間隔を維持 */
+  }
+
+  .area-title {
+    width: 24px; /* スマートフォンでは幅を少し狭める */
+    padding: 12px 0; /* パディングも調整 */
   }
 }
 
