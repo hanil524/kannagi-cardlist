@@ -2023,18 +2023,22 @@ body.modal-open {
 .deck-display {
   display: grid;
   gap: 1px;
+  width: -moz-fit-content;
   width: fit-content; /* コンテンツ幅に合わせる */
   margin: 0 auto; /* 中央寄せ */
-  place-content: center;
+  align-content: center;
+  justify-content: center;
+
+  /* Firefox対応を追加 */
+  align-items: start;
+  justify-items: center;
+  grid-auto-flow: row dense;
+
   /* スクロール防止 */
   touch-action: none; /* タッチによるスクロールも防止 */
   -webkit-overflow-scrolling: none; /* iOSのスクロールも防止 */
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
-  /* Firefox対応を追加 */
-  align-items: start;
-  justify-items: center;
-  grid-auto-flow: row;
 }
 
 /* PC ページ上部からデッキカードまでの距離 */
