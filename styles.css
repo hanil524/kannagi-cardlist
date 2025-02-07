@@ -3396,3 +3396,40 @@ body.modal-open {
   width: 100%; /* タイトルの幅を親要素いっぱいに */
   display: block; /* ブロック要素として表示 */
 }
+
+/* タブレット用のスタイル追加 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .image-modal .image-container {
+    max-width: 80%;
+    max-height: 80vh;
+  }
+
+  .image-nav-button {
+    padding: 20px 20px;
+    font-size: 20px;
+  }
+
+  .image-nav-button.prev {
+    left: 5%;
+  }
+
+  .image-nav-button.next {
+    right: 5%;
+  }
+
+  /* タブレットでの縦向き表示時の調整 */
+  @media (orientation: portrait) {
+    .image-modal .image-container {
+      max-width: 85%;
+      max-height: 70vh;
+    }
+  }
+
+  /* タブレットでの横向き表示時の調整 */
+  @media (orientation: landscape) {
+    .image-modal .image-container {
+      max-width: 75%;
+      max-height: 85vh;
+    }
+  }
+}
