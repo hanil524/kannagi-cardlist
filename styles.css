@@ -2031,6 +2031,10 @@ body.modal-open {
   -webkit-overflow-scrolling: none; /* iOSのスクロールも防止 */
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
+  /* Firefox対応を追加 */
+  align-items: start;
+  justify-items: center;
+  grid-auto-flow: row;
 }
 
 /* PC ページ上部からデッキカードまでの距離 */
@@ -2050,13 +2054,13 @@ body.modal-open {
   /* スマホ縦向き */
   @media (max-width: 768px) and (orientation: portrait) {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: repeat(8, auto);
+    grid-template-rows: repeat(8, min-content); /* 高さを内容に合わせる */
   }
 
   /* スマホ横向き・PC */
   @media (min-width: 769px), (orientation: landscape) {
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(5, min-content); /* 高さを内容に合わせる */
   }
 }
 
@@ -2065,13 +2069,13 @@ body.modal-open {
   /* スマホ縦向き */
   @media (max-width: 768px) and (orientation: portrait) {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-auto-rows: auto;
+    grid-auto-rows: min-content; /* 高さを内容に合わせる */
   }
 
   /* スマホ横向き・PC */
   @media (min-width: 769px), (orientation: landscape) {
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-auto-rows: auto;
+    grid-auto-rows: min-content; /* 高さを内容に合わせる */
   }
 }
 
@@ -2080,6 +2084,10 @@ body.modal-open {
   width: 100%;
   width: var(--card-width); /* JSで動的に設定 */
   aspect-ratio: 745/1041;
+  /* Firefox対応を追加 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .deck-card::before {
@@ -3253,6 +3261,41 @@ body.modal-open {
   margin-left: 50px; /* 右側だからか、謎の微調整が必要 */
 }
 
+/* デッキプレビュー画像のスタイル */
+.deck-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%; /* プレビュー全体を最大幅に */
+}
+
+.deck-preview-image {
+  height: 37px; /* デッキ名ボタンと同じ高さ */
+  width: auto;
+  object-fit: contain;
+  display: none; /* 初期状態は非表示 */
+}
+
+/* デッキ情報エリアのスタイル調整 */
+.deck-info {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+/* デッキ選択ボタンを伸縮可能に */
+.deck-select-button {
+  flex-grow: 1; /* 利用可能なスペースを最大限使用 */
+  width: 100%; /* ボタン自体も最大幅に */
+}
+
+/* デッキ一覧のタイトルスタイル */
+.deck-list-header h2 {
+  text-align: center;
+  width: 100%; /* タイトルの幅を親要素いっぱいに */
+  display: block; /* ブロック要素として表示 */
+}
+
 /* スマホ表示時の調整 */
 @media (max-width: 768px) {
   .distribution-content {
@@ -3360,41 +3403,6 @@ body.modal-open {
   .attribute-text {
     font-size: 12px;
   }
-}
-
-/* デッキプレビュー画像のスタイル */
-.deck-preview {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%; /* プレビュー全体を最大幅に */
-}
-
-.deck-preview-image {
-  height: 37px; /* デッキ名ボタンと同じ高さ */
-  width: auto;
-  object-fit: contain;
-  display: none; /* 初期状態は非表示 */
-}
-
-/* デッキ情報エリアのスタイル調整 */
-.deck-info {
-  display: flex;
-  gap: 8px;
-  flex: 1;
-}
-
-/* デッキ選択ボタンを伸縮可能に */
-.deck-select-button {
-  flex-grow: 1; /* 利用可能なスペースを最大限使用 */
-  width: 100%; /* ボタン自体も最大幅に */
-}
-
-/* デッキ一覧のタイトルスタイル */
-.deck-list-header h2 {
-  text-align: center;
-  width: 100%; /* タイトルの幅を親要素いっぱいに */
-  display: block; /* ブロック要素として表示 */
 }
 
 /* タブレット用のスタイル追加 */
