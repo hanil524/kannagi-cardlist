@@ -1740,6 +1740,7 @@ const deckBuilder = {
   maxCards: 4,
   restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '悠習の古日記（ゆうしゅうのこにっき）']),
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
+  sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
   // デッキビルダーのopen/close関数
@@ -1807,6 +1808,14 @@ const deckBuilder = {
     setTimeout(() => message.remove(), 2000);
   },
 
+  showSevenCardMessage() {
+    const message = document.createElement('div');
+    message.className = 'deck-limit-message';
+    message.textContent = 'このカードはデッキに7枚まで。';
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 2000);
+  },
+
   // カードを追加
   addCard(card) {
     const cardName = card.dataset.name;
@@ -1815,6 +1824,11 @@ const deckBuilder = {
     if (this.tenCardLimit.has(cardName)) {
       if (sameNameCount >= 10) {
         this.showTenCardMessage();
+        return false;
+      }
+    } else if (this.sevenCardLimit.has(cardName)) {
+      if (sameNameCount >= 7) {
+        this.showSevenCardMessage('このカードはデッキに7枚まで。');
         return false;
       }
     } else if (this.restrictedCards.has(cardName) && sameNameCount >= 1) {
