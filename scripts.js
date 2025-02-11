@@ -2787,8 +2787,13 @@ const setupCardControls = (controls, card, cardName) => {
       // 現在の枚数を取得
       const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
 
-      // 10枚制限カードの場合は10枚まで許可
-      const maxAllowed = deckBuilder.tenCardLimit.has(cardName) ? 10 : 4;
+      // それぞれの制限を確認
+      let maxAllowed = 4;
+      if (deckBuilder.tenCardLimit.has(cardName)) {
+        maxAllowed = 10;
+      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+        maxAllowed = 7;
+      }
 
       if (currentCount < maxAllowed) {
         deckBuilder.addCard(card.cloneNode(true));
@@ -2800,6 +2805,8 @@ const setupCardControls = (controls, card, cardName) => {
         // 上限に達した場合のメッセージ表示
         if (maxAllowed === 10) {
           deckBuilder.showTenCardMessage();
+        } else if (maxAllowed === 7) {
+          deckBuilder.showMessage('このカードはデッキに7枚まで。');
         } else {
           deckBuilder.showMessage('同じカードはデッキに4枚まで。');
         }
