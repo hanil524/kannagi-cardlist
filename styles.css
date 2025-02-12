@@ -1072,7 +1072,114 @@ button[onclick='resetFilters()']:active {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* 季節ボタンの基本スタイル */
+/* 「シリーズ」ボタンの基本スタイル */
+.modal-buttons button.batoruiro,
+.modal-buttons button.sinkiiro,
+.modal-buttons button.hyakkiiro,
+.modal-buttons button.puromoiro,
+.modal-buttons button.utukusiiro,
+.modal-buttons button.saigoiro,
+.modal-buttons button.anatairo,
+.modal-buttons button.kaidaniro,
+.modal-buttons button.sssiro,
+.modal-buttons button.gakkouiro,
+.modal-buttons button.lemoniro,
+.modal-buttons button.oisyairo {
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* 各ボタンの背景色設定 */
+.modal-buttons button.batoruiro {
+  background: linear-gradient(135deg, #1b1b1b 50%, #f74848 50%);
+  border: 2px solid #1d1d1d;
+}
+
+.modal-buttons button.sinkiiro {
+  background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
+  color: #222222;
+  border: 2px solid #ffffff;
+}
+
+.modal-buttons button.hyakkiiro {
+  background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
+  color: #222222;
+  border: 2px solid #f74848;
+}
+
+.modal-buttons button.puromoiro {
+  background-color: #ffffff;
+  color: #222222;
+}
+
+.modal-buttons button.utukusiiro {
+  background-color: #27c42e;
+  color: #ffffff;
+}
+
+.modal-buttons button.oisyairo {
+  background-color: #285ec2;
+  color: #ffffff;
+}
+
+.modal-buttons button.saigoiro {
+  background-color: #df619c;
+  color: #ffffff;
+}
+
+.modal-buttons button.anatairo {
+  background-color: #ff915f;
+  color: #ffffff;
+}
+
+.modal-buttons button.kaidaniro {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.modal-buttons button.gakkouiro {
+  background-color: #da3131;
+  color: #ffffff;
+}
+
+.modal-buttons button.sssiro {
+  background-color: #b3b1a2;
+  color: #ffffff;
+}
+
+.modal-buttons button.lemoniro {
+  background-color: #ebd036;
+  color: #222222;
+}
+
+/* 「札種類」の背景色 */
+.modal-buttons button.basyoiro {
+  background-color: #f74848;
+  color: #ffffff;
+  font-size: 13.5px;
+}
+
+.modal-buttons button.kaiiiro {
+  background-color: #9370db;
+  color: #ffffff;
+  font-size: 13.5px;
+}
+
+.modal-buttons button.douguiro {
+  background-color: #f0f0f0;
+  color: #222222;
+  font-size: 13.5px;
+}
+
+.modal-buttons button.kisetsuiro {
+  background-color: #ffd700;
+  color: #222222;
+  font-size: 13.5px;
+}
+
+/* 「季節」ボタンの基本スタイル */
 .modal-buttons button.haruiro,
 .modal-buttons button.natsuiro,
 .modal-buttons button.akiiro,
@@ -1145,113 +1252,6 @@ button[onclick='resetFilters()']:active {
   border: 2px solid #ff915f;
   position: relative;
   overflow: hidden;
-}
-
-/* 個別の札種類ボタンの背景色 */
-.modal-buttons button.basyoiro {
-  background-color: #f74848;
-  color: #ffffff;
-  font-size: 13.5px;
-}
-
-.modal-buttons button.kaiiiro {
-  background-color: #9370db;
-  color: #ffffff;
-  font-size: 13.5px;
-}
-
-.modal-buttons button.douguiro {
-  background-color: #f0f0f0;
-  color: #222222;
-  font-size: 13.5px;
-}
-
-.modal-buttons button.kisetsuiro {
-  background-color: #ffd700;
-  color: #222222;
-  font-size: 13.5px;
-}
-
-/* シリーズボタンの基本スタイル */
-.modal-buttons button.batoruiro,
-.modal-buttons button.sinkiiro,
-.modal-buttons button.hyakkiiro,
-.modal-buttons button.puromoiro,
-.modal-buttons button.utukusiiro,
-.modal-buttons button.saigoiro,
-.modal-buttons button.anatairo,
-.modal-buttons button.kaidaniro,
-.modal-buttons button.sssiro,
-.modal-buttons button.gakkouiro,
-.modal-buttons button.lemoniro,
-.modal-buttons button.oisyairo {
-  position: relative;
-  overflow: hidden;
-  font-weight: bold;
-  z-index: 1;
-}
-
-/* 各ボタンの背景色設定 */
-.modal-buttons button.batoruiro {
-  background: linear-gradient(135deg, #1b1b1b 50%, #f74848 50%);
-  border: 2px solid #1d1d1d;
-}
-
-.modal-buttons button.sinkiiro {
-  background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
-  color: #222222;
-  border: 2px solid #ffffff;
-}
-
-.modal-buttons button.hyakkiiro {
-  background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
-  color: #222222;
-  border: 2px solid #f74848;
-}
-
-.modal-buttons button.puromoiro {
-  background-color: #ffffff;
-  color: #222222;
-}
-
-.modal-buttons button.utukusiiro {
-  background-color: #27c42e;
-  color: #ffffff;
-}
-
-.modal-buttons button.oisyairo {
-  background-color: #285ec2;
-  color: #ffffff;
-}
-
-.modal-buttons button.saigoiro {
-  background-color: #f76969;
-  color: #ffffff;
-}
-
-.modal-buttons button.anatairo {
-  background-color: #ff915f;
-  color: #ffffff;
-}
-
-.modal-buttons button.kaidaniro {
-  background-color: #111111;
-  color: #ffffff;
-}
-
-.modal-buttons button.gakkouiro {
-  background-color: #da3131;
-  color: #ffffff;
-}
-
-.modal-buttons button.sssiro {
-  background-color: #3d3d3d;
-  color: #ffffff;
-}
-
-.modal-buttons button.lemoniro {
-  background-color: #ebd036;
-  color: #222222;
 }
 
 body.modal-open {
