@@ -1078,7 +1078,11 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.akiiro,
 .modal-buttons button.huyuiro,
 .modal-buttons button.muiro,
-.modal-buttons button.konkairo {
+.modal-buttons button.konkairo,
+.modal-buttons button.harunatsuiro,
+.modal-buttons button.haruhuyuiro,
+.modal-buttons button.akinatsuiro,
+.modal-buttons button.akihuyuiro {
   color: #ffffff;
   font-size: 13.5px;
 }
@@ -1086,95 +1090,85 @@ button[onclick='resetFilters()']:active {
 /* 個別の季節ボタンの背景色 */
 .modal-buttons button.haruiro {
   background-color: #f76969;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.natsuiro {
   background-color: #46ce46;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akiiro {
   background-color: #ff915f;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.huyuiro {
   background-color: #4e78eb;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.muiro {
   background-color: #ffffff;
   color: #222222;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.konkairo {
-  background-color: #535353;
+  background-color: #111111;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 /* 混化ボタンの斜め2色デザイン */
 .modal-buttons button.harunatsuiro {
   color: #ffffff;
   background: linear-gradient(135deg, #f76969 50%, #46ce46 50%);
+  border: 2px solid #f76969;
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.haruhuyuiro {
   color: #ffffff;
   background: linear-gradient(135deg, #f76969 50%, #4e78eb 50%);
+  border: 2px solid #f76969;
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akinatsuiro {
   color: #ffffff;
   background: linear-gradient(135deg, #ff915f 50%, #46ce46 50%);
+  border: 2px solid #ff915f;
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.akihuyuiro {
   color: #ffffff;
   background: linear-gradient(135deg, #ff915f 50%, #4e78eb 50%);
+  border: 2px solid #ff915f;
   position: relative;
   overflow: hidden;
-  border: 2px solid #1d1d1d;
 }
 
 /* 個別の札種類ボタンの背景色 */
 .modal-buttons button.basyoiro {
   background-color: #f74848;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
   font-size: 13.5px;
 }
 
 .modal-buttons button.kaiiiro {
   background-color: #9370db;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
   font-size: 13.5px;
 }
 
 .modal-buttons button.douguiro {
   background-color: #f0f0f0;
   color: #222222;
-  border: 2px solid #1d1d1d;
   font-size: 13.5px;
 }
 
 .modal-buttons button.kisetsuiro {
   background-color: #ffd700;
   color: #222222;
-  border: 2px solid #1d1d1d;
   font-size: 13.5px;
 }
 
@@ -1206,67 +1200,58 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.sinkiiro {
   background: linear-gradient(135deg, #ffffff 50%, #ff8e4d 50%);
   color: #222222;
-  border: 2px solid #1d1d1d;
+  border: 2px solid #ffffff;
 }
 
 .modal-buttons button.hyakkiiro {
   background: linear-gradient(135deg, #f74848 50%, #ffffff 50%);
   color: #222222;
-  border: 2px solid #1d1d1d;
+  border: 2px solid #f74848;
 }
 
 .modal-buttons button.puromoiro {
   background-color: #ffffff;
   color: #222222;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.utukusiiro {
   background-color: #27c42e;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.oisyairo {
   background-color: #285ec2;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.saigoiro {
   background-color: #f76969;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.anatairo {
   background-color: #ff915f;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.kaidaniro {
   background-color: #111111;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.gakkouiro {
   background-color: #da3131;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.sssiro {
-  background-color: #474747;
+  background-color: #3d3d3d;
   color: #ffffff;
-  border: 2px solid #1d1d1d;
 }
 
 .modal-buttons button.lemoniro {
   background-color: #ebd036;
   color: #222222;
-  border: 2px solid #1d1d1d;
 }
 
 body.modal-open {
