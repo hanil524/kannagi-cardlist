@@ -1,17 +1,27 @@
+/* 画面更新の無効化 */
 html,
 body {
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
   touch-action: pan-x pan-y;
   -ms-touch-action: pan-x pan-y;
+  -webkit-touch-action: pan-x pan-y;
 }
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+
+  /* 各ブラウザでテキストの選択を無効化 */
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+
+  /* 背景を細かいドット柄に */
+  background-color: #2a2a2a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23363636' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
 }
 
 header {
@@ -136,6 +146,37 @@ header a {
 
 .clear-button:hover {
   color: black;
+}
+
+/* スマホ表示のスタイル */
+@media (max-width: 768px) {
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .clear-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: gray;
+    padding: 0;
+  }
+
+  .clear-button:hover {
+    color: black;
+  }
+
+  .search-container input {
+    width: 100%;
+    padding-right: 30px; /* ×ボタンのスペースを確保 */
+    box-sizing: border-box;
+  }
 }
 
 /* メインコンテンツの上部マージンを調整 */
@@ -542,37 +583,6 @@ main {
   }
 }
 
-/* スマホ表示のスタイル */
-@media (max-width: 768px) {
-  .search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
-
-  .clear-button {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: gray;
-    padding: 0;
-  }
-
-  .clear-button:hover {
-    color: black;
-  }
-
-  .search-container input {
-    width: 100%;
-    padding-right: 30px; /* ×ボタンのスペースを確保 */
-    box-sizing: border-box;
-  }
-}
-
 header input::placeholder,
 .mobile-header input::placeholder {
   text-align: center;
@@ -603,8 +613,8 @@ header input::placeholder,
   display: block; /* 'display: none' を削除 */
   position: fixed;
   top: 50px; /* ヘッダーの高さ分 */
-  left: -80%; /* 初期位置を画面外に */
-  width: 75%;
+  left: -100%; /* 初期位置を画面外に */
+  width: 90%;
   height: calc(100% - 60px); /* 上下幅100%から、px数分を底上げする */
   z-index: 1001; /* z-indexを上げる */
   transition: left 0.2s ease-in-out; /* スムーズな移動のためのトランジション */
@@ -731,12 +741,6 @@ header input::placeholder,
   display: block;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
-}
-
-/* 背景を少しだけドット柄に */
-body {
-  background-color: #2a2a2a;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23363636' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
 }
 
 /* フィルターセクションのz-indexを上げる */
@@ -2703,15 +2707,6 @@ body.modal-open {
   line-height: 1; /* アイコンの行の高さを調整 */
 }
 
-/* プルトゥリフレッシュの無効化 */
-html,
-body {
-  overscroll-behavior: none;
-  -webkit-overscroll-behavior: none;
-  touch-action: pan-x pan-y;
-  -webkit-touch-action: pan-x pan-y;
-}
-
 /* デッキ画像保存時のスタイル */
 .deck-display.capturing {
   background: #2b2b2b;
@@ -2812,14 +2807,6 @@ body {
 
 .modal-close-button:hover {
   background-color: #5a5a5a;
-}
-
-/* body全体に適用 */
-body {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 /* 入力欄（input, textarea）では選択を許可 */
