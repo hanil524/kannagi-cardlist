@@ -1223,6 +1223,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.konkairo {
   background-color: #111111;
   color: #ffffff;
+  border: 2px solid #ffffff;
 }
 
 /* 混化ボタンの斜め2色デザイン */
