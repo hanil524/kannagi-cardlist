@@ -1739,8 +1739,9 @@ const deckBuilder = {
   deck: [],
   maxCards: 4,
   restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '悠習の古日記（ゆうしゅうのこにっき）']),
-  tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
+  twoCardLimit: new Set(['肥川の大蛇（ひのかわのおろち）']),
   sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
+  tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
   // デッキビルダーのopen/close関数
@@ -1800,6 +1801,14 @@ const deckBuilder = {
     setTimeout(() => message.remove(), 2000);
   },
 
+  showTwoCardMessage() {
+    const message = document.createElement('div');
+    message.className = 'deck-limit-message';
+    message.textContent = '準制限カードはデッキに2枚まで。';
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 2000);
+  },
+
   showTenCardMessage() {
     const message = document.createElement('div');
     message.className = 'deck-limit-message';
@@ -1833,6 +1842,10 @@ const deckBuilder = {
       }
     } else if (this.restrictedCards.has(cardName) && sameNameCount >= 1) {
       this.showLimitMessage();
+      return false;
+    } else if (this.twoCardLimit.has(cardName) && sameNameCount >= 2) {
+      // 追加：2枚制限カードのチェック
+      this.showTwoCardMessage(); // 追加：2枚制限メッセージの表示
       return false;
     } else if (sameNameCount >= this.maxCards) {
       this.showMessage('同じカードはデッキに4枚まで。');
