@@ -676,6 +676,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 初期表示時にカード数を更新
+  updateCardCount();
 });
 
 // 以下の関数は変更なし
@@ -711,6 +714,9 @@ const filterCardsByName = (event) => {
   // 検索結果が0件の場合のメッセージ表示
   const anyVisible = Array.from(cards).some((card) => card.style.display !== 'none');
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+
+  // カード数を更新
+  updateCardCount();
 };
 
 // フィルター条件のチェック関数
@@ -863,6 +869,9 @@ const resetFilters = () => {
 
   // カスタムスムーズスクロールを実行
   smoothScrollToTop();
+
+  // カード数を更新
+  updateCardCount();
 };
 
 // キーボードイベントリスナーを更新
@@ -971,6 +980,9 @@ const filterCards = () => {
   });
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+
+  // カード数を更新
+  updateCardCount();
 };
 
 // スクロールバーの幅を取得するヘルパー関数
@@ -2994,6 +3006,15 @@ const deckManager = {
       });
     });
 
+    // デッキ削除ボタン
+    modal.querySelectorAll('.deck-delete-button').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const deckId = button.getAttribute('data-deck-id');
+        confirmDeckReset(deckId);
+      });
+    });
+
     // モーダル外クリックで閉じる
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
@@ -3388,7 +3409,6 @@ function setupModalCardControls(controls, card, cardName) {
       }
     }
   };
-
   removeButton.onclick = (e) => {
     e.stopPropagation();
     if (!removeButton.disabled) {
@@ -3409,4 +3429,93 @@ function setupModalCardControls(controls, card, cardName) {
       }
     }
   };
+}
+
+// デッキ削除ボタンのイベントリスナーを追加
+document.querySelectorAll('.deck-delete-button').forEach((button) => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const deckId = button.getAttribute('data-deck-id');
+    confirmDeckReset(deckId);
+  });
+});
+
+// デッキリセット確認ポップアップを表示
+function confirmDeckReset(deckId) {
+  const confirmPopup = document.createElement('div');
+  confirmPopup.className = 'confirm-popup';
+  confirmPopup.innerHTML = `
+    <div class="confirm-content">
+      <p>デッキ${deckId}の内容をリセットしますか？</p>
+      <div class="confirm-buttons">
+        <button onclick="resetSpecificDeck(${deckId}, true)">はい</button>
+        <button onclick="resetSpecificDeck(${deckId}, false)">いいえ</button>
+      </div>
+    </div>
+  `;
+
+  // オーバーレイ部分のクリックで閉じる
+  confirmPopup.addEventListener('click', (e) => {
+    if (e.target === confirmPopup) {
+      resetSpecificDeck(deckId, false);
+    }
+  });
+
+  document.body.classList.add('modal-open');
+  document.body.appendChild(confirmPopup);
+}
+
+// 特定のデッキをリセットする関数
+function resetSpecificDeck(deckId, confirmed) {
+  const popup = document.querySelector('.confirm-popup');
+
+  if (confirmed) {
+    // 現在のデッキIDを保存
+    const currentDeckId = deckManager.currentDeckId;
+
+    // 指定されたデッキをリセット
+    if (deckManager.decks[deckId]) {
+      // デッキ内容をリセット
+      deckManager.decks[deckId].cards = [];
+      deckManager.decks[deckId].name = `デッキ${deckId}`;
+
+      // デッキ名ボタンのテキストを更新
+      const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+      if (button) {
+        button.textContent = `デッキ${deckId}`;
+      }
+
+      // プレビュー画像を非表示
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
+
+      // 現在表示中のデッキが削除対象の場合、デッキ内容も更新
+      if (currentDeckId == deckId) {
+        deckBuilder.deck = [];
+        deckBuilder.updateDisplay();
+        deckBuilder.updateDeckCount();
+      }
+
+      // 変更を保存
+      deckManager.saveToLocalStorage();
+
+      // 成功メッセージを表示
+      deckBuilder.showMessage(`デッキ${deckId}をリセットしました`);
+    }
+  }
+
+  document.body.classList.remove('modal-open');
+  popup.remove();
+}
+
+// カードの表示数をカウントして表示する関数
+function updateCardCount() {
+  const visibleCards = document.querySelectorAll('.card[style*="display: block"], .card:not([style*="display"])');
+  const countElement = document.getElementById('search-result-count');
+  if (countElement) {
+    countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
+  }
 }
