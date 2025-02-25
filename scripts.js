@@ -132,6 +132,18 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClearButtonVisibility('search-box', 'clear-button-desktop');
   updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
 
+  // 検索窓以外をクリックしたときに検索窓の選択状態を解除
+  document.addEventListener('click', (e) => {
+    if (e.target !== searchBox && e.target !== mobileSearchBox && !e.target.closest('.clear-button')) {
+      if (document.activeElement === searchBox) {
+        searchBox.blur();
+      }
+      if (document.activeElement === mobileSearchBox) {
+        mobileSearchBox.blur();
+      }
+    }
+  });
+
   resetFontSize(); // 初期化時にも実行
 
   // PCかどうかを判別
