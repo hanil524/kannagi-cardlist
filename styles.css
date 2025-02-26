@@ -418,7 +418,7 @@ main {
   position: absolute;
   padding-left: 310px; /* ×マークの判定の長さ */
   padding-right: 310px;
-  top: -5px; /* モーダルの外側に配置 */
+  top: -1px; /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
   margin-bottom: 15px; /* 閉じるボタンの下に余白を追加 */
@@ -833,36 +833,6 @@ button[onclick='resetFilters()']:active {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* モーダルのスタイル */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.modal-content {
-  background-color: rgba(44, 44, 44, 0.95);
-  margin: 10vh auto; /* 上下中央に配置するよう変更 */
-  padding: 20px;
-  border: none;
-  width: 80%;
-  max-width: 600px;
-  max-height: 80vh; /* 画面の80%の高さに制限 */
-  position: relative;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column; /* 縦方向に並べる */
-  overflow: hidden; /* 内容がはみ出さないように */
-  padding-top: 30px; /* 上部のパディングを増やす */
-}
-
 /* 画像の拡大表示（モーダル） */
 .image-modal .modal-content {
   position: relative;
@@ -997,7 +967,7 @@ button[onclick='resetFilters()']:active {
   overflow-x: hidden; /* 横スクロールを無効化 */
   overscroll-behavior: contain; /* スクロールの跳ね返りを制御 */
   -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
-  margin-bottom: 10px; /* 下部に少し余白を追加 */
+  margin-top: 10px; /* 上部に少し余白を追加 */
 }
 
 /* スマートフォン向けの追加調整 */
@@ -1075,7 +1045,7 @@ button[onclick='resetFilters()']:active {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden; /* モーダル自体はスクロールさせない */
   background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -1084,7 +1054,7 @@ button[onclick='resetFilters()']:active {
   margin: 10vh auto; /* 上下中央に配置するよう変更 */
   padding: 20px;
   border: none;
-  width: 80%;
+  width: 90%;
   max-width: 600px;
   max-height: 80vh; /* 画面の80%の高さに制限 */
   position: relative;
