@@ -2592,7 +2592,7 @@ function performZeroSearch() {
   // 未選択カードからランダムに必要な枚数を選ぶ
   function getRandomCards(unselectedCards, neededCount) {
     if (unselectedCards.length < neededCount) {
-      deckBuilder.showMessage(`零探しのカードが${unselectedCards.length}枚しかありません。`);
+      deckBuilder.showMessage(`デッキ内のカードが${unselectedCards.length}枚しかありません。`);
       return unselectedCards;
     }
 
