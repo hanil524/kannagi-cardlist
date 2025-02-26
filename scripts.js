@@ -2580,33 +2580,63 @@ function performZeroSearch() {
   let modal = document.querySelector('.zero-search-modal');
   const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
 
-  // Fisher-Yatesシャッフルで40枚から完全にランダムに8枚を選ぶ
-  function getRandomCards(deck, count) {
-    const shuffled = [...deck];
+  // 選択済みカードと未選択カードを分ける
+  function separateCards(deck) {
+    // 選択済みカードと未選択カードを分離
+    const selectedCards = deck.filter((card) => card.dataset.zeroSelected === 'true');
+    const unselectedCards = deck.filter((card) => card.dataset.zeroSelected !== 'true');
+
+    return { selectedCards, unselectedCards };
+  }
+
+  // 未選択カードからランダムに必要な枚数を選ぶ
+  function getRandomCards(unselectedCards, neededCount) {
+    if (unselectedCards.length < neededCount) {
+      deckBuilder.showMessage(`選択していないカードが${unselectedCards.length}枚しかありません。`);
+      return unselectedCards;
+    }
+
+    const shuffled = [...unselectedCards];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return shuffled.slice(0, count);
+    return shuffled.slice(0, neededCount);
   }
 
-  // 完全にランダムに8枚を選択し、その後で種類とコストで並び替え
-  const selectedCards = getRandomCards(deckBuilder.deck, 8).sort((a, b) => {
+  // カードを分離
+  const { selectedCards, unselectedCards } = separateCards(deckBuilder.deck);
+
+  // 選択済みカードと、残りの枠に必要なランダムカードを組み合わせる
+  const neededRandomCards = 8 - selectedCards.length;
+  const randomCards = getRandomCards(unselectedCards, neededRandomCards);
+
+  // 最終的な表示カード（選択済み + ランダム）
+  const displayCards = [...selectedCards, ...randomCards].sort((a, b) => {
     const typeA = typeOrder.indexOf(a.dataset.type);
     const typeB = typeOrder.indexOf(b.dataset.type);
     if (typeA !== typeB) return typeA - typeB;
     return parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
   });
 
-  // 以降のモーダル表示処理は変更なし
+  // 8枚に満たない場合は処理を中止
+  if (displayCards.length < 8 && unselectedCards.length + selectedCards.length >= 8) {
+    return;
+  }
+
+  // モーダル表示処理
   const content = `
       <div class="zero-search-content">
           <div class="zero-search-result">
-              ${selectedCards
+              ${displayCards
                 .map(
-                  (card) => `
-                      <div class="deck-card">
+                  (card, index) => `
+                      <div class="deck-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}" 
+                           data-number="${card.dataset.number}" 
+                           data-name="${card.dataset.name}"
+                           data-index="${index}">
                           <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
+                          ${card.dataset.zeroSelected === 'true' ? '<div class="zero-selected-mark"></div>' : ''}
                       </div>
                   `
                 )
@@ -2615,6 +2645,7 @@ function performZeroSearch() {
           <div class="zero-search-buttons">
               <button onclick="performZeroSearch()">リトライ</button>
               <button onclick="closeZeroSearch()">戻る</button>
+              <button onclick="resetZeroSelection()">キープ解除</button>
           </div>
       </div>
   `;
@@ -2627,6 +2658,19 @@ function performZeroSearch() {
 
   modal.innerHTML = content;
 
+  // カードクリックイベントを追加
+  const resultCards = modal.querySelectorAll('.zero-search-result .deck-card');
+  resultCards.forEach((card) => {
+    card.addEventListener('click', function () {
+      const index = this.getAttribute('data-index');
+      // 表示カードの配列から対応するカードを取得
+      const targetCard = displayCards[index];
+      if (targetCard) {
+        toggleZeroCardSelection(targetCard, this);
+      }
+    });
+  });
+
   modal.addEventListener('click', (e) => {
     if (e.target.classList.contains('zero-search-modal')) {
       closeZeroSearch();
@@ -2637,12 +2681,121 @@ function performZeroSearch() {
   requestAnimationFrame(() => modal.classList.add('active'));
 }
 
+// 零探し用のカード選択状態を切り替える関数
+function toggleZeroCardSelection(card, cardElement) {
+  if (!card) return;
+
+  // 選択状態を切り替え
+  const isSelected = card.dataset.zeroSelected === 'true';
+
+  if (isSelected) {
+    // 選択解除の場合
+    card.dataset.zeroSelected = 'false';
+
+    if (cardElement) {
+      cardElement.classList.remove('selected');
+      const mark = cardElement.querySelector('.zero-selected-mark');
+      if (mark) mark.remove();
+    }
+  } else {
+    // 選択する場合
+    card.dataset.zeroSelected = 'true';
+
+    if (cardElement) {
+      cardElement.classList.add('selected');
+      if (!cardElement.querySelector('.zero-selected-mark')) {
+        const mark = document.createElement('div');
+        mark.className = 'zero-selected-mark';
+        cardElement.appendChild(mark);
+      }
+    }
+  }
+}
+
+// 零探しの選択をすべて解除する関数
+function resetZeroSelection() {
+  deckBuilder.deck.forEach((card) => {
+    card.dataset.zeroSelected = 'false';
+  });
+
+  // モーダル内のカードの選択状態も更新
+  const modalCards = document.querySelectorAll('.zero-search-modal .deck-card');
+  modalCards.forEach((card) => {
+    card.classList.remove('selected');
+    const mark = card.querySelector('.zero-selected-mark');
+    if (mark) mark.remove();
+  });
+
+  // 選択解除後に再抽選を実行
+  performZeroSearch();
+
+  deckBuilder.showMessage('選択をすべて解除しました');
+}
+
+// 零探し機能を閉じる関数
 function closeZeroSearch() {
   const modal = document.querySelector('.zero-search-modal');
-  modal.classList.remove('active');
-  document.body.classList.remove('modal-open');
-  setTimeout(() => modal.remove(), 300);
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+
+    // 選択状態をすべて解除
+    deckBuilder.deck.forEach((card) => {
+      card.dataset.zeroSelected = 'false';
+    });
+
+    setTimeout(() => modal.remove(), 300);
+  }
 }
+
+// deckBuilder オブジェクトの updateDisplay メソッドを拡張
+const originalUpdateDisplay = deckBuilder.updateDisplay;
+deckBuilder.updateDisplay = function () {
+  // 元のメソッドを呼び出す
+  originalUpdateDisplay.call(this);
+
+  // 選択状態のカードにクラスを追加
+  this.deck.forEach((card) => {
+    if (card.dataset.selected === 'true') {
+      const displayCard = document.querySelector(`.deck-card[data-number="${card.dataset.number}"]`);
+      if (displayCard) {
+        displayCard.classList.add('selected-card');
+      }
+    }
+  });
+};
+
+// デッキ表示内のカードにクリックイベントを追加
+function addSelectionEvents() {
+  const deckCards = document.querySelectorAll('.deck-display .deck-card:not([data-empty="true"])');
+  deckCards.forEach((card) => {
+    card.addEventListener('click', function (e) {
+      // カードボタンがクリックされた場合は選択処理をスキップ
+      if (e.target.closest('.card-buttons')) return;
+
+      const cardNumber = this.getAttribute('data-number');
+      if (cardNumber) {
+        toggleCardSelection(cardNumber);
+      }
+    });
+  });
+}
+
+// デッキ表示が更新されるたびに選択イベントを再設定
+const originalDeckBuilderOpen = deckBuilder.open;
+deckBuilder.open = function () {
+  originalDeckBuilderOpen.call(this);
+  // 少し遅延させてDOM要素が確実に生成された後にイベントを設定
+  setTimeout(addSelectionEvents, 100);
+};
+
+// デッキ表示が更新されるたびに選択イベントを再設定
+const originalUpdateDeckDisplay = deckBuilder.updateDisplay;
+deckBuilder.updateDisplay = function () {
+  originalUpdateDeckDisplay.call(this);
+  // 少し遅延させてDOM要素が確実に生成された後にイベントを設定
+  setTimeout(addSelectionEvents, 100);
+};
 
 function returnToDeck() {
   deckBuilder.updateDisplay();
