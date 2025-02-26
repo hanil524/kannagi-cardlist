@@ -3552,3 +3552,78 @@ body.modal-open {
     margin: -20px auto 15px; /* PCでは上部マージンをさらに詰める */
   }
 }
+
+/* 選択されたカードのスタイル */
+.deck-card.selected-card,
+.zero-search-modal .deck-card.selected {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+
+.deck-card.selected-card::after,
+.zero-search-modal .deck-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid white;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* 零探しモーダル内のカードをクリック可能に */
+.zero-search-modal .deck-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.zero-search-modal .deck-card:hover {
+  transform: translateY(-5px);
+}
+
+/* 選択マークのスタイル */
+.zero-selected-mark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.zero-selected-mark::before {
+  content: '✓';
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 零探しボタンエリアのスタイル */
+.zero-search-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.zero-search-buttons button {
+  padding: 8px 15px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.zero-search-buttons button:hover {
+  background-color: #666;
+}
