@@ -1045,7 +1045,7 @@ button[onclick='resetFilters()']:active {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* モーダル自体はスクロールさせない */
+  overflow: auto; /* モーダル自体はスクロールさせない */
   background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -1056,7 +1056,7 @@ button[onclick='resetFilters()']:active {
   border: none;
   width: 90%;
   max-width: 600px;
-  max-height: 80vh; /* 画面の80%の高さに制限 */
+  max-height: 70vh; /* 画面の70%の高さに制限。スクロールバーを早めに表示 */
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
