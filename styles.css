@@ -2697,6 +2697,10 @@ body.modal-open {
   line-height: 1; /* アイコンの行の高さを調整 */
 }
 
+.deck-edit-button:hover i {
+  color: white;
+}
+
 /* デッキ画像保存時のスタイル */
 .deck-display.capturing {
   background: #2b2b2b;
