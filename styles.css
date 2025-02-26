@@ -938,11 +938,30 @@ button[onclick='resetFilters()']:active {
 
 /* モーダルの背景とコンテンツのスタイリング */
 .modal-content {
-  background-color: rgba(40, 40, 40, 0.95);
-  border: none;
+  background-color: rgba(44, 44, 44, 0.95);
+  margin: 10vh auto; /* 上下中央に配置するよう変更 */
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* 1pxの半透明白色の境界線を追加 */
+  width: calc(90% - 4px); /* 左右に2pxずつ、合計4pxのすき間を作る */
+  max-width: 596px; /* 600px - 4px */
+  max-height: 60vh;
+  position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* スマホ表示時の調整 */
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 5vh auto;
+    max-height: 90vh;
+    width: calc(90% - 4px); /* スマホでも同様に4pxのすき間 */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(48, 48, 48, 0.95);
+  }
 }
 
 /* モーダルのクローズボタン */
@@ -1053,16 +1072,34 @@ button[onclick='resetFilters()']:active {
   background-color: rgba(44, 44, 44, 0.95);
   margin: 10vh auto; /* 上下中央に配置するよう変更 */
   padding: 20px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* 1pxの半透明白色の境界線を追加 */
   width: 90%;
   max-width: 600px;
-  max-height: 70vh; /* 画面の70%の高さに制限。スクロールバーを早めに表示 */
+  max-height: 60vh;
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column; /* 縦方向に並べる */
-  overflow: hidden; /* 内容がはみ出さないように */
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* スマホ表示時の調整 */
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 5vh auto;
+    max-height: 90vh;
+    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.15); /* スマホ表示時は少し薄い境界線 */
+    /* オプション: 背景色を少し変えることでスキマ感を強調 */
+    background-color: rgba(48, 48, 48, 0.95);
+  }
+
+  /* モーダルの背景に微妙なパターンを追加してスキマ感を強調 */
+  .modal {
+    background-color: rgba(0, 0, 0, 0.85);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23333' fill-opacity='0.3' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  }
 }
 
 /* 「シリーズ」ボタンの基本スタイル */
