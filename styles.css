@@ -418,9 +418,10 @@ main {
   position: absolute;
   padding-left: 310px; /* ×マークの判定の長さ */
   padding-right: 310px;
-  top: -4px; /* モーダルの外側に配置 */
+  top: -5px; /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
+  margin-bottom: 15px; /* 閉じるボタンの下に余白を追加 */
 }
 
 .close:hover,
@@ -846,13 +847,20 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
+  background-color: rgba(44, 44, 44, 0.95);
+  margin: 10vh auto; /* 上下中央に配置するよう変更 */
   padding: 20px;
-  border: 3px solid #888;
+  border: none;
   width: 80%;
   max-width: 600px;
+  max-height: 80vh; /* 画面の80%の高さに制限 */
   position: relative;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column; /* 縦方向に並べる */
+  overflow: hidden; /* 内容がはみ出さないように */
+  padding-top: 30px; /* 上部のパディングを増やす */
 }
 
 /* 画像の拡大表示（モーダル） */
@@ -984,17 +992,24 @@ button[onclick='resetFilters()']:active {
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
   padding: 13px;
-  max-height: 75vh;
-  overflow-y: auto;
+  max-height: calc(80vh - 60px); /* モーダルの高さからヘッダー部分を引いた高さ */
+  overflow-y: auto; /* 縦方向のスクロールを有効化 */
   overflow-x: hidden; /* 横スクロールを無効化 */
-  overscroll-behavior-x: none; /* スクロールの跳ね返りを防止 */
-  touch-action: pan-y; /* 縦方向のスクロールのみ許可 */
+  overscroll-behavior: contain; /* スクロールの跳ね返りを制御 */
+  -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
+  margin-bottom: 10px; /* 下部に少し余白を追加 */
 }
 
 /* スマートフォン向けの追加調整 */
 @media (max-width: 768px) {
   .modal-content {
-    overflow: hidden; /* スクロールをさらに制限 */
+    margin: 5vh auto; /* スマホではより上部に配置 */
+    max-height: 90vh; /* スマホでは画面の90%まで使用 */
+    width: 90%; /* スマホでは幅を広げる */
+  }
+
+  .modal-buttons {
+    max-height: calc(90vh - 60px); /* スマホ用に調整 */
   }
 }
 
@@ -1066,14 +1081,18 @@ button[onclick='resetFilters()']:active {
 
 .modal-content {
   background-color: rgba(44, 44, 44, 0.95);
-  margin: 10vh auto 0; /* 上から10%の位置に配置 */
+  margin: 10vh auto; /* 上下中央に配置するよう変更 */
   padding: 20px;
   border: none;
   width: 80%;
   max-width: 600px;
+  max-height: 80vh; /* 画面の80%の高さに制限 */
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column; /* 縦方向に並べる */
+  overflow: hidden; /* 内容がはみ出さないように */
 }
 
 /* 「シリーズ」ボタンの基本スタイル */
