@@ -2726,9 +2726,7 @@ function resetZeroSelection() {
     if (mark) mark.remove();
   });
 
-  // 選択解除後に再抽選を実行
-  performZeroSearch();
-
+  // 選択解除後の再抽選は行わない
   deckBuilder.showMessage('選択をすべて解除しました');
 }
 
