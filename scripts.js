@@ -3670,3 +3670,17 @@ function updateCardCount() {
     countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
   }
 }
+
+// カードの選択状態を切り替える関数
+function toggleCardSelection(cardNumber) {
+  // デッキ内の該当カードを見つける
+  const card = deckBuilder.deck.find((c) => c.dataset.number === cardNumber);
+  if (!card) return;
+
+  // 選択状態を切り替え
+  const isSelected = card.dataset.selected === 'true';
+  card.dataset.selected = isSelected ? 'false' : 'true';
+
+  // デッキ表示を更新して選択状態を反映
+  deckBuilder.updateDisplay();
+}
