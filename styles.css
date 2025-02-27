@@ -2162,6 +2162,7 @@ body.modal-open {
   z-index: 2502;
   margin: 0 auto; /* 水平方向の中央揃え */
   overflow: visible; /* 子要素が切り取られないようにする */
+  border: 2px solid #ffffff28;
 }
 
 /* モーダル内の拡大画像設定 */
