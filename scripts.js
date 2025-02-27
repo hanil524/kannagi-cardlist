@@ -2751,48 +2751,6 @@ const originalUpdateDisplay = deckBuilder.updateDisplay;
 deckBuilder.updateDisplay = function () {
   // 元のメソッドを呼び出す
   originalUpdateDisplay.call(this);
-
-  // 選択状態のカードにクラスを追加
-  this.deck.forEach((card) => {
-    if (card.dataset.selected === 'true') {
-      const displayCard = document.querySelector(`.deck-card[data-number="${card.dataset.number}"]`);
-      if (displayCard) {
-        displayCard.classList.add('selected-card');
-      }
-    }
-  });
-};
-
-// デッキ表示内のカードにクリックイベントを追加
-function addSelectionEvents() {
-  const deckCards = document.querySelectorAll('.deck-display .deck-card:not([data-empty="true"])');
-  deckCards.forEach((card) => {
-    card.addEventListener('click', function (e) {
-      // カードボタンがクリックされた場合は選択処理をスキップ
-      if (e.target.closest('.card-buttons')) return;
-
-      const cardNumber = this.getAttribute('data-number');
-      if (cardNumber) {
-        toggleCardSelection(cardNumber);
-      }
-    });
-  });
-}
-
-// デッキ表示が更新されるたびに選択イベントを再設定
-const originalDeckBuilderOpen = deckBuilder.open;
-deckBuilder.open = function () {
-  originalDeckBuilderOpen.call(this);
-  // 少し遅延させてDOM要素が確実に生成された後にイベントを設定
-  setTimeout(addSelectionEvents, 100);
-};
-
-// デッキ表示が更新されるたびに選択イベントを再設定
-const originalUpdateDeckDisplay = deckBuilder.updateDisplay;
-deckBuilder.updateDisplay = function () {
-  originalUpdateDeckDisplay.call(this);
-  // 少し遅延させてDOM要素が確実に生成された後にイベントを設定
-  setTimeout(addSelectionEvents, 100);
 };
 
 function returnToDeck() {
@@ -3669,18 +3627,4 @@ function updateCardCount() {
   if (countElement) {
     countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
   }
-}
-
-// カードの選択状態を切り替える関数
-function toggleCardSelection(cardNumber) {
-  // デッキ内の該当カードを見つける
-  const card = deckBuilder.deck.find((c) => c.dataset.number === cardNumber);
-  if (!card) return;
-
-  // 選択状態を切り替え
-  const isSelected = card.dataset.selected === 'true';
-  card.dataset.selected = isSelected ? 'false' : 'true';
-
-  // デッキ表示を更新して選択状態を反映
-  deckBuilder.updateDisplay();
 }
