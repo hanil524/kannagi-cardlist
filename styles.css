@@ -1320,7 +1320,18 @@ body.modal-open {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    margin-top: 0px; /* 10pxにすると、メニューが丁度ヘッダーの下から表示される */
+    margin-top: 10px; /* 0pxから10pxに変更してギャップを作成 */
+    padding-top: 5px; /* 上部に少しパディングを追加 */
+  }
+
+  /* サブメニューとメインメニュー間の透明な領域を作成 */
+  .menu-item:hover::after {
+    content: '';
+    position: absolute;
+    height: 10px;
+    width: 100%;
+    bottom: -10px;
+    left: 0;
   }
 
   .menu-item:hover .submenu {
