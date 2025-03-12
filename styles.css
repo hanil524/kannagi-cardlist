@@ -1319,7 +1319,6 @@ body.modal-open {
     text-align: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
     margin-top: 10px; /* 0pxから10pxに変更してギャップを作成 */
     padding-top: 5px; /* 上部に少しパディングを追加 */
   }
