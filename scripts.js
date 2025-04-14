@@ -704,7 +704,8 @@ const filterCardsByName = (event) => {
     } else {
       // 検索文字列がある場合は、フィルター条件に加えて検索条件も確認
       const name = card.dataset.name.toLowerCase();
-      const matchesSearch = name.includes(query);
+      const attribute = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
+      const matchesSearch = name.includes(query) || attribute.includes(query);
 
       // フィルター条件と検索条件の両方に合致する場合のみ表示
       card.style.display = matchesFilters && matchesSearch ? 'block' : 'none';
