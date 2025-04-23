@@ -932,6 +932,7 @@ const filterCards = () => {
   let anyVisible = false;
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
+  const has廃Filter = filters.attribute.has('廃');
 
   // 複製カードの削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
@@ -944,7 +945,32 @@ const filterCards = () => {
       if (values.size > 0) {
         const cardAttribute = card.getAttribute(`data-${attribute}`);
         const cardAttributes = cardAttribute ? cardAttribute.split(' ') : [];
-        const matches = values.has(cardAttribute) || cardAttributes.some((attr) => values.has(attr));
+        
+        let matches = false;
+        
+        // 「廃」フィルターの特別処理
+        if (attribute === 'attribute' && has廃Filter) {
+          // 「廃」フィルターがある場合は、属性に「廃」を含むカードを表示
+          const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
+          
+          // 他の属性フィルターもチェック
+          const otherAttributeFilters = [...values].filter(v => v !== '廃');
+          const matchesOtherFilters = otherAttributeFilters.length === 0 || 
+                                    cardAttributes.some(attr => otherAttributeFilters.includes(attr));
+          
+          // 「廃」を含むか、他の属性フィルターに一致する場合
+          if (otherAttributeFilters.length === 0) {
+            // 「廃」だけが選択されている場合、「廃」を含む属性を持つカードだけを表示
+            matches = has廃InAttributes;
+          } else {
+            // 「廃」と他の属性が選択されている場合、「廃」を含む属性があるか、他の選択された属性に一致するカードを表示
+            matches = has廃InAttributes || matchesOtherFilters;
+          }
+        } else {
+          // 通常の完全一致フィルター
+          matches = values.has(cardAttribute) || cardAttributes.some((attr) => values.has(attr));
+        }
+        
         if (!matches) {
           shouldDisplay = false;
           break;
@@ -1067,7 +1093,12 @@ const openModal = (filterId) => {
     newButton.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      toggleFilterCard(filterId, button.innerText.trim());
+      // 「廃」ボタンの場合は特別処理
+      if (filterId === 'attribute' && button.innerText.trim() === '「廃」') {
+        toggleFilterCard(filterId, '廃');
+      } else {
+        toggleFilterCard(filterId, button.innerText.trim());
+      }
     };
     modalButtons.appendChild(newButton);
   });
