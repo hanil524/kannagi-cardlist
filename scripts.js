@@ -31,6 +31,18 @@ let isDragging = false;
 let currentCard = null;
 let startY = 0;
 
+// ★現在の日付を更新する関数を追加
+function updateCurrentDate() {
+  const updateDateElement = document.getElementById('update-date');
+  if (updateDateElement) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    updateDateElement.textContent = `${year}-${month}-${day}`;
+  }
+}
+
 // ナビゲーションボタンの状態
 const updateNavigationButtons = () => {
   const prevButton = document.getElementById('prev-image');
@@ -94,6 +106,9 @@ window.addEventListener('resize', resetFontSize);
 
 // ★ページロード後にDOMの初期化設定を行う
 document.addEventListener('DOMContentLoaded', () => {
+  // 日付を更新
+  updateCurrentDate();
+  
   // モバイルでのプルトゥリフレッシュを防止
   document.body.style.overscrollBehavior = 'none';
   document.documentElement.style.overscrollBehavior = 'none';
