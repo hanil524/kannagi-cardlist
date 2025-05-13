@@ -1826,8 +1826,8 @@ function openDeckBuilder() {
 const deckBuilder = {
   deck: [],
   maxCards: 4,
-  restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '悠習の古日記（ゆうしゅうのこにっき）']),
-  twoCardLimit: new Set(['肥川の大蛇（ひのかわのおろち）']),
+  restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）']),
+  twoCardLimit: new Set(['肥川の大蛇（ひのかわのおろち）', '悠習の古日記（ゆうしゅうのこにっき）']),
   sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   savedScrollPosition: 0, // スクロール位置保存用の変数
