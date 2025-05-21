@@ -8465,6 +8465,22 @@
           </div>
           <div
             class="card"
+            data-number="1683"
+            data-name="首無しライダー（くびなしらいだー）"
+            data-cost="9"
+            data-power="7"
+            data-series="怪談師 二章"
+            data-type="場所札"
+            data-season="冬"
+            data-rare="エキスパンション"
+            data-attribute="交通事故 道路 幽霊"
+            data-keyword="妬み"
+            data-role="「起き」 ハンデス"
+          >
+            <img data-src="images/card_10_p (85).jpg" src="placeholder.jpg" decoding="async" />
+          </div>
+          <div
+            class="card"
             data-number="1684"
             data-name="凍てつく赤身（いてつくあかみ）"
             data-cost="9"
@@ -8702,7 +8718,23 @@
             data-role="憑依加速"
           >
             <img data-src="images/card_10_p (21).jpg" src="placeholder.jpg" decoding="async" />
-          </div>       
+          </div>
+          <div
+            class="card"
+            data-number="1703"
+            data-name="善行に努める家（ぜんこうにつとめるいえ）"
+            data-cost="7"
+            data-power="2"
+            data-series="怪談師 二章"
+            data-type="場所札"
+            data-season="無"
+            data-rare="エキスパンション"
+            data-attribute="善行 うつしよ"
+            data-keyword="徳"
+            data-role="回復フェイズ"
+          >
+            <img data-src="images/card_10_p (84).jpg" src="placeholder.jpg" decoding="async" />
+          </div>
           <div
             class="card"
             data-number="1704"
@@ -9040,9 +9072,9 @@
       </div>
       <!-- キーワード -->
       <div id="keyword" class="filter-content" style="display: none">
-        <button onclick="toggleFilterCard('keyword', '召喚時')">召喚時</button>
-        <button onclick="toggleFilterCard('keyword', '速攻')">速攻</button>
-        <button onclick="toggleFilterCard('keyword', '襲撃')">襲撃</button>
+        <button onclick="toggleFilterCard('keyword', '召喚時')" data-tooltip="召喚時に効果が発動する">召喚時</button>
+        <button onclick="toggleFilterCard('keyword', '速攻')" data-tooltip="この札は「起き」状態で召喚する">速攻</button>
+        <button onclick="toggleFilterCard('keyword', '襲撃')" data-tooltip="相手の場所札にのみ攻撃できる。この攻撃で力が0になったら除外される">襲撃</button>
         <button onclick="toggleFilterCard('keyword', '逆境')">逆境</button>
         <button onclick="toggleFilterCard('keyword', '憤怒')">憤怒</button>
         <button onclick="toggleFilterCard('keyword', '追撃')">追撃</button>
@@ -9055,7 +9087,7 @@
         <button onclick="toggleFilterCard('keyword', '四季欲')">四季欲</button>
         <button onclick="toggleFilterCard('keyword', '妬み')">妬み</button>
         <button onclick="toggleFilterCard('keyword', '結界')">結界</button>
-        <button onclick="toggleFilterCard('keyword', '徳')">徳</button>
+        <button onclick="toggleFilterCard('keyword', '徳')" data-tooltip="デッキの一番上を裏向きで除外し、それが10枚になるとゲームに勝利">徳</button>
         <button onclick="toggleFilterCard('keyword', '霊視')">霊視</button>
         <button onclick="toggleFilterCard('keyword', '学校の怪談')">学校の怪談</button>
         <button onclick="toggleFilterCard('keyword', '正体不明')">正体不明</button>
