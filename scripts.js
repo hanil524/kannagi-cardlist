@@ -948,6 +948,7 @@ const filterCards = () => {
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
   const has廃Filter = filters.attribute.has('廃');
+  const hasCostLowFilter = filters.role.has('コスト↑力↓');
 
   // 複製カードの削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
@@ -963,8 +964,22 @@ const filterCards = () => {
         
         let matches = false;
         
+        // 「コスト↑力↓」フィルターの特別処理
+        if (attribute === 'role' && hasCostLowFilter) {
+          // 場所札のみを表示
+          if (card.dataset.type !== '場所札') {
+            shouldDisplay = false;
+            break;
+          }
+          // 力の低さを最優先、同じ力の場合はコストが高い順
+          const cost = parseInt(card.dataset.cost);
+          const power = parseInt(card.dataset.power);
+          // 力を最優先、コストは高い順（反転）
+          card.dataset.sortValue = `${power.toString().padStart(3, '0')}-${(999 - cost).toString().padStart(3, '0')}`;
+          matches = true;
+        }
         // 「廃」フィルターの特別処理
-        if (attribute === 'attribute' && has廃Filter) {
+        else if (attribute === 'attribute' && has廃Filter) {
           // 「廃」フィルターがある場合は、属性に「廃」を含むカードを表示
           const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
           
@@ -1020,6 +1035,17 @@ const filterCards = () => {
       card.style.display = 'none';
     }
   });
+
+  // 「コスト↑力↓」フィルターが有効な場合、カードをソート
+  if (hasCostLowFilter) {
+    const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+    visibleCards.sort((a, b) => {
+      const aValue = a.dataset.sortValue || '99-99';
+      const bValue = b.dataset.sortValue || '99-99';
+      return aValue.localeCompare(bValue);
+    });
+    visibleCards.forEach(card => cardList.appendChild(card));
+  }
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
