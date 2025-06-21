@@ -244,12 +244,15 @@ main {
 /* ボタンの縦幅を調整 */
 .filter-buttons button,
 .sort-buttons button {
-  height: 28px; /* ボタンの高さを増加 */
-  padding: 0 8px; /* 左右のパディングを設定 */
+  height: 28px;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.2; /* テキストの行間を調整 */
+  line-height: 1; /* 1.2から1に変更 */
+  font-size: 12px;
+  vertical-align: middle; /* 追加 */
+  box-sizing: border-box; /* 追加 */
 }
 
 #card-list {
