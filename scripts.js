@@ -762,17 +762,19 @@ const checkFilters = (card) => {
 
 const sortCards = (criteria) => {
   // 既存のソート状態をクリア（seasonは除く）
-  if (criteria !== 'season' && sortCriteria !== criteria) {
-    sortCriteria = criteria;
-    // No.と力の場合は初期値をdescに
-    if (criteria === 'number' || criteria === 'power') {
-      sortOrder = 'desc';
+  if (criteria !== 'season') {
+    if (sortCriteria !== criteria) {
+      sortCriteria = criteria;
+      // No.と力の場合は初期値をdescに
+      if (criteria === 'number' || criteria === 'power' || criteria === 'cost') {
+        sortOrder = 'desc';
+      } else {
+        sortOrder = 'asc';
+      }
     } else {
-      sortOrder = 'asc';
+      // 同じボタンを押した場合は順序を反転
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     }
-  } else if (criteria !== 'season') {
-    // 同じボタンを押した場合は順序を反転
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
   }
 
   const cardList = document.getElementById('card-list');
@@ -948,7 +950,6 @@ const filterCards = () => {
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
   const has廃Filter = filters.attribute.has('廃');
-  const hasCostLowFilter = filters.role.has('コスト↑力↓');
 
   // 複製カードの削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
@@ -1034,18 +1035,7 @@ const filterCards = () => {
     } else {
       card.style.display = 'none';
     }
-  });
-
-  // 「コスト↑力↓」フィルターが有効な場合、カードをソート
-  if (hasCostLowFilter) {
-    const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
-    visibleCards.sort((a, b) => {
-      const aValue = a.dataset.sortValue || '99-99';
-      const bValue = b.dataset.sortValue || '99-99';
-      return aValue.localeCompare(bValue);
-    });
-    visibleCards.forEach(card => cardList.appendChild(card));
-  }
+  });  
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
