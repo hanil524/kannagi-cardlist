@@ -789,8 +789,8 @@ const sortCards = (criteria) => {
       const bIndex = typeOrder.indexOf(bType);
       return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
     } else {
-      const aValue = parseInt(a.dataset[criteria]);
-      const bValue = parseInt(b.dataset[criteria]);
+      const aValue = parseInt(a.dataset[criteria]) || 0;
+      const bValue = parseInt(b.dataset[criteria]) || 0;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     }
   });
@@ -965,22 +965,9 @@ const filterCards = () => {
         
         let matches = false;
         
-        // 「コスト↑力↓」フィルターの特別処理
-        if (attribute === 'role' && hasCostLowFilter) {
-          // 場所札のみを表示
-          if (card.dataset.type !== '場所札') {
-            shouldDisplay = false;
-            break;
-          }
-          // 力の低さを最優先、同じ力の場合はコストが高い順
-          const cost = parseInt(card.dataset.cost);
-          const power = parseInt(card.dataset.power);
-          // 力を最優先、コストは高い順（反転）
-          card.dataset.sortValue = `${power.toString().padStart(3, '0')}-${(999 - cost).toString().padStart(3, '0')}`;
-          matches = true;
-        }
+        
         // 「廃」フィルターの特別処理
-        else if (attribute === 'attribute' && has廃Filter) {
+        if (attribute === 'attribute' && has廃Filter) {
           // 「廃」フィルターがある場合は、属性に「廃」を含むカードを表示
           const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
           
@@ -1675,8 +1662,8 @@ const loadFiltersFromLocalStorage = () => {
           });
         } else {
           cards.sort((a, b) => {
-            const aValue = parseInt(a.dataset[sortCriteria]);
-            const bValue = parseInt(b.dataset[sortCriteria]);
+            const aValue = parseInt(a.dataset[sortCriteria]) || 0;
+            const bValue = parseInt(b.dataset[sortCriteria]) || 0;
             return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
           });
         }
@@ -2173,7 +2160,7 @@ const deckBuilder = {
         if (typeA !== typeB) return typeA - typeB;
 
         // 次にコストでソート
-        const costCompare = parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
+        const costCompare = (parseInt(a.dataset.cost) || 0) - (parseInt(b.dataset.cost) || 0);
         if (costCompare !== 0) return costCompare;
 
         // 次に季節でソート
