@@ -322,7 +322,7 @@ main {
   opacity: 0;
   transition: opacity 0.1s ease-in-out; /* 無からカードが表示されるまでの秒数 */
   /* 画像が読み込まれるまでの間に何も表示されないように。透明のカードを表示してる */
-  background: url('path/to/placeholder-image.jpg') center center no-repeat;
+  background: url("placeholder.jpg") center center no-repeat;
   background-size: cover;
 }
 /* 読み込み完了時にloadedクラスが付与され、滑らかに表示（opacity: 1）*/
