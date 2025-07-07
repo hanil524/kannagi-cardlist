@@ -1,6 +1,10 @@
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
+  // メモリリークを防ぐためキャッシュをクリア
+  if (typeof seriesInfoCache !== 'undefined') {
+    seriesInfoCache.clear();
+  }
 };
 
 // Safari用の追加対策
@@ -288,6 +292,11 @@ document.addEventListener('DOMContentLoaded', () => {
           observer.disconnect();
           setupLazyLoading();
         }
+      }
+    } else if (document.visibilityState === 'hidden') {
+      // タブが非アクティブになった時、メモリを節約
+      if (seriesInfoCache.size > 100) {
+        seriesInfoCache.clear();
       }
     }
   });
@@ -1165,6 +1174,34 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
+// 収録情報のキャッシュ
+const seriesInfoCache = new Map();
+
+// 収録情報を効率的に取得する関数
+function getSeriesInfo(cardName) {
+  // キャッシュにある場合はそれを返す
+  if (seriesInfoCache.has(cardName)) {
+    return seriesInfoCache.get(cardName);
+  }
+  
+  // キャッシュにない場合のみ検索
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const allSeriesSet = new Set();
+  
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      const seriesList = card.dataset.series.split(' ');
+      seriesList.forEach(series => allSeriesSet.add(series));
+    }
+  });
+  
+  const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+  
+  // キャッシュに保存
+  seriesInfoCache.set(cardName, seriesText);
+  return seriesText;
+}
+
 // 画像モーダル内のボタン制御
 const updateModalControls = (cardName, controls) => {
   const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1248,20 +1285,11 @@ const openImageModal = (src) => {
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
   
-  // 同じ名前のカードのすべてのdata-seriesを収集
+  // 効率的に収録情報を取得
   const currentCardName = currentCard.dataset.name;
-  const allCardsWithSameName = document.querySelectorAll(`[data-name="${currentCardName}"]`);
-  const allSeriesSet = new Set();
-  
-  allCardsWithSameName.forEach(card => {
-    if (card.dataset.series) {
-      const seriesList = card.dataset.series.split(' ');
-      seriesList.forEach(series => allSeriesSet.add(series));
-    }
-  });
-  
-  if (allSeriesSet.size > 0) {
-    seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+  const seriesText = getSeriesInfo(currentCardName);
+  if (seriesText) {
+    seriesInfo.textContent = seriesText;
   }
 
   // 画像の表示処理
@@ -1351,6 +1379,11 @@ const closeImageModal = () => {
   const controls = document.querySelector('.card-controls');
   if (controls) {
     controls.remove();
+  }
+  
+  // メモリリークを防ぐため、必要に応じてキャッシュをクリア
+  if (seriesInfoCache.size > 500) {
+    seriesInfoCache.clear();
   }
 };
 
@@ -1772,18 +1805,9 @@ const showNextImage = () => {
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
       const nextCardName = nextCard.dataset.name;
-      const allCardsWithSameName = document.querySelectorAll(`[data-name="${nextCardName}"]`);
-      const allSeriesSet = new Set();
-      
-      allCardsWithSameName.forEach(card => {
-        if (card.dataset.series) {
-          const seriesList = card.dataset.series.split(' ');
-          seriesList.forEach(series => allSeriesSet.add(series));
-        }
-      });
-      
-      if (allSeriesSet.size > 0) {
-        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+      const seriesText = getSeriesInfo(nextCardName);
+      if (seriesText) {
+        seriesInfo.textContent = seriesText;
       }
     }
 
@@ -1825,18 +1849,9 @@ const showPreviousImage = () => {
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
       const prevCardName = prevCard.dataset.name;
-      const allCardsWithSameName = document.querySelectorAll(`[data-name="${prevCardName}"]`);
-      const allSeriesSet = new Set();
-      
-      allCardsWithSameName.forEach(card => {
-        if (card.dataset.series) {
-          const seriesList = card.dataset.series.split(' ');
-          seriesList.forEach(series => allSeriesSet.add(series));
-        }
-      });
-      
-      if (allSeriesSet.size > 0) {
-        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+      const seriesText = getSeriesInfo(prevCardName);
+      if (seriesText) {
+        seriesInfo.textContent = seriesText;
       }
     }
 
