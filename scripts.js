@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopPropagation();
       const img = card.querySelector('img');
-      openImageModal(img.src, card);
+      openImageModal(img.src);
     }
   });
 
@@ -1165,13 +1165,6 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 究極のシンプル版：現在のカードのみ表示
-function getSeriesInfo(card) {
-  // 一時的に無効化
-  return '';
-  // return card.dataset.series ? `収録：${card.dataset.series.replace(/ /g, '、')}` : '';
-}
-
 // 画像モーダル内のボタン制御
 const updateModalControls = (cardName, controls) => {
   const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1189,7 +1182,7 @@ const updateModalControls = (cardName, controls) => {
   return currentCount;
 };
 
-const openImageModal = (src, clickedCard = null) => {
+const openImageModal = (src) => {
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -1198,34 +1191,24 @@ const openImageModal = (src, clickedCard = null) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
-  // クリックされたカードから直接情報を取得（軽量化）
-  let currentCard = clickedCard;
-  if (!currentCard) {
-    // フォールバック：クリックされたカードが特定できない場合のみ検索
-    const allCards = document.querySelectorAll('.card, .deck-card');
-    for (let card of allCards) {
-      const img = card.querySelector('img');
-      if (img && (img.src === src || img.getAttribute('data-src') === src)) {
-        currentCard = card;
-        break;
-      }
-    }
-  }
-
-  if (!currentCard) return;
-
-  const cardName = currentCard.dataset.name;
-  
-  // ナビゲーション用の軽量な配列生成（必要時のみ）
+  // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
-  visibleCards = isDeckModalVisible 
-    ? Array.from(document.querySelectorAll('.deck-card'))
-    : Array.from(document.querySelectorAll('.card')).filter(card => 
-        card.style.display !== 'none' && !card.classList.contains('hidden')
-      );
-  
-  // 現在のカードのインデックスを取得
-  currentImageIndex = visibleCards.indexOf(currentCard);
+
+  // 現在の表示状態に応じてカードリストを取得
+  visibleCards = isDeckModalVisible
+    ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
+    : Array.from(document.querySelectorAll('.card')).filter((card) => window.getComputedStyle(card).display !== 'none'); // 表示中のカード一覧
+
+  // クリックされた画像のインデックスを取得
+  currentImageIndex = visibleCards.findIndex((card) => {
+    const cardImg = card.querySelector('img');
+    return cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src);
+  });
+
+  if (currentImageIndex === -1) return;
+
+  const currentCard = visibleCards[currentImageIndex];
+  const cardName = currentCard.dataset.name;
 
   // カウント情報の取得と表示
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1261,24 +1244,32 @@ const openImageModal = (src, clickedCard = null) => {
   const container = document.createElement('div');
   container.className = 'image-container';
 
-  // 収録情報を表示する要素を作成 - 一時的に無効化
-  /*
+  // 収録情報を表示する要素を作成
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
   
-  // 事前統合済みの収録情報を取得
-  const seriesText = getSeriesInfo(currentCard);
-  if (seriesText) {
-    seriesInfo.textContent = seriesText;
+  // 同じ名前のカードのすべてのdata-seriesを収集
+  const currentCardName = currentCard.dataset.name;
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${currentCardName}"]`);
+  const allSeriesSet = new Set();
+  
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      const seriesList = card.dataset.series.split(' ');
+      seriesList.forEach(series => allSeriesSet.add(series));
+    }
+  });
+  
+  if (allSeriesSet.size > 0) {
+    seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
   }
-  */
 
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
   // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
-  // container.appendChild(seriesInfo); // 一時的に無効化
+  container.appendChild(seriesInfo);
   container.appendChild(modalImage);
 
   // 既存のコントロールを更新
@@ -1777,16 +1768,24 @@ const showNextImage = () => {
       updateCardCountInModal(cardName);
     }
 
-    // 収録情報を更新 - 一時的に無効化
-    /*
+    // 収録情報を更新
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
-      const seriesText = getSeriesInfo(nextCard);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
+      const nextCardName = nextCard.dataset.name;
+      const allCardsWithSameName = document.querySelectorAll(`[data-name="${nextCardName}"]`);
+      const allSeriesSet = new Set();
+      
+      allCardsWithSameName.forEach(card => {
+        if (card.dataset.series) {
+          const seriesList = card.dataset.series.split(' ');
+          seriesList.forEach(series => allSeriesSet.add(series));
+        }
+      });
+      
+      if (allSeriesSet.size > 0) {
+        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
       }
     }
-    */
 
     updateNavigationButtons();
     preloadAdjacentImages();
@@ -1822,16 +1821,24 @@ const showPreviousImage = () => {
       updateCardCountInModal(cardName);
     }
 
-    // 収録情報を更新 - 一時的に無効化
-    /*
+    // 収録情報を更新
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
-      const seriesText = getSeriesInfo(prevCard);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
+      const prevCardName = prevCard.dataset.name;
+      const allCardsWithSameName = document.querySelectorAll(`[data-name="${prevCardName}"]`);
+      const allSeriesSet = new Set();
+      
+      allCardsWithSameName.forEach(card => {
+        if (card.dataset.series) {
+          const seriesList = card.dataset.series.split(' ');
+          seriesList.forEach(series => allSeriesSet.add(series));
+        }
+      });
+      
+      if (allSeriesSet.size > 0) {
+        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
       }
     }
-    */
 
     updateNavigationButtons();
     preloadAdjacentImages();
@@ -2124,7 +2131,7 @@ const deckBuilder = {
         const deckCards = Array.from(deckDisplay.querySelectorAll('.deck-card:not([data-empty="true"])'));
         currentImageIndex = deckCards.indexOf(cardElement);
         visibleCards = deckCards;
-        openImageModal(img.src, cardElement);
+        openImageModal(img.src);
       }
     };
 
