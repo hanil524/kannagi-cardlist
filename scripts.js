@@ -1244,11 +1244,32 @@ const openImageModal = (src) => {
   const container = document.createElement('div');
   container.className = 'image-container';
 
+  // 収録情報を表示する要素を作成
+  const seriesInfo = document.createElement('div');
+  seriesInfo.className = 'card-series-info';
+  
+  // 同じ名前のカードのすべてのdata-seriesを収集
+  const currentCardName = currentCard.dataset.name;
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${currentCardName}"]`);
+  const allSeriesSet = new Set();
+  
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      const seriesList = card.dataset.series.split(' ');
+      seriesList.forEach(series => allSeriesSet.add(series));
+    }
+  });
+  
+  if (allSeriesSet.size > 0) {
+    seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+  }
+
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
-  // コンテナに画像を追加
+  // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
+  container.appendChild(seriesInfo);
   container.appendChild(modalImage);
 
   // 既存のコントロールを更新
@@ -1747,6 +1768,25 @@ const showNextImage = () => {
       updateCardCountInModal(cardName);
     }
 
+    // 収録情報を更新
+    const seriesInfo = document.querySelector('.card-series-info');
+    if (seriesInfo) {
+      const nextCardName = nextCard.dataset.name;
+      const allCardsWithSameName = document.querySelectorAll(`[data-name="${nextCardName}"]`);
+      const allSeriesSet = new Set();
+      
+      allCardsWithSameName.forEach(card => {
+        if (card.dataset.series) {
+          const seriesList = card.dataset.series.split(' ');
+          seriesList.forEach(series => allSeriesSet.add(series));
+        }
+      });
+      
+      if (allSeriesSet.size > 0) {
+        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+      }
+    }
+
     updateNavigationButtons();
     preloadAdjacentImages();
   }
@@ -1779,6 +1819,25 @@ const showPreviousImage = () => {
     if (controls) {
       setupModalCardControls(controls, prevCard, cardName);
       updateCardCountInModal(cardName);
+    }
+
+    // 収録情報を更新
+    const seriesInfo = document.querySelector('.card-series-info');
+    if (seriesInfo) {
+      const prevCardName = prevCard.dataset.name;
+      const allCardsWithSameName = document.querySelectorAll(`[data-name="${prevCardName}"]`);
+      const allSeriesSet = new Set();
+      
+      allCardsWithSameName.forEach(card => {
+        if (card.dataset.series) {
+          const seriesList = card.dataset.series.split(' ');
+          seriesList.forEach(series => allSeriesSet.add(series));
+        }
+      });
+      
+      if (allSeriesSet.size > 0) {
+        seriesInfo.textContent = `収録：${Array.from(allSeriesSet).join('、')}`;
+      }
     }
 
     updateNavigationButtons();
