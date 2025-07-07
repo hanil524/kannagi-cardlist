@@ -1167,7 +1167,9 @@ let visibleCards = [];
 
 // 究極のシンプル版：現在のカードのみ表示
 function getSeriesInfo(card) {
-  return card.dataset.series ? `収録：${card.dataset.series.replace(/ /g, '、')}` : '';
+  // 一時的に無効化
+  return '';
+  // return card.dataset.series ? `収録：${card.dataset.series.replace(/ /g, '、')}` : '';
 }
 
 // 画像モーダル内のボタン制御
@@ -1249,7 +1251,8 @@ const openImageModal = (src) => {
   const container = document.createElement('div');
   container.className = 'image-container';
 
-  // 収録情報を表示する要素を作成
+  // 収録情報を表示する要素を作成 - 一時的に無効化
+  /*
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
   
@@ -1258,13 +1261,14 @@ const openImageModal = (src) => {
   if (seriesText) {
     seriesInfo.textContent = seriesText;
   }
+  */
 
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
   // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
-  container.appendChild(seriesInfo);
+  // container.appendChild(seriesInfo); // 一時的に無効化
   container.appendChild(modalImage);
 
   // 既存のコントロールを更新
@@ -1763,7 +1767,8 @@ const showNextImage = () => {
       updateCardCountInModal(cardName);
     }
 
-    // 収録情報を更新
+    // 収録情報を更新 - 一時的に無効化
+    /*
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
       const seriesText = getSeriesInfo(nextCard);
@@ -1771,6 +1776,7 @@ const showNextImage = () => {
         seriesInfo.textContent = seriesText;
       }
     }
+    */
 
     updateNavigationButtons();
     preloadAdjacentImages();
@@ -1806,7 +1812,8 @@ const showPreviousImage = () => {
       updateCardCountInModal(cardName);
     }
 
-    // 収録情報を更新
+    // 収録情報を更新 - 一時的に無効化
+    /*
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
       const seriesText = getSeriesInfo(prevCard);
@@ -1814,6 +1821,7 @@ const showPreviousImage = () => {
         seriesInfo.textContent = seriesText;
       }
     }
+    */
 
     updateNavigationButtons();
     preloadAdjacentImages();
