@@ -1231,35 +1231,22 @@ const openImageModal = (src) => {
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
 
-  // 🔥 iOS超軽量化：srcから直接カードを検索（DOM全体検索を回避）
-  let currentCard = null;
-  
-  if (isDeckModalVisible) {
-    // デッキモーダルの場合
-    visibleCards = Array.from(document.querySelectorAll('.deck-card'));
-    for (let i = 0; i < visibleCards.length; i++) {
-      const card = visibleCards[i];
-      const cardImg = card.querySelector('img');
-      if (cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src)) {
-        currentImageIndex = i;
-        currentCard = card;
-        break;
-      }
-    }
-  } else {
-    // 通常のカード表示の場合：srcから直接検索
-    const allImages = document.querySelectorAll('.card img');
-    for (let img of allImages) {
-      if (img.src === src || img.getAttribute('data-src') === src) {
-        currentCard = img.closest('.card');
-        currentImageIndex = 0; // 一時的に固定（ナビゲーション機能は後で復元）
-        break;
-      }
-    }
-    visibleCards = currentCard ? [currentCard] : [];
-  }
+  // 現在の表示状態に応じてカードリストを取得（軽量化版）
+  visibleCards = isDeckModalVisible
+    ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
+    : Array.from(document.querySelectorAll('.card')).filter((card) => 
+        card.style.display !== 'none' && !card.classList.contains('hidden')
+      ); // getComputedStyleを避けた軽量版
+
+  // クリックされた画像のインデックスを取得
+  currentImageIndex = visibleCards.findIndex((card) => {
+    const cardImg = card.querySelector('img');
+    return cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src);
+  });
 
   if (currentImageIndex === -1) return;
+
+  const currentCard = visibleCards[currentImageIndex];
   const cardName = currentCard.dataset.name;
 
   // カウント情報の取得と表示
@@ -1333,9 +1320,9 @@ const openImageModal = (src) => {
   modalContent.appendChild(prevButton);
   modalContent.appendChild(nextButton);
 
-  // 既存のsetupCardControlsの代わりに、setupModalCardControlsを使用
-  setupModalCardControls(controls, currentCard, cardName);
-  updateCardCountInModal(cardName); // ★追加
+  // 🔥 iOS原因特定：重い関数を段階的に無効化
+  // setupModalCardControls(controls, currentCard, cardName);
+  // updateCardCountInModal(cardName);
 
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -1348,17 +1335,16 @@ const openImageModal = (src) => {
     modalImage.style.transition = 'opacity 0.3s ease';
     modalImage.style.opacity = '1';
 
-    // 画像のロード完了後にナビゲーションボタンを表示
-    modalImage.onload = () => {
-      updateNavigationButtons();
-      preloadAdjacentImages();
-    };
+    // 🔥 iOS原因特定：画像ロード後の重い処理を無効化
+    // modalImage.onload = () => {
+    //   updateNavigationButtons();
+    //   preloadAdjacentImages();
+    // };
 
-    // 既にキャッシュされている場合のためのフォールバック
-    if (modalImage.complete) {
-      updateNavigationButtons();
-      preloadAdjacentImages();
-    }
+    // if (modalImage.complete) {
+    //   updateNavigationButtons();
+    //   preloadAdjacentImages();
+    // }
   });
 };
 
