@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopPropagation();
       const img = card.querySelector('img');
-      openImageModal(img.src);
+      openImageModal(img.src, card);
     }
   });
 
@@ -1189,7 +1189,7 @@ const updateModalControls = (cardName, controls) => {
   return currentCount;
 };
 
-const openImageModal = (src) => {
+const openImageModal = (src, clickedCard = null) => {
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -1198,24 +1198,34 @@ const openImageModal = (src) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
 
-  // デッキモーダルが表示中かどうかを確認
-  const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
+  // クリックされたカードから直接情報を取得（軽量化）
+  let currentCard = clickedCard;
+  if (!currentCard) {
+    // フォールバック：クリックされたカードが特定できない場合のみ検索
+    const allCards = document.querySelectorAll('.card, .deck-card');
+    for (let card of allCards) {
+      const img = card.querySelector('img');
+      if (img && (img.src === src || img.getAttribute('data-src') === src)) {
+        currentCard = card;
+        break;
+      }
+    }
+  }
 
-  // 現在の表示状態に応じてカードリストを取得
-  visibleCards = isDeckModalVisible
-    ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
-    : Array.from(document.querySelectorAll('.card')).filter((card) => window.getComputedStyle(card).display !== 'none'); // 表示中のカード一覧
+  if (!currentCard) return;
 
-  // クリックされた画像のインデックスを取得
-  currentImageIndex = visibleCards.findIndex((card) => {
-    const cardImg = card.querySelector('img');
-    return cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src);
-  });
-
-  if (currentImageIndex === -1) return;
-
-  const currentCard = visibleCards[currentImageIndex];
   const cardName = currentCard.dataset.name;
+  
+  // ナビゲーション用の軽量な配列生成（必要時のみ）
+  const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
+  visibleCards = isDeckModalVisible 
+    ? Array.from(document.querySelectorAll('.deck-card'))
+    : Array.from(document.querySelectorAll('.card')).filter(card => 
+        card.style.display !== 'none' && !card.classList.contains('hidden')
+      );
+  
+  // 現在のカードのインデックスを取得
+  currentImageIndex = visibleCards.indexOf(currentCard);
 
   // カウント情報の取得と表示
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -2114,7 +2124,7 @@ const deckBuilder = {
         const deckCards = Array.from(deckDisplay.querySelectorAll('.deck-card:not([data-empty="true"])'));
         currentImageIndex = deckCards.indexOf(cardElement);
         visibleCards = deckCards;
-        openImageModal(img.src);
+        openImageModal(img.src, cardElement);
       }
     };
 
