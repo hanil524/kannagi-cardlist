@@ -1165,26 +1165,9 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 遅延読み込み完全対応：表示中カードのみで統合（超安全）
-function getSeriesInfo(targetCard) {
-  if (!targetCard || !targetCard.dataset.name) return '';
-  
-  const cardName = targetCard.dataset.name;
-  const seriesSet = new Set();
-  
-  // 現在表示中のカード配列から同名カードを検索（DOM検索なし）
-  if (visibleCards && visibleCards.length > 0) {
-    visibleCards.forEach(card => {
-      if (card.dataset.name === cardName && card.dataset.series) {
-        card.dataset.series.split(' ').forEach(series => seriesSet.add(series));
-      }
-    });
-  } else if (targetCard.dataset.series) {
-    // フォールバック：現在のカードのみ
-    targetCard.dataset.series.split(' ').forEach(series => seriesSet.add(series));
-  }
-  
-  return seriesSet.size > 0 ? `収録：${Array.from(seriesSet).join('、')}` : '';
+// 究極のシンプル版：現在のカードのみ表示
+function getSeriesInfo(card) {
+  return card.dataset.series ? `収録：${card.dataset.series.replace(/ /g, '、')}` : '';
 }
 
 // 画像モーダル内のボタン制御
