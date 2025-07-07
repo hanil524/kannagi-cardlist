@@ -106,9 +106,6 @@ window.addEventListener('resize', resetFontSize);
 
 // ★ページロード後にDOMの初期化設定を行う
 document.addEventListener('DOMContentLoaded', () => {
-  // 最初に収録情報を事前統合（1回だけ）
-  preIntegrateSeries();
-  
   // 日付を更新
   updateCurrentDate();
   
@@ -1168,42 +1165,26 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 超軽量な収録情報取得（事前統合済み）
-function getSeriesInfo(card) {
-  return card.dataset.allSeries ? `収録：${card.dataset.allSeries}` : '';
-}
-
-// ページ読み込み時に1回だけ実行：同名カードの収録情報を事前統合
-function preIntegrateSeries() {
-  const cardsByName = {};
-  const allCards = document.querySelectorAll('.card');
+// 遅延読み込み完全対応：表示中カードのみで統合（超安全）
+function getSeriesInfo(targetCard) {
+  if (!targetCard || !targetCard.dataset.name) return '';
   
-  // 1. カード名でグループ化
-  allCards.forEach(card => {
-    const name = card.dataset.name;
-    if (!cardsByName[name]) {
-      cardsByName[name] = [];
-    }
-    cardsByName[name].push(card);
-  });
+  const cardName = targetCard.dataset.name;
+  const seriesSet = new Set();
   
-  // 2. 同名カードの収録情報を統合
-  Object.entries(cardsByName).forEach(([name, cards]) => {
-    const seriesSet = new Set();
-    
-    cards.forEach(card => {
-      if (card.dataset.series) {
+  // 現在表示中のカード配列から同名カードを検索（DOM検索なし）
+  if (visibleCards && visibleCards.length > 0) {
+    visibleCards.forEach(card => {
+      if (card.dataset.name === cardName && card.dataset.series) {
         card.dataset.series.split(' ').forEach(series => seriesSet.add(series));
       }
     });
-    
-    const integratedSeries = Array.from(seriesSet).join('、');
-    
-    // 3. 全ての同名カードに統合済み情報を設定
-    cards.forEach(card => {
-      card.dataset.allSeries = integratedSeries;
-    });
-  });
+  } else if (targetCard.dataset.series) {
+    // フォールバック：現在のカードのみ
+    targetCard.dataset.series.split(' ').forEach(series => seriesSet.add(series));
+  }
+  
+  return seriesSet.size > 0 ? `収録：${Array.from(seriesSet).join('、')}` : '';
 }
 
 // 画像モーダル内のボタン制御
