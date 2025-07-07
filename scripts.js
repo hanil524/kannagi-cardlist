@@ -1383,6 +1383,15 @@ const closeImageModal = () => {
     controls.remove();
   }
   
+  // iOS対策：画像モーダル閉じた後の遅延読み込み問題を解決
+  setTimeout(() => {
+    // 遅延読み込みの状態をリセット（フィルター操作と同じ効果）
+    const observer = document.querySelector('.card img');
+    if (observer && typeof setupLazyLoading === 'function') {
+      setupLazyLoading();
+    }
+  }, 100);
+  
   // メモリリークを防ぐため、必要に応じてキャッシュをクリア
   if (seriesInfoCache.size > 500) {
     seriesInfoCache.clear();
