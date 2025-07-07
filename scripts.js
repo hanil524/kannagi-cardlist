@@ -1,10 +1,8 @@
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
-  // メモリリークを防ぐためキャッシュをクリア
-  if (typeof seriesInfoCache !== 'undefined') {
-    seriesInfoCache.clear();
-  }
+  // キャッシュをクリア
+  Object.keys(seriesCache).forEach(key => delete seriesCache[key]);
 };
 
 // Safari用の追加対策
@@ -292,11 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
           observer.disconnect();
           setupLazyLoading();
         }
-      }
-    } else if (document.visibilityState === 'hidden') {
-      // タブが非アクティブになった時、メモリを節約
-      if (seriesInfoCache.size > 100) {
-        seriesInfoCache.clear();
       }
     }
   });
@@ -1174,32 +1167,31 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 収録情報のキャッシュ
-const seriesInfoCache = new Map();
+// 軽量な収録情報キャッシュ（シンプルなオブジェクト）
+const seriesCache = {};
 
-// 収録情報を効率的に取得する関数
+// 同名カードの収録情報を統合取得（軽量版）
 function getSeriesInfo(cardName) {
-  // キャッシュにある場合はそれを返す
-  if (seriesInfoCache.has(cardName)) {
-    return seriesInfoCache.get(cardName);
+  // 既に取得済みの場合はキャッシュから返す
+  if (seriesCache[cardName]) {
+    return seriesCache[cardName];
   }
   
-  // キャッシュにない場合のみ検索
-  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
-  const allSeriesSet = new Set();
+  // 同名カードを検索して収録情報を統合
+  const sameNameCards = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const seriesSet = new Set();
   
-  allCardsWithSameName.forEach(card => {
+  sameNameCards.forEach(card => {
     if (card.dataset.series) {
-      const seriesList = card.dataset.series.split(' ');
-      seriesList.forEach(series => allSeriesSet.add(series));
+      card.dataset.series.split(' ').forEach(series => seriesSet.add(series));
     }
   });
   
-  const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+  const result = seriesSet.size > 0 ? `収録：${Array.from(seriesSet).join('、')}` : '';
   
-  // キャッシュに保存
-  seriesInfoCache.set(cardName, seriesText);
-  return seriesText;
+  // シンプルなキャッシュに保存
+  seriesCache[cardName] = result;
+  return result;
 }
 
 // 画像モーダル内のボタン制御
@@ -1285,9 +1277,8 @@ const openImageModal = (src) => {
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
   
-  // 効率的に収録情報を取得
-  const currentCardName = currentCard.dataset.name;
-  const seriesText = getSeriesInfo(currentCardName);
+  // 同名カードの収録情報を統合取得
+  const seriesText = getSeriesInfo(currentCard.dataset.name);
   if (seriesText) {
     seriesInfo.textContent = seriesText;
   }
@@ -1381,9 +1372,9 @@ const closeImageModal = () => {
     controls.remove();
   }
   
-  // メモリリークを防ぐため、必要に応じてキャッシュをクリア
-  if (seriesInfoCache.size > 500) {
-    seriesInfoCache.clear();
+  // キャッシュが大きくなりすぎた場合はクリア（メモリ節約）
+  if (Object.keys(seriesCache).length > 200) {
+    Object.keys(seriesCache).forEach(key => delete seriesCache[key]);
   }
 };
 
@@ -1804,8 +1795,7 @@ const showNextImage = () => {
     // 収録情報を更新
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
-      const nextCardName = nextCard.dataset.name;
-      const seriesText = getSeriesInfo(nextCardName);
+      const seriesText = getSeriesInfo(nextCard.dataset.name);
       if (seriesText) {
         seriesInfo.textContent = seriesText;
       }
@@ -1848,8 +1838,7 @@ const showPreviousImage = () => {
     // 収録情報を更新
     const seriesInfo = document.querySelector('.card-series-info');
     if (seriesInfo) {
-      const prevCardName = prevCard.dataset.name;
-      const seriesText = getSeriesInfo(prevCardName);
+      const seriesText = getSeriesInfo(prevCard.dataset.name);
       if (seriesText) {
         seriesInfo.textContent = seriesText;
       }
