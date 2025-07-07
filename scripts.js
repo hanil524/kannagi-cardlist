@@ -1320,9 +1320,9 @@ const openImageModal = (src) => {
   modalContent.appendChild(prevButton);
   modalContent.appendChild(nextButton);
 
-  // 🔥 iOS原因特定：重い関数を段階的に無効化
-  // setupModalCardControls(controls, currentCard, cardName);
-  // updateCardCountInModal(cardName);
+  // 既存のsetupCardControlsの代わりに、setupModalCardControlsを使用
+  setupModalCardControls(controls, currentCard, cardName);
+  updateCardCountInModal(cardName); // ★追加
 
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -1335,16 +1335,17 @@ const openImageModal = (src) => {
     modalImage.style.transition = 'opacity 0.3s ease';
     modalImage.style.opacity = '1';
 
-    // 🔥 iOS原因特定：画像ロード後の重い処理を無効化
-    // modalImage.onload = () => {
-    //   updateNavigationButtons();
-    //   preloadAdjacentImages();
-    // };
+    // 画像のロード完了後にナビゲーションボタンを表示
+    modalImage.onload = () => {
+      updateNavigationButtons();
+      preloadAdjacentImages();
+    };
 
-    // if (modalImage.complete) {
-    //   updateNavigationButtons();
-    //   preloadAdjacentImages();
-    // }
+    // 既にキャッシュされている場合のためのフォールバック
+    if (modalImage.complete) {
+      updateNavigationButtons();
+      preloadAdjacentImages();
+    }
   });
 };
 
