@@ -1231,10 +1231,12 @@ const openImageModal = (src) => {
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
 
-  // 現在の表示状態に応じてカードリストを取得
+  // 現在の表示状態に応じてカードリストを取得（iOS軽量化）
   visibleCards = isDeckModalVisible
     ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
-    : Array.from(document.querySelectorAll('.card')).filter((card) => window.getComputedStyle(card).display !== 'none'); // 表示中のカード一覧
+    : Array.from(document.querySelectorAll('.card')).filter((card) => 
+        card.style.display !== 'none' && !card.classList.contains('hidden')
+      ); // iOS軽量化：getComputedStyleを避ける
 
   // クリックされた画像のインデックスを取得
   currentImageIndex = visibleCards.findIndex((card) => {
