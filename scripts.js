@@ -1,10 +1,6 @@
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
-  // メモリリークを防ぐためキャッシュをクリア
-  if (typeof seriesInfoCache !== 'undefined') {
-    seriesInfoCache.clear();
-  }
 };
 
 // Safari用の追加対策
@@ -257,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 遅延読み込みの処理
   const options = {
     root: null,
-    rootMargin: '400px', // 軽量化：画面外400pxの位置から読み込み開始
+    rootMargin: '1200px', // 画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
@@ -293,15 +289,10 @@ document.addEventListener('DOMContentLoaded', () => {
           setupLazyLoading();
         }
       }
-    } else if (document.visibilityState === 'hidden') {
-      // タブが非アクティブになった時、メモリを節約
-      if (seriesInfoCache.size > 100) {
-        seriesInfoCache.clear();
-      }
     }
   });
 
-  const preloadNextImages = (currentIndex, count = 3) => {
+  const preloadNextImages = (currentIndex, count = 5) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
       loadImage(images[i]);
@@ -352,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lastScrollTop = st <= 0 ? 0 : st;
         loadVisibleImages();
-      }, 200); // 軽量化：処理頻度を半分に削減
+      }, 100);
     },
     false
   );
@@ -1174,34 +1165,6 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
-// 収録情報のキャッシュ
-const seriesInfoCache = new Map();
-
-// 収録情報を効率的に取得する関数
-function getSeriesInfo(cardName) {
-  // キャッシュにある場合はそれを返す
-  if (seriesInfoCache.has(cardName)) {
-    return seriesInfoCache.get(cardName);
-  }
-  
-  // キャッシュにない場合のみ検索
-  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
-  const allSeriesSet = new Set();
-  
-  allCardsWithSameName.forEach(card => {
-    if (card.dataset.series) {
-      const seriesList = card.dataset.series.split(' ');
-      seriesList.forEach(series => allSeriesSet.add(series));
-    }
-  });
-  
-  const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
-  
-  // キャッシュに保存
-  seriesInfoCache.set(cardName, seriesText);
-  return seriesText;
-}
-
 // 画像モーダル内のボタン制御
 const updateModalControls = (cardName, controls) => {
   const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1231,12 +1194,10 @@ const openImageModal = (src) => {
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
 
-  // 現在の表示状態に応じてカードリストを取得（軽量化版）
+  // 現在の表示状態に応じてカードリストを取得
   visibleCards = isDeckModalVisible
     ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
-    : Array.from(document.querySelectorAll('.card')).filter((card) => 
-        card.style.display !== 'none' && !card.classList.contains('hidden')
-      ); // getComputedStyleを避けた軽量版
+    : Array.from(document.querySelectorAll('.card')).filter((card) => window.getComputedStyle(card).display !== 'none'); // 表示中のカード一覧
 
   // クリックされた画像のインデックスを取得
   currentImageIndex = visibleCards.findIndex((card) => {
@@ -1283,23 +1244,11 @@ const openImageModal = (src) => {
   const container = document.createElement('div');
   container.className = 'image-container';
 
-  // 収録情報を表示する要素を作成
-  const seriesInfo = document.createElement('div');
-  seriesInfo.className = 'card-series-info';
-  
-  // 効率的に収録情報を取得
-  const currentCardName = currentCard.dataset.name;
-  const seriesText = getSeriesInfo(currentCardName);
-  if (seriesText) {
-    seriesInfo.textContent = seriesText;
-  }
-
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
-  // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
-  container.appendChild(seriesInfo);
+  // コンテナに画像を追加
   container.appendChild(modalImage);
 
   // 既存のコントロールを更新
@@ -1381,16 +1330,6 @@ const closeImageModal = () => {
   const controls = document.querySelector('.card-controls');
   if (controls) {
     controls.remove();
-  }
-  
-  // フィルターボタンと全く同じ修復処理
-  setTimeout(() => {
-    resetLazyLoading();
-  }, 100);
-  
-  // メモリリークを防ぐため、必要に応じてキャッシュをクリア
-  if (seriesInfoCache.size > 500) {
-    seriesInfoCache.clear();
   }
 };
 
@@ -1808,16 +1747,6 @@ const showNextImage = () => {
       updateCardCountInModal(cardName);
     }
 
-    // 収録情報を更新
-    const seriesInfo = document.querySelector('.card-series-info');
-    if (seriesInfo) {
-      const nextCardName = nextCard.dataset.name;
-      const seriesText = getSeriesInfo(nextCardName);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
-      }
-    }
-
     updateNavigationButtons();
     preloadAdjacentImages();
   }
@@ -1850,16 +1779,6 @@ const showPreviousImage = () => {
     if (controls) {
       setupModalCardControls(controls, prevCard, cardName);
       updateCardCountInModal(cardName);
-    }
-
-    // 収録情報を更新
-    const seriesInfo = document.querySelector('.card-series-info');
-    if (seriesInfo) {
-      const prevCardName = prevCard.dataset.name;
-      const seriesText = getSeriesInfo(prevCardName);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
-      }
     }
 
     updateNavigationButtons();
@@ -3775,4 +3694,3 @@ function updateCardCount() {
     countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
   }
 }
-
