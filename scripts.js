@@ -309,27 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const setupLazyLoading = () => {
-    // iOS対策：遅延読み込みを大幅軽量化
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const images = document.querySelectorAll('.card img:not(.loaded)');
-    
-    if (isIOS) {
-      // iOS：最初の50枚のみ遅延読み込み、残りは手動読み込み
-      images.forEach((img, index) => {
-        if (index < 50 && !img.classList.contains('loaded')) {
-          img.style.opacity = '0';
-          observer.observe(img);
-        }
-      });
-    } else {
-      // PC・Android：通常処理
-      images.forEach((img, index) => {
-        if (!img.classList.contains('loaded')) {
-          img.style.opacity = '0';
-          observer.observe(img);
-        }
-      });
-    }
+    images.forEach((img, index) => {
+      if (!img.classList.contains('loaded')) {
+        img.style.opacity = '0';
+        observer.observe(img);
+      }
+    });
   };
 
   // 初期表示の画像数を制限
@@ -346,35 +332,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // スクロールイベントの処理（iOS軽量化）
+  // スクロールイベントの処理
   let lastScrollTop = 0;
   let scrollTimeout;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  
   window.addEventListener(
     'scroll',
     () => {
       clearTimeout(scrollTimeout);
-      const delay = isIOS ? 300 : 100; // iOS：300ms、他：100ms
-      
       scrollTimeout = setTimeout(() => {
         const st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop) {
           // 下スクロール時
           const visibleImages = document.querySelectorAll('.card img.loaded');
-          if (visibleImages.length > 0 && !isIOS) {
-            // iOS：プリロードを無効化
+          if (visibleImages.length > 0) {
             const lastVisibleImage = visibleImages[visibleImages.length - 1];
             const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
             preloadNextImages(index);
           }
         }
         lastScrollTop = st <= 0 ? 0 : st;
-        if (!isIOS) {
-          // iOS：loadVisibleImagesを無効化
-          loadVisibleImages();
-        }
-      }, delay);
+        loadVisibleImages();
+      }, 100);
     },
     false
   );
@@ -1406,15 +1384,13 @@ const closeImageModal = () => {
   }
   
   // iOS対策：画像モーダル閉じた後の遅延読み込み問題を解決
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (!isIOS) {
-    // PC・Androidのみ遅延読み込みリセット
-    setTimeout(() => {
-      if (typeof setupLazyLoading === 'function') {
-        setupLazyLoading();
-      }
-    }, 100);
-  }
+  setTimeout(() => {
+    // 遅延読み込みの状態をリセット（フィルター操作と同じ効果）
+    const observer = document.querySelector('.card img');
+    if (observer && typeof setupLazyLoading === 'function') {
+      setupLazyLoading();
+    }
+  }, 100);
   
   // メモリリークを防ぐため、必要に応じてキャッシュをクリア
   if (seriesInfoCache.size > 500) {
