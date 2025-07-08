@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lastScrollTop = st <= 0 ? 0 : st;
         loadVisibleImages();
-      }, 200); // 軽量化：処理頻度を半分に削減
+      }, 300); // 軽量化：処理頻度を更に削減
     },
     false
   );
@@ -1376,7 +1376,7 @@ const closeImageModal = () => {
 
   setTimeout(() => {
     handleScroll();
-  }, 100);
+  }, 200);
 
   const controls = document.querySelector('.card-controls');
   if (controls) {
@@ -1389,6 +1389,7 @@ const closeImageModal = () => {
     if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
       observer.disconnect(); // 重複観察を防ぐため既存のobserverを切断
       setupLazyLoading();
+      loadVisibleImages(); // 表示中の画像を即座に読み込み
     }
   }, 100);
   
@@ -1578,8 +1579,12 @@ document.addEventListener('DOMContentLoaded', updateActiveFilters);
 const loadVisibleImages = () => {
   const images = document.querySelectorAll('.card img:not(.loaded)');
   const viewportHeight = window.innerHeight;
+  let loadedCount = 0;
+  const maxLoadPerCall = 10; // 一度に最大10枚まで読み込み
 
   images.forEach((img) => {
+    if (loadedCount >= maxLoadPerCall) return; // 制限に達したら処理を停止
+    
     const rect = img.getBoundingClientRect();
     if (rect.top >= 0 && rect.top <= viewportHeight) {
       const src = img.getAttribute('data-src');
@@ -1590,6 +1595,7 @@ const loadVisibleImages = () => {
           img.classList.add('loaded');
         };
         img.removeAttribute('data-src');
+        loadedCount++;
       }
     }
   });
