@@ -1383,13 +1383,11 @@ const closeImageModal = () => {
     controls.remove();
   }
   
-  // 完全無効化：フィルターボタンに頼る
-  // setTimeout(() => {
-  //   if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
-  //     observer.disconnect();
-  //     setupLazyLoading();
-  //   }
-  // }, 100);
+  // フィルターボタンと全く同じ修復処理
+  setTimeout(() => {
+    observer.disconnect();
+    setupLazyLoading();
+  }, 100);
   
   // メモリリークを防ぐため、必要に応じてキャッシュをクリア
   if (seriesInfoCache.size > 500) {
