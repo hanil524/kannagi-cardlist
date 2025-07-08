@@ -1253,7 +1253,6 @@ const openImageModal = (src) => {
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
   const modal = document.getElementById('image-modal');
-  const modalImage = document.getElementById('modal-image');
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
   const modalContent = modal.querySelector('.modal-content');
@@ -1279,30 +1278,37 @@ const openImageModal = (src) => {
   const currentCard = visibleCards[currentImageIndex];
   const cardName = currentCard.dataset.name;
 
-  // 固定要素を一度だけ作成（重要: DOM要素の重複作成を防ぐ）
-  if (!modalContainer) {
-    modalContainer = document.createElement('div');
-    modalContainer.className = 'image-container';
-    
-    modalSeriesInfo = document.createElement('div');
-    modalSeriesInfo.className = 'card-series-info';
-    
-    modalControls = document.createElement('div');
-    modalControls.className = 'card-controls';
-    
-    // 構造を一度だけ構築
-    modalContainer.appendChild(modalSeriesInfo);
-    modalContainer.appendChild(modalImage);
-    modalContainer.appendChild(modalControls);
-  }
-
-  // モーダルコンテンツを一度だけクリアして構築
-  if (modalContent.children.length === 0 || !modalContent.contains(modalContainer)) {
-    modalContent.innerHTML = '';
-    modalContent.appendChild(modalContainer);
-    modalContent.appendChild(prevButton);
-    modalContent.appendChild(nextButton);
-  }
+  // 収録情報とコントロールのコンテナを作成（安全な方法）
+  const container = document.createElement('div');
+  container.className = 'image-container';
+  
+  const seriesInfo = document.createElement('div');
+  seriesInfo.className = 'card-series-info';
+  
+  const controls = document.createElement('div');
+  controls.className = 'card-controls';
+  
+  // 新しい画像要素を作成
+  const modalImage = document.createElement('img');
+  modalImage.id = 'modal-image';
+  modalImage.alt = 'Modal Image';
+  
+  // モーダルコンテンツをクリアしてから再構築
+  modalContent.innerHTML = '';
+  
+  // コンテンツを順番に追加
+  container.appendChild(seriesInfo);
+  container.appendChild(modalImage);
+  container.appendChild(controls);
+  
+  modalContent.appendChild(container);
+  modalContent.appendChild(prevButton);
+  modalContent.appendChild(nextButton);
+  
+  // グローバル変数に保存（クリーンアップ用）
+  modalContainer = container;
+  modalSeriesInfo = seriesInfo;
+  modalControls = controls;
 
   // カウント情報の取得と表示
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1388,14 +1394,15 @@ const closeImageModal = () => {
   // モーダル関連の変数をリセット（重要: 状態を完全にクリア）
   currentModalCard = null;
   currentModalCardName = null;
-  modalControlsInitialized = false; // 次回モーダル表示時に再初期化できるようにする
+  modalControlsInitialized = false;
 
-  // 全デバイス共通: 遅延読み込みを強制リセット（重要: モーダル後の劣化を防ぐ）
-  setTimeout(() => {
-    if (typeof resetLazyLoading === 'function') {
-      resetLazyLoading();
-    }
-  }, 100);
+  // 真の根本解決：作成した固定DOM要素を完全クリーンアップ（クラッシュ防止）
+  if (modalContainer && modalContainer.parentNode) {
+    modalContainer.parentNode.removeChild(modalContainer);
+  }
+  modalContainer = null;
+  modalSeriesInfo = null;
+  modalControls = null;
 
   // メモリリーク対策（全デバイス共通）
   if (seriesInfoCache.size > 100) {
@@ -1815,7 +1822,9 @@ const showNextImage = () => {
     const src = img.getAttribute('data-src') || img.src;
 
     const modalImage = document.getElementById('modal-image');
-    modalImage.src = src;
+    if (modalImage) {
+      modalImage.src = src;
+    }
 
     const cardName = nextCard.dataset.name;
     
@@ -1873,7 +1882,9 @@ const showPreviousImage = () => {
     const src = img.getAttribute('data-src') || img.src;
 
     const modalImage = document.getElementById('modal-image');
-    modalImage.src = src;
+    if (modalImage) {
+      modalImage.src = src;
+    }
 
     const cardName = prevCard.dataset.name;
     
