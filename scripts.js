@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 遅延読み込みの処理
   const options = {
     root: null,
-    rootMargin: isIOS() ? '200px' : '400px', // iOS用に軽量化
+    rootMargin: '400px',
     threshold: 0.1
   };
 
@@ -280,14 +280,13 @@ document.addEventListener('DOMContentLoaded', () => {
         img.classList.add('loaded');
       };
       img.onerror = () => {
-        // エラー時も処理を完了させる
         img.classList.add('loaded');
       };
       img.removeAttribute('data-src');
     }
   };
 
-  // ObserverをグローバルObserverとして初期化
+  // ObserverをグローバルObserverとして初期化（全デバイス共通）
   if (!observer) {
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -305,17 +304,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.visibilityState === 'visible') {
       // モーダルが開いていない時だけリセット
       if (document.getElementById('image-modal').style.display !== 'flex') {
-        if (!isIOS()) {
-          // iOS以外のみobserverをリセット
-          if (observer) {
-            resetLazyLoading();
-          }
+        if (typeof resetLazyLoading === 'function') {
+          resetLazyLoading();
         }
       }
     } else if (document.visibilityState === 'hidden') {
       // タブが非アクティブになった時、メモリを節約
-      const threshold = isIOS() ? 50 : 100; // iOSでより積極的にクリア
-      if (seriesInfoCache.size > threshold) {
+      if (seriesInfoCache.size > 100) {
         seriesInfoCache.clear();
       }
     }
@@ -346,12 +341,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 初期表示の画像数を制限
   const loadInitialImages = () => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
-    const initialCount = isIOS() ? 10 : 20; // iOSでは初期読み込み数を削減
-    
     images.forEach((img, index) => {
-      if (index < initialCount) {
+      if (index < 20) {
+        // 最初の20枚
         loadImage(img);
-        if (index === initialCount - 1 && !isIOS()) {
+        if (index === 19) {
           preloadNextImages(index);
         }
       }
@@ -365,27 +359,20 @@ document.addEventListener('DOMContentLoaded', () => {
     'scroll',
     () => {
       clearTimeout(scrollTimeout);
-      const delay = isIOS() ? 300 : 200; // iOSでは処理頻度をさらに削減
-      
       scrollTimeout = setTimeout(() => {
         const st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop) {
           // 下スクロール時
-          if (!isIOS()) {
-            // iOS以外のみプリロード実行
-            const visibleImages = document.querySelectorAll('.card img.loaded');
-            if (visibleImages.length > 0) {
-              const lastVisibleImage = visibleImages[visibleImages.length - 1];
-              const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
-              preloadNextImages(index);
-            }
+          const visibleImages = document.querySelectorAll('.card img.loaded');
+          if (visibleImages.length > 0) {
+            const lastVisibleImage = visibleImages[visibleImages.length - 1];
+            const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
+            preloadNextImages(index);
           }
         }
         lastScrollTop = st <= 0 ? 0 : st;
-        if (!isIOS()) {
-          loadVisibleImages(); // iOSでは手動呼び出しを停止
-        }
-      }, delay);
+        loadVisibleImages();
+      }, 200);
     },
     false
   );
@@ -401,31 +388,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (observer) {
       observer.disconnect();
     }
-    isObserverSetup = false; // フラグをリセット
-    
-    // iOS用: 少し遅延してからセットアップ
-    if (isIOS()) {
-      setTimeout(() => {
-        setupLazyLoading();
-      }, 50);
-    } else {
-      setupLazyLoading();
-    }
+    isObserverSetup = false;
+    setupLazyLoading();
   };
 
   document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
-      if (isIOS()) {
-        // iOS用: 軽量処理のみ
-        setTimeout(() => {
-          isObserverSetup = false; // フラグだけリセット
-        }, 100);
-      } else {
-        // PC/Android用: 従来処理
-        setTimeout(() => {
+      // 全デバイス共通: 遅延読み込みをリセット
+      setTimeout(() => {
+        if (typeof resetLazyLoading === 'function') {
           resetLazyLoading();
-        }, 100);
-      }
+        }
+      }, 100);
     });
   });
 
@@ -792,12 +766,6 @@ const filterCardsByName = (event) => {
 
   // カード数を更新
   updateCardCount();
-  
-  // iOS用: 検索後の画像処理を軽量化
-  if (isIOS()) {
-    // フラグだけリセット（実際のobserver処理は行わない）
-    isObserverSetup = false;
-  }
 };
 
 // フィルター条件のチェック関数
@@ -1093,12 +1061,6 @@ const filterCards = () => {
 
   // カード数を更新
   updateCardCount();
-  
-  // iOS用: フィルタ後の画像処理を軽量化
-  if (isIOS()) {
-    // フラグだけリセット（実際のobserver処理は行わない）
-    isObserverSetup = false;
-  }
 };
 
 // スクロールバーの幅を取得するヘルパー関数
@@ -1387,17 +1349,13 @@ const openImageModal = (src) => {
     // 画像のロード完了後にナビゲーションボタンを表示
     modalImage.onload = () => {
       updateNavigationButtons();
-      if (!isIOS()) {
-        preloadAdjacentImages();
-      }
+      preloadAdjacentImages();
     };
 
     // 既にキャッシュされている場合のためのフォールバック
     if (modalImage.complete) {
       updateNavigationButtons();
-      if (!isIOS()) {
-        preloadAdjacentImages();
-      }
+      preloadAdjacentImages();
     }
   });
 };
@@ -1432,29 +1390,16 @@ const closeImageModal = () => {
   currentModalCardName = null;
   modalControlsInitialized = false; // 次回モーダル表示時に再初期化できるようにする
 
-  // iOS用の追加クリーンアップ処理
-  if (isIOS()) {
-    // 即座にメモリ使用量を削減
-    if (seriesInfoCache.size > 50) {
-      seriesInfoCache.clear();
+  // 全デバイス共通: 遅延読み込みを強制リセット（重要: モーダル後の劣化を防ぐ）
+  setTimeout(() => {
+    if (typeof resetLazyLoading === 'function') {
+      resetLazyLoading();
     }
-    
-    // 強制的にガベージコレクションを促進
-    if (window.gc) {
-      setTimeout(() => window.gc(), 100);
-    }
-  } else {
-    // PC/Android用の従来処理
-    setTimeout(() => {
-      if (observer && typeof resetLazyLoading === 'function') {
-        resetLazyLoading();
-      }
-    }, 100);
-    
-    // メモリリークを防ぐため、必要に応じてキャッシュをクリア
-    if (seriesInfoCache.size > 500) {
-      seriesInfoCache.clear();
-    }
+  }, 100);
+
+  // メモリリーク対策（全デバイス共通）
+  if (seriesInfoCache.size > 100) {
+    seriesInfoCache.clear();
   }
 
   setTimeout(() => {
@@ -1640,11 +1585,6 @@ function removeFilter(key, value) {
 document.addEventListener('DOMContentLoaded', updateActiveFilters);
 
 const loadVisibleImages = () => {
-  // iOSでは負荷軽減のため、この関数の処理をスキップ
-  if (isIOS()) {
-    return;
-  }
-  
   const images = document.querySelectorAll('.card img:not(.loaded)');
   const viewportHeight = window.innerHeight;
 
@@ -1909,9 +1849,7 @@ const showNextImage = () => {
     }
 
     updateNavigationButtons();
-    if (!isIOS()) {
-      preloadAdjacentImages();
-    }
+    preloadAdjacentImages();
   }
 };
 
@@ -1969,9 +1907,7 @@ const showPreviousImage = () => {
     }
 
     updateNavigationButtons();
-    if (!isIOS()) {
-      preloadAdjacentImages();
-    }
+    preloadAdjacentImages();
   }
 };
 
