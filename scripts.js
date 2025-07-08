@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 遅延読み込みの処理
   const options = {
     root: null,
-    rootMargin: '1200px', // 画面外400pxの位置から読み込み開始
+    rootMargin: '400px', // 軽量化：画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const preloadNextImages = (currentIndex, count = 5) => {
+  const preloadNextImages = (currentIndex, count = 3) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
       loadImage(images[i]);
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lastScrollTop = st <= 0 ? 0 : st;
         loadVisibleImages();
-      }, 100);
+      }, 200); // 軽量化：処理頻度を半分に削減
     },
     false
   );
