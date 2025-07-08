@@ -26,6 +26,12 @@ document.addEventListener('readystatechange', function (event) {
   }
 });
 
+// iOS判定関数を追加
+const isIOS = () => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
 // 最初にすべてのグローバル変数を定義
 window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
 let sortCriteria = null;
@@ -34,6 +40,10 @@ let scrollPosition = 0;
 let isDragging = false;
 let currentCard = null;
 let startY = 0;
+
+// IntersectionObserver関連の変数をグローバルに
+let observer = null;
+let isObserverSetup = false;
 
 // ★現在の日付を更新する関数を追加
 function updateCurrentDate() {
@@ -257,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 遅延読み込みの処理
   const options = {
     root: null,
-    rootMargin: '400px', // 軽量化：画面外400pxの位置から読み込み開始
+    rootMargin: isIOS() ? '200px' : '400px', // iOS用に軽量化
     threshold: 0.1
   };
 
@@ -269,18 +279,25 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.opacity = '1';
         img.classList.add('loaded');
       };
+      img.onerror = () => {
+        // エラー時も処理を完了させる
+        img.classList.add('loaded');
+      };
       img.removeAttribute('data-src');
     }
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        loadImage(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, options);
+  // ObserverをグローバルObserverとして初期化
+  if (!observer) {
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadImage(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+  }
 
   // クリーンアップ イベントでタブのアクティブ状態を監視
   document.addEventListener('visibilitychange', () => {
@@ -288,14 +305,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.visibilityState === 'visible') {
       // モーダルが開いていない時だけリセット
       if (document.getElementById('image-modal').style.display !== 'flex') {
-        if (observer) {
-          observer.disconnect();
-          setupLazyLoading();
+        if (!isIOS()) {
+          // iOS以外のみobserverをリセット
+          if (observer) {
+            resetLazyLoading();
+          }
         }
       }
     } else if (document.visibilityState === 'hidden') {
       // タブが非アクティブになった時、メモリを節約
-      if (seriesInfoCache.size > 100) {
+      const threshold = isIOS() ? 50 : 100; // iOSでより積極的にクリア
+      if (seriesInfoCache.size > threshold) {
         seriesInfoCache.clear();
       }
     }
@@ -309,23 +329,29 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const setupLazyLoading = () => {
+    if (isObserverSetup) return; // 重複セットアップを防ぐ
+    
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
       if (!img.classList.contains('loaded')) {
         img.style.opacity = '0';
-        observer.observe(img);
+        if (observer) {
+          observer.observe(img);
+        }
       }
     });
+    isObserverSetup = true;
   };
 
   // 初期表示の画像数を制限
   const loadInitialImages = () => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
+    const initialCount = isIOS() ? 10 : 20; // iOSでは初期読み込み数を削減
+    
     images.forEach((img, index) => {
-      if (index < 20) {
-        // 最初の20枚
+      if (index < initialCount) {
         loadImage(img);
-        if (index === 19) {
+        if (index === initialCount - 1 && !isIOS()) {
           preloadNextImages(index);
         }
       }
@@ -339,20 +365,27 @@ document.addEventListener('DOMContentLoaded', () => {
     'scroll',
     () => {
       clearTimeout(scrollTimeout);
+      const delay = isIOS() ? 300 : 200; // iOSでは処理頻度をさらに削減
+      
       scrollTimeout = setTimeout(() => {
         const st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop) {
           // 下スクロール時
-          const visibleImages = document.querySelectorAll('.card img.loaded');
-          if (visibleImages.length > 0) {
-            const lastVisibleImage = visibleImages[visibleImages.length - 1];
-            const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
-            preloadNextImages(index);
+          if (!isIOS()) {
+            // iOS以外のみプリロード実行
+            const visibleImages = document.querySelectorAll('.card img.loaded');
+            if (visibleImages.length > 0) {
+              const lastVisibleImage = visibleImages[visibleImages.length - 1];
+              const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
+              preloadNextImages(index);
+            }
           }
         }
         lastScrollTop = st <= 0 ? 0 : st;
-        loadVisibleImages();
-      }, 200); // 軽量化：処理頻度を半分に削減
+        if (!isIOS()) {
+          loadVisibleImages(); // iOSでは手動呼び出しを停止
+        }
+      }, delay);
     },
     false
   );
@@ -365,17 +398,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
-    observer.disconnect();
-    setupLazyLoading();
-    // loadVisibleImages(); ソートやフィルター後に表示領域内の画像を即時読み込み
+    if (observer) {
+      observer.disconnect();
+    }
+    isObserverSetup = false; // フラグをリセット
+    
+    // iOS用: 少し遅延してからセットアップ
+    if (isIOS()) {
+      setTimeout(() => {
+        setupLazyLoading();
+      }, 50);
+    } else {
+      setupLazyLoading();
+    }
   };
 
   document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
-      setTimeout(() => {
-        resetLazyLoading();
-        // loadVisibleImages(); ボタンクリック後に表示領域内の画像を即時読み込み
-      }, 100);
+      if (isIOS()) {
+        // iOS用: 軽量処理のみ
+        setTimeout(() => {
+          isObserverSetup = false; // フラグだけリセット
+        }, 100);
+      } else {
+        // PC/Android用: 従来処理
+        setTimeout(() => {
+          resetLazyLoading();
+        }, 100);
+      }
     });
   });
 
@@ -742,6 +792,12 @@ const filterCardsByName = (event) => {
 
   // カード数を更新
   updateCardCount();
+  
+  // iOS用: 検索後の画像処理を軽量化
+  if (isIOS()) {
+    // フラグだけリセット（実際のobserver処理は行わない）
+    isObserverSetup = false;
+  }
 };
 
 // フィルター条件のチェック関数
@@ -1037,6 +1093,12 @@ const filterCards = () => {
 
   // カード数を更新
   updateCardCount();
+  
+  // iOS用: フィルタ後の画像処理を軽量化
+  if (isIOS()) {
+    // フラグだけリセット（実際のobserver処理は行わない）
+    isObserverSetup = false;
+  }
 };
 
 // スクロールバーの幅を取得するヘルパー関数
@@ -1383,18 +1445,31 @@ const closeImageModal = () => {
     controls.remove();
   }
   
-  // iOS対策：画像モーダル閉じた後の遅延読み込み問題を解決
-  setTimeout(() => {
-    // 遅延読み込みの状態をリセット（フィルター操作と同じ効果）
-    if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
-      observer.disconnect(); // 重複観察を防ぐため既存のobserverを切断
-      setupLazyLoading();
+  // iOS用: メモリリーク対策とobserver の安全な処理
+  if (isIOS()) {
+    // iOSでは軽量な処理のみ実行
+    setTimeout(() => {
+      // メモリ使用量を削減
+      if (seriesInfoCache.size > 100) { // より早めにクリア
+        seriesInfoCache.clear();
+      }
+      // ガベージコレクションを促進
+      if (window.gc) {
+        window.gc();
+      }
+    }, 200);
+  } else {
+    // PC/Android用の従来処理
+    setTimeout(() => {
+      if (observer && typeof setupLazyLoading === 'function') {
+        resetLazyLoading();
+      }
+    }, 100);
+    
+    // メモリリークを防ぐため、必要に応じてキャッシュをクリア
+    if (seriesInfoCache.size > 500) {
+      seriesInfoCache.clear();
     }
-  }, 100);
-  
-  // メモリリークを防ぐため、必要に応じてキャッシュをクリア
-  if (seriesInfoCache.size > 500) {
-    seriesInfoCache.clear();
   }
 };
 
@@ -1576,6 +1651,11 @@ function removeFilter(key, value) {
 document.addEventListener('DOMContentLoaded', updateActiveFilters);
 
 const loadVisibleImages = () => {
+  // iOSでは負荷軽減のため、この関数の処理をスキップ
+  if (isIOS()) {
+    return;
+  }
+  
   const images = document.querySelectorAll('.card img:not(.loaded)');
   const viewportHeight = window.innerHeight;
 
@@ -1587,6 +1667,9 @@ const loadVisibleImages = () => {
         img.src = src;
         img.onload = () => {
           img.style.opacity = '1';
+          img.classList.add('loaded');
+        };
+        img.onerror = () => {
           img.classList.add('loaded');
         };
         img.removeAttribute('data-src');
