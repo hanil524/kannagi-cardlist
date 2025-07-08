@@ -1385,8 +1385,7 @@ const closeImageModal = () => {
   
   // フィルターボタンと全く同じ修復処理
   setTimeout(() => {
-    observer.disconnect();
-    setupLazyLoading();
+    resetLazyLoading();
   }, 100);
   
   // メモリリークを防ぐため、必要に応じてキャッシュをクリア
