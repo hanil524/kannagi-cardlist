@@ -1,6 +1,10 @@
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
+  // メモリリークを防ぐためキャッシュをクリア
+  if (typeof seriesInfoCache !== 'undefined') {
+    seriesInfoCache.clear();
+  }
 };
 
 // Safari用の追加対策
@@ -253,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 遅延読み込みの処理
   const options = {
     root: null,
-    rootMargin: '1200px', // 画面外400pxの位置から読み込み開始
+    rootMargin: '400px', // 軽量化：画面外400pxの位置から読み込み開始
     threshold: 0.1
   };
 
@@ -289,10 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
           setupLazyLoading();
         }
       }
+    } else if (document.visibilityState === 'hidden') {
+      // タブが非アクティブになった時、メモリを節約
+      if (seriesInfoCache.size > 100) {
+        seriesInfoCache.clear();
+      }
     }
   });
 
-  const preloadNextImages = (currentIndex, count = 5) => {
+  const preloadNextImages = (currentIndex, count = 3) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
       loadImage(images[i]);
@@ -343,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lastScrollTop = st <= 0 ? 0 : st;
         loadVisibleImages();
-      }, 100);
+      }, 200); // 軽量化：処理頻度を半分に削減
     },
     false
   );
@@ -789,8 +798,8 @@ const sortCards = (criteria) => {
       const bIndex = typeOrder.indexOf(bType);
       return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
     } else {
-      const aValue = parseInt(a.dataset[criteria]);
-      const bValue = parseInt(b.dataset[criteria]);
+      const aValue = parseInt(a.dataset[criteria]) || 0;
+      const bValue = parseInt(b.dataset[criteria]) || 0;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     }
   });
@@ -965,22 +974,9 @@ const filterCards = () => {
         
         let matches = false;
         
-        // 「コスト↑力↓」フィルターの特別処理
-        if (attribute === 'role' && hasCostLowFilter) {
-          // 場所札のみを表示
-          if (card.dataset.type !== '場所札') {
-            shouldDisplay = false;
-            break;
-          }
-          // 力の低さを最優先、同じ力の場合はコストが高い順
-          const cost = parseInt(card.dataset.cost);
-          const power = parseInt(card.dataset.power);
-          // 力を最優先、コストは高い順（反転）
-          card.dataset.sortValue = `${power.toString().padStart(3, '0')}-${(999 - cost).toString().padStart(3, '0')}`;
-          matches = true;
-        }
+        
         // 「廃」フィルターの特別処理
-        else if (attribute === 'attribute' && has廃Filter) {
+        if (attribute === 'attribute' && has廃Filter) {
           // 「廃」フィルターがある場合は、属性に「廃」を含むカードを表示
           const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
           
@@ -1178,6 +1174,34 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
+// 収録情報のキャッシュ
+const seriesInfoCache = new Map();
+
+// 収録情報を効率的に取得する関数
+function getSeriesInfo(cardName) {
+  // キャッシュにある場合はそれを返す
+  if (seriesInfoCache.has(cardName)) {
+    return seriesInfoCache.get(cardName);
+  }
+  
+  // キャッシュにない場合のみ検索
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const allSeriesSet = new Set();
+  
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      const seriesList = card.dataset.series.split(' ');
+      seriesList.forEach(series => allSeriesSet.add(series));
+    }
+  });
+  
+  const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+  
+  // キャッシュに保存
+  seriesInfoCache.set(cardName, seriesText);
+  return seriesText;
+}
+
 // 画像モーダル内のボタン制御
 const updateModalControls = (cardName, controls) => {
   const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -1207,10 +1231,12 @@ const openImageModal = (src) => {
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
 
-  // 現在の表示状態に応じてカードリストを取得
+  // 現在の表示状態に応じてカードリストを取得（軽量化版）
   visibleCards = isDeckModalVisible
     ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
-    : Array.from(document.querySelectorAll('.card')).filter((card) => window.getComputedStyle(card).display !== 'none'); // 表示中のカード一覧
+    : Array.from(document.querySelectorAll('.card')).filter((card) => 
+        card.style.display !== 'none' && !card.classList.contains('hidden')
+      ); // getComputedStyleを避けた軽量版
 
   // クリックされた画像のインデックスを取得
   currentImageIndex = visibleCards.findIndex((card) => {
@@ -1257,11 +1283,23 @@ const openImageModal = (src) => {
   const container = document.createElement('div');
   container.className = 'image-container';
 
+  // 収録情報を表示する要素を作成
+  const seriesInfo = document.createElement('div');
+  seriesInfo.className = 'card-series-info';
+  
+  // 効率的に収録情報を取得
+  const currentCardName = currentCard.dataset.name;
+  const seriesText = getSeriesInfo(currentCardName);
+  if (seriesText) {
+    seriesInfo.textContent = seriesText;
+  }
+
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
-  // コンテナに画像を追加
+  // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
+  container.appendChild(seriesInfo);
   container.appendChild(modalImage);
 
   // 既存のコントロールを更新
@@ -1343,6 +1381,20 @@ const closeImageModal = () => {
   const controls = document.querySelector('.card-controls');
   if (controls) {
     controls.remove();
+  }
+  
+  // iOS対策：画像モーダル閉じた後の遅延読み込み問題を解決
+  setTimeout(() => {
+    // 遅延読み込みの状態をリセット（フィルター操作と同じ効果）
+    if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
+      observer.disconnect(); // 重複観察を防ぐため既存のobserverを切断
+      setupLazyLoading();
+    }
+  }, 100);
+  
+  // メモリリークを防ぐため、必要に応じてキャッシュをクリア
+  if (seriesInfoCache.size > 500) {
+    seriesInfoCache.clear();
   }
 };
 
@@ -1675,8 +1727,8 @@ const loadFiltersFromLocalStorage = () => {
           });
         } else {
           cards.sort((a, b) => {
-            const aValue = parseInt(a.dataset[sortCriteria]);
-            const bValue = parseInt(b.dataset[sortCriteria]);
+            const aValue = parseInt(a.dataset[sortCriteria]) || 0;
+            const bValue = parseInt(b.dataset[sortCriteria]) || 0;
             return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
           });
         }
@@ -1760,6 +1812,16 @@ const showNextImage = () => {
       updateCardCountInModal(cardName);
     }
 
+    // 収録情報を更新
+    const seriesInfo = document.querySelector('.card-series-info');
+    if (seriesInfo) {
+      const nextCardName = nextCard.dataset.name;
+      const seriesText = getSeriesInfo(nextCardName);
+      if (seriesText) {
+        seriesInfo.textContent = seriesText;
+      }
+    }
+
     updateNavigationButtons();
     preloadAdjacentImages();
   }
@@ -1792,6 +1854,16 @@ const showPreviousImage = () => {
     if (controls) {
       setupModalCardControls(controls, prevCard, cardName);
       updateCardCountInModal(cardName);
+    }
+
+    // 収録情報を更新
+    const seriesInfo = document.querySelector('.card-series-info');
+    if (seriesInfo) {
+      const prevCardName = prevCard.dataset.name;
+      const seriesText = getSeriesInfo(prevCardName);
+      if (seriesText) {
+        seriesInfo.textContent = seriesText;
+      }
     }
 
     updateNavigationButtons();
@@ -2173,7 +2245,7 @@ const deckBuilder = {
         if (typeA !== typeB) return typeA - typeB;
 
         // 次にコストでソート
-        const costCompare = parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
+        const costCompare = (parseInt(a.dataset.cost) || 0) - (parseInt(b.dataset.cost) || 0);
         if (costCompare !== 0) return costCompare;
 
         // 次に季節でソート
