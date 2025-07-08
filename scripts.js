@@ -1389,6 +1389,18 @@ const closeImageModal = () => {
     if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
       observer.disconnect(); // 重複観察を防ぐため既存のobserverを切断
       setupLazyLoading();
+      
+      // フィルターボタンと同じ処理：表示中の画像を即座に読み込み
+      const images = document.querySelectorAll('.card img:not(.loaded)');
+      images.forEach((img) => {
+        const rect = img.getBoundingClientRect();
+        if (rect.top >= 0 && rect.top <= window.innerHeight) {
+          img.src = img.getAttribute('data-src') || img.src;
+          img.removeAttribute('data-src');
+          img.classList.add('loaded');
+          img.style.opacity = '1';
+        }
+      });
     }
   }, 100);
   
@@ -3779,3 +3791,4 @@ function updateCardCount() {
     countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
   }
 }
+
