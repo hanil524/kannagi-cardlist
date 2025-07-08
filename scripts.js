@@ -1383,26 +1383,13 @@ const closeImageModal = () => {
     controls.remove();
   }
   
-  // iOS対策：画像モーダル閉じた後の遅延読み込み問題を解決
-  setTimeout(() => {
-    // 遅延読み込みの状態をリセット（フィルター操作と同じ効果）
-    if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
-      observer.disconnect(); // 重複観察を防ぐため既存のobserverを切断
-      setupLazyLoading();
-      
-      // フィルターボタンと同じ処理：表示中の画像を即座に読み込み
-      const images = document.querySelectorAll('.card img:not(.loaded)');
-      images.forEach((img) => {
-        const rect = img.getBoundingClientRect();
-        if (rect.top >= 0 && rect.top <= window.innerHeight) {
-          img.src = img.getAttribute('data-src') || img.src;
-          img.removeAttribute('data-src');
-          img.classList.add('loaded');
-          img.style.opacity = '1';
-        }
-      });
-    }
-  }, 100);
+  // 完全無効化：フィルターボタンに頼る
+  // setTimeout(() => {
+  //   if (typeof observer !== 'undefined' && typeof setupLazyLoading === 'function') {
+  //     observer.disconnect();
+  //     setupLazyLoading();
+  //   }
+  // }, 100);
   
   // メモリリークを防ぐため、必要に応じてキャッシュをクリア
   if (seriesInfoCache.size > 500) {
