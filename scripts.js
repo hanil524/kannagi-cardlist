@@ -1281,6 +1281,11 @@ const updateModalControls = (cardName, controls) => {
   return currentCount;
 };
 
+// モーダル内の固定要素を一度だけ作成して再利用
+let modalContainer = null;
+let modalSeriesInfo = null;
+let modalControls = null;
+
 const openImageModal = (src) => {
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -1289,6 +1294,7 @@ const openImageModal = (src) => {
   const modalImage = document.getElementById('modal-image');
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
+  const modalContent = modal.querySelector('.modal-content');
 
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
@@ -1311,6 +1317,31 @@ const openImageModal = (src) => {
   const currentCard = visibleCards[currentImageIndex];
   const cardName = currentCard.dataset.name;
 
+  // 固定要素を一度だけ作成（重要: DOM要素の重複作成を防ぐ）
+  if (!modalContainer) {
+    modalContainer = document.createElement('div');
+    modalContainer.className = 'image-container';
+    
+    modalSeriesInfo = document.createElement('div');
+    modalSeriesInfo.className = 'card-series-info';
+    
+    modalControls = document.createElement('div');
+    modalControls.className = 'card-controls';
+    
+    // 構造を一度だけ構築
+    modalContainer.appendChild(modalSeriesInfo);
+    modalContainer.appendChild(modalImage);
+    modalContainer.appendChild(modalControls);
+  }
+
+  // モーダルコンテンツを一度だけクリアして構築
+  if (modalContent.children.length === 0 || !modalContent.contains(modalContainer)) {
+    modalContent.innerHTML = '';
+    modalContent.appendChild(modalContainer);
+    modalContent.appendChild(prevButton);
+    modalContent.appendChild(nextButton);
+  }
+
   // カウント情報の取得と表示
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
 
@@ -1324,72 +1355,28 @@ const openImageModal = (src) => {
     maxAllowed = 7;
   }
 
-  // コントロール要素の更新
-  let controls = modal.querySelector('.card-controls');
-  if (!controls) {
-    controls = document.createElement('div');
-    controls.className = 'card-controls';
-    modal.querySelector('.modal-content').appendChild(controls);
-  }
-
   const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
 
-  controls.innerHTML = `
+  // 既存要素の内容のみ更新（新しい要素は作成しない）
+  modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
+  
+  modalControls.innerHTML = `
     <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
     <div class="card-count">${currentCount}/${displayMax}</div>
     <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
   `;
-
-  // 画像の表示処理
-  // 画像とコントロールをコンテナでラップ
-  const container = document.createElement('div');
-  container.className = 'image-container';
-
-  // 収録情報を表示する要素を作成
-  const seriesInfo = document.createElement('div');
-  seriesInfo.className = 'card-series-info';
-  
-  // 効率的に収録情報を取得
-  const currentCardName = currentCard.dataset.name;
-  const seriesText = getSeriesInfo(currentCardName);
-  if (seriesText) {
-    seriesInfo.textContent = seriesText;
-  }
 
   // 画像の表示処理
   modalImage.style.opacity = '0';
   modalImage.src = src;
 
-  // コンテナに要素を追加（上から順に：収録情報、画像、コントロール）
-  container.appendChild(seriesInfo);
-  container.appendChild(modalImage);
-
-  // 既存のコントロールを更新
-  controls.innerHTML = `
-    <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
-    <div class="card-count">${currentCount}/${displayMax}</div>
-    <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
-  `;
-
-  container.appendChild(controls);
-
-  // モーダルのコンテンツに追加
-  const modalContent = modal.querySelector('.modal-content');
-  modalContent.innerHTML = ''; // 既存のコンテンツをクリア
-  modalContent.appendChild(container);
-
-  // 既存のナビゲーションボタンを再利用
-  modalContent.appendChild(prevButton);
-  modalContent.appendChild(nextButton);
-
-  // 既存のsetupCardControlsの代わりに、setupModalCardControlsを使用
-  setupModalCardControls(controls, currentCard, cardName);
-  updateCardCountInModal(cardName); // ★追加
+  // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
+  setupModalCardControlsOnce(modalControls, currentCard, cardName);
 
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
-  document.body.style.top = `-${savedScrollPosition}px`; // 保存した位置を使用
+  document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
 
   // フェードイン効果とナビゲーションの表示を調整
@@ -1400,13 +1387,17 @@ const openImageModal = (src) => {
     // 画像のロード完了後にナビゲーションボタンを表示
     modalImage.onload = () => {
       updateNavigationButtons();
-      preloadAdjacentImages();
+      if (!isIOS()) {
+        preloadAdjacentImages();
+      }
     };
 
     // 既にキャッシュされている場合のためのフォールバック
     if (modalImage.complete) {
       updateNavigationButtons();
-      preloadAdjacentImages();
+      if (!isIOS()) {
+        preloadAdjacentImages();
+      }
     }
   });
 };
@@ -1436,32 +1427,26 @@ const closeImageModal = () => {
     window.scrollTo(0, savedScrollPosition);
   }
 
-  setTimeout(() => {
-    handleScroll();
-  }, 100);
+  // モーダル関連の変数をリセット（重要: 状態を完全にクリア）
+  currentModalCard = null;
+  currentModalCardName = null;
+  modalControlsInitialized = false; // 次回モーダル表示時に再初期化できるようにする
 
-  const controls = document.querySelector('.card-controls');
-  if (controls) {
-    controls.remove();
-  }
-  
-  // iOS用: メモリリーク対策とobserver の安全な処理
+  // iOS用の追加クリーンアップ処理
   if (isIOS()) {
-    // iOSでは軽量な処理のみ実行
-    setTimeout(() => {
-      // メモリ使用量を削減
-      if (seriesInfoCache.size > 100) { // より早めにクリア
-        seriesInfoCache.clear();
-      }
-      // ガベージコレクションを促進
-      if (window.gc) {
-        window.gc();
-      }
-    }, 200);
+    // 即座にメモリ使用量を削減
+    if (seriesInfoCache.size > 50) {
+      seriesInfoCache.clear();
+    }
+    
+    // 強制的にガベージコレクションを促進
+    if (window.gc) {
+      setTimeout(() => window.gc(), 100);
+    }
   } else {
     // PC/Android用の従来処理
     setTimeout(() => {
-      if (observer && typeof setupLazyLoading === 'function') {
+      if (observer && typeof resetLazyLoading === 'function') {
         resetLazyLoading();
       }
     }, 100);
@@ -1471,6 +1456,10 @@ const closeImageModal = () => {
       seriesInfoCache.clear();
     }
   }
+
+  setTimeout(() => {
+    handleScroll();
+  }, 100);
 };
 
 const scrollToTop = () => {
@@ -1889,24 +1878,40 @@ const showNextImage = () => {
     modalImage.src = src;
 
     const cardName = nextCard.dataset.name;
-    const controls = document.querySelector('.card-controls');
-    if (controls) {
-      setupModalCardControls(controls, nextCard, cardName);
-      updateCardCountInModal(cardName);
-    }
-
-    // 収録情報を更新
-    const seriesInfo = document.querySelector('.card-series-info');
-    if (seriesInfo) {
-      const nextCardName = nextCard.dataset.name;
-      const seriesText = getSeriesInfo(nextCardName);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
+    
+    // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
+    if (modalControls && modalSeriesInfo) {
+      // 収録情報を更新
+      modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
+      
+      // カウント情報を更新
+      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let maxAllowed = 4;
+      if (deckBuilder.infiniteCardLimit.has(cardName)) {
+        maxAllowed = Infinity;
+      } else if (deckBuilder.tenCardLimit.has(cardName)) {
+        maxAllowed = 10;
+      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+        maxAllowed = 7;
       }
+      
+      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+      modalControls.innerHTML = `
+        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+        <div class="card-count">${currentCount}/${displayMax}</div>
+        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+      `;
+      
+      // カード情報とボタン状態を更新
+      currentModalCard = nextCard;
+      currentModalCardName = cardName;
+      updateModalButtonStates(modalControls, cardName);
     }
 
     updateNavigationButtons();
-    preloadAdjacentImages();
+    if (!isIOS()) {
+      preloadAdjacentImages();
+    }
   }
 };
 
@@ -1933,24 +1938,40 @@ const showPreviousImage = () => {
     modalImage.src = src;
 
     const cardName = prevCard.dataset.name;
-    const controls = document.querySelector('.card-controls');
-    if (controls) {
-      setupModalCardControls(controls, prevCard, cardName);
-      updateCardCountInModal(cardName);
-    }
-
-    // 収録情報を更新
-    const seriesInfo = document.querySelector('.card-series-info');
-    if (seriesInfo) {
-      const prevCardName = prevCard.dataset.name;
-      const seriesText = getSeriesInfo(prevCardName);
-      if (seriesText) {
-        seriesInfo.textContent = seriesText;
+    
+    // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
+    if (modalControls && modalSeriesInfo) {
+      // 収録情報を更新
+      modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
+      
+      // カウント情報を更新
+      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let maxAllowed = 4;
+      if (deckBuilder.infiniteCardLimit.has(cardName)) {
+        maxAllowed = Infinity;
+      } else if (deckBuilder.tenCardLimit.has(cardName)) {
+        maxAllowed = 10;
+      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+        maxAllowed = 7;
       }
+      
+      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+      modalControls.innerHTML = `
+        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+        <div class="card-count">${currentCount}/${displayMax}</div>
+        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+      `;
+      
+      // カード情報とボタン状態を更新
+      currentModalCard = prevCard;
+      currentModalCardName = cardName;
+      updateModalButtonStates(modalControls, cardName);
     }
 
     updateNavigationButtons();
-    preloadAdjacentImages();
+    if (!isIOS()) {
+      preloadAdjacentImages();
+    }
   }
 };
 
@@ -3703,8 +3724,86 @@ async function captureDeck() {
   }
 }
 
-// カード拡大表示時のコントロール設定
-function setupModalCardControls(controls, card, cardName) {
+// イベントリスナーの重複登録を防ぐためのフラグ
+let modalControlsInitialized = false;
+let currentModalCard = null;
+let currentModalCardName = null;
+
+// カード拡大表示時のコントロール設定（一度だけ実行）
+function setupModalCardControlsOnce(controls, card, cardName) {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  // 現在のカード情報を更新
+  currentModalCard = card;
+  currentModalCardName = cardName;
+
+  // イベントリスナーは一度だけ設定
+  if (!modalControlsInitialized) {
+    addButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+        handleModalAddCard();
+      }
+    };
+    
+    removeButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!removeButton.disabled && currentModalCardName) {
+        handleModalRemoveCard();
+      }
+    };
+    
+    modalControlsInitialized = true;
+  }
+
+  // ボタンの状態は毎回更新
+  updateModalButtonStates(controls, cardName);
+}
+
+// モーダルでのカード追加処理
+function handleModalAddCard() {
+  const cardName = currentModalCardName;
+  
+  // カードの上限枚数を取得
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+
+  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+
+  if (maxAllowed === Infinity || currentCount < maxAllowed) {
+    deckBuilder.addCard(currentModalCard.cloneNode(true));
+    updateCardCountInModal(cardName);
+  } else {
+    // 上限メッセージ
+    if (maxAllowed === 10) {
+      deckBuilder.showTenCardMessage();
+    } else if (maxAllowed === 7) {
+      deckBuilder.showMessage('このカードはデッキに7枚まで。');
+    } else {
+      deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+    }
+  }
+}
+
+// モーダルでのカード削除処理
+function handleModalRemoveCard() {
+  const cardName = currentModalCardName;
+  const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+  if (cardToRemove) {
+    deckBuilder.removeCard(null, cardToRemove.dataset.number);
+    updateCardCountInModal(cardName);
+  }
+}
+
+// モーダルボタンの状態更新
+function updateModalButtonStates(controls, cardName) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
 
@@ -3718,10 +3817,7 @@ function setupModalCardControls(controls, card, cardName) {
     maxAllowed = 7;
   }
 
-  // 現在の枚数を取得して表示
   const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
-  const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
-  controls.querySelector('.card-count').textContent = `${currentCount}/${displayMax}`;
 
   // ボタンの無効化状態を設定
   addButton.disabled = maxAllowed !== Infinity && currentCount >= maxAllowed;
@@ -3739,39 +3835,12 @@ function setupModalCardControls(controls, card, cardName) {
   } else {
     removeButton.classList.remove('disabled');
   }
+}
 
-  // イベントリスナーを再設定
-  addButton.onclick = (e) => {
-    e.stopPropagation();
-    if (!addButton.disabled) {
-      // 現在の枚数を再取得
-      const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
-
-      if (maxAllowed === Infinity || currentCount < maxAllowed) {
-        deckBuilder.addCard(card.cloneNode(true));
-        updateCardCountInModal(cardName);
-      } else {
-        // 上限メッセージ
-        if (maxAllowed === 10) {
-          deckBuilder.showTenCardMessage();
-        } else if (maxAllowed === 7) {
-          deckBuilder.showMessage('このカードはデッキに7枚まで。');
-        } else {
-          deckBuilder.showMessage('同じカードはデッキに4枚まで。');
-        }
-      }
-    }
-  };
-  removeButton.onclick = (e) => {
-    e.stopPropagation();
-    if (!removeButton.disabled) {
-      const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
-      if (cardToRemove) {
-        deckBuilder.removeCard(null, cardToRemove.dataset.number);
-        updateCardCountInModal(cardName);
-      }
-    }
-  };
+// カード拡大表示時のコントロール設定（旧版 - 後方互換性のため残す）
+function setupModalCardControls(controls, card, cardName) {
+  // 新しい関数に転送
+  setupModalCardControlsOnce(controls, card, cardName);
 }
 
 // デッキ削除ボタンのイベントリスナーを追加
