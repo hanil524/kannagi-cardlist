@@ -727,6 +727,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 初期表示時にカード数を更新
   updateCardCount();
+  // 初期表示時にフィルター詳細を更新
+  updateFilterDetails();
 });
 
 // 以下の関数は変更なし
@@ -923,6 +925,8 @@ const resetFilters = () => {
 
   // カード数を更新
   updateCardCount();
+  // フィルター詳細をリセット
+  updateFilterDetails();
 };
 
 // キーボードイベントリスナーを更新
@@ -971,10 +975,13 @@ const toggleFilterCard = (attribute, value) => {
   }
   filterCards();
   updateActiveFilters();
+  updateFilterDetails(); // フィルター詳細を更新
   saveFiltersToLocalStorage();
 
   // モーダルを確実に閉じる
-  closeModal();
+  setTimeout(() => {
+    closeModal();
+  }, 10);
 };
 
 const filterCards = () => {
@@ -1584,6 +1591,7 @@ function removeFilter(key, value) {
     filters[key].delete(value);
     filterCards();
     updateActiveFilters();
+    updateFilterDetails(); // フィルター詳細を更新
     // フィルター削除時にもローカルストレージを更新
     saveFiltersToLocalStorage();
   }
@@ -1768,11 +1776,13 @@ const loadFiltersFromLocalStorage = () => {
       // フィルターとアクティブ表示の更新
       filterCards();
       updateActiveFilters();
+      updateFilterDetails();
     });
   } else {
     // ソート状態がない場合は単純にフィルターを適用
     filterCards();
     updateActiveFilters();
+    updateFilterDetails();
   }
 };
 
@@ -3870,11 +3880,96 @@ function resetSpecificDeck(deckId, confirmed) {
   popup.remove();
 }
 
-// カードの表示数をカウントして表示する関数
+
+
+// 検索結果カウントを更新する関数
 function updateCardCount() {
-  const visibleCards = document.querySelectorAll('.card[style*="display: block"], .card:not([style*="display"])');
+  const cards = document.querySelectorAll('.card');
+  let visibleCount = 0;
+  
+  cards.forEach((card) => {
+    if (card.style.display !== 'none' && !card.hasAttribute('data-empty')) {
+      visibleCount++;
+    }
+  });
+  
   const countElement = document.getElementById('search-result-count');
   if (countElement) {
-    countElement.innerHTML = `検索結果 <span class="count-number">${visibleCards.length}</span> 枚`;
+    countElement.innerHTML = `検索結果：<span class="count-number">${visibleCount}</span>枚`;
   }
+}
+
+// フィルター詳細表示を更新する関数
+function updateFilterDetails() {
+  const keywordDetailsElement = document.getElementById('keyword-details');
+  const roleDetailsElement = document.getElementById('role-details');
+  const seriesDetailsElement = document.getElementById('series-details');
+  const rareDetailsElement = document.getElementById('rare-details');
+  const containerElement = document.getElementById('filter-details');
+  
+  if (!keywordDetailsElement || !roleDetailsElement || !seriesDetailsElement || !rareDetailsElement || !containerElement) {
+    return;
+  }
+
+  // 選択されたフィルターを取得
+  const selectedKeywords = Array.from(filters.keyword || []);
+  const selectedRoles = Array.from(filters.role || []);
+  const selectedSeries = Array.from(filters.series || []);
+  const selectedRares = Array.from(filters.rare || []);
+
+  // キーワード詳細を作成
+  keywordDetailsElement.innerHTML = '';
+  selectedKeywords.forEach(keyword => {
+    const keywordButton = document.querySelector(`#keyword button[onclick*="toggleFilterCard('keyword', '${keyword}')"]`);
+    if (keywordButton) {
+      const tooltip = keywordButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${keyword}</span>：<span class="item-description">${tooltip}</span>`;
+      keywordDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // 役割詳細を作成
+  roleDetailsElement.innerHTML = '';
+  selectedRoles.forEach(role => {
+    const roleButton = document.querySelector(`#role button[onclick*="toggleFilterCard('role', '${role}')"]`);
+    if (roleButton) {
+      const tooltip = roleButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${role}</span>：<span class="item-description">${tooltip}</span>`;
+      roleDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // シリーズ詳細を作成
+  seriesDetailsElement.innerHTML = '';
+  selectedSeries.forEach(series => {
+    const seriesButton = document.querySelector(`#series button[onclick*="toggleFilterCard('series', '${series}')"]`);
+    if (seriesButton) {
+      const tooltip = seriesButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${series}</span>：<span class="item-description">${tooltip}</span>`;
+      seriesDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // レア詳細を作成
+  rareDetailsElement.innerHTML = '';
+  selectedRares.forEach(rare => {
+    const rareButton = document.querySelector(`#rare button[onclick*="toggleFilterCard('rare', '${rare}')"]`);
+    if (rareButton) {
+      const tooltip = rareButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${rare}</span>：<span class="item-description">${tooltip}</span>`;
+      rareDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // コンテナの表示・非表示を制御
+  const hasContent = selectedKeywords.length > 0 || selectedRoles.length > 0 || selectedSeries.length > 0 || selectedRares.length > 0;
+  containerElement.style.display = hasContent ? 'block' : 'none';
 }
