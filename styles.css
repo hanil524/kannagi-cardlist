@@ -1365,7 +1365,7 @@ body.modal-open {
   color: white;
   font-weight: bold;
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px 0 0 0; /* 下マージンを削除して上マージンのみに */
   background-color: rgba(15, 15, 15, 0.5);
   border-radius: 5px;
   text-align: center;
@@ -5473,6 +5473,79 @@ body.modal-open {
   z-index: 10;
   word-wrap: break-word;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* キーワード・役割詳細表示エリアのスタイル */
+.keyword-role-details {
+  color: rgb(255, 255, 255);
+  text-align: left;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(40, 40, 40, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.details-section {
+  margin-bottom: 8px;
+}
+
+.details-section:last-child {
+  margin-bottom: 0;
+}
+
+.details-item {
+  background-color: rgba(60, 60, 60, 0.9);
+  color: white;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  border-left: 4px solid #4a90e2;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.details-item .item-name {
+  font-weight: bold;
+  color: #87ceeb;
+}
+
+.details-item .item-description {
+  color: #e0e0e0;
+  margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+  .search-result-count {
+    font-size: 16px;
+    padding: 5px 10px;
+    margin-top: 0; /* スマホではマージントップを0に */
+  }
+
+  .keyword-role-details {
+    padding: 8px 10px;
+    margin-bottom: 3px;
+  }
+
+  .details-item {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+@media (min-width: 769px) {
+  .search-result-count {
+    max-width: 75%;
+    margin: 0 auto 15px; /* PC表示では通常のマージンに変更 */
+  }
+
+  .keyword-role-details {
+    max-width: 75%;
+    margin: 1px auto 15px; /* PC表示では適切な上下マージンを設定 */
+  }
 }
 
 
