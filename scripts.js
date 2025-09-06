@@ -654,6 +654,22 @@ document.addEventListener('DOMContentLoaded', () => {
     zeroCheckButton.addEventListener('click', performZeroSearch);
   }
 
+  // 共有ボタン（切替と零探しの間に挿入）
+  const deckMenuEl = document.querySelector('.deck-menu');
+  if (deckMenuEl && !document.getElementById('deck-share')) {
+    const shareBtn = document.createElement('button');
+    shareBtn.id = 'deck-share';
+    shareBtn.className = 'deck-menu-button';
+    shareBtn.textContent = '共有';
+    const zeroBtn = document.getElementById('zero-check');
+    if (zeroBtn) {
+      deckMenuEl.insertBefore(shareBtn, zeroBtn);
+    } else {
+      deckMenuEl.appendChild(shareBtn);
+    }
+    shareBtn.addEventListener('click', openDeckShareModal);
+  }
+
   // リセットボタン
   const resetButton = document.getElementById('deck-reset');
   if (resetButton) {
@@ -4053,3 +4069,451 @@ function updateFilterDetails() {
   const hasContent = selectedKeywords.length > 0 || selectedRoles.length > 0 || selectedSeries.length > 0 || selectedRares.length > 0;
   containerElement.style.display = hasContent ? 'block' : 'none';
 }
+
+// =====================
+// デッキコード機能
+// =====================
+
+// デッキ -> カノニカル文字列（id:count を | 連結、id昇順）
+function canonicalizeDeckMap(deckMap) {
+  return Object.entries(deckMap)
+    .filter(([_, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([id, c]) => `${id}:${c}`)
+    .join('|');
+}
+
+async function sha256Hex(text) {
+  const enc = new TextEncoder();
+  const data = enc.encode(text);
+  const cryptoObj = (window.crypto || self.crypto);
+  if (!cryptoObj || !cryptoObj.subtle) {
+    throw new Error('SHA-256が利用できません');
+  }
+  const hash = await cryptoObj.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+function b64urlEncode(str) {
+  const b64 = btoa(str);
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function b64urlDecode(s) {
+  let b64 = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (b64.length % 4) b64 += '=';
+  return atob(b64);
+}
+
+// 現在のデッキ（deckBuilder.deck）から {number: count} を作成
+function currentDeckToMap() {
+  const map = {};
+  (deckBuilder.deck || []).forEach((card) => {
+    const id = card?.dataset?.number;
+    if (!id) return;
+    map[id] = (map[id] || 0) + 1;
+  });
+  return map;
+}
+
+async function deckToCodeFromMap(map) {
+  // v3: base36本文 + プレーン表現（Base64URL非使用で短縮）
+  const entries = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .map(([id, c]) => `${parseInt(id, 10).toString(36)}:${parseInt(c, 10).toString(36)}`);
+  const body = entries.join('|');
+  const version = 'v3';
+  const normalizedBody = normalizeDeckCodeBody(body);
+  const checksum = (await sha256Hex(normalizedBody)).slice(0, 10);
+  return `${version}|${checksum}|${normalizedBody}`;
+}
+
+// v5: JSON配列をBase64URL化（短縮・堅牢）
+async function deckToCodeV5(map) {
+  const pairs = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .map(([id, c]) => [String(id), Number(c)]);
+  const payload = b64urlEncode(JSON.stringify(pairs));
+  const checksum = (await sha256Hex(payload)).slice(0, 10);
+  return `v5|${checksum}|${payload}`;
+}
+
+async function codeToMap(code) {
+  try {
+    const raw0 = normalizeWholeCode(code);
+
+    // v6: 5|checksum|base64url(VARINT binary)
+    if(/^5\|/.test(raw0)){
+      const firstBar = raw0.indexOf('|');
+      const rest = raw0.slice(firstBar + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('Bad format');
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi,'').toLowerCase();
+      const payload = rest.slice(sep + 1);
+      const expect = (await sha256Hex(payload)).slice(0, 10);
+      if (checksum !== expect) throw new Error('Invalid code');
+      const bytes = v6_binToBytes(b64urlDecode(payload));
+      let i=0, prev=0; const map={};
+      while(i < bytes.length){
+        const d=v6_varintDecode(bytes,i); if(d.value===null) break; i=d.next;
+        const c=v6_varintDecode(bytes,i); if(c.value===null) break; i=c.next;
+        const id = prev + d.value; prev = id;
+        if (c.value>0) map[String(id)] = (map[String(id)]||0) + c.value;
+      }
+      return map;
+    }
+    // legacy v5: v5|checksum|base64url(JSON[[id,count],...])
+    if(/^v5\|/i.test(raw0)){
+      const firstBar = raw0.indexOf('|');
+      const rest = raw0.slice(firstBar + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('Bad format');
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi,'').toLowerCase();
+      const payload = rest.slice(sep + 1);
+      const expect = (await sha256Hex(payload)).slice(0, 10);
+      if (checksum !== expect) throw new Error('Invalid code');
+      const pairs = JSON.parse(b64urlDecode(payload));
+      const map = {};
+      if (Array.isArray(pairs)) {
+        pairs.forEach(([id,c]) => { const n=Number(c)||0; if(id&&n>0) map[String(id)] = (map[String(id)]||0)+n; });
+      }
+      return map;
+    }
+    const firstBar = raw0.indexOf("|");
+    if (firstBar <= 0) throw new Error("Bad format");
+    const versionRaw0 = raw0.slice(0, firstBar).toLowerCase(); const versionRaw = versionRaw0.startsWith('v') ? versionRaw0.slice(1) : versionRaw0;
+    const rest = raw0.slice(firstBar + 1);
+    const sep = rest.indexOf('|');
+    if (sep < 0) throw new Error('Bad format');
+    const checksumRaw = rest.slice(0, sep);
+    const body = rest.slice(sep + 1);
+    const checksum = String(checksumRaw || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
+    const parseBody = normalizeDeckCodeBody(body);
+    const expect = (await sha256Hex(parseBody)).slice(0, 10);
+    if (checksum !== expect) throw new Error('Invalid code');
+    const map = {};
+    if (parseBody) {
+      parseBody.split("|").forEach((pair) => {
+        const [idStr0, cntStr0] = pair.split(":");
+        if (!idStr0 || !cntStr0) return;
+        let idStr; let n;
+        if (versionRaw === "v1") {
+          idStr = idStr0;
+          n = parseInt(cntStr0, 10) || 0;
+        } else {
+          idStr = parseInt(idStr0, 36).toString(10);
+          n = parseInt(cntStr0, 36) || 0;
+        }
+        n = Math.max(0, n);
+        if (idStr && n > 0) map[idStr] = (map[idStr] || 0) + n;
+      });
+    }
+    return map;
+  } catch (e) {
+    throw new Error("無効なコードです");
+  }
+}
+function replaceDeckWithMap(map) {
+  // 先に全IDの存在確認（1枚でも欠けたら適用を中止）
+  const missing = [];
+  Object.entries(map).forEach(([id]) => {
+    const exists = document.querySelector(`.card[data-number="${id}"]`);
+    if (!exists) missing.push(id);
+  });
+  if (missing.length > 0) {
+    if (typeof deckBuilder?.showMessage === 'function') {
+      deckBuilder.showMessage(`見つからない札があります: ${missing.join(',')}`);
+    }
+    return false;
+  }
+
+  const newDeck = [];
+  const addCardByNumber = (num) => {
+    const original = document.querySelector(`.card[data-number="${num}"]`);
+    if (!original) return false;
+    const card = document.createElement('div');
+    card.className = 'card';
+    Object.assign(card.dataset, {
+      name: original.dataset.name,
+      type: original.dataset.type,
+      season: original.dataset.season,
+      cost: original.dataset.cost,
+      number: original.dataset.number
+    });
+    const img = document.createElement('img');
+    const originalImg = original.querySelector('img');
+    img.src = originalImg.getAttribute('data-src') || originalImg.src;
+    img.alt = original.dataset.name;
+    img.onload = () => { img.classList.add('loaded'); img.style.opacity = '1'; };
+    card.appendChild(img);
+    newDeck.push(card);
+    return true;
+  };
+
+  Object.entries(map)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .forEach(([id, count]) => {
+      for (let i = 0; i < count; i++) addCardByNumber(id);
+    });
+
+  deckBuilder.deck = newDeck;
+  deckBuilder.updateDisplay();
+  deckBuilder.updateDeckCount();
+  // 保存と名称変更
+  const currentDeckId = deckManager.currentDeckId;
+  const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+  if (button) button.textContent = 'デッキコードから作成';
+  if (!deckManager.decks[currentDeckId]) deckManager.decks[currentDeckId] = { name: 'デッキコードから作成', cards: [] };
+  deckManager.decks[currentDeckId].name = 'デッキコードから作成';
+  deckManager.saveDeck(currentDeckId);
+}
+
+function openDeckShareModal() {
+  // スタイル注入（1回だけ）
+  if (!document.getElementById("deck-share-style")) {
+    const st = document.createElement("style");
+    st.id = "deck-share-style";
+    st.textContent = `
+    .deck-share-body{display:flex;flex-direction:column;gap:10px;color:#fff}
+    .deck-code-title,.deck-code-input-title{color:#e0e0e0;font-weight:bold;font-size:14px}
+    .deck-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .deck-code-buttons{display:flex;gap:10px;justify-content:flex-start;margin-bottom:12px}
+    .deck-code-input-area{display:block}
+    .deck-code-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px;box-sizing:border-box}
+    .deck-code-apply-row{display:flex;gap:10px;justify-content:flex-start}\n    .deck-list-content textarea, .deck-list-content input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+    `;
+    document.head.appendChild(st);
+  }
+
+  // 既存があれば再利用
+  let modal = document.getElementById('deck-share-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'deck-share-modal';
+    modal.className = 'deck-list-modal';
+    const content = document.createElement('div');
+    content.className = 'deck-list-content';
+    content.innerHTML = `
+      <div class=\"deck-list-header\">
+        <h2>デッキ共有</h2>
+        <button class=\"deck-list-close\" id=\"deck-share-close\">&times;</button>
+      </div>
+      <div class=\"deck-share-body\">
+        <div class=\"deck-code-title\">選択中のデッキコード</div>
+        <div id=\"deck-code-display\" class=\"deck-code-display\"></div>
+        <div class=\"deck-code-buttons\">
+          <button id=\"copy-deck-code\" class=\"deck-menu-button\">デッキコードをコピー</button>
+        </div>
+        <div id=\"deck-code-input-area\" class=\"deck-code-input-area\">
+          <div class=\"deck-code-input-title\">デッキコードを入力してください。</div>
+          <textarea id=\"deck-code-input\" class=\"deck-code-input\" rows=\"3\" placeholder=\"ここに貼り付け\"></textarea>
+           <div class=\"deck-code-apply-row\">
+             <button id=\"paste-from-clipboard\" class=\"deck-menu-button\">クリップボードから貼り付け</button>
+             <button id=\"apply-deck-code\" class=\"deck-menu-button\">適用</button><button id=\"clear-deck-code\" class=\"deck-menu-button\">消去</button>
+           </div>
+        </div>
+      </div>`;
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // 閉じる
+    const closeBtn = content.querySelector('#deck-share-close');
+    closeBtn?.addEventListener('click', () => {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+      }
+    });
+
+    // コピー
+    // コピー
+    content.querySelector('#copy-deck-code')?.addEventListener('click', async () => {
+      const code = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(code);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('デッキコードをコピーしました。');
+      } catch (_) {
+        alert('コピーに失敗しました');
+      }
+    });
+
+    // 表示コードをクリックでコピー（PCでの操作簡略化）
+    const codeDisplay = content.querySelector('#deck-code-display');
+    if (codeDisplay) {
+      codeDisplay.addEventListener('click', async () => {
+        const code = codeDisplay.textContent?.trim() || '';
+        try { await navigator.clipboard.writeText(code); } catch (_) {}
+      });
+    }
+
+    // クリップボードから貼り付け
+    const pasteBtn = content.querySelector('#paste-from-clipboard');
+    if (pasteBtn) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          const txt = await navigator.clipboard.readText();
+          const input = content.querySelector('#deck-code-input');
+          if (input) { input.value = txt || ''; input.focus(); }
+        } catch (err) {
+          // 取得できない環境では、上の表示コードを流用
+          const displayTxt = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
+          const input = content.querySelector('#deck-code-input');
+          if (input) { input.value = displayTxt; input.focus(); }
+        }
+      });
+    }
+
+
+    // 消去
+    const clearBtn = content.querySelector('#clear-deck-code');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        const input = content.querySelector('#deck-code-input');
+        if (input) { input.value = ''; input.focus(); }
+      });
+    }
+
+    // 適用
+    content.querySelector('#apply-deck-code')?.addEventListener('click', async () => {
+      const input = content.querySelector('#deck-code-input');
+      const val = input?.value?.trim() || '';
+      if (!val) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('デッキコードを入力してください。');
+        return;
+      }
+      try {
+        const map = await codeToMap(val);
+        // 確認ポップアップ
+        const confirmPopup = document.createElement('div');
+        confirmPopup.className = 'confirm-popup';
+        confirmPopup.innerHTML = `
+          <div class=\"confirm-content\">
+            <p>現在のデッキに上書きしますか？</p>
+            <div class=\"confirm-buttons\">
+              <button id=\"apply-code-yes\">はい</button>
+              <button id=\"apply-code-no\">いいえ</button>
+            </div>
+          </div>`;
+        confirmPopup.addEventListener('click', (e) => {
+          if (e.target === confirmPopup) document.body.removeChild(confirmPopup);
+        });
+        document.body.appendChild(confirmPopup);
+        document.getElementById('apply-code-no')?.addEventListener('click', () => {
+          document.body.removeChild(confirmPopup);
+        });
+        document.getElementById('apply-code-yes')?.addEventListener('click', () => {
+          document.body.removeChild(confirmPopup);
+          replaceDeckWithMap(map);
+          // 閉じる
+          modal.classList.remove('active');
+          setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+        });
+      } catch (e) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('無効なコードです');
+      }
+    });
+  }
+
+  // コード生成して表示
+  (async () => {
+    try {
+      const map = currentDeckToMap();
+      const prefer = localStorage.getItem('deckCodeVersion') || 'v6';
+      const code = (prefer.toLowerCase()==='v6'||prefer==='5') ? await deckToCodeV6(map) : (prefer.toLowerCase()==='v5' ? await deckToCodeV5(map) : await deckToCodeFromMap(map));
+      const display = modal.querySelector('#deck-code-display');
+      if (display) display.textContent = code;
+    } catch (e) {
+      const display = modal.querySelector('#deck-code-display');
+      if (display) display.textContent = 'コード生成に失敗しました';
+    }
+  })();
+
+  // 表示
+  modal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+    const ta = modal.querySelector('#deck-code-input');
+    if (ta) ta.focus();
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Normalize possible full-width separators and invisible chars in code body
+function normalizeDeckCodeBody(s) {
+  if (!s) return '';
+  return s
+    .replace(/[\u00A0\u200B-\u200D\uFEFF]/g, '') // zero-width & NBSP
+    .replace(/\uFF1A/g, ':') // full-width colon
+    .replace(/\uFF5C/g, '|') // full-width pipe
+    .replace(/\s+/g, '')
+    .replace(/\|{2,}/g, '|')
+    .trim();
+}
+
+
+// 全体正規化: 全角「｜」「：」、空白/ゼロ幅を除去
+function normalizeWholeCode(s) {
+  return String(s || '')
+    .replace(/[\u00A0\u200B-\u200D\uFEFF]/g, '')
+    .replace(/\uFF5C/g, '|') // 全角｜
+    .replace(/\uFF1A/g, ':') // 全角：
+    .replace(/\s+/g, '')
+    .trim();
+}
+
+
+// ===== v6: VarInt Binary + Base64URL (short) =====
+function v6_varintEncode(n) {
+  n = Number(n) >>> 0;
+  const out = [];
+  while (n >= 0x80) { out.push((n & 0x7f) | 0x80); n >>>= 7; }
+  out.push(n);
+  return out;
+}
+function v6_varintDecode(bytes, pos) {
+  let shift = 0, res = 0, b = 0, i = pos;
+  do { if (i >= bytes.length) return { value: null, next: i }; b = bytes[i++]; res |= (b & 0x7f) << shift; shift += 7; } while (b & 0x80);
+  return { value: res >>> 0, next: i };
+}
+function v6_bytesToBin(arr) { let s = ''; for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 0xff); return s; }
+function v6_binToBytes(str) { const out = new Uint8Array(str.length); for (let i = 0; i < str.length; i++) out[i] = str.charCodeAt(i) & 0xff; return out; }
+async function deckToCodeV6(map) {
+  const entries = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+    .sort((a, b) => a[0] - b[0]);
+  let prev = 0; const bytes = [];
+  for (const [id, cnt] of entries) {
+    const d = id - prev; prev = id;
+    bytes.push(...v6_varintEncode(d));
+    bytes.push(...v6_varintEncode(cnt));
+  }
+  const payload = b64urlEncode(v6_bytesToBin(bytes));
+  const checksum = (await sha256Hex(payload)).slice(0, 10);
+  return `5|${checksum}|${payload}`;
+}
+
