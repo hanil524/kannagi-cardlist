@@ -213,6 +213,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // 制限解禁トグルのイベント
+  const limitToggle = document.getElementById('limit-release-toggle');
+  if (limitToggle) {
+    limitToggle.addEventListener('change', (e) => {
+      deckBuilder.limitReleaseEnabled = !!e.target.checked;
+      // 画像モーダルを開いている場合、表示・ボタン状態を更新
+      try {
+        const imageModal = document.getElementById('image-modal');
+        if (imageModal && imageModal.style.display === 'flex' && typeof currentModalCardName !== 'undefined' && currentModalCardName) {
+          if (typeof updateCardCountInModal === 'function') {
+            updateCardCountInModal(currentModalCardName);
+          }
+          if (typeof updateModalButtonStates === 'function' && typeof modalControls !== 'undefined' && modalControls) {
+            updateModalButtonStates(modalControls, currentModalCardName);
+          }
+        }
+      } catch (err) {
+        // no-op
+      }
+    });
+  }
+
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
   imageModal.addEventListener('click', function (event) {
@@ -2663,7 +2685,7 @@ const deckBuilder = {
     typeContent.appendChild(typeRows);
     return typeContent;
   },
-
+  
   // 属性分布の作成
   createAttributeDistribution() {
     const attributeContent = document.createElement('div');
@@ -2701,6 +2723,64 @@ const deckBuilder = {
     return attributeContent;
   }
 };
+
+// === 制限解禁対応: 追加ロジック ===
+// 1) トグル状態（デフォルトOFF）
+if (typeof deckBuilder.limitReleaseEnabled === 'undefined') {
+  deckBuilder.limitReleaseEnabled = false;
+}
+
+// 2) 基本上限（制限解禁を考慮しない）
+deckBuilder.getBaseLimit = function (cardName) {
+  if (this.infiniteCardLimit.has(cardName)) return Infinity;
+  if (this.tenCardLimit.has(cardName)) return 10;
+  if (this.sevenCardLimit.has(cardName)) return 7;
+  if (this.restrictedCards.has(cardName)) return 1;
+  if (this.twoCardLimit.has(cardName)) return 2;
+  return this.maxCards; // 通常は4
+};
+
+// 3) 現在設定を反映した上限（制限解禁ONなら3以下を4に）
+deckBuilder.getMaxAllowed = function (cardName) {
+  const base = this.getBaseLimit(cardName);
+  if (this.limitReleaseEnabled && base !== Infinity && base <= 3) {
+    return 4;
+  }
+  return base;
+};
+
+// 4) addCard の上書き（上限判定を一本化）
+(function overrideAddCard() {
+  const originalAddCard = deckBuilder.addCard;
+  deckBuilder.addCard = function (card) {
+    if (!card || !card.dataset) return false;
+    const cardName = card.dataset.name;
+    const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
+    const maxAllowed = this.getMaxAllowed(cardName);
+
+    if (maxAllowed !== Infinity && sameNameCount >= maxAllowed) {
+      if (maxAllowed === 10) {
+        this.showTenCardMessage();
+      } else if (maxAllowed === 7) {
+        this.showSevenCardMessage('このカードはデッキに7枚まで。');
+      } else if (!this.limitReleaseEnabled && this.restrictedCards.has(cardName)) {
+        this.showLimitMessage();
+      } else if (!this.limitReleaseEnabled && this.twoCardLimit.has(cardName)) {
+        this.showTwoCardMessage();
+      } else {
+        this.showMessage('同じカードはデッキに4枚まで。');
+      }
+      return false;
+    }
+
+    // 追加処理は元実装と同等
+    this.deck.push(card);
+    this.updateDisplay();
+    this.updateDeckCount();
+    deckManager.saveDeck(deckManager.currentDeckId);
+    return true;
+  };
+})();
 
 // モーダル表示処理を分離
 function showDeckModal(scrollPosition) {
