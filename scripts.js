@@ -4278,13 +4278,17 @@ function openDeckShareModal() {
     const st = document.createElement("style");
     st.id = "deck-share-style";
     st.textContent = `
-    .deck-share-body{display:flex;flex-direction:column;gap:10px;color:#fff}
-    .deck-code-title,.deck-code-input-title{color:#e0e0e0;font-weight:bold;font-size:14px}
-    .deck-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .deck-code-buttons{display:flex;gap:10px;justify-content:flex-start;margin-bottom:12px}
-    .deck-code-input-area{display:block}
-    .deck-code-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px;box-sizing:border-box}
-    .deck-code-apply-row{display:flex;gap:10px;justify-content:flex-start}\n    .deck-list-content textarea, .deck-list-content input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+    /* Deck share modal: unify typographic scale and spacing */
+    .deck-share-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4}
+    .deck-code-title,.deck-code-input-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
+    .deck-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:14px;line-height:1.4}
+    .deck-code-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0}
+    .deck-code-input-area{display:flex;flex-direction:column;gap:8px}
+    .deck-code-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:14px;line-height:1.4}
+    .deck-code-apply-row{display:flex;gap:8px;justify-content:flex-start;align-items:center}
+    /* Keep left alignment, normalize button sizing only within this modal */
+    .deck-share-body .deck-menu-button{font-size:14px;font-weight:600;padding:6px 10px;height:auto;min-height:32px;line-height:1.2}
+    \n    .deck-list-content textarea, .deck-list-content input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
     `;
     document.head.appendChild(st);
   }
@@ -4450,16 +4454,6 @@ function openDeckShareModal() {
     if (ta) ta.focus();
   });
 }
-
-
-
-
-
-
-
-
-
-
 
 
 // Normalize possible full-width separators and invisible chars in code body
