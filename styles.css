@@ -1902,9 +1902,9 @@ body.modal-open {
 
 .card-add-button:hover,
 .card-remove-button:hover {
-  transform: scale(1.1);
   background-color: rgba(0, 0, 0, 0.9);
   border-color: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
 }
 
 /* ＋と－のアイコン */
@@ -2291,8 +2291,8 @@ body.modal-open {
 }
 
 .card-control-button:hover {
-  transform: scale(1.1);
   background-color: rgba(80, 80, 80, 0.9);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
 }
 
 .card-count {
@@ -2372,9 +2372,9 @@ body.modal-open {
   /* ボタンホバー効果 */
   .card-add-button:hover,
   .card-remove-button:hover {
-    transform: scale(1.1);
     background-color: rgba(0, 0, 0, 0.9);
     border-color: white;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
   }
 
   /* ＋と－のアイコン */
@@ -2909,6 +2909,7 @@ body.modal-open {
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
 }
+
 
 /* PCでのみモーダル起動時にスクロールバー拡大 */
 @media (min-width: 768px) {
@@ -3725,9 +3726,9 @@ body.modal-open {
 
 .card-add-button:hover,
 .card-remove-button:hover {
-  transform: scale(1.1);
   background-color: rgba(0, 0, 0, 0.9);
   border-color: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
 }
 
 /* ＋と－のアイコン */
@@ -4114,8 +4115,8 @@ body.modal-open {
 }
 
 .card-control-button:hover {
-  transform: scale(1.1);
   background-color: rgba(80, 80, 80, 0.9);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
 }
 
 .card-count {
@@ -4195,9 +4196,9 @@ body.modal-open {
   /* ボタンホバー効果 */
   .card-add-button:hover,
   .card-remove-button:hover {
-    transform: scale(1.1);
     background-color: rgba(0, 0, 0, 0.9);
     border-color: white;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
   }
 
   /* ＋と－のアイコン */
@@ -5573,3 +5574,62 @@ body.modal-open {
     margin: 1px auto 15px; /* PC表示では適切な上下マージンを設定 */
   }
 }
+
+/* ===== Final overrides: ensure single centered +/− icons (no duplicates) ===== */
+/* Overlay add/remove buttons on cards (list and deck) */
+.card-add-button,
+.card-remove-button {
+  position: relative;
+  font-size: 0 !important; /* hide any accidental glyphs */
+}
+
+.card-add-button::before,
+.card-remove-button::before,
+.card-add-button::after {
+  content: '' !important; /* override any previous content glyphs */
+  position: absolute;
+  left: calc(50% + 0.2px); /* subtle visual centering */
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* horizontal bar for minus */
+.card-add-button::before,
+.card-remove-button::before {
+  width: 16px;
+  height: 2px;
+}
+
+/* vertical bar for plus */
+.card-add-button::after {
+  width: 2px;
+  height: 16px;
+}
+
+/* Modal buttons inside image modal */
+#add-card,
+#remove-card {
+  color: transparent !important; /* hide inner text '＋' '−' */
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+#remove-card {
+  background-image: linear-gradient(90deg, #ffffff, #ffffff) !important;
+  background-repeat: no-repeat !important;
+  background-position: calc(50% + 0.5px) center !important;
+  background-size: 18px 2px !important;
+}
+
+#add-card {
+  background-image: linear-gradient(90deg, #ffffff, #ffffff),
+                    linear-gradient(0deg,  #ffffff, #ffffff) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: calc(50% + 0.5px) center, calc(50% + 0.5px) center !important;
+  background-size: 18px 2px, 2px 18px !important;
+}
+
+/* (hover transforms removed at source to avoid jitter) */
