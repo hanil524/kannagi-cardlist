@@ -4370,12 +4370,18 @@ function openDeckShareModal() {
         try {
           const txt = await navigator.clipboard.readText();
           const input = content.querySelector('#deck-code-input');
-          if (input) { input.value = txt || ''; input.focus(); }
+          if (input) {
+            input.value = txt || '';
+            if (document.activeElement === input) input.blur();
+          }
         } catch (err) {
           // 取得できない環境では、上の表示コードを流用
           const displayTxt = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
           const input = content.querySelector('#deck-code-input');
-          if (input) { input.value = displayTxt; input.focus(); }
+          if (input) {
+            input.value = displayTxt;
+            if (document.activeElement === input) input.blur();
+          }
         }
       });
     }
@@ -4386,7 +4392,10 @@ function openDeckShareModal() {
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         const input = content.querySelector('#deck-code-input');
-        if (input) { input.value = ''; input.focus(); }
+        if (input) {
+          input.value = '';
+          if (document.activeElement === input) input.blur();
+        }
       });
     }
 
@@ -4450,8 +4459,7 @@ function openDeckShareModal() {
   document.body.classList.add('modal-open');
   requestAnimationFrame(() => {
     modal.classList.add('active');
-    const ta = modal.querySelector('#deck-code-input');
-    if (ta) ta.focus();
+    // フォーカスは当てない（キーボードを出さない）
   });
 }
 
