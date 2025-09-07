@@ -377,7 +377,10 @@
         <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
       </div>
       <!-- 役割 -->
-      <div id="role" class="filter-content" style="display: none">        
+      <div id="role" class="filter-content" style="display: none">
+        <button onclick="toggleFilterCard('role', '攻撃時')" data-tooltip="攻撃時に効果が発動すること">攻撃時</button>
+        <button onclick="toggleFilterCard('role', '除外加速')" data-tooltip="除外をカードの効果で増やすこと">除外加速</button>
+        <button onclick="toggleFilterCard('role', '除外戻し')" data-tooltip="除外されているカードを、手札・場・デッキなどに戻すこと">除外戻し</button>     
         <button onclick="toggleFilterCard('role', 'ドロー')" data-tooltip="山札の上からカードを引くこと">ドロー</button>
         <button onclick="toggleFilterCard('role', '公開ドロー')" data-tooltip="山札の上から引いたカードを手札公開場に置くこと">公開ドロー</button>
         <button onclick="toggleFilterCard('role', '底ドロー')" data-tooltip="デッキの一番下からカードを引くこと">底ドロー</button>
@@ -402,8 +405,6 @@
         <button onclick="toggleFilterCard('role', '踏み倒し')" data-tooltip="本来のコストより、少ない魂でカードを使用すること">踏み倒し</button>
         <button onclick="toggleFilterCard('role', '魂加速')" data-tooltip="魂をカードの効果で増やすこと">魂加速</button>
         <button onclick="toggleFilterCard('role', '魂利用')" data-tooltip="魂にあるカードに影響がある効果">魂利用</button>
-        <button onclick="toggleFilterCard('role', '除外加速')" data-tooltip="除外をカードの効果で増やすこと">除外加速</button>
-        <button onclick="toggleFilterCard('role', '除外戻し')" data-tooltip="除外されているカードを、手札・場・デッキなどに戻すこと">除外戻し</button>
         <button onclick="toggleFilterCard('role', '底送り')" data-tooltip="デッキの一番下にカードを置くこと">底送り</button>
         <button onclick="toggleFilterCard('role', 'トップ送り')" data-tooltip="デッキの一番上にカードを置くこと">トップ送り</button>
         <button onclick="toggleFilterCard('role', 'トップ確認')" data-tooltip="デッキの一番上を確認すること">トップ確認</button>
