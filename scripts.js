@@ -180,8 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (isPC) {
     document.addEventListener('mousedown', (e) => {
-      // 入力欄は除外
-      if (e.target.tagName !== 'INPUT' && e.button === 0) {
+      // 入力欄は除外（TEXTAREA も含める）
+      if (
+        e.button === 0 &&
+        e.target.tagName !== 'INPUT' &&
+        e.target.tagName !== 'TEXTAREA'
+      ) {
         e.preventDefault();
       }
     });
