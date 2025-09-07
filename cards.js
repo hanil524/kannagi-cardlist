@@ -939,7 +939,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="春"
 data-type="場所札"
-data-role="魂加速 攻撃時"
+data-role="魂加速"
 data-keyword=""
 data-attribute="悪夢"
 >
@@ -8234,7 +8234,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="都市伝説 悪魔 UMA からくり"
 data-keyword=""
-data-role="直接ダメ ヒール ドレイン 攻撃時"
+data-role="直接ダメ ヒール ドレイン"
 >
 <img data-src="images/card_10_p (118).jpg" src="placeholder.jpg" decoding="async" />
 </div>
