@@ -1179,7 +1179,7 @@ const openModal = (filterId) => {
     // 簡易指定: 役割モーダル内のボタンをホラー系で強調…
     if (filterId === 'role') {
       const label = (newButton.innerText || '').trim();
-      const redLabels = ['除外加速', '除外戻し'];
+      const redLabels = ['除外加速', '除外戻し', '攻撃時'];
       if (redLabels.includes(label)) {
         newButton.classList.add('role-exile');
         // CSSのみでは上書きされる可能性があるため、インライン + !important で強制
