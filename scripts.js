@@ -287,6 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   // 遅延読み込みの処理
+  // 表示の先読み枚数と初期読み込み枚数を拡張（+15枚）
+  const PRELOAD_AHEAD_COUNT = 18; // もともと3 → 3 + 15
+  const INITIAL_LAZYLOAD_COUNT = 35; // もともと20 → 20 + 15
   const options = {
     root: null,
     rootMargin: '400px',
@@ -338,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const preloadNextImages = (currentIndex, count = 3) => {
+  const preloadNextImages = (currentIndex, count = PRELOAD_AHEAD_COUNT) => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
       loadImage(images[i]);
@@ -364,11 +367,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadInitialImages = () => {
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
-      if (index < 20) {
-        // 最初の20枚
+      if (index < INITIAL_LAZYLOAD_COUNT) {
+        // 最初の35枚（従来より+15枚）
         loadImage(img);
-        if (index === 19) {
-          preloadNextImages(index);
+        if (index === INITIAL_LAZYLOAD_COUNT - 1) {
+          preloadNextImages(index, PRELOAD_AHEAD_COUNT);
         }
       }
     });
