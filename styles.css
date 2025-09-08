@@ -3024,6 +3024,55 @@ body.modal-open {
   margin-left: 35px;
 }
 
+/* 主な属性を2列で中央配置するレイアウト */
+.attribute-rows.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2列 */
+  column-gap: 6px;    /* 列間をさらに詰める */
+  row-gap: 1px;
+  width: calc(100% - 38px); /* タイトル(約28px) + 余白(約10px) を考慮 */
+  margin-left: 50px;  /* 左ラベル分のオフセット */
+}
+
+@media (max-width: 768px) {
+  .attribute-rows.two-columns {
+    column-gap: 3px;
+  }
+}
+
+/* === Final override: 主な属性 2列中央寄せ（干渉対策） === */
+.attribute-rows.two-columns {
+  /* 列幅は内容サイズに合わせる → 中央に密集させる */
+  grid-template-columns: max-content max-content !important;
+  justify-content: center !important;
+  /* 列間は最小限に */
+  column-gap: 20px !important;
+  row-gap: 2px !important;
+  /* 左の縦タイトル分だけオフセット（必要なら変数で微調整） */
+  margin-left: var(--attr-title-offset, 30px) !important;
+  width: auto !important;
+}
+
+/* アイテムはテキスト幅だけにし、中央寄せ */
+.attribute-rows.two-columns .attribute-text {
+  width: max-content !important;
+  display: grid;
+  grid-template-columns: auto auto; /* 名前 | カウント */
+  column-gap: 6px;
+  justify-self: center;
+}
+
+/* カウントの記号付与（文字化け回避） */
+.attribute-rows.two-columns .attribute-text::after {
+  content: '：' attr(data-count) '枚' !important;
+  text-align: left;
+}
+
+/* 主な属性のカウントはCSSで「：」と「枚」を付ける（文字化け回避） */
+.attribute-rows.two-columns .attribute-text::after {
+  content: '：' attr(data-count) '枚';
+}
+
 /* テキスト表示のスタイル */
 .season-text,
 .type-text,
