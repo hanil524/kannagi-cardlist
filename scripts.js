@@ -527,6 +527,10 @@ document.addEventListener('DOMContentLoaded', () => {
       cardElement.setAttribute('data-season', card.dataset.season);
       cardElement.setAttribute('data-cost', card.dataset.cost);
       cardElement.setAttribute('data-number', card.dataset.number);
+      // 主な属性の集計に必要な属性情報も引き継ぐ
+      if (card.dataset.attribute) {
+        cardElement.setAttribute('data-attribute', card.dataset.attribute);
+      }
 
       const img = document.createElement('img');
       img.src = card.querySelector('img').src;
@@ -2472,6 +2476,11 @@ const deckBuilder = {
                 number: data.number
               });
 
+              // 主な属性の集計に必要な属性も復元
+              if (originalCard.dataset.attribute) {
+                card.dataset.attribute = originalCard.dataset.attribute;
+              }
+
               // 画像要素を作成
               const img = document.createElement('img');
               const originalImg = originalCard.querySelector('img');
@@ -4245,7 +4254,7 @@ async function codeToMap(code) {
     throw new Error("無効なコードです");
   }
 }
-function replaceDeckWithMap(map) {
+  function replaceDeckWithMap(map) {
   // 先に全IDの存在確認（1枚でも欠けたら適用を中止）
   const missing = [];
   Object.entries(map).forEach(([id]) => {
@@ -4272,6 +4281,10 @@ function replaceDeckWithMap(map) {
       cost: original.dataset.cost,
       number: original.dataset.number
     });
+    // 主な属性の集計に必要な属性情報も付与
+    if (original.dataset.attribute) {
+      card.dataset.attribute = original.dataset.attribute;
+    }
     const img = document.createElement('img');
     const originalImg = original.querySelector('img');
     img.src = originalImg.getAttribute('data-src') || originalImg.src;
