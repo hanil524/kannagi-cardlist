@@ -3047,7 +3047,7 @@ body.modal-open {
   justify-content: center !important;
   /* 列間は最小限に */
   column-gap: 20px !important;
-  row-gap: 2px !important;
+  row-gap: 1px !important;
   /* 左の縦タイトル分だけオフセット（必要なら変数で微調整） */
   margin-left: var(--attr-title-offset, 30px) !important;
   width: auto !important;
