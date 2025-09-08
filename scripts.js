@@ -2802,6 +2802,75 @@ deckBuilder.getMaxAllowed = function (cardName) {
   return base;
 };
 
+// 4-a-2) 主な属性の再定義（数値のみを埋め込み、装飾はCSSで付与）
+deckBuilder.createAttributeDistribution = function () {
+  const attributeContent = document.createElement('div');
+  attributeContent.className = 'attribute-content';
+
+  const attributeCounts = {};
+  (this.deck || []).forEach((card) => {
+    const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
+    if (!attrs) return;
+    attrs.split(' ').forEach((attr) => {
+      if (!attr) return;
+      attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+    });
+  });
+
+  const top10 = Object.entries(attributeCounts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 10);
+
+  const rows = document.createElement('div');
+  rows.className = 'attribute-rows two-columns';
+
+  top10.forEach(([attribute, count]) => {
+    const item = document.createElement('div');
+    item.className = 'attribute-text';
+    item.setAttribute('data-name', attribute);
+    item.setAttribute('data-count', String(count));
+    rows.appendChild(item);
+  });
+
+  attributeContent.appendChild(rows);
+  return attributeContent;
+};
+
+// 4-a) 主な属性: 上位10件を2列で中央表示に差し替え
+deckBuilder.createAttributeDistribution = function () {
+  const attributeContent = document.createElement('div');
+  attributeContent.className = 'attribute-content';
+
+  // 属性ごとの頻度カウント
+  const attributeCounts = {};
+  (this.deck || []).forEach((card) => {
+    const attrs = card?.dataset?.attribute || '';
+    if (!attrs) return;
+    attrs.split(' ').forEach((attr) => {
+      if (!attr) return;
+      attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+    });
+  });
+
+  const sortedAttributes = Object.entries(attributeCounts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 10);
+
+  const rows = document.createElement('div');
+  rows.className = 'attribute-rows two-columns';
+
+  sortedAttributes.forEach(([attribute, count]) => {
+    const item = document.createElement('div');
+    item.className = 'attribute-text';
+    item.setAttribute('data-name', attribute);
+    item.setAttribute('data-count', `�F${count}��`);
+    rows.appendChild(item);
+  });
+
+  attributeContent.appendChild(rows);
+  return attributeContent;
+};
+
 // 4) addCard の上書き（上限判定を一本化）
 (function overrideAddCard() {
   const originalAddCard = deckBuilder.addCard;
@@ -4560,3 +4629,40 @@ async function deckToCodeV6(map) {
   return `5|${checksum}|${payload}`;
 }
 
+// === Final override: createAttributeDistribution ===
+// 数値のみを data-count に持たせ、記号はCSSで付与することで文字化けを防ぐ。
+// 上位10件を2列表示。呼び出し側は既存のまま。
+if (typeof deckBuilder !== 'undefined') {
+  deckBuilder.createAttributeDistribution = function () {
+    const attributeContent = document.createElement('div');
+    attributeContent.className = 'attribute-content';
+
+    const attributeCounts = {};
+    (this.deck || []).forEach((card) => {
+      const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
+      if (!attrs) return;
+      attrs.split(' ').forEach((attr) => {
+        if (!attr) return;
+        attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+      });
+    });
+
+    const top10 = Object.entries(attributeCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 10);
+
+    const rows = document.createElement('div');
+    rows.className = 'attribute-rows two-columns';
+
+    top10.forEach(([attribute, count]) => {
+      const item = document.createElement('div');
+      item.className = 'attribute-text';
+      item.setAttribute('data-name', attribute);
+      item.setAttribute('data-count', String(count));
+      rows.appendChild(item);
+    });
+
+    attributeContent.appendChild(rows);
+    return attributeContent;
+  };
+}
