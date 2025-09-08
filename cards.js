@@ -6196,7 +6196,7 @@ data-season="秋"
 data-rare="SSR"
 data-attribute="菌"
 data-keyword="鮮明 不屈"
-data-role="除外戻し"
+data-role="除外戻し 回収"
 >
 <img data-src="images/card_9_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9648,7 +9648,7 @@ data-season="夏"
 data-rare="R"
 data-attribute="墓地 妖怪 海"
 data-keyword="召喚時"
-data-role="除外戻し 直接ダメ"
+data-role="除外戻し 直接ダメ 回収"
 >
 <img data-src="images/card_12_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9685,6 +9685,70 @@ data-role="除外加速 直接ダメ"
 <img data-src="images/card_12_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
+  class="card"
+  data-number="1907"
+  data-name="かに坊主(かにぼうず)"
+  data-cost="5"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 蟲"
+  data-keyword=""
+  data-role="除外戻し 回収 直接ダメ"
+>
+  <img data-src="images/card_12_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1908"
+  data-name="蟲憑(むしつき)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="墓地 妖怪 蟲"
+  data-keyword=""
+  data-role="除外加速 直接ダメ"
+>
+  <img data-src="images/card_12_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1909"
+  data-name="私の墓(わたしのはか)"
+  data-cost="1"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="墓地"
+  data-keyword=""
+  data-role="除外戻し 回収 直接ダメ"
+>
+  <img data-src="images/card_12_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1910"
+  data-name="沈めてあげる(しずめてあげる)"
+  data-cost="9"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 海"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_12_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
 class="card"
 data-number="1911"
 data-name="霊道(れいどう)"
@@ -9696,9 +9760,73 @@ data-season="秋"
 data-rare="C"
 data-attribute="墓地 妖怪 幽霊"
 data-keyword=""
-data-role="除外戻し ドロー 攻撃時"
+data-role="除外戻し 回収 ドロー 攻撃時"
 >
 <img data-src="images/card_12_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1912"
+  data-name="木霊の森(こだまのもり)"
+  data-cost="1"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="墓地 妖怪 樹木"
+  data-keyword="召喚時"
+  data-role="除外加速 ドロー"
+>
+  <img data-src="images/card_12_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1913"
+  data-name="砂の竹林(すなのちくりん)"
+  data-cost="4"
+  data-power="3"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋 冬"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 樹木"
+  data-keyword="召喚時"
+  data-role="除外戻し 回収 ハンデス"
+>
+  <img data-src="images/card_12_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1914"
+  data-name="べとべと(ベトベト)"
+  data-cost="2"
+  data-power="2"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="攻撃時 除外戻し 回収"
+>
+  <img data-src="images/card_12_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1915"
+  data-name="うぶめ(ウブメ)"
+  data-cost="8"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="墓地 妖怪"
+  data-keyword="召喚時"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_12_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
 class="card"
@@ -9728,9 +9856,121 @@ data-season="秋"
 data-rare="C"
 data-attribute="墓地 妖怪"
 data-keyword=""
-data-role="除外戻し ドロー"
+data-role="除外戻し 回収 ドロー"
 >
 <img data-src="images/card_12_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1918"
+  data-name="山姥(やまんば)"
+  data-cost="4"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="除外加速 ハンデス"
+>
+  <img data-src="images/card_12_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1919"
+  data-name="唐笠おばけ(からかさおばけ)"
+  data-cost="0"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="墓地 妖怪 からくり"
+  data-keyword=""
+  data-role="除外戻し 回収 ドロー"
+>
+  <img data-src="images/card_12_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1920"
+  data-name="こなきじじい(コナキジジイ)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 おじさん"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_12_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1921"
+  data-name="夜刀神(やとのかみ)"
+  data-cost="4"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="神 大蛇 妖怪 月"
+  data-keyword="神秘 召喚時"
+  data-role="憑依加速"
+>
+  <img data-src="images/card_12_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1922"
+data-name="沼御前（ぬまごぜん）"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-rare=""
+data-season="春"
+data-type="怪異札"
+data-role="バフ"
+data-keyword="鮮明 不屈"
+data-attribute="妖怪 大蛇"
+>
+<img data-src="images/card_12_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1923"
+  data-name="ヨモツモノ(よもつもの)"
+  data-cost="6"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪 からくり"
+  data-keyword=""
+  data-role="2種類札 札除去 バニラ"
+>
+  <img data-src="images/card_12_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1924"
+  data-name="いったん木綿(いったんもめん)"
+  data-cost="0"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="季節札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_12_p (24).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
 class="card"
@@ -9747,6 +9987,22 @@ data-keyword=""
 data-role="ロック"
 >
 <img data-src="images/card_12_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1926"
+  data-name="鈴鳴り(すずなり)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="御守り 髑髏"
+  data-keyword=""
+  data-role="魂利用 回収 追加行動"
+>
+  <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
