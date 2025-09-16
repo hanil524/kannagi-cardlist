@@ -45,6 +45,92 @@ let startY = 0;
 let observer = null;
 let isObserverSetup = false;
 
+const MAX_CONCURRENT_IMAGE_LOADS = 6;
+const imageLoadQueue = [];
+const queuedImages = new Set();
+const loadingImages = new Set();
+let activeImageLoads = 0;
+
+const processImageQueue = () => {
+  while (activeImageLoads < MAX_CONCURRENT_IMAGE_LOADS && imageLoadQueue.length > 0) {
+    const img = imageLoadQueue.shift();
+    if (!img) {
+      continue;
+    }
+
+    queuedImages.delete(img);
+
+    if (!img.isConnected || img.classList.contains('loaded') || loadingImages.has(img)) {
+      continue;
+    }
+
+    const src = img.getAttribute('data-src');
+    if (!src || img.src === src) {
+      continue;
+    }
+
+    loadingImages.add(img);
+    activeImageLoads += 1;
+
+    const finalize = (didLoad) => {
+      if (didLoad) {
+        img.style.opacity = '1';
+      }
+      img.classList.add('loaded');
+      loadingImages.delete(img);
+      img.onload = null;
+      img.onerror = null;
+      activeImageLoads = Math.max(0, activeImageLoads - 1);
+      processImageQueue();
+    };
+
+    img.onload = () => finalize(true);
+    img.onerror = () => finalize(false);
+
+    img.removeAttribute('data-src');
+    img.src = src;
+  }
+};
+
+const queueImageForLoad = (img, priority = false) => {
+  if (!img || !img.isConnected) {
+    return;
+  }
+
+  if (img.classList.contains('loaded') || loadingImages.has(img)) {
+    return;
+  }
+
+  const src = img.getAttribute('data-src');
+  if (!src || img.src === src) {
+    return;
+  }
+
+  if (queuedImages.has(img)) {
+    if (priority) {
+      const index = imageLoadQueue.indexOf(img);
+      if (index > 0) {
+        imageLoadQueue.splice(index, 1);
+        imageLoadQueue.unshift(img);
+      }
+    }
+    return;
+  }
+
+  if (priority) {
+    imageLoadQueue.unshift(img);
+  } else {
+    imageLoadQueue.push(img);
+  }
+
+  queuedImages.add(img);
+  processImageQueue();
+};
+
+const loadImage = (img, priority = false) => {
+  queueImageForLoad(img, priority);
+};
+
 // ★現在の日付を更新する関数を追加
 function updateCurrentDate() {
   const updateDateElement = document.getElementById('update-date');
@@ -300,27 +386,12 @@ document.addEventListener('DOMContentLoaded', () => {
     threshold: 0.1
   };
 
-  const loadImage = (img) => {
-    const src = img.getAttribute('data-src');
-    if (src && img.src !== src && !img.classList.contains('loaded')) {
-      img.src = src;
-      img.onload = () => {
-        img.style.opacity = '1';
-        img.classList.add('loaded');
-      };
-      img.onerror = () => {
-        img.classList.add('loaded');
-      };
-      img.removeAttribute('data-src');
-    }
-  };
-
   // ObserverをグローバルObserverとして初期化（全デバイス共通）
   if (!observer) {
     observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          loadImage(entry.target);
+          loadImage(entry.target, true);
           observer.unobserve(entry.target);
         }
       });
@@ -346,9 +417,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const preloadNextImages = (currentIndex, count = PRELOAD_AHEAD_COUNT) => {
-    const images = document.querySelectorAll('.card img:not(.loaded)');
+    const images = document.querySelectorAll('.card img');
     for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
-      loadImage(images[i]);
+      const img = images[i];
+      if (img && !img.classList.contains('loaded')) {
+        loadImage(img);
+      }
     }
   };
 
@@ -369,11 +443,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 初期表示の画像数を制限
   const loadInitialImages = () => {
-    const images = document.querySelectorAll('.card img:not(.loaded)');
+    const images = document.querySelectorAll('.card img');
     images.forEach((img, index) => {
       if (index < INITIAL_LAZYLOAD_COUNT) {
         // 最初の35枚（従来より+15枚）
-        loadImage(img);
+        loadImage(img, true);
         if (index === INITIAL_LAZYLOAD_COUNT - 1) {
           preloadNextImages(index, PRELOAD_AHEAD_COUNT);
         }
@@ -1676,18 +1750,7 @@ const loadVisibleImages = () => {
   images.forEach((img) => {
     const rect = img.getBoundingClientRect();
     if (rect.top >= 0 && rect.top <= viewportHeight) {
-      const src = img.getAttribute('data-src');
-      if (src && img.src !== src) {
-        img.src = src;
-        img.onload = () => {
-          img.style.opacity = '1';
-          img.classList.add('loaded');
-        };
-        img.onerror = () => {
-          img.classList.add('loaded');
-        };
-        img.removeAttribute('data-src');
-      }
+      loadImage(img, true);
     }
   });
 };
