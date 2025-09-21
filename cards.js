@@ -10490,5 +10490,69 @@ data-role="ヒール"
 >
 <img data-src="images/card_12_p (6).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+class="card"
+data-number="10033"
+data-name="那須物語(なすものがたり)"
+data-cost="5"
+data-power="4"
+data-series="プロモ"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="妖怪 動物 狐"
+data-keyword="楽園"
+data-role="攻撃時 ヒール"
+>
+<img data-src="images/card_12_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10034"
+data-name="死の蛆(ですわーむ)"
+data-cost="5"
+data-power="8"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="妖怪 蟲 都市伝説"
+data-keyword="憤怒 速攻"
+data-role=""
+>
+<img data-src="images/card_12_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10035"
+data-name="芍薬童子(しゃくやくどうじ)"
+data-cost="5"
+data-power="5"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="妖怪 花 噂"
+data-keyword="追撃 召喚時"
+data-role="ドロー ハンデス"
+>
+<img data-src="images/card_12_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10036"
+data-name="氷蜃(ひょうしん)"
+data-cost="5"
+data-power="4"
+data-series="プロモ"
+data-type="場所札"
+data-season="冬"
+data-rare=""
+data-attribute="妖怪 鬼 戦"
+data-keyword="妬み"
+data-role="攻撃時 ランデス"
+>
+<img data-src="images/card_12_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
