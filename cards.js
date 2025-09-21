@@ -9803,7 +9803,7 @@ data-role="除外戻し 回収 ドロー 攻撃時"
   data-cost="2"
   data-power="2"
   data-series="妖怪デッキ：墓暴き"
-  data-type="怪異札"
+  data-type="場所札"
   data-season="秋"
   data-rare="UC"
   data-attribute="墓地 妖怪"
@@ -9819,7 +9819,7 @@ data-role="除外戻し 回収 ドロー 攻撃時"
   data-cost="8"
   data-power="1"
   data-series="妖怪デッキ：墓暴き"
-  data-type="怪異札"
+  data-type="場所札"
   data-season="秋"
   data-rare="SR"
   data-attribute="墓地 妖怪"
@@ -10556,4 +10556,3 @@ data-role="攻撃時 ランデス"
 </div>
 
 `;
-
