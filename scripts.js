@@ -2102,7 +2102,7 @@ const deckBuilder = {
   deck: [],
   maxCards: 4,
   restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '肥川の大蛇（ひのかわのおろち）', "消さなきゃ（けさなきゃ）"]),
-  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）"]),
+  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）", "暗躍者(あんやくしゃ)", "仮想世界の外(かそうせかいのそと)"]),
   sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   infiniteCardLimit: new Set(['複製体(くろーん クローン)']), // 無限枚数制限カード
