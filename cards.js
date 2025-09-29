@@ -6805,7 +6805,7 @@ data-series="SSS47"
 data-type="場所札"
 data-season="冬"
 data-rare="エキスパンション"
-data-attribute="SSS 廃旅館"
+data-attribute="神 SSS 廃旅館"
 data-keyword="合唱"
 data-role="ロック 攻撃時"
 >
