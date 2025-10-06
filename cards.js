@@ -4497,7 +4497,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="動物 災害"
 data-keyword="不屈"
-data-role="追加行動 札除去 踏み倒し 攻撃時"
+data-role="札除去 踏み倒し 攻撃時"
 >
 <img data-src="images/card_7_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10553,6 +10553,22 @@ data-keyword="妬み"
 data-role="攻撃時 ランデス"
 >
 <img data-src="images/card_12_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10037"
+data-name="なないろ天獄(なないろてんごく)"
+data-cost="10"
+data-power="7"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="糧 神 家屋"
+data-keyword="召喚時"
+data-role=""
+>
+<img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
