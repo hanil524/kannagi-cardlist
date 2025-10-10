@@ -10005,6 +10005,1049 @@ data-role="ロック"
   <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
+<!-- ナナフシギ襲来 -->
+
+<div
+  class="card"
+  data-number="2000"
+  data-name="葛見神社(くずみじんじゃ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 廃神社"
+  data-keyword="言霊"
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_13_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2001"
+  data-name="lulu(るる)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 WBD 幽霊"
+  data-keyword=""
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_13_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2002"
+  data-name="パシンペロンはやぶさ(ぱしんぺろんはやぶさ)"
+  data-cost="2"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 動物 視線"
+  data-keyword="召喚時 言霊"
+  data-role="魂加速"
+>
+  <img data-src="images/card_13_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2003"
+  data-name="かいんどりー"
+  data-cost="4"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 WBD 視線"
+  data-keyword=""
+  data-role="「起き」 ヒール"
+>
+  <img data-src="images/card_13_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2004"
+  data-name="十二月田護朗(しわすだごろー)"
+  data-cost="6"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 事件 怨念"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_13_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2005"
+  data-name="吉田猛々(よしだもうもう)"
+  data-cost="8"
+  data-power="8"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="攻撃時 バフ"
+>
+  <img data-src="images/card_13_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2006"
+  data-name="つばさねこ"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="七不思議 都市伝説 UMA 猫"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_13_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2007"
+  data-name="吉田猛々猫の姿(よしだもうもうねこのすがた)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_13_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2008"
+  data-name="サヤカスター(さやかすたー)"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 楽器 幽霊"
+  data-keyword="言霊"
+  data-role="追加行動"
+>
+  <img data-src="images/card_13_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2009"
+  data-name="猛々の嫁メリケンサック(もうもうのよめめりけんさっく)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="札ダメ 直接ダメ"
+>
+  <img data-src="images/card_13_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2010"
+  data-name="築地の健吾(つきじのけんご)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="七不思議 海 災害"
+  data-keyword="展開時"
+  data-role="ヒール 攻撃時"
+>
+  <img data-src="images/card_13_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2011"
+  data-name="JBK(じこぶっけんかいぎしつ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 廃マンション"
+  data-keyword=""
+  data-role="攻撃時 除外加速"
+>
+  <img data-src="images/card_13_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2012"
+  data-name="GKM(がーりっく・まねー・かも～)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 神隠し"
+  data-keyword="言霊"
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2014"
+  data-name="同心(どうしん)"
+  data-cost="2"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 WBD 楽器"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2015"
+  data-name="hamaTime(はまたいむ)"
+  data-cost="3"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 WBD 幽霊"
+  data-keyword="召喚時"
+  data-role="除外加速 公開ドロー ドロー"
+>
+  <img data-src="images/card_13_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2016"
+  data-name="うえまつそう"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 神 石像"
+  data-keyword="言霊"
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2017"
+  data-name="社員寮(しゃいんりょう)"
+  data-cost="4"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 廃屋"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2018"
+  data-name="呪怨家(じゅおんけ)"
+  data-cost="6"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 廃屋 怨霊"
+  data-keyword=""
+  data-role="攻撃時 除外加速 直接ダメ"
+>
+  <img data-src="images/card_13_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2019"
+  data-name="夏目太一朗(なつめたいちろう)"
+  data-cost="6"
+  data-power="4"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 妖怪 鬼 幽霊"
+  data-keyword="召喚時 言霊 "
+  data-role="魂回収"
+>
+  <img data-src="images/card_13_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2020"
+  data-name="関口ケント(せきぐちけんと)"
+  data-cost="11"
+  data-power="10"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="七不思議 WBD 怨念"
+  data-keyword="召喚時 言霊 "
+  data-role="攻撃時 魂回収 除外加速 バフ"
+>
+  <img data-src="images/card_13_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2021"
+  data-name="大赤見ノヴ(おおあかみのゔ)"
+  data-cost="12"
+  data-power="10"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="七不思議 神"
+  data-keyword="召喚時"
+  data-role="憑依加速 直接ダメ"
+>
+  <img data-src="images/card_13_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2022"
+  data-name="オオパパミ(おおぱぱみ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SSR"
+  data-attribute="七不思議"
+  data-keyword="召喚時"
+  data-role="直接ダメ 魂加速 除外加速"
+>
+  <img data-src="images/card_13_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2023"
+  data-name="かつらナナ(かつらなな)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 幽霊"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2024"
+  data-name="おごぽご"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 UMA 龍"
+  data-keyword="不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2025"
+  data-name="ドラゴンハンマー(どらごんはんまー)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 龍 WBD"
+  data-keyword=""
+  data-role="除外加速 直接ダメ"
+>
+  <img data-src="images/card_13_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2026"
+  data-name="引児(ひきじ)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 海 腐乱"
+  data-keyword=""
+  data-role="直接ダメ サーチ"
+>
+  <img data-src="images/card_13_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2027"
+  data-name="牛抱せん夏(うしだきせんか)"
+  data-cost="8"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 幻"
+  data-keyword="言霊"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2028"
+  data-name="呪怨家の呪い(じゅおんけののろい)"
+  data-cost="15"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 呪 廃屋"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2029"
+  data-name="ゴリ神様(ごりがみさま)"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 人形"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2030"
+  data-name="怪談ショーの椅子(かいだんしょーのいす)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 噂"
+  data-keyword="言霊"
+  data-role="直接ダメ 公開ドロー ドロー"
+>
+  <img data-src="images/card_13_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2031"
+  data-name="マーシーの張り紙(まーしーのはりがみ)"
+  data-cost="10"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 浸食"
+  data-keyword=""
+  data-role="札ダメ"
+>
+  <img data-src="images/card_13_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2032"
+  data-name="さあやりましょう"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="WBD"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2033"
+  data-name="A4コピー用紙(えーよんこぴーようし)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 樹木"
+  data-keyword="言霊"
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_13_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2034"
+  data-name="ズズズのトンネル(ずずずのとんねる)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 廃隧道 怨霊"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2035"
+  data-name="ミミズーク(みみずーく)"
+  data-cost="2"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 動物"
+  data-keyword="召喚時"
+  data-role="追加行動"
+>
+  <img data-src="images/card_13_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2036"
+  data-name="のりまき"
+  data-cost="4"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 不吉"
+  data-keyword="召喚時"
+  data-role="サーチ"
+>
+  <img data-src="images/card_13_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2037"
+  data-name="半身の男(はんみのおとこ)"
+  data-cost="6"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 血液 廃マンション"
+  data-keyword=""
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_13_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2038"
+  data-name="ちぇるちぇりうむ"
+  data-cost="6"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 烏 怨霊"
+  data-keyword="秘境"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2039"
+  data-name="無垢な願い(むくなねがい)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 怨霊"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_13_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2040"
+  data-name="にしお"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 廃隧道"
+  data-keyword=""
+  data-role="ドロー バウンス"
+>
+  <img data-src="images/card_13_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2041"
+  data-name="あかうぼ"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 海 胎内"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_13_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2042"
+  data-name="ノヴ神ライター(のゔがみらいたー)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 浸食 灯火"
+  data-keyword=""
+  data-role="ドロー 札除去"
+>
+  <img data-src="images/card_13_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2043"
+  data-name="DDD(でぃーぷ・でぃーぱー・でぃーぺすと)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 虹 ゴリラ"
+  data-keyword="展開時"
+  data-role="ドロー"
+>
+  <img data-src="images/card_13_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2044"
+  data-name="海辺の公衆トイレ(うみべのこうしゅうといれ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 海 鏡"
+  data-keyword="言霊"
+  data-role="攻撃時 デッキ破壊"
+>
+  <img data-src="images/card_13_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2045"
+  data-name="がん"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 鬼"
+  data-keyword=""
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_13_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2046"
+  data-name="ハニトラ梅木(はにとらうめき)"
+  data-cost="1"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 墓地"
+  data-keyword="言霊"
+  data-role="攻撃時 ランデス"
+>
+  <img data-src="images/card_13_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2047"
+  data-name="カチモード児玉(かちもーどこだま)"
+  data-cost="3"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 事件 家屋"
+  data-keyword="召喚時 言霊"
+  data-role="憑依破壊"
+>
+  <img data-src="images/card_13_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2048"
+  data-name="ブッシュ(ぶっしゅ)"
+  data-cost="5"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 WBD からくり"
+  data-keyword=""
+  data-role="攻撃時 札除去"
+>
+  <img data-src="images/card_13_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2049"
+  data-name="夜馬裕(やまゆう)"
+  data-cost="8"
+  data-power="7"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 髑髏 幽霊"
+  data-keyword="召喚時 言霊"
+  data-role="攻撃時 直接ダメ 除外戻し"
+>
+  <img data-src="images/card_13_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2050"
+  data-name="お魚怪談(おさかなかいだん)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 人魚"
+  data-keyword=""
+  data-role="札除去"
+>
+  <img data-src="images/card_13_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2051"
+  data-name="ポル子(ぽるこ)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 WBD 血液"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_13_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2052"
+  data-name="みつけて"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 視線 鏡"
+  data-keyword=""
+  data-role="デッキ破壊"
+>
+  <img data-src="images/card_13_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2053"
+  data-name="鏡と石(かがみといし)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 鏡 石像"
+  data-keyword=""
+  data-role="回復フェイズ"
+>
+  <img data-src="images/card_13_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2054"
+  data-name="おろげずるーむ"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="UC"
+  data-attribute="七不思議 家屋 電話"
+  data-keyword=""
+  data-role="札無効"
+>
+  <img data-src="images/card_13_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2055"
+  data-name="儀式邸(ぎしきてい)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 家屋"
+  data-keyword=""
+  data-role="自傷ダメ 「起き」"
+>
+  <img data-src="images/card_13_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2056"
+  data-name="猛々の子供部屋(もうもうのこどもべや)"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 家屋 猫"
+  data-keyword=""
+  data-role="攻撃時 魂回収"
+>
+  <img data-src="images/card_13_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2057"
+  data-name="呪われたカイエン(のろわれたかいえん)"
+  data-cost="8"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 交通事故 呪 廃車"
+  data-keyword=""
+  data-role="踏み倒し"
+>
+  <img data-src="images/card_13_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2058"
+  data-name="響洋平(ひびきようへい)"
+  data-cost="7"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="R"
+  data-attribute="七不思議 楽器"
+  data-keyword="召喚時 言霊"
+  data-role="追加行動"
+>
+  <img data-src="images/card_13_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2059"
+  data-name="真実を語る黒子(しんじつをかたるくろこ)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 灯火 噂"
+  data-keyword="言霊"
+  data-role="手札公開"
+>
+  <img data-src="images/card_13_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2060"
+  data-name="黒い子宮(くろいしきゅう)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 胎内 罪"
+  data-keyword=""
+  data-role="直接ダメ ヒール"
+>
+  <img data-src="images/card_13_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2061"
+  data-name="生首ヘアゴム(なまくびへあごむ)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_13_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2062"
+  data-name="ねこポーチ(ねこぽーち)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="猫"
+  data-keyword=""
+  data-role=""
+>
+  <img data-src="images/card_13_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2063"
+  data-name="きよめたまえ"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_13_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2064"
+  data-name="GMK BLACK CARD(じーえむけーぶらっくかーど)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="無"
+  data-rare="KR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role=""
+>
+  <img data-src="images/card_13_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2065"
+  data-name="？？？"
+  data-cost=""
+  data-power=""
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="KR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role=""
+>
+  <img data-src="images/card_13_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
 <!-- ★★ -->
 
 <!-- プロモ ぷろも -->
