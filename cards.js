@@ -11613,5 +11613,21 @@ data-role=""
 >
 <img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+class="card"
+data-number="10038"
+data-name="休憩中(きゅうけいちゅう)"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-type="場所札"
+data-season="無"
+data-rare=""
+data-attribute="七不思議 うつしよ"
+data-keyword="召喚時"
+data-role="手札公開"
+>
+<img data-src="images/card_13_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
