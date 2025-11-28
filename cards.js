@@ -5064,7 +5064,7 @@ data-role="力固定"
 <div
 class="card"
 data-number="1346"
-data-name="天への道（てんへのみち）"
+data-name="天への道(てんへのみち)"
 data-cost="6"
 data-power="7"
 data-series="怪談師"
@@ -5073,7 +5073,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="廃隧道 道路 交通事故"
 data-keyword=""
-data-role="力固定"
+data-role="力固定 バフ"
 >
 <img data-src="images/card_7_p (86).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11628,6 +11628,22 @@ data-keyword="召喚時"
 data-role="手札公開"
 >
 <img data-src="images/card_13_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10039"
+data-name="天への道(てんへのみち)"
+data-cost="6"
+data-power="7"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="廃隧道 道路 交通事故"
+data-keyword=""
+data-role="力固定 バフ"
+>
+<img data-src="images/card_13_p (67).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
