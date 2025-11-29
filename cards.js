@@ -932,7 +932,7 @@ data-attribute="蝙蝠 血液"
 <div
 class="card"
 data-number="105"
-data-name="終わらない夢（おわらないゆめ）"
+data-name="終わらない夢(おわらないゆめ)"
 data-cost="3"
 data-power="3"
 data-series="新季の到来"
@@ -11644,6 +11644,22 @@ data-keyword=""
 data-role="力固定 バフ"
 >
 <img data-src="images/card_13_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10040"
+data-name="終わらない夢(おわらないゆめ)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="悪夢"
+data-keyword=""
+data-role="魂加速"
+>
+<img data-src="images/card_13_p (68).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
