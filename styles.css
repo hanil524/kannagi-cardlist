@@ -1919,7 +1919,7 @@ body.modal-open {
 }
 
 .card-remove-button::before {
-  content: '−';
+  content: '－';
 }
 
 .deck-card-count {
@@ -2389,7 +2389,7 @@ body.modal-open {
   }
 
   .card-remove-button::before {
-    content: '−';
+    content: '－';
   }
 }
 
@@ -3056,7 +3056,7 @@ body.modal-open {
 .attribute-text::after {
   content: attr(data-count);
   text-align: left;
-  margin-left: -4px; /* ：との間隔を調整 */
+  margin-left: 1px; /* ：との間隔を調整 */
 }
 
 /* コスト分布エリアはタイトル不要 */
@@ -3814,3 +3814,19 @@ body.modal-open {
   background-size: 18px 2px, 2px 18px !important;
 }
 
+/* デッキの詳細 → 属性の2列表示 */
+.attribute-rows.two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 4px 0px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+  padding-left: 90px;
+  box-sizing: border-box;
+}
+
+.attribute-rows.two-columns .attribute-text {
+  font-size: 13px;
+}
