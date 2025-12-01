@@ -3757,61 +3757,87 @@ body.modal-open {
   }
 }
 
-/* ===== Final overrides: ensure single centered +/− icons (no duplicates) ===== */
-/* Overlay add/remove buttons on cards (list and deck) */
+/* ===== Final overrides: +/- ボタンを画像に置き換え ===== */
+
+/* カード一覧・デッキ画面のボタン共通 */
 .card-add-button,
 .card-remove-button {
   position: relative;
-  font-size: 0 !important; /* hide any accidental glyphs */
+  font-size: 0 !important;
+  border: none !important;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
 }
 
-.card-add-button::before,
-.card-remove-button::before,
-.card-add-button::after {
-  content: '' !important; /* override any previous content glyphs */
-  position: absolute;
-  left: calc(50% + 0.2px); /* subtle visual centering */
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  border-radius: 1px;
-  pointer-events: none;
-}
-
-/* horizontal bar for minus */
 .card-add-button::before,
 .card-remove-button::before {
-  width: 16px;
-  height: 2px;
+  content: none !important;
 }
 
-/* vertical bar for plus */
-.card-add-button::after {
-  width: 2px;
-  height: 16px;
+/* タップ範囲を広げる */
+.card-add-button::after,
+.card-remove-button::after {
+  content: '' !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 150%;
+  background: transparent;
 }
 
-/* Modal buttons inside image modal */
+.card-add-button {
+  background-image: url('plus.png');
+}
+
+.card-remove-button {
+  background-image: url('minus.png');
+}
+
+/* モーダル内のボタン */
 #add-card,
 #remove-card {
-  color: transparent !important; /* hide inner text '＋' '−' */
+  position: relative;
+  color: transparent !important;
   font-size: 0 !important;
   line-height: 0 !important;
+  border: none !important;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
 }
 
-#remove-card {
-  background-image: linear-gradient(90deg, #ffffff, #ffffff) !important;
-  background-repeat: no-repeat !important;
-  background-position: calc(50% + 0.5px) center !important;
-  background-size: 18px 2px !important;
+/* モーダル内のタップ範囲を広げる */
+#add-card::after,
+#remove-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180%;
+  height: 180%;
+  background: transparent;
 }
 
 #add-card {
-  background-image: linear-gradient(90deg, #ffffff, #ffffff),
-                    linear-gradient(0deg,  #ffffff, #ffffff) !important;
-  background-repeat: no-repeat, no-repeat !important;
-  background-position: calc(50% + 0.5px) center, calc(50% + 0.5px) center !important;
-  background-size: 18px 2px, 2px 18px !important;
+  background-image: url('plus.png');
+}
+
+#remove-card {
+  background-image: url('minus.png');
+}
+
+/* ホバー時 */
+.card-add-button:hover,
+.card-remove-button:hover,
+#add-card:hover,
+#remove-card:hover {
+  opacity: 0.8;
 }
 
 /* デッキの詳細 → 属性の2列表示 */
