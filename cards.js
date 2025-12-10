@@ -3890,7 +3890,7 @@ data-double-for="さいごのうた"
 data-rare="C"
 data-season="春"
 data-type="道具札"
-data-role=""
+data-role="バフ"
 data-keyword=""
 data-attribute="動物 古書 噂"
 >
