@@ -11580,7 +11580,7 @@ data-season="春"
 data-rare=""
 data-attribute="妖怪 動物 狐"
 data-keyword="楽園"
-data-role="攻撃時 ヒール"
+data-role="攻撃時 ヒール 相手ヒール"
 >
 <img data-src="images/card_12_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
