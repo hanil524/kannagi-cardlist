@@ -11048,6 +11048,41 @@ data-role="ロック"
   <img data-src="images/card_13_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
+<!-- 怪談師三章 -->
+
+<div
+  class="card"
+  data-number="2170"
+  data-name="かみつき鬼(かみつきおに)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬 無"
+  data-rare="エキスパンション"
+  data-attribute="鬼 博物館"
+  data-keyword=""
+  data-role="自傷ダメ 相手ヒール"
+>
+  <img data-src="images/card_14_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2210"
+  data-name="泡沫に消える来賓(うたかたにきえるらいひん)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ 火事"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
 <!-- ★★ -->
 
 <!-- プロモ ぷろも -->
