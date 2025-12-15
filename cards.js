@@ -11299,7 +11299,7 @@ data-attribute="動物 陰"
 <div
 class="card"
 data-number="10016"
-data-name="泡沫に消える来賓（うたかたにきえるらいひん）"
+data-name="泡沫に消える来賓(うたかたにきえるらいひん)"
 data-cost="0"
 data-power="0"
 data-series="プロモ"
