@@ -1303,7 +1303,7 @@ data-attribute="廃屋"
 <div
 class="card"
 data-number="128"
-data-name="妊婦絵（にんぷえ）"
+data-name="妊婦絵(にんぷえ)"
 data-cost="2"
 data-power="2"
 data-series="新季の到来 うつくしいせかい"
@@ -11050,6 +11050,38 @@ data-role="ロック"
 
 <!-- 怪談師三章 -->
 
+<div
+  class="card"
+  data-number="2110"
+  data-name="猫屋敷の闇(ねこやしきのやみ)"
+  data-cost="8"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="猫 動物 陰"
+  data-keyword=""
+  data-role="攻撃時"
+>
+  <img data-src="images/card_14_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2140"
+  data-name="妊婦絵(にんぷえ)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="廃円宿"
+  data-keyword="四季欲"
+  data-role="直接ダメ 札ダメ"
+>
+  <img data-src="images/card_14_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 <div
   class="card"
   data-number="2170"
