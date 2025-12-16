@@ -11062,7 +11062,7 @@ data-role="ロック"
   data-rare=""
   data-attribute="猫 動物 陰"
   data-keyword=""
-  data-role="攻撃時"
+  data-role="攻撃時 バフ"
 >
   <img data-src="images/card_14_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
