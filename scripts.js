@@ -1114,6 +1114,11 @@ const filterCards = () => {
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
   const has廃Filter = filters.attribute.has('廃');
 
+  // 検索欄の文字を取得
+  const searchBox = document.getElementById('search-box');
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+  const query = (searchBox?.value || mobileSearchBox?.value || '').toLowerCase();
+
   // 複製カードの削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
 
@@ -1156,6 +1161,16 @@ const filterCards = () => {
           shouldDisplay = false;
           break;
         }
+      }
+    }
+
+    // 検索条件もチェック
+    if (shouldDisplay && query !== '') {
+      const name = card.dataset.name.toLowerCase();
+      const attribute = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
+      const matchesSearch = name.includes(query) || attribute.includes(query);
+      if (!matchesSearch) {
+        shouldDisplay = false;
       }
     }
 
