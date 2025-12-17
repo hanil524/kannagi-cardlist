@@ -11084,6 +11084,38 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2160"
+  data-name="ジャンピングババア(じゃんぴんぐばばあ)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2164"
+  data-name="福おじいちゃん(ふくおじいちゃん)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="おじいさん 善行 罪"
+  data-keyword=""
+  data-role="力固定"
+>
+  <img data-src="images/card_14_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2170"
   data-name="かみつき鬼(かみつきおに)"
   data-cost="0"
