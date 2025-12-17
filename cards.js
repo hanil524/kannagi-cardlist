@@ -11052,6 +11052,38 @@ data-role="ロック"
 
 <div
   class="card"
+  data-number="2103"
+  data-name="桜花雨(さくられいん)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="花 墓地"
+  data-keyword="召喚時"
+  data-role="攻撃時 サーチ 直接ダメ"
+>
+  <img data-src="images/card_14_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2105"
+  data-name="歩き巫女(あるきみこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="刀"
+  data-keyword=""
+  data-role="攻撃時 ヒール ドロー"
+>
+  <img data-src="images/card_14_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2110"
   data-name="猫屋敷の闇(ねこやしきのやみ)"
   data-cost="8"
