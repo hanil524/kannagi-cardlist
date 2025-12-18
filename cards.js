@@ -11043,7 +11043,7 @@ data-role="ロック"
   data-rare="KR"
   data-attribute="七不思議"
   data-keyword=""
-  data-role=""
+  data-role="魂貫通 ヒール無効"
 >
   <img data-src="images/card_13_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
