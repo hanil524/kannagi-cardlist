@@ -11100,7 +11100,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2140"
+  data-number="2130"
   data-name="妊婦絵(にんぷえ)"
   data-cost="2"
   data-power="2"
@@ -11113,6 +11113,38 @@ data-role="ロック"
   data-role="直接ダメ 札ダメ"
 >
   <img data-src="images/card_14_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2132"
+  data-name="世見猫(せみねこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="動物 猫 烏"
+  data-keyword="召喚時 不屈"
+  data-role="魂加速 直接ダメ"
+>
+  <img data-src="images/card_14_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2133"
+  data-name="歯のある魚群(はのあるぎょぐん)"
+  data-cost="3"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人魚 血液"
+  data-keyword="魚群"
+  data-role="自傷ダメ 直接ダメ 札ダメ"
+>
+  <img data-src="images/card_14_p (9).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11523,7 +11555,7 @@ data-role="魂加速 ヒール"
 <div
 class="card"
 data-number="10024"
-data-name="世見猫（せみねこ）"
+data-name="世見猫(せみねこ)"
 data-cost="3"
 data-power="3"
 data-series="プロモ"
