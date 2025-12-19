@@ -11068,6 +11068,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2104"
+  data-name="世見鬼(せみき)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 鬼 烏"
+  data-keyword="召喚時 不屈"
+  data-role="ヒール"
+>
+  <img data-src="images/card_14_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2105"
   data-name="歩き巫女(あるきみこ)"
   data-cost="3"
@@ -11186,13 +11202,29 @@ data-role="ロック"
   data-power="0"
   data-series="怪談師三章"
   data-type="怪異札"
-  data-season="冬 無"
+  data-season="冬"
   data-rare="エキスパンション"
   data-attribute="鬼 博物館"
   data-keyword=""
   data-role="自傷ダメ 相手ヒール"
 >
   <img data-src="images/card_14_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2175"
+  data-name="黄金体験(おうごんたいけん)"
+  data-cost="8"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="からくり"
+  data-keyword="正体不明"
+  data-role="札除去"
+>
+  <img data-src="images/card_14_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
