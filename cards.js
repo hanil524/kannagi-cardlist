@@ -11164,6 +11164,38 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2150"
+  data-name="陰峰トンネル(かげみねとんねる)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃隧道 陰"
+  data-keyword="召喚時"
+  data-role="ドロー 公開ドロー"
+>
+  <img data-src="images/card_14_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2153"
+  data-name="世見狐(せみこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="動物 狐 烏"
+  data-keyword="召喚時 不屈"
+  data-role="魂加速 ドロー"
+>
+  <img data-src="images/card_14_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2160"
   data-name="ジャンピングババア(じゃんぴんぐばばあ)"
   data-cost="3"
@@ -11571,7 +11603,7 @@ data-role="自傷ダメ 札無効"
 <div
 class="card"
 data-number="10023"
-data-name="世見鬼（せみき）"
+data-name="世見鬼(せみき)"
 data-cost="3"
 data-power="3"
 data-series="プロモ"
@@ -11603,7 +11635,7 @@ data-role="魂加速 直接ダメ"
 <div
 class="card"
 data-number="10025"
-data-name="世見狐（せみこ）"
+data-name="世見狐(せみこ)"
 data-cost="3"
 data-power="3"
 data-series="プロモ"
@@ -11619,7 +11651,7 @@ data-role="魂加速 ドロー"
 <div
 class="card"
 data-number="10026"
-data-name="世見花（せみか）"
+data-name="世見花(せみか)"
 data-cost="3"
 data-power="3"
 data-series="プロモ"
