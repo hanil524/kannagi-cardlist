@@ -11196,6 +11196,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2158"
+  data-name="深い愛情(ふかいあいじょう)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="罪 視線"
+  data-keyword=""
+  data-role="底送り ドロー"
+>
+  <img data-src="images/card_14_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2160"
   data-name="ジャンピングババア(じゃんぴんぐばばあ)"
   data-cost="3"
@@ -11228,7 +11244,23 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2170"
+  data-number="2174"
+  data-name="世見花(せみか)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="動物 花 烏"
+  data-keyword="召喚時 不屈"
+  data-role="魂加速 除外加速"
+>
+  <img data-src="images/card_14_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2180"
   data-name="かみつき鬼(かみつきおに)"
   data-cost="0"
   data-power="0"
@@ -11244,7 +11276,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2175"
+  data-number="2183"
   data-name="黄金体験(おうごんたいけん)"
   data-cost="8"
   data-power="0"
