@@ -2600,7 +2600,7 @@ data-attribute="糧 野営"
 <div
 class="card"
 data-number="218"
-data-name="蛇行剣（だこうけん）"
+data-name="蛇行剣(だこうけん)"
 data-cost="3"
 data-power="0"
 data-series="百鬼夜行"
@@ -11116,6 +11116,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2124"
+  data-name="蛇行剣(だこうけん)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="大蛇 刀"
+  data-keyword=""
+  data-role="バウンス"
+>
+  <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2130"
   data-name="妊婦絵(にんぷえ)"
   data-cost="2"
@@ -11161,6 +11177,22 @@ data-role="ロック"
   data-role="自傷ダメ 直接ダメ 札ダメ"
 >
   <img data-src="images/card_14_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2148"
+  data-name="ムクロギヒメ(むくろぎひめ)"
+  data-cost="9"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="髑髏 妖怪"
+  data-keyword=""
+  data-role="魂加速 直接ダメ"
+>
+  <img data-src="images/card_14_p (17).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
