@@ -985,18 +985,24 @@ button[onclick='resetFilters()']:active {
   opacity: 1;
 }
 
-/* モーダル内のフィルターボタンのスタイリング */
 .modal-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
   padding: 13px;
   max-height: calc(80vh - 60px); /* モーダルの高さからヘッダー部分を引いた高さ */
-  overflow-y: auto; /* 縦方向のスクロールを有効化 */
+  overflow-y: overlay; /* スクロール可能時のみスクロールバー表示 */
   overflow-x: hidden; /* 横スクロールを無効化 */
   overscroll-behavior: contain; /* スクロールの跳ね返りを制御 */
   -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
   margin-top: 10px; /* 上部に少し余白を追加 */
+}
+
+/* スクロール可能時のみスクロールバーを常に表示 */
+@supports not (overflow-y: overlay) {
+  .modal-buttons {
+    overflow-y: auto;
+  }
 }
 
 /* スマートフォン向けの追加調整 */
@@ -1047,22 +1053,23 @@ button[onclick='resetFilters()']:active {
   box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* スクロールバーのスタイリング */
+/* スクロールバーのスタイリング - 常に表示 */
 .modal-buttons::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .modal-buttons::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
 }
 
 .modal-buttons::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
 }
 
 .modal-buttons::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* モーダルのスタイル */
