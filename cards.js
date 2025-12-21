@@ -2210,7 +2210,7 @@ data-attribute="うつしよ 人形"
 <div
 class="card"
 data-number="184"
-data-name="祈りの巫女人形（いのりのみこにんぎょう）"
+data-name="祈りの巫女人形(いのりのみこにんぎょう)"
 data-cost="6"
 data-power="0"
 data-series="新季の到来"
@@ -11180,7 +11180,23 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2148"
+  data-number="2143"
+  data-name="痣通洲架橋、堕螺児(あざとおすらせん、だらつじ)"
+  data-cost="7"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 蟲 都市伝説 UMA"
+  data-keyword="正体不明"
+  data-role="二種類札 デッキ破壊 直接ダメ"
+>
+  <img data-src="images/card_14_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2144"
   data-name="ムクロギヒメ(むくろぎひめ)"
   data-cost="9"
   data-power="0"
@@ -11321,6 +11337,22 @@ data-role="ロック"
   data-role="札除去"
 >
   <img data-src="images/card_14_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2208"
+  data-name="祈りの巫女人形(いのりのみこにんぎょう)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ 人形"
+  data-keyword=""
+  data-role="ダメ無効 デッキ破壊"
+>
+  <img data-src="images/card_14_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
