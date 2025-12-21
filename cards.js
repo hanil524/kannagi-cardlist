@@ -2217,7 +2217,7 @@ data-series="新季の到来"
 data-rare="SR"
 data-season="無"
 data-type="道具札"
-data-role="ダメ無効 デッキ破壊"
+data-role="相手ドロー 底送り ダメ無効"
 data-keyword=""
 data-attribute="うつしよ 人形"
 >
@@ -3101,7 +3101,7 @@ data-attribute="交通事故 道路"
 <div
 class="card"
 data-number="249"
-data-name="死んでも許さない（しんでもゆるさない）"
+data-name="死んでも許さない(しんでもゆるさない)"
 data-cost="4"
 data-power="2"
 data-series="百鬼夜行"
@@ -11244,6 +11244,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2155"
+  data-name="死んでも許さない(しんでもゆるさない)"
+  data-cost="4"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="樹木 幽霊"
+  data-keyword=""
+  data-role="直接ダメ 憑依加速 回復フェイズ"
+>
+  <img data-src="images/card_14_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2158"
   data-name="深い愛情(ふかいあいじょう)"
   data-cost="0"
@@ -11325,6 +11341,22 @@ data-role="ロック"
 <div
   class="card"
   data-number="2183"
+  data-name="尾鰭のついた噂(おひれのついたうわさ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="噂 廃校 人魚"
+  data-keyword=""
+  data-role="サーチ 底送り"
+>
+  <img data-src="images/card_14_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2187"
   data-name="黄金体験(おうごんたいけん)"
   data-cost="8"
   data-power="0"
@@ -11350,7 +11382,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="うつしよ 人形"
   data-keyword=""
-  data-role="ダメ無効 デッキ破壊"
+  data-role="相手ドロー 底送り ダメ無効"
 >
   <img data-src="images/card_14_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
