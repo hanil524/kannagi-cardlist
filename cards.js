@@ -11324,6 +11324,38 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2176"
+  data-name="王国の低音奏者(おうこくのていおんそうしゃ)"
+  data-cost="5"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="楽器"
+  data-keyword="召喚時 合唱"
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_14_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2178"
+  data-name="ゆーちゃそ王子(ゆーちゃそおうじ)"
+  data-cost="7"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="楽器"
+  data-keyword="召喚時 合唱"
+  data-role="攻撃時 回収"
+>
+  <img data-src="images/card_14_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2180"
   data-name="かみつき鬼(かみつきおに)"
   data-cost="0"
