@@ -3392,14 +3392,14 @@ data-attribute="博物館 視線"
 <div
 class="card"
 data-number="267"
-data-name="お化けマンション（おばけまんしょん）"
+data-name="お化けマンション(おばけまんしょん)"
 data-cost="6"
 data-power="1"
 data-series="百鬼夜行"
 data-rare="UC"
 data-season="冬"
 data-type="場所札"
-data-role="ドロー 攻撃時"
+data-role="攻撃時 ドロー 相手ドロー"
 data-keyword=""
 data-attribute="廃マンション"
 >
@@ -11340,6 +11340,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2177"
+  data-name="お化けマンション(おばけまんしょん)"
+  data-cost="6"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃マンション"
+  data-keyword=""
+  data-role="攻撃時 ドロー 相手ドロー"
+>
+  <img data-src="images/card_14_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2178"
   data-name="ゆーちゃそ王子(ゆーちゃそおうじ)"
   data-cost="7"
@@ -11433,6 +11449,22 @@ data-role="ロック"
   data-role="直接ダメ"
 >
   <img data-src="images/card_14_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2216"
+  data-name="五色沼の主(ごしょくぬまのあるじ)"
+  data-cost="12"
+  data-power="10"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="渓谷 怨霊"
+  data-keyword="召喚時"
+  data-role="除外加速 「起き」"
+>
+  <img data-src="images/card_14_p (26).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
