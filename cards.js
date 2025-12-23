@@ -11132,7 +11132,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2124"
+  data-number="2121"
   data-name="蛇行剣(だこうけん)"
   data-cost="3"
   data-power="0"
@@ -11145,6 +11145,38 @@ data-role="ロック"
   data-role="バウンス"
 >
   <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2122"
+  data-name="とまんないおばんざい"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="糧"
+  data-keyword="不屈"
+  data-role="ヒール"
+>
+  <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2124"
+  data-name="腐っても鯛(くさってもたい)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人魚 腐乱"
+  data-keyword="召喚時"
+  data-role="魂加速"
+>
+  <img data-src="images/card_14_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
