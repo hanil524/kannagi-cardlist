@@ -3863,3 +3863,13 @@ body.modal-open {
 .attribute-rows.two-columns .attribute-text {
   font-size: 13px;
 }
+
+/* デフォルトはスクロールバー非表示 */
+.modal-buttons {
+  overflow-y: hidden;
+}
+
+/* スクロール可能時のみスクロールバー表示 */
+.modal-buttons.has-scroll {
+  overflow-y: scroll;
+}
