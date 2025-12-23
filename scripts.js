@@ -346,37 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showNextImage();
   });
 
-  // スワイプ操作のサポート（オプション）
-  let touchStartX = 0;
-  const modalImage = document.getElementById('modal-image');
-
-  modalImage.addEventListener(
-    'touchstart',
-    (e) => {
-      touchStartX = e.touches[0].clientX;
-    },
-    { passive: true }
-  );
-
-  modalImage.addEventListener(
-    'touchend',
-    (e) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const diff = touchStartX - touchEndX;
-
-      if (Math.abs(diff) > 50) {
-        // 50pxのスワイプで判定
-        if (diff > 0) {
-          showNextImage();
-        } else {
-          showPreviousImage();
-        }
-      }
-    },
-    { passive: true }
-  );
-
-  // 遅延読み込みの処理
+    // 遅延読み込みの処理
   // 表示の先読み枚数と初期読み込み枚数を拡張（+15枚）
   const PRELOAD_AHEAD_COUNT = 18; // もともと3 → 3 + 15
   const INITIAL_LAZYLOAD_COUNT = 35; // もともと20 → 20 + 15
@@ -585,7 +555,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopPropagation();
       const img = card.querySelector('img');
-      openImageModal(img.src);
+      const imgSrc = img.getAttribute('data-src') || img.src;
+      openImageModal(imgSrc);
     }
   });
 
@@ -1507,6 +1478,31 @@ const openImageModal = (src) => {
   // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
   setupModalCardControlsOnce(modalControls, currentCard, cardName);
 
+  // スワイプ操作のサポート（スマホ用）
+  let touchStartX = 0;
+  let touchStartY = 0;
+  
+  modalImage.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  
+  modalImage.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // 横方向のスワイプが縦方向より大きい場合のみ反応
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+  }, { passive: true });
+
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
@@ -1967,8 +1963,12 @@ const showNextImage = () => {
   const currentCard = visibleCards[currentImageIndex];
   let nextIndex = currentImageIndex + 1;
 
-  // 次のカードが透明カードまたは同じカードの場合はスキップ
-  while (nextIndex < visibleCards.length && (visibleCards[nextIndex].hasAttribute('data-empty') || visibleCards[nextIndex].dataset.name === currentCard.dataset.name)) {
+  // 次のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
+  while (nextIndex < visibleCards.length && (
+    visibleCards[nextIndex].hasAttribute('data-empty') || 
+    (visibleCards[nextIndex].dataset.name === currentCard.dataset.name && 
+     visibleCards[nextIndex].dataset.number === currentCard.dataset.number)
+  )) {
     nextIndex++;
   }
 
@@ -2012,6 +2012,10 @@ const showNextImage = () => {
       // カード情報とボタン状態を更新
       currentModalCard = nextCard;
       currentModalCardName = cardName;
+      
+      // 新しいボタンにイベントリスナーを設定
+      setupModalButtonListeners(modalControls);
+      
       updateModalButtonStates(modalControls, cardName);
     }
 
@@ -2027,8 +2031,12 @@ const showPreviousImage = () => {
   const currentCard = visibleCards[currentImageIndex];
   let prevIndex = currentImageIndex - 1;
 
-  // 前のカードが透明カードまたは同じカードの場合はスキップ
-  while (prevIndex >= 0 && (visibleCards[prevIndex].hasAttribute('data-empty') || visibleCards[prevIndex].dataset.name === currentCard.dataset.name)) {
+  // 前のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
+  while (prevIndex >= 0 && (
+    visibleCards[prevIndex].hasAttribute('data-empty') || 
+    (visibleCards[prevIndex].dataset.name === currentCard.dataset.name && 
+     visibleCards[prevIndex].dataset.number === currentCard.dataset.number)
+  )) {
     prevIndex--;
   }
 
@@ -2072,6 +2080,10 @@ const showPreviousImage = () => {
       // カード情報とボタン状態を更新
       currentModalCard = prevCard;
       currentModalCardName = cardName;
+      
+      // 新しいボタンにイベントリスナーを設定
+      setupModalButtonListeners(modalControls);
+      
       updateModalButtonStates(modalControls, cardName);
     }
 
@@ -3965,6 +3977,30 @@ async function captureDeck() {
 let modalControlsInitialized = false;
 let currentModalCard = null;
 let currentModalCardName = null;
+
+// モーダルボタンにイベントリスナーを設定する関数
+function setupModalButtonListeners(controls) {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+  
+  if (addButton) {
+    addButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+        handleModalAddCard();
+      }
+    };
+  }
+  
+  if (removeButton) {
+    removeButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!removeButton.disabled && currentModalCardName) {
+        handleModalRemoveCard();
+      }
+    };
+  }
+}
 
 // カード拡大表示時のコントロール設定（一度だけ実行）
 function setupModalCardControlsOnce(controls, card, cardName) {
