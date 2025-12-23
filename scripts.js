@@ -1484,13 +1484,24 @@ const openImageModal = (src) => {
   // スワイプ操作のサポート（スマホ用）
   let touchStartX = 0;
   let touchStartY = 0;
+  let swiping = false;
   
   modalImage.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
+    swiping = false;
+  }, { passive: true });
+  
+  modalImage.addEventListener('touchmove', (e) => {
+    const diffX = Math.abs(e.touches[0].clientX - touchStartX);
+    if (diffX > 20) {
+      swiping = true;
+    }
   }, { passive: true });
   
   modalImage.addEventListener('touchend', (e) => {
+    if (!swiping) return;
+    
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
     const diffX = touchStartX - touchEndX;
@@ -1503,7 +1514,22 @@ const openImageModal = (src) => {
       } else {
         showPreviousImage();
       }
+      
+      // スワイプ後、modalImage自体のlastTouchを削除
+      delete modalImage.dataset.lastTouch;
+      
+      // 念のためモーダル内の全要素のlastTouchも削除
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.querySelectorAll('*').forEach(el => {
+          if (el.dataset && el.dataset.lastTouch) {
+            delete el.dataset.lastTouch;
+          }
+        });
+      }
     }
+    
+    swiping = false;
   }, { passive: true });
 
   modal.style.display = 'flex';
