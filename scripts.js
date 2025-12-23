@@ -1302,6 +1302,9 @@ const openModal = (filterId) => {
   if (headerContent) {
     headerContent.style.paddingRight = `${scrollbarWidth}px`;
   }
+  
+  // スクロールバーの表示を更新
+  updateScrollbarVisibility();
 };
 
 const closeModal = () => {
@@ -4780,3 +4783,15 @@ if (typeof deckBuilder !== 'undefined') {
     return attributeContent;
   };
 }
+
+// スクロール可能かチェックしてスクロールバーを表示
+const updateScrollbarVisibility = () => {
+  const modalButtons = document.querySelector('.modal-buttons');
+  if (modalButtons) {
+    if (modalButtons.scrollHeight > modalButtons.clientHeight) {
+      modalButtons.classList.add('has-scroll');
+    } else {
+      modalButtons.classList.remove('has-scroll');
+    }
+  }
+};
