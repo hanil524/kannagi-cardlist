@@ -671,7 +671,7 @@ data-attribute="血液"
 <div
 class="card"
 data-number="42"
-data-name="血を吸ったマフラー（ちをすったまふらー）"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
 data-cost="3"
 data-power="0"
 data-series="夏VS冬バトルセット おいしゃさんごっこ"
@@ -11811,7 +11811,7 @@ data-role="自傷ダメ ドロー"
 <div
 class="card"
 data-number="10022"
-data-name="血を吸ったマフラー（ちをすったまふらー）"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
 data-cost="3"
 data-power="0"
 data-series="プロモ"
@@ -12111,6 +12111,22 @@ data-keyword=""
 data-role="魂加速"
 >
 <img data-src="images/card_13_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10041"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
+data-cost="3"
+data-power="0"
+data-series="プロモ"
+data-type="道具札"
+data-season="冬"
+data-rare=""
+data-attribute="血液"
+data-keyword=""
+data-role="自傷ダメ 札無効"
+>
+<img data-src="images/card_14_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
