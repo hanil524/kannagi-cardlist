@@ -11100,6 +11100,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2108"
+  data-name="福徳正神(ふくとくせいじん)"
+  data-cost="5"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="善行"
+  data-keyword="突現 徳"
+  data-role="攻撃時 除外加速"
+>
+  <img data-src="images/card_14_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2110"
   data-name="猫屋敷の闇(ねこやしきのやみ)"
   data-cost="8"
@@ -11417,6 +11433,22 @@ data-role="ロック"
   data-role="札除去"
 >
   <img data-src="images/card_14_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2195"
+  data-name="休憩中(きゅうけいちゅう)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="七不思議 うつしよ"
+  data-keyword="召喚時"
+  data-role="手札公開"
+>
+  <img data-src="images/card_14_p (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
