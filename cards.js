@@ -11180,7 +11180,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2130"
+  data-number="2126"
   data-name="妊婦絵(にんぷえ)"
   data-cost="2"
   data-power="2"
@@ -11196,7 +11196,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2132"
+  data-number="2127"
   data-name="世見猫(せみねこ)"
   data-cost="3"
   data-power="3"
@@ -11212,7 +11212,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2133"
+  data-number="2128"
   data-name="歯のある魚群(はのあるぎょぐん)"
   data-cost="3"
   data-power="2"
@@ -11225,6 +11225,22 @@ data-role="ロック"
   data-role="自傷ダメ 直接ダメ 札ダメ"
 >
   <img data-src="images/card_14_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2134"
+  data-name="神蟲(じんちゅう)"
+  data-cost="20"
+  data-power="20"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 蟲 妖怪"
+  data-keyword="突現"
+  data-role="除外加速 "
+>
+  <img data-src="images/card_14_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11513,6 +11529,22 @@ data-role="ロック"
   data-role="直接ダメ"
 >
   <img data-src="images/card_14_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2215"
+  data-name="後藤商店(ごとうしょうてん)"
+  data-cost="4"
+  data-power="9"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="噂 家屋 糧"
+  data-keyword="召喚時"
+  data-role="ヒール"
+>
+  <img data-src="images/card_14_p (32).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
