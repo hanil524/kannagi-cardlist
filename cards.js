@@ -11116,6 +11116,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2106"
+  data-name="牌塔(かーどたわー)"
+  data-cost="5"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="怨霊 災害"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_14_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2108"
   data-name="福徳正神(ふくとくせいじん)"
   data-cost="5"
@@ -11529,6 +11545,22 @@ data-role="ロック"
   data-role="手札公開"
 >
   <img data-src="images/card_14_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2198"
+  data-name="ここぼし"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="鬼 侵食"
+  data-keyword=""
+  data-role=""
+>
+  <img data-src="images/card_14_p (36).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -12035,7 +12067,7 @@ data-role="バニラ"
 <div
 class="card"
 data-number="10030"
-data-name="牌塔(かーどたわー カードタワー)"
+data-name="牌塔(かーどたわー)"
 data-cost="5"
 data-power="1"
 data-series="プロモ"
