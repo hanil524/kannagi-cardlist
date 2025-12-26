@@ -10995,7 +10995,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="猫"
   data-keyword=""
-  data-role=""
+  data-role="属性追加"
 >
   <img data-src="images/card_13_p (59).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11276,6 +11276,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2138"
+  data-name="寄生支配(ぱらさいとじゃっく)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 からくり"
+  data-keyword=""
+  data-role="属性追加"
+>
+  <img data-src="images/card_14_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2143"
   data-name="痣通洲架橋、堕螺児(あざとおすらせん、だらつじ)"
   data-cost="7"
@@ -11401,6 +11417,22 @@ data-role="ロック"
   data-role="力固定"
 >
   <img data-src="images/card_14_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2170"
+  data-name="隔離室(かくりしつ)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="視線 廃病院"
+  data-keyword="召喚時"
+  data-role="除外加速 ドロー"
+>
+  <img data-src="images/card_14_p (38).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
