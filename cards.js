@@ -11276,6 +11276,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2137"
+  data-name="巡り合い(めぐりあい)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="猫 月"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2138"
   data-name="寄生支配(ぱらさいとじゃっく)"
   data-cost="3"
@@ -11641,6 +11657,22 @@ data-role="ロック"
   data-role="ヒール"
 >
   <img data-src="images/card_14_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2215"
+  data-name="あにめ"
+  data-cost="9"
+  data-power="4"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春冬"
+  data-rare="エキスパンション"
+  data-attribute="血液 侵食"
+  data-keyword=""
+  data-role="攻撃時 ランデス 魂加速"
+>
+  <img data-src="images/card_14_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
