@@ -11340,7 +11340,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2150"
+  data-number="2148"
   data-name="陰峰トンネル(かげみねとんねる)"
   data-cost="0"
   data-power="1"
@@ -11353,6 +11353,22 @@ data-role="ロック"
   data-role="ドロー 公開ドロー"
 >
   <img data-src="images/card_14_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2149"
+  data-name="うわん"
+  data-cost="1"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 妖怪"
+  data-keyword="秘境"
+  data-role=""
+>
+  <img data-src="images/card_14_p (42).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11609,6 +11625,22 @@ data-role="ロック"
   data-role=""
 >
   <img data-src="images/card_14_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2201"
+  data-name="魔境の札(まきょうのふだ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword="潜在能力"
+  data-role=""
+>
+  <img data-src="images/card_14_p (43).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
