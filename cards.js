@@ -11164,7 +11164,23 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2121"
+  data-number="2115"
+  data-name="私ノ愛シイ人(わたしのいとしいひと)"
+  data-cost="9"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="髑髏"
+  data-keyword=""
+  data-role="サーチ ヒール"
+>
+  <img data-src="images/card_14_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2118"
   data-name="蛇行剣(だこうけん)"
   data-cost="3"
   data-power="0"
@@ -11180,7 +11196,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2122"
+  data-number="2119"
   data-name="とまんないおばんざい"
   data-cost="3"
   data-power="0"
@@ -11193,6 +11209,22 @@ data-role="ロック"
   data-role="ヒール"
 >
   <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2145"
+  data-name="血の祭儀(ちのさいぎ)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 廃門"
+  data-keyword="展開時"
+  data-role="除外加速 サーチ"
+>
+  <img data-src="images/card_14_p (45).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
