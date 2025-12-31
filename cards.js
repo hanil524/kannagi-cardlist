@@ -11212,7 +11212,23 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2145"
+  data-number="2120"
+  data-name="白月(はくげつ)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="廃墟 月"
+  data-keyword=""
+  data-role="相手ドロー ドロー"
+>
+  <img data-src="images/card_14_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2122"
   data-name="血の祭儀(ちのさいぎ)"
   data-cost="1"
   data-power="0"
@@ -11289,6 +11305,22 @@ data-role="ロック"
   data-role="自傷ダメ 直接ダメ 札ダメ"
 >
   <img data-src="images/card_14_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2133"
+  data-name="奈落(ならく)"
+  data-cost="12"
+  data-power="10"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="奈落"
+  data-keyword="召喚時"
+  data-role="札除去 ハンデス ランデス 除外加速"
+>
+  <img data-src="images/card_14_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
