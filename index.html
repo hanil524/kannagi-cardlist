@@ -316,6 +316,7 @@
       </div>
       <!-- 属性 -->
       <div id="attribute" class="filter-content" style="display: none">
+        <span class="filter-category">※効果対象になったことのある属性一覧</span>
         <button onclick="toggleFilterCard('attribute', '蟲')">蟲</button>
         <button onclick="toggleFilterCard('attribute', '動物')">動物</button>
         <button onclick="toggleFilterCard('attribute', '血液')">血液</button>
@@ -387,11 +388,11 @@
       <!-- 役割 -->
       <div id="role" class="filter-content" style="display: none">
         <span class="filter-category">メイン</span>
+        <button onclick="toggleFilterCard('role', '回復フェイズ')" data-tooltip="「回復フェイズ」に影響するカード全般">回復フェイズ</button>
+        <button onclick="toggleFilterCard('role', '「起き」')" data-tooltip="場にある札を「起き」状態にすること">「起き」</button>
         <button onclick="toggleFilterCard('role', '攻撃時')" data-tooltip="攻撃時に効果が発動すること">攻撃時</button>
         <button onclick="toggleFilterCard('role', '追加行動')" data-tooltip="ターン1回の制限なく、追加で行動すること">追加行動</button>
-        <button onclick="toggleFilterCard('role', '回復フェイズ')" data-tooltip="「回復フェイズ」に影響するカード全般">回復フェイズ</button>
         <button onclick="toggleFilterCard('role', '2種類札')" data-tooltip="1つのカードが2つの札種類を持つこと">2種類札</button>
-        <button onclick="toggleFilterCard('role', '「起き」')" data-tooltip="場にある札を「起き」状態にすること">「起き」</button>
         <span class="filter-category">ドロー</span>
         <button onclick="toggleFilterCard('role', 'ドロー')" data-tooltip="山札の上からカードを引くこと">ドロー</button>
         <button onclick="toggleFilterCard('role', '公開ドロー')" data-tooltip="山札の上から引いたカードを手札公開場に置くこと">公開ドロー</button>
@@ -443,8 +444,9 @@
         <button onclick="toggleFilterCard('role', '憑依加速')" data-tooltip="憑依をカードの効果で増やすこと">憑依加速</button>
         <button onclick="toggleFilterCard('role', '憑依破壊')" data-tooltip="憑依をカードの効果で減らすこと">憑依破壊</button>
         <span class="filter-category">属性</span>
-        <button onclick="toggleFilterCard('role', '「花子」')" data-tooltip="名前に「花子」が含まれているカード">「花子」</button>        
         <button onclick="toggleFilterCard('role', '属性追加')" data-tooltip="カードに新たな属性を付与すること">属性追加</button>
+        <button onclick="toggleFilterCard('role', '「花子」')" data-tooltip="名前に「花子」が含まれているカード">「花子」</button>
+
         <span class="filter-category">無効果</span>
         <button onclick="toggleFilterCard('role', 'バニラ')" data-tooltip="効果がないカードのこと">バニラ</button>        
         <button onclick="toggleFilterCard('role', '効果を失う')" data-tooltip="カードの効果を失うこと">効果を失う</button>
