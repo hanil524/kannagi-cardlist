@@ -398,9 +398,8 @@
         <button onclick="toggleFilterCard('role', 'ドロー')" data-tooltip="山札の上からカードを引くこと">ドロー</button>
         <button onclick="toggleFilterCard('role', '公開ドロー')" data-tooltip="山札の上から引いたカードを手札公開場に置くこと">公開ドロー</button>
         <button onclick="toggleFilterCard('role', '底ドロー')" data-tooltip="デッキの一番下からカードを引くこと">底ドロー</button>
-        <button onclick="toggleFilterCard('role', 'サーチ')" data-tooltip="山札から対象のカードを狙って引くこと">サーチ</button>
-        <button onclick="toggleFilterCard('role', '回収')" data-tooltip="魂・除外から手札にカードを戻すこと">回収</button>
         <button onclick="toggleFilterCard('role', '相手ドロー')" data-tooltip="相手のデッキからカードを引かせること">相手ドロー</button>
+        <button onclick="toggleFilterCard('role', 'サーチ')" data-tooltip="山札から対象のカードを狙って引くこと">サーチ</button>
         <span class="filter-category">ダメージ</span>
         <button onclick="toggleFilterCard('role', '札ダメ')" data-tooltip="場所札にダメージを与えること">札ダメ</button>
         <button onclick="toggleFilterCard('role', '直接ダメ')" data-tooltip="相手ライフに直接ダメージを与える効果">直接ダメ</button>
@@ -412,15 +411,15 @@
         <button onclick="toggleFilterCard('role', 'バウンス')" data-tooltip="場のカードを手札などに戻すこと">バウンス</button>
         <button onclick="toggleFilterCard('role', '除去無効')" data-tooltip="場所札を除去する効果を無効にする">除去無効</button>
         <button onclick="toggleFilterCard('role', '徳除去')" data-tooltip="相手の「徳」を減らすこと">徳除去</button>
+        <span class="filter-category">魂</span>
+        <button onclick="toggleFilterCard('role', '魂加速')" data-tooltip="魂をカードの効果で増やすこと">魂加速</button>
+        <button onclick="toggleFilterCard('role', '魂利用')" data-tooltip="魂にあるカードに影響がある効果">魂利用</button>
+        <button onclick="toggleFilterCard('role', '魂戻し')" data-tooltip="魂から手札にカードを戻すこと">魂戻し</button>
+        <button onclick="toggleFilterCard('role', 'コスト軽減')" data-tooltip="使用する際に必要なコストを軽減する効果">コスト軽減</button>
+        <button onclick="toggleFilterCard('role', '踏み倒し')" data-tooltip="本来のコストより、少ない魂でカードを使用すること">踏み倒し</button>
         <span class="filter-category">除外</span>
         <button onclick="toggleFilterCard('role', '除外加速')" data-tooltip="除外をカードの効果で増やすこと">除外加速</button>
-        <button onclick="toggleFilterCard('role', '除外戻し')" data-tooltip="除外されているカードを、手札・場・デッキなどに戻すこと">除外戻し</button>
-        <span class="filter-category">妨害</span>
-        <button onclick="toggleFilterCard('role', 'ハンデス')" data-tooltip="相手の手札を削ること">ハンデス</button>
-        <button onclick="toggleFilterCard('role', 'ランデス')" data-tooltip="相手の魂を削ること">ランデス</button>
-        <button onclick="toggleFilterCard('role', 'デッキ破壊')" data-tooltip="LO（ライブラリー アウト）に関する札">デッキ破壊</button>
-        <button onclick="toggleFilterCard('role', 'ロック')" data-tooltip="相手の行動を制限すること">ロック</button>
-        <button onclick="toggleFilterCard('role', '札無効')" data-tooltip="カードの効果を無効化すること">札無効</button>
+        <button onclick="toggleFilterCard('role', '除外戻し')" data-tooltip="除外されているカードを、手札・場・デッキなどに戻すこと">除外戻し</button>        
         <span class="filter-category">力</span>
         <button onclick="toggleFilterCard('role', 'バフ')" data-tooltip="力を上げる効果">バフ</button>
         <button onclick="toggleFilterCard('role', '力固定')" data-tooltip="力を一定の数値で固定する効果">力固定</button>
@@ -437,11 +436,12 @@
         <button onclick="toggleFilterCard('role', '底送り')" data-tooltip="デッキの一番下にカードを置くこと">底送り</button>
         <button onclick="toggleFilterCard('role', 'トップ送り')" data-tooltip="デッキの一番上にカードを置くこと">トップ送り</button>
         <button onclick="toggleFilterCard('role', 'トップ確認')" data-tooltip="デッキの一番上を確認すること">トップ確認</button>
-        <span class="filter-category">魂</span>
-        <button onclick="toggleFilterCard('role', '魂加速')" data-tooltip="魂をカードの効果で増やすこと">魂加速</button>
-        <button onclick="toggleFilterCard('role', '魂利用')" data-tooltip="魂にあるカードに影響がある効果">魂利用</button>
-        <button onclick="toggleFilterCard('role', 'コスト軽減')" data-tooltip="使用する際に必要なコストを軽減する効果">コスト軽減</button>
-        <button onclick="toggleFilterCard('role', '踏み倒し')" data-tooltip="本来のコストより、少ない魂でカードを使用すること">踏み倒し</button>
+        <span class="filter-category">妨害</span>
+        <button onclick="toggleFilterCard('role', 'ハンデス')" data-tooltip="相手の手札を削ること">ハンデス</button>
+        <button onclick="toggleFilterCard('role', 'ランデス')" data-tooltip="相手の魂を削ること">ランデス</button>
+        <button onclick="toggleFilterCard('role', 'デッキ破壊')" data-tooltip="LO（ライブラリー アウト）に関する札">デッキ破壊</button>
+        <button onclick="toggleFilterCard('role', 'ロック')" data-tooltip="相手の行動を制限すること">ロック</button>
+        <button onclick="toggleFilterCard('role', '札無効')" data-tooltip="カードの効果を無効化すること">札無効</button>
         <span class="filter-category">憑依</span>
         <button onclick="toggleFilterCard('role', '憑依加速')" data-tooltip="憑依をカードの効果で増やすこと">憑依加速</button>
         <button onclick="toggleFilterCard('role', '憑依破壊')" data-tooltip="憑依をカードの効果で減らすこと">憑依破壊</button>
