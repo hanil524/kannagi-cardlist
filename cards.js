@@ -824,7 +824,7 @@ data-series="夏VS冬バトルセット"
 data-rare="R"
 data-season="春"
 data-type="怪異札"
-data-role="ヒール 直接ダメ"
+data-role="ヒール 直接ダメ ドレイン"
 data-keyword=""
 data-attribute="大蛇"
 >
@@ -907,7 +907,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="春"
 data-type="場所札"
-data-role="魂貫通"
+data-role="魂貫通 常時"
 data-keyword="楽園"
 data-attribute="廃線 解脱"
 >
@@ -956,7 +956,7 @@ data-double-for="さいごのうた"
 data-rare="C"
 data-season="春"
 data-type="場所札"
-data-role=""
+data-role="常時"
 data-keyword="楽園"
 data-attribute="廃鉱山 解脱"
 >
@@ -988,7 +988,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="春"
 data-type="場所札"
-data-role="回復フェイズ"
+data-role="回復フェイズ 常時"
 data-keyword=""
 data-attribute="家屋"
 >
@@ -1004,7 +1004,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="春"
 data-type="場所札"
-data-role="ダメ無効"
+data-role="ダメ無効 常時"
 data-keyword=""
 data-attribute="壁"
 >
@@ -1230,7 +1230,7 @@ data-series="新季の到来 うつくしいせかい"
 data-rare="C"
 data-season="夏"
 data-type="場所札"
-data-role=""
+data-role="常時"
 data-keyword="速攻"
 data-attribute="廃集落 腐乱"
 >
@@ -1246,7 +1246,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="夏"
 data-type="場所札"
-data-role="回復フェイズ 「起き」"
+data-role="回復フェイズ 「起き」 常時"
 data-keyword=""
 data-attribute="神 畑"
 >
@@ -1278,7 +1278,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="夏"
 data-type="場所札"
-data-role="札ダメ 札除去"
+data-role="札ダメ 札除去 常時"
 data-keyword="速攻 襲撃"
 data-attribute="廃村 殺人"
 >
@@ -1392,7 +1392,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="夏"
 data-type="場所札"
-data-role="直接ダメ"
+data-role="直接ダメ 常時"
 data-keyword=""
 data-attribute="神 竜"
 >
@@ -1683,7 +1683,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="秋"
 data-type="場所札"
-data-role="ロック"
+data-role="ロック 常時"
 data-keyword=""
 data-attribute="神 廃屋"
 >
@@ -1861,7 +1861,7 @@ data-double-for="おいしゃさんごっこ"
 data-rare="C"
 data-season="冬"
 data-type="場所札"
-data-role=""
+data-role="常時"
 data-keyword=""
 data-attribute="廃旅館"
 >
@@ -2023,7 +2023,7 @@ data-series="新季の到来"
 data-rare="SR"
 data-season="冬"
 data-type="場所札"
-data-role="バフ"
+data-role="バフ 常時"
 data-keyword=""
 data-attribute="博物館 雪崩"
 >
@@ -2332,7 +2332,7 @@ data-series="百鬼夜行 さいごのうた"
 data-rare="UC"
 data-season="春"
 data-type="場所札"
-data-role="神秘付与 回復フェイズ"
+data-role="神秘付与 回復フェイズ 常時"
 data-keyword="秘境"
 data-attribute="妖怪 災害 幻"
 >
@@ -2494,7 +2494,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="春"
 data-type="怪異札"
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール ドレイン"
 data-keyword=""
 data-attribute="噂 血液"
 >
@@ -2526,7 +2526,7 @@ data-series="百鬼夜行"
 data-rare="R"
 data-season="春"
 data-type="怪異札"
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール ドレイン"
 data-keyword="不屈"
 data-attribute="蝙蝠 血液"
 >
@@ -2671,7 +2671,7 @@ data-series="百鬼夜行 うつくしいせかい"
 data-rare="UC"
 data-season="夏"
 data-type="場所札"
-data-role=""
+data-role="常時"
 data-keyword=""
 data-attribute="妖怪"
 >
@@ -2704,7 +2704,7 @@ data-double-for="うつくしいせかい"
 data-rare="C"
 data-season="夏"
 data-type="場所札"
-data-role="サーチ 攻撃時"
+data-role="サーチ 攻撃時 常時"
 data-keyword=""
 data-attribute="妖怪 蟲 廃村"
 >
@@ -2752,7 +2752,7 @@ data-series="百鬼夜行 うつくしいせかい"
 data-rare="UC"
 data-season="夏"
 data-type="場所札"
-data-role="憑依加速"
+data-role="憑依加速 常時"
 data-keyword=""
 data-attribute="蟲 病 廃旅館"
 >
@@ -3010,7 +3010,7 @@ data-series="百鬼夜行"
 data-rare="UC"
 data-season="秋"
 data-type="場所札"
-data-role="神秘付与"
+data-role="神秘付与 常時"
 data-keyword=""
 data-attribute="交通事故 からくり"
 >
@@ -3042,7 +3042,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="秋"
 data-type="場所札"
-data-role="ドロー 攻撃時"
+data-role="ドロー 攻撃時 常時"
 data-keyword=""
 data-attribute="廃門 糧"
 >
@@ -3108,7 +3108,7 @@ data-series="百鬼夜行"
 data-rare="UC"
 data-season="秋"
 data-type="場所札"
-data-role="直接ダメ 憑依加速 回復フェイズ"
+data-role="直接ダメ 憑依加速 回復フェイズ 常時"
 data-keyword=""
 data-attribute="樹木 幽霊"
 >
@@ -3641,7 +3641,7 @@ data-series="百鬼夜行"
 data-rare="C 封印改訂"
 data-season="無"
 data-type="場所札"
-data-role="札ダメ 札除去"
+data-role="札ダメ 札除去 常時"
 data-keyword="速攻 襲撃"
 data-attribute="うつしよ 血液 人形 殺人"
 >
@@ -3754,7 +3754,7 @@ data-series="百鬼夜行"
 data-rare="R"
 data-season="混化 春夏"
 data-type="季節札"
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール ドレイン"
 data-keyword=""
 data-attribute="腐乱 大蛇"
 >
@@ -3786,7 +3786,7 @@ data-series="百鬼夜行"
 data-rare="KR"
 data-season="無"
 data-type="場所札"
-data-role="バフ 除去無効"
+data-role="バフ 除去無効 常時"
 data-keyword=""
 data-attribute="妖怪 神"
 >
@@ -3839,7 +3839,7 @@ data-double-for="さいごのうた"
 data-rare="C"
 data-season="春"
 data-type="場所札"
-data-role="ヒール"
+data-role="ヒール 常時"
 data-keyword=""
 data-attribute="動物"
 >
@@ -3977,7 +3977,7 @@ data-double-for="あなたのよこで"
 data-rare="SR"
 data-season="秋"
 data-type="場所札"
-data-role="ランデス"
+data-role="ランデス 常時"
 data-keyword=""
 data-attribute="神 交通事故 怨霊"
 >
@@ -4353,7 +4353,7 @@ data-season="春"
 data-type="場所札"
 data-attribute="悪夢"
 data-keyword=""
-data-role="魂加速 回収"
+data-role="魂加速 回収 常時"
 >
 <img data-src="images/card_7_p (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4401,7 +4401,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="妖怪 大蛇"
 data-keyword=""
-data-role="回復フェイズ "
+data-role="回復フェイズ 常時"
 >
 <img data-src="images/card_7_p (79).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4417,7 +4417,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="家屋 刀"
 data-keyword=""
-data-role="バフ 力固定"
+data-role="バフ 力固定 常時"
 >
 <img data-src="images/card_7_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4433,7 +4433,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="妖怪 大蛇"
 data-keyword=""
-data-role="自傷ダメ"
+data-role="自傷ダメ 常時"
 >
 <img data-src="images/card_7_p (42).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4561,7 +4561,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="神 動物"
 data-keyword="楽園"
-data-role="ヒール 直接ダメ"
+data-role="ヒール 直接ダメ ドレイン"
 >
 <img data-src="images/card_7_p (50).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4689,7 +4689,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="神 妖怪"
 data-keyword=""
-data-role="「起き」 魂貫通"
+data-role="「起き」 魂貫通 常時"
 >
 <img data-src="images/card_7_p (39).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4769,7 +4769,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="廃屋 腐乱"
 data-keyword="速攻 憎悪"
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_7_p (45).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4833,7 +4833,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="人魚"
 data-keyword=""
-data-role="追加行動 「起き」 魂加速 攻撃時"
+data-role="追加行動 「起き」 魂加速 攻撃時 常時"
 >
 <img data-src="images/card_7_p (91).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4961,7 +4961,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="糧 家屋"
 data-keyword=""
-data-role="ロック"
+data-role="ロック 常時"
 >
 <img data-src="images/card_7_p (88).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4977,7 +4977,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="廃鉱山"
 data-keyword=""
-data-role="ドロー"
+data-role="ドロー 常時"
 >
 <img data-src="images/card_7_p (35).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4993,7 +4993,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="髑髏 廃鉱山"
 data-keyword="召喚時"
-data-role="除去無効 ランデス 回復フェイズ"
+data-role="除去無効 ランデス 回復フェイズ 常時"
 >
 <img data-src="images/card_7_p (38).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5009,7 +5009,7 @@ data-season="秋"
 data-rare="エキスパンション 封印改訂"
 data-attribute="糧 灯火"
 data-keyword=""
-data-role="ロック 除外加速 回復フェイズ"
+data-role="ロック 除外加速 回復フェイズ 常時"
 >
 <img data-src="images/card_7_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5057,7 +5057,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="神 妖怪"
 data-keyword="秘境"
-data-role="力固定"
+data-role="力固定 常時"
 >
 <img data-src="images/card_7_p (49).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5089,7 +5089,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="交通事故 道路"
 data-keyword="追撃 速攻"
-data-role="ハンデス 攻撃時"
+data-role="ハンデス 攻撃時 常時"
 >
 <img data-src="images/card_7_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5231,7 +5231,7 @@ data-series="怪談師"
 data-rare="エキスパンション"
 data-season="冬"
 data-type="場所札"
-data-role="ロック"
+data-role="ロック 常時"
 data-keyword=""
 data-attribute="牢獄 視線"
 >
@@ -5281,7 +5281,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="廃校 都市伝説"
 data-keyword=""
-data-role="ランデス 除外加速 ロック"
+data-role="ランデス 除外加速 ロック 常時"
 >
 <img data-src="images/card_7_p (59).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5329,7 +5329,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="妖怪 幽霊 災害"
 data-keyword="神秘"
-data-role="神秘付与 バフ 攻撃時"
+data-role="神秘付与 バフ 攻撃時 常時"
 >
 <img data-src="images/card_7_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5713,7 +5713,7 @@ data-season="混化 春夏"
 data-rare="エキスパンション"
 data-attribute="渓谷 怨霊"
 data-keyword="神秘 速攻"
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_7_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5796,7 +5796,7 @@ data-season="春 夏 秋 冬 無"
 data-rare="C"
 data-attribute="噂 廃校 樹木 花"
 data-keyword=""
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_9_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5956,7 +5956,7 @@ data-season="秋"
 data-rare="UC"
 data-attribute="噂 廃校 不吉"
 data-keyword=""
-data-role="効果を失う 直接ダメ ヒール ドロー ハンデス ランデス"
+data-role="効果を失う 直接ダメ ヒール ドロー ハンデス ランデス 常時 ドレイン"
 >
 <img data-src="images/card_9_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6068,7 +6068,7 @@ data-season="冬"
 data-rare="C"
 data-attribute="噂 廃校 牢獄"
 data-keyword="学校の怪談"
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_9_p (1).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6343,7 +6343,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="SSS 虹 蟲"
 data-keyword=""
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール ドレイン"
 >
 <img data-src="images/card_8_p (14).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6471,7 +6471,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="SSS 罪"
 data-keyword="合唱"
-data-role="攻撃時"
+data-role="攻撃時 常時"
 >
 <img data-src="images/card_8_p (15).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6807,7 +6807,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="神 SSS 廃旅館"
 data-keyword="合唱"
-data-role="ロック 攻撃時"
+data-role="ロック 攻撃時 常時"
 >
 <img data-src="images/card_8_p (24).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6951,7 +6951,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="SSS 廃旅館 動物"
 data-keyword="合唱"
-data-role="直接ダメ 攻撃時"
+data-role="直接ダメ 攻撃時 常時"
 >
 <img data-src="images/card_8_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7066,7 +7066,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="花 樹木 妖怪"
 data-keyword=""
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_10_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7098,7 +7098,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="神 人魚"
 data-keyword=""
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_10_p (97).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7146,7 +7146,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="動物 事件"
 data-keyword=""
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_10_p (104).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7162,7 +7162,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="古城 怨念 戦"
 data-keyword=""
-data-role="除去無効"
+data-role="除去無効 常時"
 >
 <img data-src="images/card_10_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>       
@@ -7290,7 +7290,7 @@ data-season="春"
 data-rare="エキスパンション"
 data-attribute="血液 噂"
 data-keyword=""
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール ドレイン"
 >
 <img data-src="images/card_10_p (75).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7434,7 +7434,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="灯火 罪 動物"
 data-keyword=""
-data-role="自傷ダメ 直接ダメ"
+data-role="自傷ダメ 直接ダメ 常時"
 >
 <img data-src="images/card_10_p (72).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7482,7 +7482,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="墓地 陰 災害"
 data-keyword=""
-data-role="回復フェイズ 除外加速"
+data-role="回復フェイズ 除外加速 常時"
 >
 <img data-src="images/card_10_p (113).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7514,7 +7514,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="龍 噂"
 data-keyword="召喚時"
-data-role="「起き」 除去無効"
+data-role="「起き」 除去無効 常時"
 >
 <img data-src="images/card_10_p (82).jpg" src="placeholder.jpg" decoding="async" />
 </div>          
@@ -7562,7 +7562,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="家屋 幻 幽霊"
 data-keyword=""
-data-role="直接ダメ"
+data-role="直接ダメ 常時"
 >
 <img data-src="images/card_10_p (94).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7578,7 +7578,7 @@ data-season="夏"
 data-rare="エキスパンション"
 data-attribute="刀 怨念"
 data-keyword=""
-data-role="追加行動 「起き」"
+data-role="追加行動 「起き」 常時"
 >
 <img data-src="images/card_10_p (57).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7818,7 +7818,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="視線 罪"
 data-keyword=""
-data-role="ドロー"
+data-role="ドロー 常時"
 >
 <img data-src="images/card_10_p (116).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7850,7 +7850,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="岬"
 data-keyword=""
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_10_p (122).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7882,7 +7882,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="廃駅 廃線"
 data-keyword=""
-data-role="相手ドロー"
+data-role="相手ドロー 常時"
 >
 <img data-src="images/card_10_p (83).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7898,7 +7898,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="幻 花"
 data-keyword="召喚時"
-data-role="憑依加速 ドロー 公開ドロー"
+data-role="憑依加速 ドロー 公開ドロー 常時"
 >
 <img data-src="images/card_10_p (71).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7930,7 +7930,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="廃マンション からくり"
 data-keyword=""
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_10_p (35).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8234,7 +8234,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="都市伝説 悪魔 UMA からくり"
 data-keyword=""
-data-role="直接ダメ ヒール ドレイン"
+data-role="直接ダメ ヒール ドレイン 常時"
 >
 <img data-src="images/card_10_p (118).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8273,7 +8273,7 @@ data-role="ランデス ドロー 攻撃時"
 <div
 class="card"
 data-number="1679"
-data-name="霧隠れの境界（ミステリア みすてりあ）"
+data-name="霧隠れの境界(みすてりあ)"
 data-cost="5"
 data-power="5"
 data-series="怪談師二章"
@@ -8282,7 +8282,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="廃集落 動物 牢獄"
 data-keyword="召喚時"
-data-role="ロック ランデス ハンデス"
+data-role="ロック ランデス ハンデス 常時"
 >
 <img data-src="images/card_10_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8330,7 +8330,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="髑髏 灯火 怨霊"
 data-keyword="召喚時"
-data-role="特殊勝利 憑依加速"
+data-role="特殊勝利 憑依加速 常時"
 >
 <img data-src="images/card_10_p (14).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8346,7 +8346,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="交通事故 道路 幽霊"
 data-keyword="妬み"
-data-role="「起き」 ハンデス"
+data-role="「起き」 ハンデス 常時"
 >
 <img data-src="images/card_10_p (85).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8378,7 +8378,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="都市伝説 悪魔 UMA"
 data-keyword="↻（伏せ）"
-data-role="魂貫通"
+data-role="魂貫通 常時"
 >
 <img data-src="images/card_10_p (16).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8570,7 +8570,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="妖怪 災害"
 data-keyword="秘境"
-data-role="追加行動 踏み倒し 「起き」"
+data-role="追加行動 踏み倒し 「起き」 常時"
 >
 <img data-src="images/card_10_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8586,7 +8586,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="神 烏 都市伝説"
 data-keyword=""
-data-role="除外加速 ヒール 直接ダメ 追加行動 ランデス"
+data-role="除外加速 ヒール 直接ダメ 追加行動 ランデス 常時"
 >
 <img data-src="images/card_10_p (88).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8618,7 +8618,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="幽霊 交通事故"
 data-keyword=""
-data-role="直接ダメ"
+data-role="直接ダメ 常時"
 >
 <img data-src="images/card_10_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8666,7 +8666,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="善行 うつしよ"
 data-keyword="徳"
-data-role="回復フェイズ"
+data-role="回復フェイズ 常時"
 >
 <img data-src="images/card_10_p (84).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8682,7 +8682,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="神 動物 妖怪 鬼 からくり 視線"
 data-keyword=""
-data-role="除外加速 ランデス 攻撃時"
+data-role="除外加速 ランデス 攻撃時 常時"
 >
 <img data-src="images/card_10_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8890,7 +8890,7 @@ data-season="冬"
 data-rare="エキスパンション"
 data-attribute="廃施設 牢獄"
 data-keyword=""
-data-role="ロック"
+data-role="ロック 常時"
 >
 <img data-src="images/card_10_p (34).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8957,7 +8957,7 @@ data-season="春"
 data-rare="C"
 data-attribute="都市伝説 園 花"
 data-keyword=""
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_11_p (13).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8973,7 +8973,7 @@ data-season="春"
 data-rare="R"
 data-attribute="都市伝説 犬族 UMA"
 data-keyword="正体不明"
-data-role="ヒール"
+data-role="ヒール 常時"
 >
 <img data-src="images/card_11_p (2).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8989,7 +8989,7 @@ data-season="春"
 data-rare="SR"
 data-attribute="都市伝説 血液 動物"
 data-keyword="鬼動"
-data-role="直接ダメ ヒール 攻撃時"
+data-role="直接ダメ ヒール 攻撃時 ドレイン"
 >
 <img data-src="images/card_11_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9085,7 +9085,7 @@ data-season="夏"
 data-rare="C"
 data-attribute="都市伝説 火事"
 data-keyword=""
-data-role="自傷ダメ"
+data-role="自傷ダメ 常時"
 >
 <img data-src="images/card_11_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9213,7 +9213,7 @@ data-season="秋"
 data-rare="C"
 data-attribute="都市伝説 罪 不吉"
 data-keyword=""
-data-role="バフ"
+data-role="バフ 常時"
 >
 <img data-src="images/card_11_p (20).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9229,7 +9229,7 @@ data-season="秋"
 data-rare="C"
 data-attribute="都市伝説 からくり"
 data-keyword="正体不明"
-data-role="「伏せ」 「起き」"
+data-role="「伏せ」 「起き」 常時"
 >
 <img data-src="images/card_11_p (35).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9245,7 +9245,7 @@ data-season="秋"
 data-rare="C 封印改訂"
 data-attribute="都市伝説 怨念 罪"
 data-keyword="潜在能力"
-data-role=""
+data-role="常時"
 >
 <img data-src="images/card_11_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9341,7 +9341,7 @@ data-season="冬"
 data-rare="C"
 data-attribute="都市伝説 海 災害"
 data-keyword=""
-data-role="札除去"
+data-role="札除去 常時"
 >
 <img data-src="images/card_11_p (37).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9373,7 +9373,7 @@ data-season="冬"
 data-rare="SR"
 data-attribute="神 都市伝説 鬼"
 data-keyword="神秘 鬼動"
-data-role="ランデス 攻撃時"
+data-role="ランデス 攻撃時 常時"
 >
 <img data-src="images/card_11_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>         
@@ -10067,7 +10067,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 WBD 視線"
   data-keyword=""
-  data-role="「起き」 ヒール"
+  data-role="「起き」 ヒール 常時"
 >
   <img data-src="images/card_13_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10083,7 +10083,7 @@ data-role="ロック"
   data-rare="R"
   data-attribute="七不思議 事件 怨念"
   data-keyword=""
-  data-role="ヒール"
+  data-role="ヒール 常時"
 >
   <img data-src="images/card_13_p (1).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10227,7 +10227,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 WBD 楽器"
   data-keyword=""
-  data-role="直接ダメ"
+  data-role="直接ダメ 常時"
 >
   <img data-src="images/card_13_p (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10323,7 +10323,7 @@ data-role="ロック"
   data-rare="SR"
   data-attribute="七不思議 WBD 怨念"
   data-keyword="召喚時 言霊 "
-  data-role="攻撃時 魂回収 除外加速 バフ"
+  data-role="攻撃時 魂回収 除外加速 バフ 常時"
 >
   <img data-src="images/card_13_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10339,7 +10339,7 @@ data-role="ロック"
   data-rare="SR"
   data-attribute="七不思議 神"
   data-keyword="召喚時"
-  data-role="憑依加速 直接ダメ"
+  data-role="憑依加速 直接ダメ 常時"
 >
   <img data-src="images/card_13_p (12).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10611,7 +10611,7 @@ data-role="ロック"
   data-rare="UC"
   data-attribute="七不思議 WBD 烏 怨霊"
   data-keyword="秘境"
-  data-role="直接ダメ"
+  data-role="直接ダメ 常時"
 >
   <img data-src="images/card_13_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10883,7 +10883,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 家屋"
   data-keyword=""
-  data-role="自傷ダメ 「起き」"
+  data-role="自傷ダメ 「起き」 常時"
 >
   <img data-src="images/card_13_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10915,7 +10915,7 @@ data-role="ロック"
   data-rare="UC"
   data-attribute="七不思議 交通事故 呪 廃車"
   data-keyword=""
-  data-role="踏み倒し"
+  data-role="踏み倒し 常時"
 >
   <img data-src="images/card_13_p (57).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10963,7 +10963,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 胎内 罪"
   data-keyword=""
-  data-role="直接ダメ ヒール"
+  data-role="直接ダメ ヒール ドレイン"
 >
   <img data-src="images/card_13_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11334,7 +11334,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="神 蟲 妖怪"
   data-keyword="突現"
-  data-role="除外加速 "
+  data-role="除外加速 常時"
 >
   <img data-src="images/card_14_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11382,7 +11382,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="神 蟲 都市伝説 UMA"
   data-keyword="正体不明"
-  data-role="二種類札 デッキ破壊 直接ダメ"
+  data-role="2種類札 デッキ破壊 直接ダメ"
 >
   <img data-src="images/card_14_p (20).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11462,7 +11462,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="樹木 幽霊"
   data-keyword=""
-  data-role="直接ダメ 憑依加速 回復フェイズ"
+  data-role="直接ダメ 憑依加速 回復フェイズ 常時"
 >
   <img data-src="images/card_14_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11800,7 +11800,7 @@ data-series="プロモ"
 data-rare="SSR"
 data-season="春"
 data-type="場所札"
-data-role="ヒール"
+data-role="ヒール 常時"
 data-keyword=""
 data-attribute="動物 猫"
 >
@@ -11883,7 +11883,7 @@ data-rare=""
 data-season="無"
 data-type="場所札"
 data-role="追加行動"
-data-keyword="召喚時"
+data-keyword="召喚時 常時"
 data-attribute="うつしよ 家屋"
 >
 <img data-src="images/card_4_p (8).jpg" src="placeholder.jpg" decoding="async" />
@@ -12380,7 +12380,7 @@ data-season="秋"
 data-rare=""
 data-attribute="廃隧道 道路 交通事故"
 data-keyword=""
-data-role="力固定 バフ"
+data-role="力固定 バフ 常時"
 >
 <img data-src="images/card_13_p (67).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12396,7 +12396,7 @@ data-season="春"
 data-rare=""
 data-attribute="悪夢"
 data-keyword=""
-data-role="魂加速"
+data-role="魂加速 常時"
 >
 <img data-src="images/card_13_p (68).jpg" src="placeholder.jpg" decoding="async" />
 </div>
