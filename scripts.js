@@ -1235,32 +1235,23 @@ const openModal = (filterId) => {
     return;
   }
 
-  const filterContent = filterElement.querySelectorAll('button');
-  filterContent.forEach((button) => {
+  const filterContent = filterElement.querySelectorAll('button, .filter-category');
+  filterContent.forEach((element) => {
+    // カテゴリ見出しの場合
+    if (element.classList.contains('filter-category')) {
+      const category = document.createElement('span');
+      category.className = 'filter-category';
+      category.textContent = element.textContent;
+      modalButtons.appendChild(category);
+      return;
+    }
+    
+    // ボタンの場合
+    const button = element;
     const newButton = document.createElement('button');
     newButton.innerText = button.innerText;
     newButton.className = button.className;
-    // 簡易指定: 役割モーダル内のボタンをホラー系で強調…
-    if (filterId === 'role') {
-      const label = (newButton.innerText || '').trim();
-      const redLabels = ['除外加速', '除外戻し', '攻撃時'];
-      if (redLabels.includes(label)) {
-        newButton.classList.add('role-exile');
-        // CSSのみでは上書きされる可能性があるため、インライン + !important で強制
-        try {
-          newButton.style.setProperty('background', 'linear-gradient(180deg, #4a0000 0%, #1a0000 100%)', 'important');
-          newButton.style.setProperty('background-color', '#2a0000', 'important');
-          newButton.style.setProperty('color', '#ffffff', 'important');
-          newButton.style.setProperty('border', '1px solid rgba(255,0,0,0.35)', 'important');
-          newButton.style.setProperty('box-shadow', '0 0 0 1px rgba(255,0,0,0.15) inset', 'important');
-        } catch (_) {
-          // setProperty が使えない環境向けのフォールバック
-          newButton.style.background = 'linear-gradient(180deg, #4a0000 0%, #1a0000 100%)';
-          newButton.style.color = '#ffffff';
-          newButton.style.border = '1px solid rgba(255,0,0,0.35)';
-        }
-      }
-    }
+    
     // ツールチップ用の属性を追加
     if (button.hasAttribute('data-tooltip')) {
       newButton.setAttribute('data-tooltip', button.getAttribute('data-tooltip'));
