@@ -4125,7 +4125,7 @@ data-series="れもんちゃんデッキ"
 data-rare="C"
 data-season="秋"
 data-type="怪異札"
-data-role="ドロー デッキ破壊"
+data-role="ドロー 相手ドロー"
 data-keyword=""
 data-attribute="かき"
 >
@@ -5167,7 +5167,7 @@ data-series="怪談師"
 data-rare="エキスパンション"
 data-season="秋"
 data-type="道具札"
-data-role="ドロー ハンデス デッキ破壊"
+data-role="ドロー ハンデス 相手ドロー"
 data-keyword=""
 data-attribute="糧 家屋"
 >
@@ -5697,7 +5697,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="うつしよ 陰"
 data-keyword=""
-data-role="札除去 デッキ破壊"
+data-role="札除去 相手ドロー"
 >
 <img data-src="images/card_7_p (81).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7882,7 +7882,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="廃駅 廃線"
 data-keyword=""
-data-role="デッキ破壊"
+data-role="相手ドロー"
 >
 <img data-src="images/card_10_p (83).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11898,7 +11898,7 @@ data-series="プロモ"
 data-rare=""
 data-season="秋"
 data-type="道具札"
-data-role="ドロー ハンデス デッキ破壊"
+data-role="ドロー ハンデス 相手ドロー"
 data-keyword=""
 data-attribute="糧 家屋"
 >
