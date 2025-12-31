@@ -711,7 +711,7 @@ data-double-for="おいしゃさんごっこ"
 data-rare="UC"
 data-season="冬"
 data-type="道具札"
-data-role="回収 魂利用"
+data-role="魂戻し 魂利用"
 data-keyword=""
 data-attribute="人形 藁人形 蘇生"
 >
@@ -775,7 +775,7 @@ data-series="夏VS冬バトルセット"
 data-rare="R"
 data-season="秋"
 data-type="怪異札"
-data-role="回収 除外戻し"
+data-role="除外戻し"
 data-keyword="鮮明 不屈"
 data-attribute="菌"
 >
@@ -1537,7 +1537,7 @@ data-series="新季の到来"
 data-rare="C"
 data-season="夏"
 data-type="道具札"
-data-role="直接ダメ 札ダメ 回収"
+data-role="直接ダメ 札ダメ 魂戻し"
 data-keyword=""
 data-attribute="病"
 >
@@ -1586,7 +1586,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="夏"
 data-type="道具札"
-data-role="回収"
+data-role="魂戻し"
 data-keyword=""
 data-attribute="人形 蘇生"
 >
@@ -1651,7 +1651,7 @@ data-series="新季の到来"
 data-rare="C"
 data-season="秋"
 data-type="場所札"
-data-role="除外戻し 底送り"
+data-role="除外戻し 除外除去 底送り"
 data-keyword="召喚時"
 data-attribute="廃葬儀場"
 >
@@ -2104,7 +2104,7 @@ data-series="新季の到来"
 data-rare="C"
 data-season="冬"
 data-type="道具札"
-data-role="除外戻し 底送り"
+data-role="除外除去 底送り"
 data-keyword=""
 data-attribute="事件 楽器"
 >
@@ -2736,7 +2736,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="夏"
 data-type="場所札"
-data-role="回収 直接ダメ"
+data-role="魂戻し 直接ダメ"
 data-keyword="不屈"
 data-attribute="廃神社 人形 日本人形 呪"
 >
@@ -3319,7 +3319,7 @@ data-double-for="あなたのよこで"
 data-rare="R"
 data-season="秋"
 data-type="怪異札"
-data-role="追加行動 魂利用 回収"
+data-role="追加行動 魂戻し"
 data-keyword=""
 data-attribute="妖怪 怨霊"
 >
@@ -4353,7 +4353,7 @@ data-season="春"
 data-type="場所札"
 data-attribute="悪夢"
 data-keyword=""
-data-role="魂加速 回収 常時"
+data-role="魂加速 魂戻し 常時"
 >
 <img data-src="images/card_7_p (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -4801,7 +4801,7 @@ data-season="夏"
 data-type="場所札"
 data-attribute="廃旅館 幽霊"
 data-keyword="速攻"
-data-role="回収 除外戻し 攻撃時"
+data-role="除外戻し 攻撃時"
 >
 <img data-src="images/card_7_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -5553,7 +5553,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="動物 うつしよ"
 data-keyword=""
-data-role="除外戻し 底送り"
+data-role="除外戻し 除外除去 底送り"
 >
 <img data-src="images/card_7_p (68).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6100,7 +6100,7 @@ data-season="冬"
 data-rare="R"
 data-attribute="噂 人形 腐乱 蘇生"
 data-keyword=""
-data-role="2種類札 回収"
+data-role="2種類札 魂戻し"
 >
 <img data-src="images/card_9_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6196,7 +6196,7 @@ data-season="秋"
 data-rare="SSR"
 data-attribute="菌"
 data-keyword="鮮明 不屈"
-data-role="除外戻し 回収"
+data-role="除外戻し"
 >
 <img data-src="images/card_9_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6212,7 +6212,7 @@ data-season="春"
 data-rare="R"
 data-attribute="神 動物"
 data-keyword=""
-data-role="ヒール バフ 除外戻し"
+data-role="ヒール バフ 除外除去"
 >
 <img data-src="images/card_9_p (22).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9648,7 +9648,7 @@ data-season="夏"
 data-rare="R"
 data-attribute="墓地 妖怪 海"
 data-keyword="召喚時"
-data-role="除外戻し 直接ダメ 回収"
+data-role="除外戻し 直接ダメ"
 >
 <img data-src="images/card_12_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9696,7 +9696,7 @@ data-role="除外加速 直接ダメ"
   data-rare="UC"
   data-attribute="墓地 妖怪 蟲"
   data-keyword=""
-  data-role="除外戻し 回収 直接ダメ"
+  data-role="除外戻し 直接ダメ"
 >
   <img data-src="images/card_12_p (13).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9728,7 +9728,7 @@ data-role="除外加速 直接ダメ"
   data-rare="C"
   data-attribute="墓地"
   data-keyword=""
-  data-role="除外戻し 回収 直接ダメ"
+  data-role="除外戻し 直接ダメ"
 >
   <img data-src="images/card_12_p (22).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9760,7 +9760,7 @@ data-season="秋"
 data-rare="C"
 data-attribute="墓地 妖怪 幽霊"
 data-keyword=""
-data-role="除外戻し 回収 ドロー 攻撃時"
+data-role="除外戻し ドロー 攻撃時"
 >
 <img data-src="images/card_12_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9792,14 +9792,14 @@ data-role="除外戻し 回収 ドロー 攻撃時"
   data-rare="UC"
   data-attribute="墓地 妖怪 樹木"
   data-keyword="召喚時"
-  data-role="除外戻し 回収 ハンデス"
+  data-role="除外戻し ハンデス"
 >
   <img data-src="images/card_12_p (25).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
   data-number="1914"
-  data-name="べとべと(ベトベト)"
+  data-name="べとべと"
   data-cost="2"
   data-power="2"
   data-series="妖怪デッキ：墓暴き"
@@ -9808,7 +9808,7 @@ data-role="除外戻し 回収 ドロー 攻撃時"
   data-rare="UC"
   data-attribute="墓地 妖怪"
   data-keyword=""
-  data-role="攻撃時 除外戻し 回収"
+  data-role="攻撃時 除外除去"
 >
   <img data-src="images/card_12_p (15).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9847,7 +9847,7 @@ data-role="サーチ 除外加速"
 <div
 class="card"
 data-number="1917"
-data-name="さとり(サトリ)"
+data-name="さとり"
 data-cost="0"
 data-power="0"
 data-series="妖怪デッキ：墓暴き"
@@ -9856,7 +9856,7 @@ data-season="秋"
 data-rare="C"
 data-attribute="墓地 妖怪"
 data-keyword=""
-data-role="除外戻し 回収 ドロー"
+data-role="除外戻し ドロー"
 >
 <img data-src="images/card_12_p (3).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9888,7 +9888,7 @@ data-role="除外戻し 回収 ドロー"
   data-rare="C"
   data-attribute="墓地 妖怪 からくり"
   data-keyword=""
-  data-role="除外戻し 回収 ドロー"
+  data-role="除外戻し ドロー"
 >
   <img data-src="images/card_12_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10000,7 +10000,7 @@ data-role="ロック"
   data-rare=""
   data-attribute="御守り 髑髏"
   data-keyword=""
-  data-role="魂利用 回収 追加行動"
+  data-role="魂戻し 追加行動"
 >
   <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10306,8 +10306,8 @@ data-role="ロック"
   data-season="夏"
   data-rare="R"
   data-attribute="七不思議 妖怪 鬼 幽霊"
-  data-keyword="召喚時 言霊 "
-  data-role="魂回収"
+  data-keyword="召喚時 言霊"
+  data-role="魂戻し"
 >
   <img data-src="images/card_13_p (22).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10323,7 +10323,7 @@ data-role="ロック"
   data-rare="SR"
   data-attribute="七不思議 WBD 怨念"
   data-keyword="召喚時 言霊 "
-  data-role="攻撃時 魂回収 除外加速 バフ 常時"
+  data-role="攻撃時 魂戻し 除外加速 バフ 常時"
 >
   <img data-src="images/card_13_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10899,7 +10899,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 家屋 猫"
   data-keyword=""
-  data-role="攻撃時 魂回収"
+  data-role="攻撃時 魂戻し"
 >
   <img data-src="images/card_13_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11372,6 +11372,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2140"
+  data-name="ダブッダマンズ(だぶっだまんず)"
+  data-cost="10"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="UMA 幽霊"
+  data-keyword=""
+  data-role="直接ダメ 特殊勝利"
+>
+  <img data-src="images/card_14_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2143"
   data-name="痣通洲架橋、堕螺児(あざとおすらせん、だらつじ)"
   data-cost="7"
@@ -11590,7 +11606,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="楽器"
   data-keyword="召喚時 合唱"
-  data-role="攻撃時 回収"
+  data-role="攻撃時 魂戻し"
 >
   <img data-src="images/card_14_p (24).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11673,6 +11689,22 @@ data-role="ロック"
   data-role="手札公開"
 >
   <img data-src="images/card_14_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2196"
+  data-name="HAVE A NICE CURSE!!(よいのろいを！！)"
+  data-cost="5"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword="召喚時"
+  data-role="攻撃時 除外戻し 除外加速 直接ダメ"
+>
+  <img data-src="images/card_14_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
