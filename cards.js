@@ -11164,6 +11164,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2111"
+  data-name="血の種(ちのたね)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 樹木"
+  data-keyword=""
+  data-role="魂加速 自傷ダメ"
+>
+  <img data-src="images/card_14_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2115"
   data-name="私ノ愛シイ人(わたしのいとしいひと)"
   data-cost="9"
@@ -11388,6 +11404,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2142"
+  data-name="気づいて(きづいて)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="墓地 災害 幻"
+  data-keyword=""
+  data-role="「起き」"
+>
+  <img data-src="images/card_14_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2143"
   data-name="痣通洲架橋、堕螺児(あざとおすらせん、だらつじ)"
   data-cost="7"
@@ -11420,7 +11452,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2148"
+  data-number="2147"
   data-name="陰峰トンネル(かげみねとんねる)"
   data-cost="0"
   data-power="1"
@@ -11433,6 +11465,22 @@ data-role="ロック"
   data-role="ドロー 公開ドロー"
 >
   <img data-src="images/card_14_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2148"
+  data-name="百貨店(ひゃっかてん)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="人形"
+  data-keyword="召喚時 正体不明"
+  data-role="底送り"
+>
+  <img data-src="images/card_14_p (51).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11513,6 +11561,22 @@ data-role="ロック"
   data-role="サーチ"
 >
   <img data-src="images/card_14_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2162"
+  data-name="わたつみの子供(わたつみのこども)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="人魚 樹木"
+  data-keyword=""
+  data-role="追加行動"
+>
+  <img data-src="images/card_14_p (50).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
