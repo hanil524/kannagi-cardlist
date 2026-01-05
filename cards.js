@@ -7818,7 +7818,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="視線 罪"
 data-keyword=""
-data-role="ドロー 常時"
+data-role="ドロー 常時 「起き」"
 >
 <img data-src="images/card_10_p (116).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9405,7 +9405,7 @@ data-season="冬"
 data-rare="UC"
 data-attribute="都市伝説 UMA 動物"
 data-keyword=""
-data-role="札除去"
+data-role="札除去 「起き」"
 >
 <img data-src="images/card_11_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10067,7 +10067,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 WBD 視線"
   data-keyword=""
-  data-role="「起き」 ヒール 常時"
+  data-role="「起き」 「伏せ」 ヒール 常時"
 >
   <img data-src="images/card_13_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10771,7 +10771,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 WBD からくり"
   data-keyword=""
-  data-role="攻撃時 札除去"
+  data-role="攻撃時 札除去 「起き」 「伏せ」"
 >
   <img data-src="images/card_13_p (44).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12507,7 +12507,7 @@ data-type="場所札"
 data-season="夏"
 data-rare=""
 data-attribute="糧 神 家屋"
-data-keyword="召喚時"
+data-keyword="召喚時 「起き」"
 data-role=""
 >
 <img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
