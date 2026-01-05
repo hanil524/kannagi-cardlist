@@ -11580,6 +11580,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2163"
+  data-name="孵らなかった7番目の子雛(かえらなかったななばんめのこひな)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 烏"
+  data-keyword=""
+  data-role="サーチ 常時 効果を失う"
+>
+  <img data-src="images/card_14_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2164"
   data-name="福おじいちゃん(ふくおじいちゃん)"
   data-cost="1"
@@ -11593,6 +11609,22 @@ data-role="ロック"
   data-role="力固定"
 >
   <img data-src="images/card_14_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2168"
+  data-name="おいしい人(おいしいひと)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="悪夢"
+  data-keyword=""
+  data-role="攻撃時 ドロー 自傷ダメ"
+>
+  <img data-src="images/card_14_p (54).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
