@@ -11180,6 +11180,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2113"
+  data-name="吸血(きゅうけつ)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 蝙蝠"
+  data-keyword=""
+  data-role="直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_14_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2115"
   data-name="私ノ愛シイ人(わたしのいとしいひと)"
   data-cost="9"
@@ -11609,6 +11625,22 @@ data-role="ロック"
   data-role="力固定"
 >
   <img data-src="images/card_14_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2166"
+  data-name="アイスティー(あいすてぃー)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 事件"
+  data-keyword=""
+  data-role="「伏せ」 直接ダメ ドロー"
+>
+  <img data-src="images/card_14_p (56).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
