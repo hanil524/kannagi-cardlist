@@ -12576,5 +12576,21 @@ data-role="自傷ダメ 札無効"
 >
 <img data-src="images/card_14_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10042"
+  data-name="ねこポーチ(ねこぽーち)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="猫"
+  data-keyword=""
+  data-role="属性追加"
+>
+  <img data-src="images/card_14_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
