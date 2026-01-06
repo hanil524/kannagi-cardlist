@@ -45,7 +45,7 @@ let startY = 0;
 let observer = null;
 let isObserverSetup = false;
 
-const MAX_CONCURRENT_IMAGE_LOADS = 6;
+const MAX_CONCURRENT_IMAGE_LOADS = 4;
 const imageLoadQueue = [];
 const queuedImages = new Set();
 const loadingImages = new Set();
@@ -348,11 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 遅延読み込みの処理
   // 表示の先読み枚数と初期読み込み枚数を拡張（+15枚）
-  const PRELOAD_AHEAD_COUNT = 18; // もともと3 → 3 + 15
-  const INITIAL_LAZYLOAD_COUNT = 35; // もともと20 → 20 + 15
+  const PRELOAD_AHEAD_COUNT = 6; // 先読み枚数を抑える
+  const INITIAL_LAZYLOAD_COUNT = 20; // 初期読み込み枚数を抑える
   const options = {
     root: null,
-    rootMargin: '400px',
+    rootMargin: '200px',
     threshold: 0.1
   };
 
@@ -1728,6 +1728,8 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
 
 // フィルターの該当表示
 
+let activeFiltersResizeHandler = null;
+
 function updateActiveFilters() {
   const activeFilters = [];
   for (const [key, values] of Object.entries(filters)) {
@@ -1758,7 +1760,11 @@ function updateActiveFilters() {
 
   setDisplayBasedOnScreenSize();
 
-  window.addEventListener('resize', setDisplayBasedOnScreenSize);
+  if (activeFiltersResizeHandler) {
+    window.removeEventListener('resize', activeFiltersResizeHandler);
+  }
+  activeFiltersResizeHandler = setDisplayBasedOnScreenSize;
+  window.addEventListener('resize', activeFiltersResizeHandler);
 }
 
 function removeFilter(key, value) {
@@ -1779,6 +1785,10 @@ const loadVisibleImages = () => {
   const viewportHeight = window.innerHeight;
 
   images.forEach((img) => {
+    const card = img.closest('.card');
+    if (card && (card.style.display === 'none' || card.classList.contains('hidden'))) {
+      return;
+    }
     const rect = img.getBoundingClientRect();
     if (rect.top >= 0 && rect.top <= viewportHeight) {
       loadImage(img, true);
