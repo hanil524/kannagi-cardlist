@@ -3763,6 +3763,7 @@ const deckManager = {
     list.dataset.dragSortInitialized = 'true';
 
     const LONG_PRESS_MS = 600;
+    const MOVE_TOLERANCE = 8;
     const SCROLL_EDGE = 40;
     const MAX_SCROLL_SPEED = 12;
     const manager = this;
@@ -3774,8 +3775,6 @@ const deckManager = {
       isDragging: false,
       suppressClick: false,
       isTouch: false,
-      scrollStart: 0,
-      scrollMax: 0,
       startX: 0,
       startY: 0,
       lastX: 0,
@@ -3786,6 +3785,12 @@ const deckManager = {
       currentItem: null,
       placeholder: null,
       longPressTimer: null
+    };
+
+    const blockTouchScroll = (e) => {
+      if (state.isDragging) {
+        e.preventDefault();
+      }
     };
 
     const clearLongPress = () => {
@@ -3845,6 +3850,8 @@ const deckManager = {
       state.placeholder = document.createElement('div');
       state.placeholder.className = 'deck-list-placeholder';
       state.placeholder.style.height = `${rect.height}px`;
+      state.placeholder.style.minHeight = `${rect.height}px`;
+      state.placeholder.style.flex = '0 0 auto';
       item.parentNode.insertBefore(state.placeholder, item.nextSibling);
 
       const initialTop = rect.top - listRect.top + list.scrollTop;
@@ -3930,8 +3937,6 @@ const deckManager = {
         state.pointerId = null;
         state.suppressClick = false;
         state.isTouch = false;
-        state.scrollStart = 0;
-        state.scrollMax = 0;
         clearLongPress();
         return;
       }
@@ -3957,8 +3962,6 @@ const deckManager = {
       state.pointerId = null;
       state.currentItem = null;
       state.isTouch = false;
-      state.scrollStart = 0;
-      state.scrollMax = 0;
 
       manager.updateDeckOrderFromDOM();
       manager.saveToLocalStorage();
@@ -3974,8 +3977,6 @@ const deckManager = {
       state.pointerId = null;
       state.currentItem = null;
       state.isTouch = false;
-      state.scrollStart = 0;
-      state.scrollMax = 0;
     };
 
     const isIgnoredTarget = (target) =>
@@ -4013,8 +4014,6 @@ const deckManager = {
       state.startY = e.clientY;
       state.lastX = e.clientX;
       state.lastY = e.clientY;
-      state.scrollStart = list.scrollTop;
-      state.scrollMax = Math.max(0, list.scrollHeight - list.clientHeight);
       state.longPressTimer = setTimeout(beginDrag, LONG_PRESS_MS);
     });
 
@@ -4027,11 +4026,12 @@ const deckManager = {
         state.lastX = e.clientX;
         state.lastY = e.clientY;
         if (!state.isDragging) {
-          if (state.isTouch) {
-            e.preventDefault();
-            const deltaY = e.clientY - state.startY;
-            const nextScroll = state.scrollStart - deltaY;
-            list.scrollTop = Math.max(0, Math.min(state.scrollMax, nextScroll));
+          if (!state.isTouch) {
+            const dx = e.clientX - state.startX;
+            const dy = e.clientY - state.startY;
+            if (Math.hypot(dx, dy) > MOVE_TOLERANCE) {
+              cancelPress();
+            }
           }
           return;
         }
@@ -4040,17 +4040,6 @@ const deckManager = {
         autoScroll(e.clientY);
         updateDragPosition(e.clientY);
         updatePlaceholder(e.clientY);
-      },
-      { passive: false }
-    );
-
-    list.addEventListener(
-      'touchmove',
-      (e) => {
-        if (!state.isPressing || state.isDragging) {
-          return;
-        }
-        e.preventDefault();
       },
       { passive: false }
     );
@@ -4077,6 +4066,14 @@ const deckManager = {
       }
       cancelPress();
     });
+
+    list.addEventListener('scroll', () => {
+      if (state.isPressing && !state.isDragging && state.isTouch) {
+        cancelPress();
+      }
+    });
+
+    document.addEventListener('touchmove', blockTouchScroll, { passive: false });
 
     list.addEventListener('lostpointercapture', () => {
       if (state.isDragging) {
