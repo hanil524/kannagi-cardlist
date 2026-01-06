@@ -45,7 +45,7 @@ let startY = 0;
 let observer = null;
 let isObserverSetup = false;
 
-const MAX_CONCURRENT_IMAGE_LOADS = 4;
+const MAX_CONCURRENT_IMAGE_LOADS = 6;
 const imageLoadQueue = [];
 const queuedImages = new Set();
 const loadingImages = new Set();
@@ -346,14 +346,14 @@ document.addEventListener('DOMContentLoaded', () => {
     showNextImage();
   });
 
-    // 遅延読み込みの処理
-  // 表示の先読み枚数と初期読み込み枚数を拡張（+15枚）
-  const PRELOAD_AHEAD_COUNT = 6; // 先読み枚数を抑える
-  const INITIAL_LAZYLOAD_COUNT = 20; // 初期読み込み枚数を抑える
+  // 遅延読み込みの処理
+  // 表示の先読み枚数と初期読み込み枚数を適度に増やす
+  const PRELOAD_AHEAD_COUNT = 12;
+  const INITIAL_LAZYLOAD_COUNT = 30;
   const options = {
     root: null,
-    rootMargin: '200px',
-    threshold: 0.1
+    rootMargin: '400px 0px',
+    threshold: 0.01
   };
 
   // ObserverをグローバルObserverとして初期化（全デバイス共通）
@@ -1789,6 +1789,7 @@ document.addEventListener('DOMContentLoaded', updateActiveFilters);
 const loadVisibleImages = () => {
   const images = document.querySelectorAll('.card img:not(.loaded)');
   const viewportHeight = window.innerHeight;
+  const preloadMargin = 300;
   const visibleImages = [];
 
   images.forEach((img) => {
@@ -1797,7 +1798,7 @@ const loadVisibleImages = () => {
       return;
     }
     const rect = img.getBoundingClientRect();
-    if (rect.top >= 0 && rect.top <= viewportHeight) {
+    if (rect.bottom >= -preloadMargin && rect.top <= viewportHeight + preloadMargin) {
       visibleImages.push({ img, top: rect.top });
     }
   });
