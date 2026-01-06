@@ -11292,6 +11292,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2125"
+  data-name="触らぬ神に祟り無し(ふらぬかみにたたりなし)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 不吉"
+  data-keyword=""
+  data-role="常時 札除去"
+>
+  <img data-src="images/card_14_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2126"
   data-name="妊婦絵(にんぷえ)"
   data-cost="2"
@@ -11881,6 +11897,22 @@ data-role="ロック"
   data-role="相手ドロー 底送り ダメ無効"
 >
   <img data-src="images/card_14_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2209"
+  data-name="呪札(じゅふ)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword=""
+  data-role="憑依破壊"
+>
+  <img data-src="images/card_14_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
