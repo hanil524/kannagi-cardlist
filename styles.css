@@ -2695,12 +2695,46 @@ body.modal-open {
   gap: 9px;
   overflow-y: auto; /* 縦方向のスクロールを有効化 */
   flex-grow: 1; /* 残りのスペースを全て使用 */
+  position: relative;
+}
+
+@media (pointer: coarse) {
+  .deck-list-items,
+  .deck-list-item,
+  .deck-list-item * {
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 
 .deck-list-item {
   display: flex;
   gap: 10px;
   align-items: center;
+  transition: transform 0.16s ease;
+}
+
+.deck-list-items.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+}
+
+.deck-list-item.dragging {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+  transform: scale(1.02);
+  background-color: rgba(58, 58, 58, 0.9);
+  border-radius: 6px;
+}
+
+.deck-list-placeholder {
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* デッキ一覧アイテムのコンテナ */
