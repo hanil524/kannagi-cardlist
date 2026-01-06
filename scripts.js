@@ -359,12 +359,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ObserverをグローバルObserverとして初期化（全デバイス共通）
   if (!observer) {
     observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          loadImage(entry.target, true);
-          observer.unobserve(entry.target);
-        }
-      });
+      const intersecting = entries.filter((entry) => entry.isIntersecting);
+      if (intersecting.length === 0) {
+        return;
+      }
+
+      intersecting.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      for (let i = intersecting.length - 1; i >= 0; i--) {
+        const entry = intersecting[i];
+        loadImage(entry.target, true);
+        observer.unobserve(entry.target);
+      }
     }, options);
   }
 
@@ -413,16 +419,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 初期表示の画像数を制限
   const loadInitialImages = () => {
-    const images = document.querySelectorAll('.card img');
-    images.forEach((img, index) => {
-      if (index < INITIAL_LAZYLOAD_COUNT) {
-        // 最初の35枚（従来より+15枚）
-        loadImage(img, true);
-        if (index === INITIAL_LAZYLOAD_COUNT - 1) {
-          preloadNextImages(index, PRELOAD_AHEAD_COUNT);
-        }
-      }
-    });
+    const images = Array.from(document.querySelectorAll('.card img'));
+    const initialCount = Math.min(INITIAL_LAZYLOAD_COUNT, images.length);
+
+    for (let i = initialCount - 1; i >= 0; i--) {
+      loadImage(images[i], true);
+    }
+
+    if (initialCount > 0) {
+      preloadNextImages(initialCount - 1, PRELOAD_AHEAD_COUNT);
+    }
   };
 
   // スクロールイベントの処理
@@ -1783,6 +1789,7 @@ document.addEventListener('DOMContentLoaded', updateActiveFilters);
 const loadVisibleImages = () => {
   const images = document.querySelectorAll('.card img:not(.loaded)');
   const viewportHeight = window.innerHeight;
+  const visibleImages = [];
 
   images.forEach((img) => {
     const card = img.closest('.card');
@@ -1791,9 +1798,15 @@ const loadVisibleImages = () => {
     }
     const rect = img.getBoundingClientRect();
     if (rect.top >= 0 && rect.top <= viewportHeight) {
-      loadImage(img, true);
+      visibleImages.push({ img, top: rect.top });
     }
   });
+
+  visibleImages.sort((a, b) => a.top - b.top);
+
+  for (let i = visibleImages.length - 1; i >= 0; i--) {
+    loadImage(visibleImages[i].img, true);
+  }
 };
 
 // 並び「季節」の実装
@@ -3772,7 +3785,7 @@ const deckManager = {
     }
     list.dataset.dragSortInitialized = 'true';
 
-    const LONG_PRESS_MS = 600;
+    const LONG_PRESS_MS = 400;
     const MOVE_TOLERANCE = 8;
     const SCROLL_EDGE = 40;
     const MAX_SCROLL_SPEED = 12;
