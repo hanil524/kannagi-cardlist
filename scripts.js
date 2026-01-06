@@ -3583,11 +3583,13 @@ const setupCardControls = (controls, card, cardName) => {
 const deckManager = {
   currentDeckId: 1,
   decks: {},
+  deckOrder: [],
 
   // 初期化時にデッキデータを確実に読み込む
   initialize() {
     // 既存のデッキデータをロード
     this.loadFromLocalStorage();
+    this.applyDeckOrder();
 
     // デッキヘッダーの切り替えボタン
     const deckMenu = document.querySelector('.deck-menu');
@@ -3633,6 +3635,80 @@ const deckManager = {
     }
   },
 
+  getDeckOrderFromDOM() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return [];
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list) {
+      return [];
+    }
+    return Array.from(list.querySelectorAll('.deck-list-item .deck-select-button'))
+      .map((button) => parseInt(button.dataset.deckId, 10))
+      .filter((id) => Number.isFinite(id));
+  },
+
+  applyDeckOrder() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return;
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list) {
+      return;
+    }
+    const items = Array.from(list.querySelectorAll('.deck-list-item'));
+    if (!items.length) {
+      return;
+    }
+    const idToItem = new Map();
+    items.forEach((item) => {
+      const button = item.querySelector('.deck-select-button');
+      const id = button ? parseInt(button.dataset.deckId, 10) : NaN;
+      if (Number.isFinite(id)) {
+        idToItem.set(id, item);
+      }
+    });
+
+    const desiredOrder =
+      Array.isArray(this.deckOrder) && this.deckOrder.length
+        ? this.deckOrder
+        : items
+            .map((item) => {
+              const button = item.querySelector('.deck-select-button');
+              return button ? parseInt(button.dataset.deckId, 10) : NaN;
+            })
+            .filter((id) => Number.isFinite(id));
+
+    const orderedItems = [];
+    desiredOrder.forEach((id) => {
+      const item = idToItem.get(id);
+      if (item) {
+        orderedItems.push(item);
+      }
+    });
+    items.forEach((item) => {
+      if (!orderedItems.includes(item)) {
+        orderedItems.push(item);
+      }
+    });
+    orderedItems.forEach((item) => list.appendChild(item));
+    this.deckOrder = orderedItems
+      .map((item) => {
+        const button = item.querySelector('.deck-select-button');
+        return button ? parseInt(button.dataset.deckId, 10) : NaN;
+      })
+      .filter((id) => Number.isFinite(id));
+  },
+
+  updateDeckOrderFromDOM() {
+    const order = this.getDeckOrderFromDOM();
+    if (order.length) {
+      this.deckOrder = order;
+    }
+  },
+
   // setupEventListeners メソッド
   setupEventListeners() {
     const modal = document.getElementById('deck-list-modal');
@@ -3669,6 +3745,342 @@ const deckManager = {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         this.closeDeckList();
+      }
+    });
+
+    this.setupDeckListDrag();
+  },
+
+  setupDeckListDrag() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return;
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list || list.dataset.dragSortInitialized === 'true') {
+      return;
+    }
+    list.dataset.dragSortInitialized = 'true';
+
+    const LONG_PRESS_MS = 600;
+    const SCROLL_EDGE = 40;
+    const MAX_SCROLL_SPEED = 12;
+    const manager = this;
+    const hasCoarsePointer = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false;
+
+    const state = {
+      pointerId: null,
+      isPressing: false,
+      isDragging: false,
+      suppressClick: false,
+      isTouch: false,
+      scrollStart: 0,
+      scrollMax: 0,
+      startX: 0,
+      startY: 0,
+      lastX: 0,
+      lastY: 0,
+      offsetX: 0,
+      offsetY: 0,
+      itemHeight: 0,
+      currentItem: null,
+      placeholder: null,
+      longPressTimer: null
+    };
+
+    const clearLongPress = () => {
+      if (state.longPressTimer) {
+        clearTimeout(state.longPressTimer);
+        state.longPressTimer = null;
+      }
+    };
+
+    const capturePositions = () => {
+      const positions = new Map();
+      Array.from(list.children).forEach((item) => {
+        if (item === state.currentItem || item === state.placeholder) {
+          return;
+        }
+        positions.set(item, item.getBoundingClientRect());
+      });
+      return positions;
+    };
+
+    const animateReorder = (prevPositions) => {
+      prevPositions.forEach((rect, item) => {
+        const nextRect = item.getBoundingClientRect();
+        const deltaX = rect.left - nextRect.left;
+        const deltaY = rect.top - nextRect.top;
+        if (deltaX || deltaY) {
+          item.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          item.style.transition = 'transform 0s';
+          requestAnimationFrame(() => {
+            item.style.transition = 'transform 160ms ease';
+            item.style.transform = '';
+          });
+          setTimeout(() => {
+            item.style.transition = '';
+          }, 200);
+        }
+      });
+    };
+
+    const beginDrag = () => {
+      if (!state.isPressing || state.isDragging || !state.currentItem) {
+        return;
+      }
+      clearLongPress();
+      state.isDragging = true;
+      state.suppressClick = true;
+
+      const item = state.currentItem;
+      const listRect = list.getBoundingClientRect();
+      const rect = item.getBoundingClientRect();
+      const startX = state.lastX || state.startX;
+      const startY = state.lastY || state.startY;
+      state.offsetX = startX - rect.left;
+      state.offsetY = startY - rect.top;
+      state.itemHeight = rect.height;
+
+      state.placeholder = document.createElement('div');
+      state.placeholder.className = 'deck-list-placeholder';
+      state.placeholder.style.height = `${rect.height}px`;
+      item.parentNode.insertBefore(state.placeholder, item.nextSibling);
+
+      const initialTop = rect.top - listRect.top + list.scrollTop;
+
+      item.classList.add('dragging');
+      item.style.width = `${listRect.width}px`;
+      item.style.left = '0px';
+      item.style.top = `${initialTop}px`;
+      item.style.position = 'absolute';
+      item.style.zIndex = '5000';
+      item.style.pointerEvents = 'none';
+
+      list.classList.add('is-dragging');
+      try {
+        item.setPointerCapture(state.pointerId);
+      } catch (err) {
+        // Pointer capture is best-effort.
+      }
+
+      item.style.left = '0px';
+      item.style.top = `${initialTop}px`;
+    };
+
+    const updateDragPosition = (clientY) => {
+      if (!state.currentItem) {
+        return;
+      }
+      const listRect = list.getBoundingClientRect();
+      const maxTop = Math.max(0, list.scrollHeight - state.itemHeight);
+      const nextTop = clientY - listRect.top + list.scrollTop - state.offsetY;
+      const clampedTop = Math.max(0, Math.min(maxTop, nextTop));
+      state.currentItem.style.left = '0px';
+      state.currentItem.style.top = `${clampedTop}px`;
+    };
+
+    const updatePlaceholder = (clientY) => {
+      if (!state.placeholder) {
+        return;
+      }
+      const items = Array.from(list.querySelectorAll('.deck-list-item')).filter(
+        (item) => item !== state.currentItem
+      );
+      const target = items.find((item) => {
+        const rect = item.getBoundingClientRect();
+        return clientY < rect.top + rect.height / 2;
+      });
+
+      if (target) {
+        if (state.placeholder.nextSibling === target) {
+          return;
+        }
+        const prevPositions = capturePositions();
+        list.insertBefore(state.placeholder, target);
+        animateReorder(prevPositions);
+        return;
+      }
+
+      if (!state.placeholder.nextSibling) {
+        return;
+      }
+      const prevPositions = capturePositions();
+      list.appendChild(state.placeholder);
+      animateReorder(prevPositions);
+    };
+
+    const autoScroll = (clientY) => {
+      const rect = list.getBoundingClientRect();
+      let delta = 0;
+      if (clientY < rect.top + SCROLL_EDGE) {
+        delta = -MAX_SCROLL_SPEED * ((SCROLL_EDGE - (clientY - rect.top)) / SCROLL_EDGE);
+      } else if (clientY > rect.bottom - SCROLL_EDGE) {
+        delta = MAX_SCROLL_SPEED * ((SCROLL_EDGE - (rect.bottom - clientY)) / SCROLL_EDGE);
+      }
+      if (delta !== 0) {
+        list.scrollTop += delta;
+      }
+    };
+
+    const finishDrag = () => {
+      if (!state.currentItem) {
+        state.isDragging = false;
+        state.isPressing = false;
+        state.pointerId = null;
+        state.suppressClick = false;
+        state.isTouch = false;
+        state.scrollStart = 0;
+        state.scrollMax = 0;
+        clearLongPress();
+        return;
+      }
+
+      const item = state.currentItem;
+      if (state.placeholder && state.placeholder.parentNode) {
+        state.placeholder.parentNode.insertBefore(item, state.placeholder);
+        state.placeholder.remove();
+      }
+
+      item.classList.remove('dragging');
+      item.style.position = '';
+      item.style.left = '';
+      item.style.top = '';
+      item.style.width = '';
+      item.style.zIndex = '';
+      item.style.pointerEvents = '';
+      list.classList.remove('is-dragging');
+
+      clearLongPress();
+      state.isDragging = false;
+      state.isPressing = false;
+      state.pointerId = null;
+      state.currentItem = null;
+      state.isTouch = false;
+      state.scrollStart = 0;
+      state.scrollMax = 0;
+
+      manager.updateDeckOrderFromDOM();
+      manager.saveToLocalStorage();
+
+      setTimeout(() => {
+        state.suppressClick = false;
+      }, 0);
+    };
+
+    const cancelPress = () => {
+      clearLongPress();
+      state.isPressing = false;
+      state.pointerId = null;
+      state.currentItem = null;
+      state.isTouch = false;
+      state.scrollStart = 0;
+      state.scrollMax = 0;
+    };
+
+    const isIgnoredTarget = (target) =>
+      target.closest('.deck-edit-button, .deck-delete-button, .deck-list-close');
+
+    list.addEventListener(
+      'click',
+      (e) => {
+        if (state.suppressClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          state.suppressClick = false;
+        }
+      },
+      true
+    );
+
+    list.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) {
+        return;
+      }
+      if (isIgnoredTarget(e.target)) {
+        return;
+      }
+      const item = e.target.closest('.deck-list-item');
+      if (!item) {
+        return;
+      }
+      state.isPressing = true;
+      state.isTouch =
+        e.pointerType === 'touch' || e.pointerType === 'pen' || (e.pointerType === 'mouse' && hasCoarsePointer);
+      state.pointerId = e.pointerId;
+      state.currentItem = item;
+      state.startX = e.clientX;
+      state.startY = e.clientY;
+      state.lastX = e.clientX;
+      state.lastY = e.clientY;
+      state.scrollStart = list.scrollTop;
+      state.scrollMax = Math.max(0, list.scrollHeight - list.clientHeight);
+      state.longPressTimer = setTimeout(beginDrag, LONG_PRESS_MS);
+    });
+
+    list.addEventListener(
+      'pointermove',
+      (e) => {
+        if (!state.isPressing || state.pointerId !== e.pointerId) {
+          return;
+        }
+        state.lastX = e.clientX;
+        state.lastY = e.clientY;
+        if (!state.isDragging) {
+          if (state.isTouch) {
+            e.preventDefault();
+            const deltaY = e.clientY - state.startY;
+            const nextScroll = state.scrollStart - deltaY;
+            list.scrollTop = Math.max(0, Math.min(state.scrollMax, nextScroll));
+          }
+          return;
+        }
+
+        e.preventDefault();
+        autoScroll(e.clientY);
+        updateDragPosition(e.clientY);
+        updatePlaceholder(e.clientY);
+      },
+      { passive: false }
+    );
+
+    list.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!state.isPressing || state.isDragging) {
+          return;
+        }
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+
+    list.addEventListener('pointerup', (e) => {
+      if (state.pointerId !== e.pointerId) {
+        return;
+      }
+      if (state.isDragging) {
+        e.preventDefault();
+        finishDrag();
+        return;
+      }
+      cancelPress();
+    });
+
+    list.addEventListener('pointercancel', (e) => {
+      if (state.pointerId !== e.pointerId) {
+        return;
+      }
+      if (state.isDragging) {
+        finishDrag();
+        return;
+      }
+      cancelPress();
+    });
+
+    list.addEventListener('lostpointercapture', () => {
+      if (state.isDragging) {
+        finishDrag();
       }
     });
   },
@@ -3730,7 +4142,8 @@ const deckManager = {
   saveToLocalStorage() {
     const saveData = {
       currentDeckId: this.currentDeckId,
-      decks: this.decks
+      decks: this.decks,
+      deckOrder: this.deckOrder
     };
     localStorage.setItem('kannagi-deck-manager', JSON.stringify(saveData));
   },
@@ -3740,6 +4153,7 @@ const deckManager = {
     const saveData = {
       currentDeckId: this.currentDeckId,
       decks: this.decks,
+      deckOrder: this.deckOrder,
       version: '2'
     };
     localStorage.setItem('kannagi-deck-manager-v2', JSON.stringify(saveData));
@@ -3752,6 +4166,9 @@ const deckManager = {
         const data = JSON.parse(saved);
         this.currentDeckId = data.currentDeckId || 1;
         this.decks = data.decks || {};
+        this.deckOrder = Array.isArray(data.deckOrder)
+          ? data.deckOrder.map((id) => parseInt(id, 10)).filter((id) => Number.isFinite(id))
+          : [];
 
         // デッキ名を復元
         Object.entries(this.decks).forEach(([deckId, deck]) => {
@@ -3765,6 +4182,7 @@ const deckManager = {
       console.error('デッキデータの読み込みに失敗しました:', e);
       this.currentDeckId = 1;
       this.decks = {};
+      this.deckOrder = [];
     }
   },
 
