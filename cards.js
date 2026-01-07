@@ -12624,5 +12624,21 @@ data-role="自傷ダメ 札無効"
 >
   <img data-src="images/card_14_p (58).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+class="card"
+data-number="10043"
+data-name="螺旋階段の悪夢（らせんかいだんのあくむ）"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-rare=""
+data-season="春"
+data-type="場所札"
+data-attribute="悪夢"
+data-keyword=""
+data-role="魂加速 魂戻し 常時"
+>
+<img data-src="images/card_14_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
