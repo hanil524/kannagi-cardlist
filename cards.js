@@ -11260,6 +11260,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2121"
+  data-name="咎人の刀(とがびとのかたな)"
+  data-cost="15"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="刀 呪"
+  data-keyword="呪い"
+  data-role="札除去"
+>
+  <img data-src="images/card_14_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2122"
   data-name="血の祭儀(ちのさいぎ)"
   data-cost="1"
@@ -11305,6 +11321,22 @@ data-role="ロック"
   data-role="常時 札除去"
 >
   <img data-src="images/card_14_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2126"
+  data-name="お空のかげ(おそらのかげ)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃神社 龍"
+  data-keyword=""
+  data-role="攻撃時 サーチ 公開ドロー ドロー 底送り"
+>
+  <img data-src="images/card_14_p (62).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
