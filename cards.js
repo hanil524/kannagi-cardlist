@@ -11052,6 +11052,22 @@ data-role="ロック"
 
 <div
   class="card"
+  data-number="2101"
+  data-name="ないしょばなし"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="大蛇 噂"
+  data-keyword=""
+  data-role="攻撃時 サーチ 除外加速"
+>
+  <img data-src="images/card_14_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2102"
   data-name="妖怪美容室(ようかいびようしつ)"
   data-cost="1"
@@ -11129,6 +11145,22 @@ data-role="ロック"
   data-role="攻撃時 ドロー"
 >
   <img data-src="images/card_14_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2107"
+  data-name="化け猫(こぴーきゃっと)"
+  data-cost="4"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="猫 墓地"
+  data-keyword=""
+  data-role="常時"
+>
+  <img data-src="images/card_14_p (64).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
