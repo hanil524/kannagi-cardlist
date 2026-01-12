@@ -11629,6 +11629,22 @@ data-role="ロック"
 <div
   class="card"
   data-number="2158"
+  data-name="ヤマノケ(やまのけ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="正体不明"
+  data-role=""
+>
+  <img data-src="images/card_14_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2159"
   data-name="深い愛情(ふかいあいじょう)"
   data-cost="0"
   data-power="0"
@@ -11721,6 +11737,22 @@ data-role="ロック"
   data-role="「伏せ」 直接ダメ ドロー"
 >
   <img data-src="images/card_14_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2167"
+  data-name="妄執の果て(もうしゅうのはて)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="陰"
+  data-keyword=""
+  data-role="ドロー 魂加速"
+>
+  <img data-src="images/card_14_p (66).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
