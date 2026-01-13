@@ -11596,7 +11596,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2153"
+  data-number="2150"
   data-name="世見狐(せみこ)"
   data-cost="3"
   data-power="3"
@@ -11612,7 +11612,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2155"
+  data-number="2151"
   data-name="死んでも許さない(しんでもゆるさない)"
   data-cost="4"
   data-power="2"
@@ -11625,6 +11625,22 @@ data-role="ロック"
   data-role="直接ダメ 憑依加速 回復フェイズ 常時"
 >
   <img data-src="images/card_14_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2152"
+  data-name="忘れないで(わすれないで)"
+  data-cost="6"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="家屋 廃屋"
+  data-keyword=""
+  data-role="常時 攻撃時 除外加速 デッキ破壊"
+>
+  <img data-src="images/card_14_p (68).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11977,6 +11993,22 @@ data-role="ロック"
   data-role=""
 >
   <img data-src="images/card_14_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2206"
+  data-name="四十七曲収録(よんじゅうななきょくしゅうろく)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 楽器"
+  data-keyword="合唱"
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (69).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
