@@ -2607,7 +2607,7 @@ data-series="百鬼夜行"
 data-rare="UC"
 data-season="春"
 data-type="道具札"
-data-role="バウンス"
+data-role="バウンス 季節札除去"
 data-keyword=""
 data-attribute="大蛇 刀"
 >
@@ -6663,7 +6663,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="SSS 廃鉱山"
 data-keyword=""
-data-role="バウンス"
+data-role="バウンス 季節札除去"
 >
 <img data-src="images/card_8_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10643,7 +10643,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="七不思議 廃隧道"
   data-keyword=""
-  data-role="ドロー バウンス"
+  data-role="ドロー バウンス 季節札除去"
 >
   <img data-src="images/card_13_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11270,7 +11270,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="大蛇 刀"
   data-keyword=""
-  data-role="バウンス"
+  data-role="バウンス 季節札除去"
 >
   <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
