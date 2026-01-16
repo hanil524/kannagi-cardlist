@@ -3448,7 +3448,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="冬"
 data-type="場所札"
-data-role="2種類札 札除去 トップ確認"
+data-role="2種類札 札除去 トップ確認 季節札除去"
 data-keyword="召喚時"
 data-attribute="妖怪 霊場"
 >
@@ -5697,7 +5697,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="うつしよ 陰"
 data-keyword=""
-data-role="札除去 相手ドロー"
+data-role="札除去 相手ドロー 季節札除去"
 >
 <img data-src="images/card_7_p (81).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7978,7 +7978,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="交通事故 噂"
 data-keyword=""
-data-role="札除去"
+data-role="札除去 季節札除去"
 >
 <img data-src="images/card_10_p (6).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11446,7 +11446,7 @@ data-role="ロック"
   data-rare="エキスパンション"
   data-attribute="奈落"
   data-keyword="召喚時"
-  data-role="札除去 ハンデス ランデス 除外加速"
+  data-role="札除去 ハンデス ランデス 除外加速 季節札除去"
 >
   <img data-src="images/card_14_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
