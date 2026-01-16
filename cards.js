@@ -12060,6 +12060,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2205"
+  data-name="■■を探しています。(■■をさがしています。)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="事件 噂"
+  data-keyword=""
+  data-role="手札公開"
+>
+  <img data-src="images/card_14_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2206"
   data-name="四十七曲収録(よんじゅうななきょくしゅうろく)"
   data-cost="5"
@@ -12124,7 +12140,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2215"
+  data-number="2213"
   data-name="後藤商店(ごとうしょうてん)"
   data-cost="4"
   data-power="9"
@@ -12169,6 +12185,22 @@ data-role="ロック"
   data-role="除外加速 「起き」"
 >
   <img data-src="images/card_14_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2218"
+  data-name="入道雲(にゅうどうぐも)"
+  data-cost="8"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="混化 秋夏"
+  data-rare="エキスパンション"
+  data-attribute="災害"
+  data-keyword="展開時"
+  data-role="札除去 季節札除去 直接ダメ"
+>
+  <img data-src="images/card_14_p (74).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
