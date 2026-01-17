@@ -11724,6 +11724,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2161"
+  data-name="泥田坊(どろたぼう)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 妖怪"
+  data-keyword=""
+  data-role="季節札除去 ドロー"
+>
+  <img data-src="images/card_14_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2162"
   data-name="わたつみの子供(わたつみのこども)"
   data-cost="6"
@@ -11833,6 +11849,22 @@ data-role="ロック"
   data-role="除外加速 ドロー"
 >
   <img data-src="images/card_14_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2173"
+  data-name="深夜の廃工場(しんやのはいこうじょう)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃施設"
+  data-keyword="妬み 召喚時"
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (77).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
