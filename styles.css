@@ -278,6 +278,11 @@ main {
 .limit-release input {
   margin: 0;
 }
+@media (max-width: 768px) {
+  .limit-release {
+    font-weight: normal;
+  }
+}
 
 /* 以前の中央配置に戻す: 個別の上書きは不要 */
 
@@ -3929,4 +3934,44 @@ body.modal-open {
 
 .filter-category:first-child {
   margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .deck-menu {
+    flex-wrap: wrap;
+    gap: clamp(4px, 1.2vw, 8px);
+  }
+
+  .deck-menu > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .deck-menu .deck-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: clamp(10px, 2.6vw, 13px);
+    line-height: 1.1;
+    padding: clamp(2px, 0.8vw, 6px) clamp(4px, 1.2vw, 10px);
+    text-align: center;
+  }
+
+  .deck-menu .deck-counter {
+    font-size: clamp(10px, 2.6vw, 13px);
+    line-height: 1.1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .deck-menu {
+    gap: 4px;
+  }
+
+  .deck-menu .deck-menu-button,
+  .deck-menu .deck-counter {
+    min-width: 0;
+  }
 }
