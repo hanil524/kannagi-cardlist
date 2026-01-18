@@ -12896,5 +12896,22 @@ data-role="魂加速 魂戻し 常時"
 >
 <img data-src="images/card_14_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+</div>
+<div
+class="card"
+data-number="10044"
+data-name="闇(やみ)"
+data-cost="0"
+data-power="0"
+data-series="エクストラルール「闇」"
+data-rare=""
+data-season="無"
+data-type=""
+data-attribute=""
+data-keyword=""
+data-role=""
+>
+<img data-src="images/card_14_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
