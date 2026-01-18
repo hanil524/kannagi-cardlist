@@ -307,7 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const limitToggle = document.getElementById('limit-release-toggle');
   if (limitToggle) {
     limitToggle.addEventListener('change', (e) => {
-      deckBuilder.limitReleaseEnabled = !!e.target.checked;
+      const limitEnabled = !!e.target.checked;
+      deckBuilder.limitReleaseEnabled = limitEnabled;
+      if (typeof deckBuilder?.showMessage === 'function') {
+        deckBuilder.showMessage(
+          limitEnabled
+            ? '枚数制限のあるカードが4枚まで使用可能になりました。'
+            : '枚数制限が再度適用されました。'
+        );
+      }
       // 画像モーダルを開いている場合、表示・ボタン状態を更新
       try {
         const imageModal = document.getElementById('image-modal');
