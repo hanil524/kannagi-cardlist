@@ -11180,6 +11180,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2109"
+  data-name="屋敷の最奥(やしきのさいおう)"
+  data-cost="9"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="人形 侵食"
+  data-keyword="召喚時"
+  data-role="憑依加速 追加行動"
+>
+  <img data-src="images/card_14_p (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2110"
   data-name="猫屋敷の闇(ねこやしきのやみ)"
   data-cost="8"
@@ -11194,6 +11210,7 @@ data-role="ロック"
 >
   <img data-src="images/card_14_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+
 <div
   class="card"
   data-number="2111"
@@ -11561,6 +11578,22 @@ data-role="ロック"
   data-role="魂加速 直接ダメ"
 >
   <img data-src="images/card_14_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2145"
+  data-name="人形屋敷(どーるはうす)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人形 廃屋"
+  data-keyword="不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (80).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -12903,7 +12936,8 @@ data-number="10044"
 data-name="闇(やみ)"
 data-cost="0"
 data-power="0"
-data-series="エクストラルール「闇」"
+data-series=""
+data-series-info="エクストラルール「闇」<br><br>【札名】闇<br>【札種類】なし<br>【属性】なし<br>【コスト】零<br>【季節】無<br>・この札は自札の効果を含めて、一切の効果対象にならない。<br>・あらゆる理由で魂・除外・徳にならない。<br>・零探しを含む、あらゆる場面でこの札を「視認」した時、自分の手札公開場に置く。<br>・この札は一度公開すると「非公開手札」にできない。<br>・この札は「零探し」の対象に選べない。<br>・この札は手札として数える。<br>・この札が手札公開場にある時、この札は手札超過で選択できない。<br>・エクストラルール：参加者8名以上のトーナメント大会において『闇』を採用して対戦し、上位3位以内に入った場合、あなたは「大会の招待状」ではなく「別の新たな招待状」を獲得する。"
 data-rare=""
 data-season="無"
 data-type=""
