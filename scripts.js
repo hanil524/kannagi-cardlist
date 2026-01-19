@@ -1346,6 +1346,11 @@ let visibleCards = [];
 // 収録情報のキャッシュ
 const seriesInfoCache = new Map();
 
+const normalizeSeriesInfoText = (text) => {
+  if (!text) return '';
+  return text.replace(/<br\s*\/?>|\\n/gi, '\n');
+};
+
 // 収録情報を効率的に取得する関数
 function getSeriesInfo(cardName) {
   // キャッシュにある場合はそれを返す
@@ -1356,8 +1361,12 @@ function getSeriesInfo(cardName) {
   // キャッシュにない場合のみ検索
   const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
   const allSeriesSet = new Set();
+  const seriesInfoSet = new Set();
   
   allCardsWithSameName.forEach(card => {
+    if (card.dataset.seriesInfo) {
+      seriesInfoSet.add(card.dataset.seriesInfo);
+    }
     if (card.dataset.series) {
       const seriesList = card.dataset.series.split(' ');
       seriesList.forEach(series => allSeriesSet.add(series));
@@ -1365,10 +1374,13 @@ function getSeriesInfo(cardName) {
   });
   
   const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+  const extraInfoText = seriesInfoSet.size > 0 ? Array.from(seriesInfoSet).join('\n') : '';
+  const combinedText = [seriesText, extraInfoText].filter(Boolean).join('\n');
+  const formattedText = normalizeSeriesInfoText(combinedText);
   
   // キャッシュに保存
-  seriesInfoCache.set(cardName, seriesText);
-  return seriesText;
+  seriesInfoCache.set(cardName, formattedText);
+  return formattedText;
 }
 
 // 画像モーダル内のボタン制御
