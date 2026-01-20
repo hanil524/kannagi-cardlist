@@ -12013,6 +12013,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2185"
+  data-name="赤い女(あかいおんな)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="園 血液"
+  data-keyword="楽園"
+  data-role="ヒール ドロー"
+>
+  <img data-src="images/card_14_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2186"
   data-name="融合体(ゆうごうたい)"
   data-cost="7"
@@ -12106,6 +12122,22 @@ data-role="ロック"
   data-role=""
 >
   <img data-src="images/card_14_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2200"
+  data-name="渡り歩く蟹麺(わたりあるくかにめん)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="糧 蟲"
+  data-keyword=""
+  data-role="直接ダメ 効果を失う バニラ"
+>
+  <img data-src="images/card_14_p (82).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
