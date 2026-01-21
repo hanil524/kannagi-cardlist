@@ -1651,8 +1651,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const menuOverlay = document.querySelector('.menu-overlay');
   const closeMenuButton = document.querySelector('.close-menu');
 
-  // タッチデバイスでのズームを防止
-  document.addEventListener('touchstart', preventZoom, { passive: false });
+  // iOS only: prevent double-tap zoom without blocking scroll
+  if (isIOS()) {
+    document.addEventListener('touchstart', preventZoom, { passive: false });
+  }
 
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
@@ -1725,19 +1727,19 @@ function preventZoom(e) {
     return; // マルチタッチの場合はここで終了
   }
 
+  var target = e.target;
   var t2 = e.timeStamp;
-  var t1 = e.target.dataset && e.target.dataset.lastTouch ? e.target.dataset.lastTouch : 0;
+  var t1 = target && target.dataset && target.dataset.lastTouch ? Number(target.dataset.lastTouch) : 0;
   var dt = t2 - t1;
-  var fingers = e.touches.length;
 
-  if (!dt || dt > 500 || fingers > 1) return; // 長押しやマルチタッチは無視
-
-  e.preventDefault();
-  e.target.click();
+  if (t1 && dt < 500) {
+    e.preventDefault();
+    target.click();
+  }
 
   // 最後のタッチ時間を更新
-  if (e.target.dataset) {
-    e.target.dataset.lastTouch = t2;
+  if (target && target.dataset) {
+    target.dataset.lastTouch = t2;
   }
 }
 
