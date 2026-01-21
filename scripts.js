@@ -32,6 +32,40 @@ const isIOS = () => {
          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 };
 
+const hasVisibleModal = () => {
+  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal'];
+  const modalOpen = modalIds.some((id) => {
+    const el = document.getElementById(id);
+    return el && el.style.display && el.style.display !== 'none';
+  });
+  if (modalOpen) {
+    return true;
+  }
+  return !!document.querySelector('.confirm-popup, .zero-search-modal, .distribution-modal, .deck-image-modal');
+};
+
+const ensureScrollUnlocked = () => {
+  if (!document.body || hasVisibleModal()) {
+    return;
+  }
+  if (
+    document.body.classList.contains('modal-open') ||
+    document.body.style.position === 'fixed' ||
+    document.body.style.overflow === 'hidden'
+  ) {
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    document.body.style.touchAction = '';
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.position = '';
+    document.documentElement.style.height = '';
+  }
+};
+
 // 最初にすべてのグローバル変数を定義
 window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
 let sortCriteria = null;
@@ -279,6 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 複製カードにクリック判定を付与
   const cardList = document.getElementById('card-list');
+  if (cardList) {
+    cardList.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
+  }
 
   // フィルターボタンにクリックイベントを追加
   const filterButtons = document.querySelectorAll('.filter-buttons button');
@@ -837,6 +874,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCardCount();
   // 初期表示時にフィルター詳細を更新
   updateFilterDetails();
+  ensureScrollUnlocked();
 });
 
 // 以下の関数は変更なし
