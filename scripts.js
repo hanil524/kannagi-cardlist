@@ -32,8 +32,12 @@ const isIOS = () => {
          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 };
 
+const isAndroid = () => {
+  return /Android/i.test(navigator.userAgent);
+};
+
 const hasVisibleModal = () => {
-  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal'];
+  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal'];
   const modalOpen = modalIds.some((id) => {
     const el = document.getElementById(id);
     return el && el.style.display && el.style.display !== 'none';
@@ -45,24 +49,33 @@ const hasVisibleModal = () => {
 };
 
 const ensureScrollUnlocked = () => {
-  if (!document.body || hasVisibleModal()) {
+  const body = document.body;
+  const docEl = document.documentElement;
+  if (!body || hasVisibleModal()) {
     return;
   }
-  if (
-    document.body.classList.contains('modal-open') ||
-    document.body.style.position === 'fixed' ||
-    document.body.style.overflow === 'hidden'
-  ) {
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    document.body.style.touchAction = '';
-    document.documentElement.style.overflow = '';
-    document.documentElement.style.position = '';
-    document.documentElement.style.height = '';
+  const bodyLocked =
+    body.classList.contains('modal-open') ||
+    body.classList.contains('no-scroll') ||
+    body.classList.contains('scroll-locked') ||
+    body.style.position === 'fixed' ||
+    body.style.overflow === 'hidden' ||
+    body.style.touchAction === 'none' ||
+    docEl.style.overflow === 'hidden' ||
+    docEl.style.position === 'fixed' ||
+    docEl.style.touchAction === 'none';
+  if (bodyLocked) {
+    body.classList.remove('modal-open', 'no-scroll', 'scroll-locked');
+    body.style.overflow = '';
+    body.style.position = '';
+    body.style.top = '';
+    body.style.width = '';
+    body.style.paddingRight = '';
+    body.style.touchAction = '';
+    docEl.style.overflow = '';
+    docEl.style.position = '';
+    docEl.style.height = '';
+    docEl.style.touchAction = '';
   }
 };
 
@@ -315,6 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardList = document.getElementById('card-list');
   if (cardList) {
     cardList.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
+  }
+  if (isAndroid()) {
+    document.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
   }
 
   // フィルターボタンにクリックイベントを追加
