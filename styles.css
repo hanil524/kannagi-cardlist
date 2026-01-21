@@ -281,7 +281,8 @@ main {
 main,
 #card-list,
 #card-list .card,
-#card-list .card img {
+#card-list .card img,
+#card-list * {
   touch-action: pan-y;
   -ms-touch-action: pan-y;
 }
