@@ -95,6 +95,9 @@ const setupAndroidScrollAssist = () => {
     startX: 0,
     startY: 0,
     lastY: 0,
+    lastMoveTime: 0,
+    velocityY: 0,
+    inertiaFrame: null,
     startScrollY: 0,
     moveCount: 0,
     manualScroll: false,
@@ -132,6 +135,54 @@ const setupAndroidScrollAssist = () => {
     state.moveCount = 0;
   };
 
+  const stopInertia = () => {
+    if (state.inertiaFrame) {
+      cancelAnimationFrame(state.inertiaFrame);
+      state.inertiaFrame = null;
+    }
+    state.velocityY = 0;
+  };
+
+  const startInertia = () => {
+    if (state.inertiaFrame || state.nativeScrollDetected) {
+      return;
+    }
+    const minVelocity = 0.02;
+    const friction = 0.95;
+    let lastTime = performance.now();
+
+    const step = (now) => {
+      if (hasVisibleModal()) {
+        stopInertia();
+        return;
+      }
+
+      const dt = Math.max(1, now - lastTime);
+      lastTime = now;
+      const decay = Math.pow(friction, dt / 16.67);
+      state.velocityY *= decay;
+
+      if (Math.abs(state.velocityY) < minVelocity) {
+        stopInertia();
+        return;
+      }
+
+      ensureScrollUnlocked();
+      const delta = state.velocityY * dt;
+      const before = window.pageYOffset || document.documentElement.scrollTop || 0;
+      window.scrollBy(0, delta);
+      const after = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (before === after) {
+        stopInertia();
+        return;
+      }
+
+      state.inertiaFrame = requestAnimationFrame(step);
+    };
+
+    state.inertiaFrame = requestAnimationFrame(step);
+  };
+
   const onTouchStart = (e) => {
     if (e.touches.length !== 1) {
       resetState();
@@ -141,12 +192,15 @@ const setupAndroidScrollAssist = () => {
       resetState();
       return;
     }
+    stopInertia();
     ensureScrollUnlocked();
     const touch = e.touches[0];
     state.touchId = touch.identifier;
     state.startX = touch.clientX;
     state.startY = touch.clientY;
     state.lastY = touch.clientY;
+    state.lastMoveTime = performance.now();
+    state.velocityY = 0;
     state.startScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     state.moveCount = 0;
     state.manualScroll = false;
@@ -203,10 +257,24 @@ const setupAndroidScrollAssist = () => {
       window.scrollBy(0, clamped);
     }
     state.lastY = touch.clientY;
+
+    const now = performance.now();
+    const dt = Math.max(1, now - state.lastMoveTime);
+    const instantVelocity = clamped / dt;
+    state.velocityY = state.velocityY * 0.8 + instantVelocity * 0.2;
+    state.lastMoveTime = now;
   };
 
-  const onTouchEnd = () => resetState();
-  const onTouchCancel = () => resetState();
+  const onTouchEnd = () => {
+    if (state.manualScroll && !state.nativeScrollDetected) {
+      startInertia();
+    }
+    resetState();
+  };
+  const onTouchCancel = () => {
+    stopInertia();
+    resetState();
+  };
 
   document.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
   document.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
