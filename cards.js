@@ -11294,22 +11294,6 @@ data-role="ロック"
 <div
   class="card"
   data-number="2118"
-  data-name="蛇行剣(だこうけん)"
-  data-cost="3"
-  data-power="0"
-  data-series="怪談師三章"
-  data-type="道具札"
-  data-season="春"
-  data-rare="エキスパンション"
-  data-attribute="大蛇 刀"
-  data-keyword=""
-  data-role="バウンス 季節札除去"
->
-  <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-  class="card"
-  data-number="2119"
   data-name="とまんないおばんざい"
   data-cost="3"
   data-power="0"
@@ -11322,6 +11306,22 @@ data-role="ロック"
   data-role="ヒール"
 >
   <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2119"
+  data-name="蛇行剣(だこうけん)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="大蛇 刀"
+  data-keyword=""
+  data-role="バウンス 季節札除去"
+>
+  <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11741,6 +11741,38 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2155"
+  data-name="レア枠(れあわく)"
+  data-cost="10"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="幻 花"
+  data-keyword="召喚時"
+  data-role="ドロー"
+>
+  <img data-src="images/card_14_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2156"
+  data-name="黄泉平坂(よもつひらさか)"
+  data-cost="13"
+  data-power="7"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="道路 不吉"
+  data-keyword=""
+  data-role="常時 魂貫通 力固定"
+>
+  <img data-src="images/card_14_p (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2158"
   data-name="ヤマノケ(やまのけ)"
   data-cost="0"
@@ -11965,7 +11997,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2176"
+  data-number="2175"
   data-name="王国の低音奏者(おうこくのていおんそうしゃ)"
   data-cost="5"
   data-power="3"
@@ -11981,7 +12013,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2177"
+  data-number="2176"
   data-name="お化けマンション(おばけまんしょん)"
   data-cost="6"
   data-power="1"
@@ -11997,7 +12029,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2178"
+  data-number="2177"
   data-name="ゆーちゃそ王子(ゆーちゃそおうじ)"
   data-cost="7"
   data-power="5"
@@ -12010,6 +12042,22 @@ data-role="ロック"
   data-role="攻撃時 魂戻し"
 >
   <img data-src="images/card_14_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2178"
+  data-name="鬼我島(おにがしま)"
+  data-cost="9"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_14_p (91).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -12058,6 +12106,22 @@ data-role="ロック"
   data-role="サーチ 底送り"
 >
   <img data-src="images/card_14_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2184"
+  data-name="奥へ進む者(おくへすすむもの)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃隧道 怨念"
+  data-keyword=""
+  data-role="除外加速"
+>
+  <img data-src="images/card_14_p (90).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -12125,7 +12189,7 @@ data-role="ロック"
 </div>
 <div
   class="card"
-  data-number="2195"
+  data-number="2194"
   data-name="休憩中(きゅうけいちゅう)"
   data-cost="0"
   data-power="1"
@@ -12138,6 +12202,22 @@ data-role="ロック"
   data-role="手札公開"
 >
   <img data-src="images/card_14_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2195"
+  data-name="妙味真似(みょうみまね)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="不吉"
+  data-keyword=""
+  data-role="攻撃時 属性削除"
+>
+  <img data-src="images/card_14_p (88).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
