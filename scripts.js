@@ -45,6 +45,9 @@ const hasVisibleModal = () => {
   if (modalOpen) {
     return true;
   }
+  if (document.querySelector('.menu-overlay.active, .mobile-nav.active')) {
+    return true;
+  }
   return !!document.querySelector('.confirm-popup, .zero-search-modal, .distribution-modal, .deck-image-modal');
 };
 
@@ -77,6 +80,138 @@ const ensureScrollUnlocked = () => {
     docEl.style.height = '';
     docEl.style.touchAction = '';
   }
+};
+
+let androidScrollAssistInitialized = false;
+
+const setupAndroidScrollAssist = () => {
+  if (androidScrollAssistInitialized || !isAndroid()) {
+    return;
+  }
+  androidScrollAssistInitialized = true;
+
+  const state = {
+    touchId: null,
+    startX: 0,
+    startY: 0,
+    lastY: 0,
+    startScrollY: 0,
+    moveCount: 0,
+    manualScroll: false,
+    nativeScrollDetected: false
+  };
+
+  const isInteractiveTarget = (target) => {
+    return !!target.closest('button, a, input, textarea, select, label');
+  };
+
+  const isBlockedRegion = (target) => {
+    return !!target.closest(
+      '.mobile-nav, .menu-overlay, #modal, #image-modal, #deck-modal, #deck-list-modal, #deck-share-modal, ' +
+        '.deck-image-modal, .distribution-modal, .zero-search-modal, .confirm-popup'
+    );
+  };
+
+  const isEligibleTarget = (target) => {
+    if (!target || hasVisibleModal()) {
+      return false;
+    }
+    if (!target.closest('main')) {
+      return false;
+    }
+    if (isBlockedRegion(target) || isInteractiveTarget(target)) {
+      return false;
+    }
+    return true;
+  };
+
+  const resetState = () => {
+    state.touchId = null;
+    state.manualScroll = false;
+    state.nativeScrollDetected = false;
+    state.moveCount = 0;
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches.length !== 1) {
+      resetState();
+      return;
+    }
+    if (!isEligibleTarget(e.target)) {
+      resetState();
+      return;
+    }
+    ensureScrollUnlocked();
+    const touch = e.touches[0];
+    state.touchId = touch.identifier;
+    state.startX = touch.clientX;
+    state.startY = touch.clientY;
+    state.lastY = touch.clientY;
+    state.startScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    state.moveCount = 0;
+    state.manualScroll = false;
+    state.nativeScrollDetected = false;
+  };
+
+  const onTouchMove = (e) => {
+    if (state.touchId === null) {
+      return;
+    }
+    const touch = Array.from(e.touches).find((t) => t.identifier === state.touchId);
+    if (!touch) {
+      return;
+    }
+
+    const dx = touch.clientX - state.startX;
+    const dy = touch.clientY - state.startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    const threshold = 6;
+
+    if (absDy < threshold) {
+      return;
+    }
+    if (absDx > absDy) {
+      resetState();
+      return;
+    }
+
+    if (!state.manualScroll && !state.nativeScrollDetected) {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (Math.abs(currentScrollY - state.startScrollY) > 1) {
+        state.nativeScrollDetected = true;
+        return;
+      }
+      state.moveCount += 1;
+      if (state.moveCount < 2) {
+        return;
+      }
+      state.manualScroll = true;
+    }
+
+    if (state.nativeScrollDetected || !state.manualScroll) {
+      return;
+    }
+
+    ensureScrollUnlocked();
+    e.preventDefault();
+
+    const deltaY = state.lastY - touch.clientY;
+    const maxDelta = 120;
+    const clamped = Math.max(-maxDelta, Math.min(maxDelta, deltaY));
+    if (clamped) {
+      window.scrollBy(0, clamped);
+    }
+    state.lastY = touch.clientY;
+  };
+
+  const onTouchEnd = () => resetState();
+  const onTouchCancel = () => resetState();
+
+  document.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
+  document.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+  document.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
+  document.addEventListener('touchcancel', onTouchCancel, { passive: true, capture: true });
 };
 
 // 最初にすべてのグローバル変数を定義
@@ -891,6 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 初期表示時にフィルター詳細を更新
   updateFilterDetails();
   ensureScrollUnlocked();
+  setupAndroidScrollAssist();
 });
 
 // 以下の関数は変更なし
