@@ -147,9 +147,12 @@ const setupAndroidScrollAssist = () => {
     if (state.inertiaFrame || state.nativeScrollDetected) {
       return;
     }
-    const minVelocity = 0.02;
-    const friction = 0.95;
+    const minVelocity = 0.008;
+    const friction = 0.97;
+    const velocityBoost = 1.12;
     let lastTime = performance.now();
+
+    state.velocityY *= velocityBoost;
 
     const step = (now) => {
       if (hasVisibleModal()) {
@@ -261,7 +264,7 @@ const setupAndroidScrollAssist = () => {
     const now = performance.now();
     const dt = Math.max(1, now - state.lastMoveTime);
     const instantVelocity = clamped / dt;
-    state.velocityY = state.velocityY * 0.8 + instantVelocity * 0.2;
+    state.velocityY = state.velocityY * 0.65 + instantVelocity * 0.35;
     state.lastMoveTime = now;
   };
 
