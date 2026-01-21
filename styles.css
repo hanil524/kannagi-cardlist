@@ -765,6 +765,7 @@ header input::placeholder,
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
@@ -774,6 +775,7 @@ header input::placeholder,
   opacity: 1;
   visibility: visible;
   display: block;
+  pointer-events: auto;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
 }
