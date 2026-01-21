@@ -250,17 +250,8 @@ const setupAndroidScrollAssist = () => {
       return;
     }
 
-    
     ensureScrollUnlocked();
-
-    // 追加（キャンセル不可の touchmove では preventDefault しない）
-    if (!e.cancelable) {
-      state.nativeScrollDetected = true;
-      return;
-    }
-
     e.preventDefault();
-
 
     const deltaY = state.lastY - touch.clientY;
     const maxDelta = 120;
@@ -4116,7 +4107,7 @@ const deckManager = {
     };
 
     const blockTouchScroll = (e) => {
-      if (state.isDragging && e.cancelable) {
+      if (state.isDragging) {
         e.preventDefault();
       }
     };
