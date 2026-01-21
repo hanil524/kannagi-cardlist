@@ -3368,6 +3368,15 @@ body.modal-open {
   object-fit: contain;
   display: none; /* 初期状態は非表示 */
 }
+@media (pointer: coarse) {
+  .deck-list-modal .deck-preview-image {
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
 
 /* デッキ情報エリアのスタイル調整 */
 .deck-info {
