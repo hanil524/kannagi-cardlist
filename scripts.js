@@ -4061,7 +4061,18 @@ const deckManager = {
       return;
     }
     const list = modal.querySelector('.deck-list-items');
-    if (!list || list.dataset.dragSortInitialized === 'true') {
+    if (!list) {
+      return;
+    }
+    if (isAndroid() && modal.dataset.contextMenuBlocked !== 'true') {
+      modal.dataset.contextMenuBlocked = 'true';
+      modal.addEventListener('contextmenu', (e) => {
+        if (e.target && e.target.closest('.deck-preview')) {
+          e.preventDefault();
+        }
+      });
+    }
+    if (list.dataset.dragSortInitialized === 'true') {
       return;
     }
     list.dataset.dragSortInitialized = 'true';
