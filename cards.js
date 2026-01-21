@@ -11229,6 +11229,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2112"
+  data-name="戦武者(いくさむしゃ)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="古城 幻 戦 刀"
+  data-keyword="不屈"
+  data-role="バフ 魂加速"
+>
+  <img data-src="images/card_14_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2113"
   data-name="吸血(きゅうけつ)"
   data-cost="5"
@@ -11482,6 +11498,22 @@ data-role="ロック"
   data-role="除外加速 常時"
 >
   <img data-src="images/card_14_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2136"
+  data-name="怨念の憎(おんねんのぞう)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="腐乱 蟲"
+  data-keyword="憎悪"
+  data-role="直接ダメ 攻撃時"
+>
+  <img data-src="images/card_14_p (85).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -11885,6 +11917,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2171"
+  data-name="黒音れも(くろねれも)"
+  data-cost="1"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="陰 悪魔"
+  data-keyword="召喚時 合唱"
+  data-role="追加行動 攻撃時"
+>
+  <img data-src="images/card_14_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2173"
   data-name="深夜の廃工場(しんやのはいこうじょう)"
   data-cost="2"
@@ -12058,6 +12106,22 @@ data-role="ロック"
   data-role="札除去"
 >
   <img data-src="images/card_14_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2191"
+  data-name="あっ"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃病院"
+  data-keyword=""
+  data-role="季節札除去 「起き」"
+>
+  <img data-src="images/card_14_p (83).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
