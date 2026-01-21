@@ -3830,13 +3830,30 @@ const deckManager = {
       itemHeight: 0,
       currentItem: null,
       placeholder: null,
-      longPressTimer: null
+      longPressTimer: null,
+      touchBlockActive: false
     };
 
     const blockTouchScroll = (e) => {
       if (state.isDragging) {
         e.preventDefault();
       }
+    };
+
+    const enableTouchScrollBlock = () => {
+      if (state.touchBlockActive) {
+        return;
+      }
+      state.touchBlockActive = true;
+      document.addEventListener('touchmove', blockTouchScroll, { passive: false });
+    };
+
+    const disableTouchScrollBlock = () => {
+      if (!state.touchBlockActive) {
+        return;
+      }
+      state.touchBlockActive = false;
+      document.removeEventListener('touchmove', blockTouchScroll);
     };
 
     const clearLongPress = () => {
@@ -3883,6 +3900,7 @@ const deckManager = {
       clearLongPress();
       state.isDragging = true;
       state.suppressClick = true;
+      enableTouchScrollBlock();
 
       const item = state.currentItem;
       const listRect = list.getBoundingClientRect();
@@ -3983,6 +4001,7 @@ const deckManager = {
         state.pointerId = null;
         state.suppressClick = false;
         state.isTouch = false;
+        disableTouchScrollBlock();
         clearLongPress();
         return;
       }
@@ -4008,6 +4027,7 @@ const deckManager = {
       state.pointerId = null;
       state.currentItem = null;
       state.isTouch = false;
+      disableTouchScrollBlock();
 
       manager.updateDeckOrderFromDOM();
       manager.saveToLocalStorage();
@@ -4023,6 +4043,7 @@ const deckManager = {
       state.pointerId = null;
       state.currentItem = null;
       state.isTouch = false;
+      disableTouchScrollBlock();
     };
 
     const isIgnoredTarget = (target) =>
@@ -4118,8 +4139,6 @@ const deckManager = {
         cancelPress();
       }
     });
-
-    document.addEventListener('touchmove', blockTouchScroll, { passive: false });
 
     list.addEventListener('lostpointercapture', () => {
       if (state.isDragging) {
