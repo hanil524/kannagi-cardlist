@@ -11902,7 +11902,7 @@ data-role="ロック"
 <div
   class="card"
   data-number="2154"
-  data-name="AE-BC(あいびーしー)"
+  data-name="IBC(あいびーしー)"
   data-cost="9"
   data-power="5"
   data-series="怪談師三章"
