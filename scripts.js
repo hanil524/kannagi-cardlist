@@ -449,6 +449,142 @@ const filters = {
   rare: new Set()
 };
 
+let seasonAutoConfig = null;
+const autoSeasonFilters = new Set();
+
+const getSeasonFilterValues = () => {
+  const seasonElement = document.getElementById('season');
+  if (!seasonElement) {
+    return [];
+  }
+  const values = Array.from(seasonElement.querySelectorAll('button'))
+    .map((button) => button.innerText.trim())
+    .filter(Boolean);
+  return Array.from(new Set(values));
+};
+
+const canSegmentSeasonValue = (value, tokens) => {
+  if (!value || tokens.length === 0) {
+    return false;
+  }
+  const dp = new Array(value.length + 1).fill(false);
+  dp[0] = true;
+  for (let i = 0; i < value.length; i++) {
+    if (!dp[i]) {
+      continue;
+    }
+    for (const token of tokens) {
+      if (!token) {
+        continue;
+      }
+      if (value.startsWith(token, i)) {
+        dp[i + token.length] = true;
+      }
+    }
+  }
+  return dp[value.length];
+};
+
+const segmentSeasonValue = (value, tokens) => {
+  if (!value || tokens.length === 0) {
+    return null;
+  }
+  const sortedTokens = tokens.slice().sort((a, b) => b.length - a.length);
+  const dp = new Array(value.length + 1).fill(false);
+  const prev = new Array(value.length + 1).fill(null);
+  dp[0] = true;
+  for (let i = 0; i < value.length; i++) {
+    if (!dp[i]) {
+      continue;
+    }
+    for (const token of sortedTokens) {
+      if (!token) {
+        continue;
+      }
+      if (value.startsWith(token, i)) {
+        const next = i + token.length;
+        if (!dp[next]) {
+          dp[next] = true;
+          prev[next] = { index: i, token };
+        }
+      }
+    }
+  }
+  if (!dp[value.length]) {
+    return null;
+  }
+  const result = [];
+  let idx = value.length;
+  while (idx > 0) {
+    const step = prev[idx];
+    if (!step) {
+      return null;
+    }
+    result.unshift(step.token);
+    idx = step.index;
+  }
+  return result;
+};
+
+const buildSeasonAutoConfig = () => {
+  const values = getSeasonFilterValues();
+  if (values.length === 0) {
+    return { base: [], compositeMap: new Map() };
+  }
+
+  const base = values.filter((value) => {
+    const tokens = values.filter((candidate) => candidate !== value);
+    return !canSegmentSeasonValue(value, tokens);
+  });
+
+  const compositeMap = new Map();
+  values.forEach((value) => {
+    if (base.includes(value)) {
+      return;
+    }
+    const parts = segmentSeasonValue(value, base);
+    if (parts && parts.length > 1) {
+      compositeMap.set(value, parts);
+    }
+  });
+
+  return { base, compositeMap };
+};
+
+const syncSeasonAutoFilters = () => {
+  if (!filters.season) {
+    return false;
+  }
+  if (!seasonAutoConfig) {
+    seasonAutoConfig = buildSeasonAutoConfig();
+  }
+  const compositeMap = seasonAutoConfig.compositeMap;
+  if (!compositeMap || compositeMap.size === 0) {
+    return false;
+  }
+
+  const previousAuto = new Set(autoSeasonFilters);
+  autoSeasonFilters.clear();
+  let changed = false;
+
+  compositeMap.forEach((parts, combo) => {
+    const shouldEnable = parts.every((part) => filters.season.has(part));
+    if (shouldEnable) {
+      autoSeasonFilters.add(combo);
+      if (!filters.season.has(combo)) {
+        filters.season.add(combo);
+        changed = true;
+      }
+    } else if (previousAuto.has(combo)) {
+      if (filters.season.delete(combo)) {
+        changed = true;
+      }
+    }
+  });
+
+  return changed;
+};
+
 // フォントサイズをリセット
 function resetFontSize() {
   document.body.style.WebkitTextSizeAdjust = '100%';
@@ -1248,6 +1384,7 @@ window.scrollToTop = () => {
 const resetFilters = () => {
   // 既存のフィルターリセット処理
   Object.keys(filters).forEach((key) => filters[key].clear());
+  autoSeasonFilters.clear();
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
   const originalCards = document.querySelectorAll('.card:not([data-cloned])');
   originalCards.forEach((card) => {
@@ -1341,6 +1478,9 @@ const toggleFilterCard = (attribute, value) => {
     filters[attribute].delete(value);
   } else {
     filters[attribute].add(value);
+  }
+  if (attribute === 'season') {
+    syncSeasonAutoFilters();
   }
   filterCards();
   updateActiveFilters();
@@ -2059,6 +2199,9 @@ function updateActiveFilters() {
 function removeFilter(key, value) {
   if (filters[key]) {
     filters[key].delete(value);
+    if (key === 'season') {
+      syncSeasonAutoFilters();
+    }
     filterCards();
     updateActiveFilters();
     updateFilterDetails(); // フィルター詳細を更新
@@ -2173,6 +2316,7 @@ const loadFiltersFromLocalStorage = () => {
       filters[key] = new Set(value);
     }
   }
+  syncSeasonAutoFilters();
 
   // ソート状態の復元
   if (savedSortState) {
