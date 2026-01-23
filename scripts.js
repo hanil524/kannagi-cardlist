@@ -4772,10 +4772,16 @@ function loadHtml2Canvas() {
 
 // デッキ画像の保存機能
 async function captureDeck() {
+  const isIPhone = /iPhone/.test(navigator.userAgent);
+  const isIOSDevice = isIOS();
+  const imageTab = isIPhone ? window.open('about:blank', '_blank') : null;
+
   // 保存中メッセージを表示（最初に表示）
   const messageDiv = document.createElement('div');
   messageDiv.className = 'saving-message';
-  messageDiv.textContent = '画像を作成中...';
+  messageDiv.textContent = isIPhone
+    ? '画像を作成中...\n新しいタブで画像を長押し保存してください。'
+    : '画像を作成中...';
   document.body.appendChild(messageDiv);
 
   // 確実にメッセージが表示されるよう少し待機
@@ -4813,10 +4819,7 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOSの判定（新しい方式）
-    const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-
-    if (isIOS) {
+    if (isIOSDevice) {
       try {
         const imageSource = await (async () => {
           if (typeof canvas.toBlob === 'function') {
@@ -4828,7 +4831,29 @@ async function captureDeck() {
           return { url: canvas.toDataURL('image/png'), revoke: false };
         })();
 
-        // モーダルを生成（iOSのみ）
+        if (isIPhone) {
+          if (imageTab) {
+            imageTab.location.href = imageSource.url;
+            if (typeof imageTab.focus === 'function') {
+              imageTab.focus();
+            }
+            if (imageSource.revoke) {
+              setTimeout(() => URL.revokeObjectURL(imageSource.url), 60000);
+            }
+          } else {
+            if (imageSource.revoke) {
+              URL.revokeObjectURL(imageSource.url);
+            }
+            if (typeof deckBuilder?.showMessage === 'function') {
+              deckBuilder.showMessage('新しいタブが開かない場合はポップアップを許可してください。');
+            } else {
+              alert('新しいタブが開かない場合はポップアップを許可してください。');
+            }
+          }
+          return;
+        }
+
+        // モーダルを生成（iOS: iPadなど）
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
