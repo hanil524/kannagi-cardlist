@@ -4832,25 +4832,34 @@ async function captureDeck() {
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        // iOSはシンプルな長押し保存のみのモーダル
-        const modalHTML = `
-          <div class="deck-image-container">
-            <img src="${dataUrl}" alt="${deckName}">
-            <p class="save-instruction">画像を長押し保存してください</p>
-            <button class="modal-close-button">閉じる</button>
-          </div>
-        `;
+        const container = document.createElement('div');
+        container.className = 'deck-image-container';
 
-        imageModal.innerHTML = modalHTML;
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.alt = deckName;
+        img.className = 'deck-captured-image';
+        img.decoding = 'async';
+        img.loading = 'eager';
+
+        const instruction = document.createElement('p');
+        instruction.className = 'save-instruction';
+        instruction.textContent = '画像を長押し保存してください';
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'modal-close-button';
+        closeButton.textContent = '閉じる';
+
+        container.appendChild(img);
+        container.appendChild(instruction);
+        container.appendChild(closeButton);
+        imageModal.appendChild(container);
 
         // イベントリスナーを追加
-        const closeButton = imageModal.querySelector('.modal-close-button');
-        if (closeButton) {
-          closeButton.addEventListener('click', () => {
-            imageModal.remove();
-            document.body.classList.remove('modal-open');
-          });
-        }
+        closeButton.addEventListener('click', () => {
+          imageModal.remove();
+          document.body.classList.remove('modal-open');
+        });
 
         imageModal.addEventListener('click', (e) => {
           if (e.target === imageModal) {
@@ -4862,10 +4871,16 @@ async function captureDeck() {
         // DOMに追加
         document.body.appendChild(imageModal);
 
-        // 少し遅延してからフェードイン（Safari対策）
-        setTimeout(() => {
-          imageModal.classList.add('active');
-        }, 200);
+        // 画像読み込み後にフェードイン
+        const activateModal = () => {
+          requestAnimationFrame(() => imageModal.classList.add('active'));
+        };
+        if (img.complete) {
+          activateModal();
+        } else {
+          img.addEventListener('load', activateModal, { once: true });
+          img.addEventListener('error', activateModal, { once: true });
+        }
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
