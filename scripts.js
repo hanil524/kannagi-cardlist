@@ -4818,15 +4818,15 @@ async function captureDeck() {
 
     if (isIOS) {
       try {
-        // DataURLを生成（エラーハンドリング付き）
-        const dataUrl = await new Promise((resolve, reject) => {
-          try {
-            const url = canvas.toDataURL('image/png');
-            resolve(url);
-          } catch (e) {
-            reject(e);
+        const imageSource = await (async () => {
+          if (typeof canvas.toBlob === 'function') {
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+            if (blob) {
+              return { url: URL.createObjectURL(blob), revoke: true };
+            }
           }
-        });
+          return { url: canvas.toDataURL('image/png'), revoke: false };
+        })();
 
         // モーダルを生成（iOSのみ）
         const imageModal = document.createElement('div');
@@ -4836,11 +4836,12 @@ async function captureDeck() {
         container.className = 'deck-image-container';
 
         const img = document.createElement('img');
-        img.src = dataUrl;
+        img.src = imageSource.url;
         img.alt = deckName;
         img.className = 'deck-captured-image';
         img.decoding = 'async';
         img.loading = 'eager';
+        img.draggable = false;
 
         const instruction = document.createElement('p');
         instruction.className = 'save-instruction';
@@ -4855,14 +4856,22 @@ async function captureDeck() {
         container.appendChild(closeButton);
         imageModal.appendChild(container);
 
+        const cleanupImageUrl = () => {
+          if (imageSource.revoke) {
+            URL.revokeObjectURL(imageSource.url);
+          }
+        };
+
         // イベントリスナーを追加
         closeButton.addEventListener('click', () => {
+          cleanupImageUrl();
           imageModal.remove();
           document.body.classList.remove('modal-open');
         });
 
         imageModal.addEventListener('click', (e) => {
           if (e.target === imageModal) {
+            cleanupImageUrl();
             imageModal.remove();
             document.body.classList.remove('modal-open');
           }
