@@ -4772,21 +4772,10 @@ function loadHtml2Canvas() {
 
 // デッキ画像の保存機能
 async function captureDeck() {
-  const ua = navigator.userAgent || '';
-  const isIOSDevice = isIOS();
-  const screenMin = Math.min(window.screen?.width || 0, window.screen?.height || 0);
-  const isIPhoneLike =
-    /iPhone/i.test(ua) ||
-    (isIOSDevice && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 && screenMin > 0 && screenMin <= 500);
-  const isSafari = /Safari/i.test(ua) && !/(CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo)/i.test(ua);
-  const useIPhoneSafariFlow = isIOSDevice && isIPhoneLike && isSafari;
-
   // 保存中メッセージを表示（最初に表示）
   const messageDiv = document.createElement('div');
   messageDiv.className = 'saving-message';
-  messageDiv.textContent = useIPhoneSafariFlow
-    ? '画像を作成中...\nこのあと表示される画像を長押し保存してください。'
-    : '画像を作成中...';
+  messageDiv.textContent = '画像を作成中...';
   document.body.appendChild(messageDiv);
 
   // 確実にメッセージが表示されるよう少し待機
@@ -4824,67 +4813,47 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    if (isIOSDevice) {
+    // iOSの判定（新しい方式）
+    const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+    if (isIOS) {
       try {
-        const imageSource = await (async () => {
-          if (typeof canvas.toBlob === 'function') {
-            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-            if (blob) {
-              return { url: URL.createObjectURL(blob), revoke: true };
-            }
+        // DataURLを生成（エラーハンドリング付き）
+        const dataUrl = await new Promise((resolve, reject) => {
+          try {
+            const url = canvas.toDataURL('image/png');
+            resolve(url);
+          } catch (e) {
+            reject(e);
           }
-          return { url: canvas.toDataURL('image/png'), revoke: false };
-        })();
+        });
 
-        if (useIPhoneSafariFlow) {
-          window.location.href = imageSource.url;
-          return;
-        }
-
-        // モーダルを生成（iOS: iPadなど）
+        // モーダルを生成（iOSのみ）
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        const container = document.createElement('div');
-        container.className = 'deck-image-container';
+        // iOSはシンプルな長押し保存のみのモーダル
+        const modalHTML = `
+          <div class="deck-image-container">
+            <img src="${dataUrl}" alt="${deckName}">
+            <p class="save-instruction">画像を長押し保存してください</p>
+            <button class="modal-close-button">閉じる</button>
+          </div>
+        `;
 
-        const img = document.createElement('img');
-        img.src = imageSource.url;
-        img.alt = deckName;
-        img.className = 'deck-captured-image';
-        img.decoding = 'async';
-        img.loading = 'eager';
-        img.draggable = false;
-
-        const instruction = document.createElement('p');
-        instruction.className = 'save-instruction';
-        instruction.textContent = '画像を長押し保存してください';
-
-        const closeButton = document.createElement('button');
-        closeButton.className = 'modal-close-button';
-        closeButton.textContent = '閉じる';
-
-        container.appendChild(img);
-        container.appendChild(instruction);
-        container.appendChild(closeButton);
-        imageModal.appendChild(container);
-
-        const cleanupImageUrl = () => {
-          if (imageSource.revoke) {
-            URL.revokeObjectURL(imageSource.url);
-          }
-        };
+        imageModal.innerHTML = modalHTML;
 
         // イベントリスナーを追加
-        closeButton.addEventListener('click', () => {
-          cleanupImageUrl();
-          imageModal.remove();
-          document.body.classList.remove('modal-open');
-        });
+        const closeButton = imageModal.querySelector('.modal-close-button');
+        if (closeButton) {
+          closeButton.addEventListener('click', () => {
+            imageModal.remove();
+            document.body.classList.remove('modal-open');
+          });
+        }
 
         imageModal.addEventListener('click', (e) => {
           if (e.target === imageModal) {
-            cleanupImageUrl();
             imageModal.remove();
             document.body.classList.remove('modal-open');
           }
@@ -4893,16 +4862,10 @@ async function captureDeck() {
         // DOMに追加
         document.body.appendChild(imageModal);
 
-        // 画像読み込み後にフェードイン
-        const activateModal = () => {
-          requestAnimationFrame(() => imageModal.classList.add('active'));
-        };
-        if (img.complete) {
-          activateModal();
-        } else {
-          img.addEventListener('load', activateModal, { once: true });
-          img.addEventListener('error', activateModal, { once: true });
-        }
+        // 少し遅延してからフェードイン（Safari対策）
+        setTimeout(() => {
+          imageModal.classList.add('active');
+        }, 200);
       } catch (error) {
         console.error('モーダル表示エラー:', error);
         alert('画像の表示に失敗しました。');
