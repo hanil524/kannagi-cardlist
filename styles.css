@@ -2865,6 +2865,7 @@ body.modal-open {
   z-index: 10001; /* モーダルより上に表示 */
   font-size: 16px;
   text-align: center;
+  white-space: pre-line;
   pointer-events: none;
 }
 
