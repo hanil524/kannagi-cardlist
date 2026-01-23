@@ -2946,8 +2946,8 @@ textarea {
 
 .deck-captured-image {
   -webkit-touch-callout: default;
-  user-select: auto;
-  -webkit-user-select: auto;
+  user-select: none;
+  -webkit-user-select: none;
   pointer-events: auto;
   touch-action: auto;
 }
