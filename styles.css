@@ -2865,7 +2865,6 @@ body.modal-open {
   z-index: 10001; /* モーダルより上に表示 */
   font-size: 16px;
   text-align: center;
-  white-space: pre-line;
   pointer-events: none;
 }
 
@@ -2963,12 +2962,6 @@ textarea {
 }
 
 /* スクロールバー分の余白を常に確保 */
-@supports (-webkit-touch-callout: none) {
-  .deck-image-modal,
-  .deck-image-container {
-    touch-action: auto;
-  }
-}
 html {
   overflow-y: scroll;
 }
