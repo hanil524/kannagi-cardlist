@@ -2946,8 +2946,8 @@ textarea {
 
 .deck-captured-image {
   -webkit-touch-callout: default;
-  user-select: none;
-  -webkit-user-select: none;
+  user-select: auto;
+  -webkit-user-select: auto;
   pointer-events: auto;
   touch-action: auto;
 }
@@ -2962,6 +2962,12 @@ textarea {
 }
 
 /* スクロールバー分の余白を常に確保 */
+@supports (-webkit-touch-callout: none) {
+  .deck-image-modal,
+  .deck-image-container {
+    touch-action: auto;
+  }
+}
 html {
   overflow-y: scroll;
 }
