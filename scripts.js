@@ -4772,15 +4772,20 @@ function loadHtml2Canvas() {
 
 // デッキ画像の保存機能
 async function captureDeck() {
-  const isIPhone = /iPhone/.test(navigator.userAgent);
+  const ua = navigator.userAgent || '';
   const isIOSDevice = isIOS();
-  const imageTab = isIPhone ? window.open('about:blank', '_blank') : null;
+  const screenMin = Math.min(window.screen?.width || 0, window.screen?.height || 0);
+  const isIPhoneLike =
+    /iPhone/i.test(ua) ||
+    (isIOSDevice && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 && screenMin > 0 && screenMin <= 500);
+  const isSafari = /Safari/i.test(ua) && !/(CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo)/i.test(ua);
+  const useIPhoneSafariFlow = isIOSDevice && isIPhoneLike && isSafari;
 
   // 保存中メッセージを表示（最初に表示）
   const messageDiv = document.createElement('div');
   messageDiv.className = 'saving-message';
-  messageDiv.textContent = isIPhone
-    ? '画像を作成中...\n新しいタブで画像を長押し保存してください。'
+  messageDiv.textContent = useIPhoneSafariFlow
+    ? '画像を作成中...\nこのあと表示される画像を長押し保存してください。'
     : '画像を作成中...';
   document.body.appendChild(messageDiv);
 
@@ -4831,25 +4836,8 @@ async function captureDeck() {
           return { url: canvas.toDataURL('image/png'), revoke: false };
         })();
 
-        if (isIPhone) {
-          if (imageTab) {
-            imageTab.location.href = imageSource.url;
-            if (typeof imageTab.focus === 'function') {
-              imageTab.focus();
-            }
-            if (imageSource.revoke) {
-              setTimeout(() => URL.revokeObjectURL(imageSource.url), 60000);
-            }
-          } else {
-            if (imageSource.revoke) {
-              URL.revokeObjectURL(imageSource.url);
-            }
-            if (typeof deckBuilder?.showMessage === 'function') {
-              deckBuilder.showMessage('新しいタブが開かない場合はポップアップを許可してください。');
-            } else {
-              alert('新しいタブが開かない場合はポップアップを許可してください。');
-            }
-          }
+        if (useIPhoneSafariFlow) {
+          window.location.href = imageSource.url;
           return;
         }
 
