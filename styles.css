@@ -1063,10 +1063,12 @@ button[onclick='resetFilters()']:active {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.modal-buttons button:hover {
-  background-color: rgba(100, 100, 100, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .modal-buttons button:hover {
+    background-color: rgba(100, 100, 100, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .modal-buttons button:active {
