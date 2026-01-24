@@ -2900,10 +2900,49 @@ body.modal-open {
   align-items: center;
 }
 
+.deck-image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
 .deck-image-container img {
+  display: block;
   max-width: 100%;
   max-height: calc(70vh - 80px); /* ボタンとテキストの余白を確保 */
   object-fit: contain;
+}
+
+.deck-share-button {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.deck-share-button i {
+  font-size: 13px;
+}
+
+.deck-share-button:active {
+  transform: scale(0.98);
+}
+
+.deck-share-button.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .save-instruction {
