@@ -1999,10 +1999,10 @@ body.modal-open {
   z-index: 2;
 }
 
-/* レスポンシブ対応 */
+/* レスポンシブ対応 スマホ用デッキ作成画面ヘッダー（縦幅） */
 @media (max-width: 768px) {
   .deck-menu {
-    --deck-menu-height: clamp(26px, 3.6vh, 32px);
+    --deck-menu-height: clamp(36px, 3.6vh, 32px);
     padding: 3px 6px;
   }
 
