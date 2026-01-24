@@ -72,6 +72,15 @@ header a {
   box-sizing: border-box;
 }
 
+@supports (-webkit-touch-callout: none) {
+  .mobile-header {
+    left: 0;
+    right: 0;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
 /* スマホ表示のヘッダーを表示する */
 @media (max-width: 768px) {
   header {
