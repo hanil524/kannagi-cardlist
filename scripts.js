@@ -1611,6 +1611,38 @@ const getScrollbarWidth = () => {
   return scrollbarWidth;
 };
 
+const attributeSortCollator =
+  typeof Intl !== 'undefined' && typeof Intl.Collator === 'function'
+    ? new Intl.Collator('ja', { usage: 'sort', sensitivity: 'base', numeric: true })
+    : null;
+
+const sortAttributes = (attributes) => {
+  const list = attributes.slice();
+  if (!attributeSortCollator) {
+    return list.sort();
+  }
+  return list.sort((a, b) => attributeSortCollator.compare(a, b));
+};
+
+const collectAllAttributes = () => {
+  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const attributes = new Set();
+  cards.forEach((card) => {
+    const value = card.dataset.attribute;
+    if (!value) {
+      return;
+    }
+    value.split(' ').forEach((attr) => {
+      if (attr) {
+        attributes.add(attr);
+      }
+    });
+  });
+  return Array.from(attributes);
+};
+
+let attributeEffectTargetOnly = true;
+
 const openModal = (filterId) => {
   const modal = document.getElementById('modal');
   const modalButtons = document.getElementById('modal-buttons');
@@ -1644,34 +1676,16 @@ const openModal = (filterId) => {
     tooltip.style.opacity = '0';
   };
 
-  const filterElement = document.getElementById(filterId);
-  if (!filterElement) {
-    console.error(`Element with id ${filterId} not found`);
-    return;
-  }
-
-  const filterContent = filterElement.querySelectorAll('button, .filter-category');
-  filterContent.forEach((element) => {
-    // カテゴリ見出しの場合
-    if (element.classList.contains('filter-category')) {
-      const category = document.createElement('span');
-      category.className = 'filter-category';
-      category.textContent = element.textContent;
-      modalButtons.appendChild(category);
-      return;
-    }
-    
-    // ボタンの場合
-    const button = element;
+  const createModalButton = (label, className, tooltipText, valueOverride) => {
     const newButton = document.createElement('button');
-    newButton.innerText = button.innerText;
-    newButton.className = button.className;
-    
-    // ツールチップ用の属性を追加
-    if (button.hasAttribute('data-tooltip')) {
-      newButton.setAttribute('data-tooltip', button.getAttribute('data-tooltip'));
+    newButton.innerText = label;
+    if (className) {
+      newButton.className = className;
+    }
 
-      // PCの場合のみツールチップを有効化
+    if (tooltipText) {
+      newButton.setAttribute('data-tooltip', tooltipText);
+
       if (window.innerWidth > 768) {
         newButton.addEventListener('mouseenter', (e) => {
           const text = e.target.getAttribute('data-tooltip');
@@ -1687,15 +1701,91 @@ const openModal = (filterId) => {
     newButton.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      // 「廃」ボタンの場合は特別処理
-      if (filterId === 'attribute' && button.innerText.trim() === '「廃」') {
+      const trimmedLabel = String(label).trim();
+      const value = typeof valueOverride === 'string' ? valueOverride : trimmedLabel;
+      if (filterId === 'attribute' && trimmedLabel === '「廃」') {
         toggleFilterCard(filterId, '廃');
       } else {
-        toggleFilterCard(filterId, button.innerText.trim());
+        toggleFilterCard(filterId, value);
       }
     };
-    modalButtons.appendChild(newButton);
-  });
+
+    return newButton;
+  };
+
+  const appendFilterElements = (elements) => {
+    elements.forEach((element) => {
+      if (element.classList.contains('filter-category')) {
+        const category = document.createElement('span');
+        category.className = 'filter-category';
+        category.textContent = element.textContent;
+        modalButtons.appendChild(category);
+        return;
+      }
+
+      const button = element;
+      const tooltipText = button.getAttribute('data-tooltip');
+      const newButton = createModalButton(button.innerText, button.className, tooltipText);
+      modalButtons.appendChild(newButton);
+    });
+  };
+
+  const filterElement = document.getElementById(filterId);
+  if (!filterElement) {
+    console.error(`Element with id ${filterId} not found`);
+    return;
+  }
+
+  const renderAttributeModal = () => {
+    modalButtons.innerHTML = '';
+
+    const allAttributes = collectAllAttributes();
+    const totalCount = allAttributes.length;
+    const header = document.createElement('div');
+    header.className = 'attribute-modal-header';
+
+    const count = document.createElement('span');
+    count.className = 'attribute-modal-count';
+    count.textContent = `全${totalCount}種類`;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'attribute-modal-toggle';
+    toggle.textContent = attributeEffectTargetOnly ? '全て表示' : '一部表示';
+    if (!attributeEffectTargetOnly) {
+      toggle.classList.add('is-off');
+    }
+    toggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      attributeEffectTargetOnly = !attributeEffectTargetOnly;
+      renderAttributeModal();
+    });
+
+    header.appendChild(count);
+    header.appendChild(toggle);
+    modalButtons.appendChild(header);
+
+    if (attributeEffectTargetOnly) {
+      const effectTargetContent = filterElement.querySelectorAll('button, .filter-category');
+      appendFilterElements(effectTargetContent);
+    } else {
+      const sortedAttributes = sortAttributes(allAttributes);
+      sortedAttributes.forEach((attribute) => {
+        const newButton = createModalButton(attribute, '');
+        modalButtons.appendChild(newButton);
+      });
+    }
+
+    updateScrollbarVisibility();
+  };
+
+  if (filterId === 'attribute') {
+    renderAttributeModal();
+  } else {
+    const filterContent = filterElement.querySelectorAll('button, .filter-category');
+    appendFilterElements(filterContent);
+  }
 
   scrollPosition = window.pageYOffset;
   const scrollbarWidth = getScrollbarWidth();
