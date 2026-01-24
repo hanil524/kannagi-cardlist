@@ -63,26 +63,23 @@ header a {
   display: none;
   background: #1f1f1f;
   color: white;
-  padding: 6px;
+  padding: 6px 8px;
   height: 50px; /* 明示的に高さを指定 */
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 /* スマホ表示のヘッダーを表示する */
 @media (max-width: 768px) {
-  .mobile-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 10px; /* 必要に応じて調整 */
-    box-sizing: border-box; /* パディングを含む幅調整 */
-  }
   header {
     display: none;
+  }
+
+  .mobile-header {
+    display: flex;
   }
 }
 
@@ -150,32 +147,37 @@ header a {
 
 /* スマホ表示のスタイル */
 @media (max-width: 768px) {
-  .search-container {
-    position: relative;
-    display: flex;
+  .deck-menu {
+    flex-wrap: wrap;
+    gap: clamp(4px, 1.2vw, 8px);
+  }
+
+  .deck-menu > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .deck-menu .deck-counter,
+  .deck-menu #back-to-gallery {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .deck-menu .deck-menu-button {
+    display: inline-flex;
     align-items: center;
-    width: 100%;
+    justify-content: center;
+    gap: 4px;
+    font-size: clamp(12px, 1.9vh, 14px);
+    line-height: 1;
+    padding: 0 clamp(4px, 1.2vw, 10px);
+    text-align: center;
   }
 
-  .clear-button {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: gray;
-    padding: 0;
-  }
-
-  .clear-button:hover {
-    color: black;
-  }
-
-  .search-container input {
-    width: 100%;
-    padding-right: 30px; /* ×ボタンのスペースを確保 */
-    box-sizing: border-box;
+  .deck-menu .deck-counter {
+    font-size: clamp(12px, 1.9vh, 14px);
+    line-height: 1;
+    text-align: center;
   }
 }
 
@@ -728,7 +730,9 @@ header input::placeholder,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 6px 8px;
+    height: 50px;
+    box-sizing: border-box;
   }
 
   .search-container {
@@ -1643,22 +1647,23 @@ body.modal-open {
 
 /* デッキヘッダーメニューのレスポンシブ対応 */
 .deck-menu {
+  --deck-menu-height: clamp(28px, 4vh, 36px);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 8px 10px;
+  padding: 3px 8px;
   background: rgba(40, 40, 40, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px; /* ボタン間の間隔を縮小 */
+  gap: 8px;
   box-sizing: border-box;
 }
 
 .deck-menu-button {
-  padding: 4px 8px;
+  padding: 0 10px;
   background-color: #444;
   color: white;
   border: none;
@@ -1667,45 +1672,55 @@ body.modal-open {
   transition: background-color 0.3s;
   text-align: center;
   font-weight: bold;
-  height: clamp(28px, 4vh, 36px); /* 高さも調整 */
+  font-size: clamp(12px, 1.9vh, 14px);
+  height: var(--deck-menu-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  line-height: 1;
+  box-sizing: border-box;
   white-space: nowrap;
 }
 
 /* スマートフォン対応 */
 @media (max-width: 360px) {
   .deck-menu {
-    padding: 6px 5px;
+    --deck-menu-height: clamp(26px, 3.6vh, 32px);
+    padding: 3px 5px;
     gap: 5px;
   }
 
   .deck-menu-button {
-    padding: 4px 8px;
-    font-size: 11px;
+    padding: 0 8px;
+    font-size: clamp(12px, 1.9vh, 14px);
     min-width: 50px;
   }
 
   .deck-counter {
-    padding: 4px 6px;
+    padding: 0 8px;
     min-width: 40px;
-    font-size: 11px;
+    font-size: clamp(12px, 1.9vh, 14px);
   }
 }
 
 /* デッキ画面 枚数カウンター用のスタイル */
 .deck-counter {
-  padding: 4px 8px;
+  padding: 0 10px;
   background-color: #333;
   color: white;
   border: 1px solid #666;
   border-radius: 4px;
   font-weight: bold;
-  font-size: clamp(12px, 2vw, 14px);
-  min-width: 30px; /* カウンターの横幅 */
-  min-height: 20px;
+  font-size: clamp(12px, 1.9vh, 14px);
+  min-width: 36px;
+  height: var(--deck-menu-height);
   text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
 }
 
 /* デッキ枚数39以下の場合の赤色表示 */
@@ -1716,8 +1731,8 @@ body.modal-open {
 /* スマホ対応 */
 @media (max-width: 768px) {
   .deck-counter {
-    min-width: 30px;
-    padding: 4px 6px;
+    min-width: 36px;
+    padding: 0 8px;
   }
 }
 
@@ -1987,12 +2002,13 @@ body.modal-open {
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .deck-menu {
-    padding: 5px 10px;
+    --deck-menu-height: clamp(26px, 3.6vh, 32px);
+    padding: 3px 6px;
   }
 
   .deck-menu-button {
-    padding: 3px 10px;
-    font-size: 12px;
+    padding: 0 8px;
+    font-size: clamp(12px, 1.9vh, 14px);
   }
 
   .deck-display {
@@ -4016,20 +4032,26 @@ body.modal-open {
     min-width: 0;
   }
 
+  .deck-menu .deck-counter,
+  .deck-menu #back-to-gallery {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
   .deck-menu .deck-menu-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    font-size: clamp(10px, 2.6vw, 13px);
-    line-height: 1.1;
-    padding: clamp(2px, 0.8vw, 6px) clamp(4px, 1.2vw, 10px);
+    font-size: clamp(12px, 1.9vh, 14px);
+    line-height: 1;
+    padding: 0 clamp(4px, 1.2vw, 10px);
     text-align: center;
   }
 
   .deck-menu .deck-counter {
-    font-size: clamp(10px, 2.6vw, 13px);
-    line-height: 1.1;
+    font-size: clamp(12px, 1.9vh, 14px);
+    line-height: 1;
     text-align: center;
   }
 }
