@@ -4842,7 +4842,7 @@ async function captureDeck() {
                 <span>共有</span>
               </button>
             </div>
-            <p class="save-instruction">画像を長押し保存してください</p>
+            <p class="save-instruction">共有ボタン、または画像を長押しで保存してください。</p>
             <button class="modal-close-button">閉じる</button>
           </div>
         `;
