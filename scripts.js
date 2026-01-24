@@ -4835,7 +4835,13 @@ async function captureDeck() {
         // iOSはシンプルな長押し保存のみのモーダル
         const modalHTML = `
           <div class="deck-image-container">
-            <img src="${dataUrl}" alt="${deckName}">
+            <div class="deck-image-wrapper">
+              <img src="${dataUrl}" alt="${deckName}">
+              <button class="deck-share-button" type="button" aria-label="共有">
+                <i class="fas fa-share"></i>
+                <span>共有</span>
+              </button>
+            </div>
             <p class="save-instruction">画像を長押し保存してください</p>
             <button class="modal-close-button">閉じる</button>
           </div>
@@ -4844,6 +4850,41 @@ async function captureDeck() {
         imageModal.innerHTML = modalHTML;
 
         // イベントリスナーを追加
+        const shareButton = imageModal.querySelector('.deck-share-button');
+        if (shareButton) {
+          shareButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            shareButton.disabled = true;
+            shareButton.classList.add('is-loading');
+            try {
+              if (navigator.share) {
+                const blob = await (await fetch(dataUrl)).blob();
+                const file = new File([blob], `${deckName}.png`, { type: blob.type || 'image/png' });
+                const canShareFiles = !navigator.canShare || navigator.canShare({ files: [file] });
+                if (canShareFiles) {
+                  await navigator.share({ title: deckName, files: [file] });
+                  return;
+                }
+              }
+              if (typeof deckBuilder?.showMessage === 'function') {
+                deckBuilder.showMessage('共有できませんでした。画像を長押し保存してください。');
+              } else {
+                alert('共有できませんでした。画像を長押し保存してください。');
+              }
+            } catch (error) {
+              if (error && error.name === 'AbortError') return;
+              if (typeof deckBuilder?.showMessage === 'function') {
+                deckBuilder.showMessage('共有に失敗しました。画像を長押し保存してください。');
+              } else {
+                alert('共有に失敗しました。画像を長押し保存してください。');
+              }
+            } finally {
+              shareButton.disabled = false;
+              shareButton.classList.remove('is-loading');
+            }
+          });
+        }
+
         const closeButton = imageModal.querySelector('.modal-close-button');
         if (closeButton) {
           closeButton.addEventListener('click', () => {
