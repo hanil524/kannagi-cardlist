@@ -4771,10 +4771,22 @@ const deckManager = {
       commit
     };
 
-    requestAnimationFrame(() => {
-      input.focus();
-      input.select();
-    });
+    const focusInput = () => {
+      try {
+        input.focus({ preventScroll: true });
+      } catch (err) {
+        input.focus();
+      }
+      if (typeof input.setSelectionRange === 'function') {
+        const len = input.value.length;
+        input.setSelectionRange(0, len);
+      } else {
+        input.select();
+      }
+    };
+
+    // iOSで確実にキーボードを出すため、ユーザー操作直後に即フォーカス
+    focusInput();
   },
 
   // デッキのプレビュー画像を更新
