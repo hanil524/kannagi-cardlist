@@ -2866,6 +2866,17 @@ const deckBuilder = {
     const windowHeight = window.innerHeight;
     const windowWidth = window.innerWidth;
     const maxHeight = windowHeight - menuHeight - 20;
+    const container = display.closest('.deck-modal-content');
+    let availableWidth = windowWidth * 0.95;
+    if (container) {
+      const styles = window.getComputedStyle(container);
+      const paddingX =
+        (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+      const containerWidth = container.clientWidth || 0;
+      if (containerWidth > 0) {
+        availableWidth = Math.max(0, containerWidth - paddingX);
+      }
+    }
 
     const cards = display.getElementsByClassName('deck-card');
     if (cards.length === 0) return;
@@ -2882,7 +2893,7 @@ const deckBuilder = {
     const aspectRatio = 1041 / 745;
 
     // 利用可能な最大幅と高さから、カードの最大サイズを計算
-    const maxCardWidth = (windowWidth * 0.95 - (cols - 1)) / cols;
+    const maxCardWidth = (availableWidth - (cols - 1)) / cols;
     const maxCardHeight = (maxHeight - (rows - 1)) / rows;
 
     // アスペクト比を維持しながら、画面に収まる最大サイズを計算
@@ -4463,7 +4474,7 @@ const deckManager = {
     };
 
     const isIgnoredTarget = (target) =>
-      target.closest('.deck-edit-button, .deck-delete-button, .deck-list-close');
+      target.closest('.deck-edit-button, .deck-delete-button, .deck-list-close, .deck-name-input');
 
     list.addEventListener(
       'click',
@@ -4680,25 +4691,90 @@ const deckManager = {
   // デッキ名を編集
   editDeckName(deckId) {
     const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
-    const currentName = button.textContent;
-    const newName = prompt('デッキ名を入力してください:', currentName);
+    if (!button) {
+      return;
+    }
 
-    if (newName && newName.trim()) {
-      button.textContent = newName.trim();
+    if (this.deckNameEditing && typeof this.deckNameEditing.commit === 'function') {
+      this.deckNameEditing.commit();
+    }
 
-      // デッキ名のみを更新
+    const originalName = button.textContent.trim();
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'deck-name-input';
+    input.value = originalName;
+    input.setAttribute('aria-label', 'デッキ名');
+    input.setAttribute('data-deck-id', String(deckId));
+
+    button.style.display = 'none';
+    const parent = button.parentNode;
+    if (parent) {
+      parent.insertBefore(input, button.nextSibling);
+    }
+
+    let finalized = false;
+    const cleanup = () => {
+      if (finalized) {
+        return;
+      }
+      finalized = true;
+      input.remove();
+      button.style.display = '';
+      if (this.deckNameEditing && this.deckNameEditing.input === input) {
+        this.deckNameEditing = null;
+      }
+    };
+
+    const commit = () => {
+      if (finalized) {
+        return;
+      }
+      const newName = input.value.trim() || originalName;
+      button.textContent = newName;
+
       if (this.decks[deckId]) {
-        this.decks[deckId].name = newName.trim();
+        this.decks[deckId].name = newName;
       } else {
         this.decks[deckId] = {
-          name: newName.trim(),
-          cards: [] // 新規デッキの場合は空の配列を設定
+          name: newName,
+          cards: []
         };
       }
 
-      // デッキ内容は変更せずに保存
       this.saveToLocalStorage();
-    }
+      cleanup();
+    };
+
+    const cancel = () => {
+      cleanup();
+    };
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        commit();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancel();
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      commit();
+    });
+
+    this.deckNameEditing = {
+      input,
+      button,
+      deckId,
+      commit
+    };
+
+    requestAnimationFrame(() => {
+      input.focus();
+      input.select();
+    });
   },
 
   // デッキのプレビュー画像を更新
