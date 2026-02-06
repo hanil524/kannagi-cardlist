@@ -446,7 +446,8 @@ const filters = {
   role: new Set(),
   keyword: new Set(),
   attribute: new Set(),
-  rare: new Set()
+  rare: new Set(),
+  cost: new Set()
 };
 
 let seasonAutoConfig = null;
