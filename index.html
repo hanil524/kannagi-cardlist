@@ -205,6 +205,7 @@
               <label>条件</label>
               <div class="filter-buttons">
                 <button data-filter="series" onclick="openModal('series')">シリーズ</button>
+                <button data-filter="cost" onclick="openModal('cost')">コスト</button>
                 <button data-filter="type" onclick="openModal('type')">札</button>
                 <button data-filter="season" onclick="openModal('season')">季節</button>
                 <button data-filter="rare" onclick="openModal('rare')">レア</button>
@@ -284,6 +285,27 @@
         <button onclick="toggleFilterCard('series', '怪談師三章')" class="kaidaniro" data-tooltip="ユーザーズパック 第三弾（2026年1月30日発売）">怪談師三章</button>
         <button onclick="toggleFilterCard('series', 'プロモ')" class="puromoiro" data-tooltip="店舗コラボ、イベント配布など">プロモ</button>
       </div>
+      <!-- コスト -->
+      <div id="cost" class="filter-content" style="display: none">
+        <span class="filter-category">コスト</span>
+        <button onclick="toggleFilterCard('cost', '0')">0</button>
+        <button onclick="toggleFilterCard('cost', '1')">1</button>
+        <button onclick="toggleFilterCard('cost', '2')">2</button>
+        <button onclick="toggleFilterCard('cost', '3')">3</button>
+        <button onclick="toggleFilterCard('cost', '4')">4</button>
+        <button onclick="toggleFilterCard('cost', '5')">5</button>
+        <button onclick="toggleFilterCard('cost', '6')">6</button>
+        <button onclick="toggleFilterCard('cost', '7')">7</button>
+        <button onclick="toggleFilterCard('cost', '8')">8</button>
+        <button onclick="toggleFilterCard('cost', '9')">9</button>
+        <button onclick="toggleFilterCard('cost', '10')">10</button>
+        <button onclick="toggleFilterCard('cost', '11')">11</button>
+        <button onclick="toggleFilterCard('cost', '12')">12</button>
+        <button onclick="toggleFilterCard('cost', '13')">13</button>
+        <button onclick="toggleFilterCard('cost', '14')">14</button>
+        <button onclick="toggleFilterCard('cost', '15')">15</button>
+        <button onclick="toggleFilterCard('cost', '20')">20</button>
+      </div>
       <!-- 札種類 -->
       <div id="type" class="filter-content" style="display: none">
         <span class="filter-category">札種類</span>
@@ -319,6 +341,7 @@
         <button onclick="toggleFilterCard('rare', 'エキスパンション')" data-tooltip="封入率、レアリティ固定">エキスパンション</button>
         <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
       </div>
+      
 
       <!-- 属性 -->
       <div id="attribute" class="filter-content" style="display: none">
