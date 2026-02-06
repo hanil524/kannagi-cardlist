@@ -447,7 +447,8 @@ const filters = {
   keyword: new Set(),
   attribute: new Set(),
   rare: new Set(),
-  cost: new Set()
+  cost: new Set(),
+  power: new Set()
 };
 
 let seasonAutoConfig = null;
@@ -1294,7 +1295,9 @@ const checkFilters = (card) => {
       const cardAttributes = card.dataset.attribute.split(' ');
       return [...filters.attribute].some((attr) => cardAttributes.includes(attr));
     },
-    rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare)
+    rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare),
+    cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
+    power: () => filters.power.size === 0 || filters.power.has(card.dataset.power)
   };
 
   // すべての条件を満たす場合のみtrue
@@ -2260,7 +2263,17 @@ function updateActiveFilters() {
     }
   }
 
-  const filterDisplay = activeFilters.map((filter) => `<button class="filter-item" onclick="removeFilter('${filter.key}', '${filter.value}')">${filter.value}</button>`).join('');
+  // フィルターキーと表示名のマッピング
+  const filterLabels = {
+    cost: 'コスト：',
+    power: '力：'
+  };
+  
+  const filterDisplay = activeFilters.map((filter) => {
+    const label = filterLabels[filter.key] || '';
+    const displayText = label ? `${label}${filter.value}` : filter.value;
+    return `<button class="filter-item" onclick="removeFilter('${filter.key}', '${filter.value}')">${displayText}</button>`;
+  }).join('');
 
   const pcElement = document.getElementById('active-filters-pc');
   const mobileElement = document.getElementById('active-filters-mobile');
