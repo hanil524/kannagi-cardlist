@@ -205,10 +205,10 @@
               <label>条件</label>
               <div class="filter-buttons">
                 <button data-filter="series" onclick="openModal('series')">シリーズ</button>
-                <button data-filter="cost" onclick="openModal('cost')">コスト</button>
                 <button data-filter="type" onclick="openModal('type')">札</button>
+                <button data-filter="cost" onclick="openModal('cost')">コスト</button>                
                 <button data-filter="season" onclick="openModal('season')">季節</button>
-                <button data-filter="rare" onclick="openModal('rare')">レア</button>
+                <button data-filter="power" onclick="openModal('power')">力</button>
               </div>
             </div>
             <div class="filter-group">
@@ -217,6 +217,7 @@
                 <button data-filter="attribute" onclick="openModal('attribute')">属性</button>
                 <button data-filter="keyword" onclick="openModal('keyword')">キーワード</button>
                 <button data-filter="role" onclick="openModal('role')">役割</button>
+                <button data-filter="rare" onclick="openModal('rare')">レア</button>
               </div>
             </div>
             <div class="filter-group">
@@ -306,6 +307,24 @@
         <button onclick="toggleFilterCard('cost', '15')">15</button>
         <button onclick="toggleFilterCard('cost', '20')">20</button>
       </div>
+      <!-- 力 -->
+      <div id="power" class="filter-content" style="display: none">
+        <span class="filter-category">力</span>
+        <button onclick="toggleFilterCard('power', '0')">0</button>
+        <button onclick="toggleFilterCard('power', '1')">1</button>
+        <button onclick="toggleFilterCard('power', '2')">2</button>
+        <button onclick="toggleFilterCard('power', '3')">3</button>
+        <button onclick="toggleFilterCard('power', '4')">4</button>
+        <button onclick="toggleFilterCard('power', '5')">5</button>
+        <button onclick="toggleFilterCard('power', '6')">6</button>
+        <button onclick="toggleFilterCard('power', '7')">7</button>
+        <button onclick="toggleFilterCard('power', '8')">8</button>
+        <button onclick="toggleFilterCard('power', '9')">9</button>
+        <button onclick="toggleFilterCard('power', '10')">10</button>
+        <button onclick="toggleFilterCard('power', '13')">13</button>
+        <button onclick="toggleFilterCard('power', '15')">15</button>
+        <button onclick="toggleFilterCard('power', '20')">20</button>
+      </div>
       <!-- 札種類 -->
       <div id="type" class="filter-content" style="display: none">
         <span class="filter-category">札種類</span>
@@ -329,19 +348,6 @@
         <button onclick="toggleFilterCard('season', '秋冬')" class="akihuyuiro">秋冬</button>
         <button onclick="toggleFilterCard('season', '春夏秋冬')" class="syunkasyuutoiro">春夏秋冬</button>
       </div>      
-      <!-- レア度 -->
-      <div id="rare" class="filter-content" style="display: none">
-        <span class="filter-category">レア度</span>
-        <button onclick="toggleFilterCard('rare', 'C')">C</button>
-        <button onclick="toggleFilterCard('rare', 'UC')">UC</button>
-        <button onclick="toggleFilterCard('rare', 'R')">R</button>
-        <button onclick="toggleFilterCard('rare', 'SR')">SR</button>
-        <button onclick="toggleFilterCard('rare', 'SSR')">SSR</button>
-        <button onclick="toggleFilterCard('rare', 'KR')" data-tooltip="巫レア">KR</button>
-        <button onclick="toggleFilterCard('rare', 'エキスパンション')" data-tooltip="封入率、レアリティ固定">エキスパンション</button>
-        <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
-      </div>
-      
 
       <!-- 属性 -->
       <div id="attribute" class="filter-content" style="display: none">
@@ -510,6 +516,18 @@
         <button onclick="toggleFilterCard('role', '2種類札')" data-tooltip="1つのカードが2つの札種類を持つこと">2種類札</button>
         <span class="filter-category">裏</span>
         <button onclick="toggleFilterCard('role', '裏指定')" data-tooltip="正体不明などで裏向きになっている札を指定する効果">裏指定</button>        
+      </div>
+      <!-- レア度 -->
+      <div id="rare" class="filter-content" style="display: none">
+        <span class="filter-category">レア度</span>
+        <button onclick="toggleFilterCard('rare', 'C')">C</button>
+        <button onclick="toggleFilterCard('rare', 'UC')">UC</button>
+        <button onclick="toggleFilterCard('rare', 'R')">R</button>
+        <button onclick="toggleFilterCard('rare', 'SR')">SR</button>
+        <button onclick="toggleFilterCard('rare', 'SSR')">SSR</button>
+        <button onclick="toggleFilterCard('rare', 'KR')" data-tooltip="巫レア">KR</button>
+        <button onclick="toggleFilterCard('rare', 'エキスパンション')" data-tooltip="封入率、レアリティ固定">エキスパンション</button>
+        <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
       </div>
 
       <div id="image-modal" class="image-modal">
