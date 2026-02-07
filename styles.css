@@ -652,6 +652,24 @@ header input::placeholder,
   transition: all 0.3s ease;
 }
 
+/* ハンバーガーメニュー用：アイコン＋「メニュー」を少し小さく */
+.hamburger-menu {
+  cursor: pointer;
+  text-align: center;
+  padding: 1px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-menu .menu-text {
+  font-weight: bold;
+  font-size: 11px;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
 .hamburger-menu:hover .menu-text {
   color: #ffffff;
 }
