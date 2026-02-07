@@ -1297,7 +1297,15 @@ const checkFilters = (card) => {
     },
     rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare),
     cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
-    power: () => filters.power.size === 0 || filters.power.has(card.dataset.power)
+    power: () => {
+      if (filters.power.size === 0) return true;
+      const powerMatch = filters.power.has(card.dataset.power);
+      // 「力」で「0」を含むときは場所札のみ
+      if (filters.power.has('0')) {
+        return powerMatch && (card.dataset.type === '場所札');
+      }
+      return powerMatch;
+    }
   };
 
   // すべての条件を満たす場合のみtrue
@@ -1545,6 +1553,11 @@ const filterCards = () => {
         } else {
           // 通常の完全一致フィルター
           matches = values.has(cardAttribute) || cardAttributes.some((attr) => values.has(attr));
+        }
+        
+        // 「力」で「0」を含むときは場所札（data-type=場所札）のみ表示
+        if (attribute === 'power' && values.has('0')) {
+          matches = matches && (card.getAttribute('data-type') === '場所札');
         }
         
         if (!matches) {
