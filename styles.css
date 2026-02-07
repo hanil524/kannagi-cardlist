@@ -1534,9 +1534,9 @@ body.modal-open {
   text-align: right;
   width: 100%;
   padding: 5px 20px;
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.7;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   box-sizing: border-box; /* パディングを含めたwidth計算 */
 }
 
@@ -1554,8 +1554,8 @@ body.modal-open {
 @media (max-width: 768px) {
   .update-info {
     text-align: right;
-    padding: 1px 1px;
-    font-size: 13px;
+    padding: 0px 1px;
+    font-size: 12.5px;
   }
 }
 
