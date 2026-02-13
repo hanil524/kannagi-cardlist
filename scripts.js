@@ -596,6 +596,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ローディングスピナーを非表示にし、コンテンツを表示
     document.getElementById('loading-overlay').style.display = 'none';
     document.getElementById('content').style.display = 'block';
+    loadInitialImages();
+    setupLazyLoading();
   });
 
   // 検索ボックスにイベントリスナーを追加
@@ -844,13 +846,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 200);
     },
     false
-  );
-
-  // ページロード完了後に遅延読み込みをセットアップ
-  window.addEventListener('load', () => {
-    loadInitialImages();
-    setupLazyLoading();
-  });
+  );  
 
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
@@ -1044,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const diff = startY - currentY;
 
         // 移動距離に応じて透明度を変更
-        const opacity = Math.max(0.5, Math.min(0.2, 1 - Math.abs(diff) / 200));
+        const opacity = Math.max(0.2, Math.min(0.5, 1 - Math.abs(diff) / 200));
         currentCard.style.opacity = opacity.toString();
 
         // カードを少し移動させる
@@ -1264,28 +1260,51 @@ const filterCardsByName = (event) => {
 
 // フィルター条件のチェック関数
 const checkFilters = (card) => {
+  const has廃Filter = filters.attribute.has('廃');
+
   // 各フィルター条件をチェック
   const checks = {
-    series: () => filters.series.size === 0 || filters.series.has(card.dataset.series),
-    season: () => filters.season.size === 0 || filters.season.has(card.dataset.season),
+    series: () => {
+      if (filters.series.size === 0) return true;
+      const cardValues = card.dataset.series ? card.dataset.series.split(' ') : [];
+      return cardValues.some((v) => filters.series.has(v));
+    },
+    season: () => {
+      if (filters.season.size === 0) return true;
+      const cardValues = card.dataset.season ? card.dataset.season.split(' ') : [];
+      return cardValues.some((v) => filters.season.has(v));
+    },
     type: () => filters.type.size === 0 || filters.type.has(card.dataset.type),
     role: () => {
       if (filters.role.size === 0) return true;
       const cardRoles = card.dataset.role.split(' ');
       return [...filters.role].some((role) => cardRoles.includes(role));
     },
-    keyword: () => filters.keyword.size === 0 || filters.keyword.has(card.dataset.keyword),
+    keyword: () => {
+      if (filters.keyword.size === 0) return true;
+      const cardValues = card.dataset.keyword ? card.dataset.keyword.split(' ') : [];
+      return cardValues.some((v) => filters.keyword.has(v));
+    },
     attribute: () => {
       if (filters.attribute.size === 0) return true;
-      const cardAttributes = card.dataset.attribute.split(' ');
-      return [...filters.attribute].some((attr) => cardAttributes.includes(attr));
+      const cardAttributes = card.dataset.attribute ? card.dataset.attribute.split(' ') : [];
+
+      if (has廃Filter) {
+        const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
+        const otherFilters = [...filters.attribute].filter(v => v !== '廃');
+        if (otherFilters.length === 0) {
+          return has廃InAttributes;
+        }
+        return has廃InAttributes || cardAttributes.some(attr => otherFilters.includes(attr));
+      }
+
+      return cardAttributes.some((attr) => filters.attribute.has(attr));
     },
     rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare),
     cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
     power: () => {
       if (filters.power.size === 0) return true;
       const powerMatch = filters.power.has(card.dataset.power);
-      // 「力」で「0」を含むときは場所札のみ
       if (filters.power.has('0')) {
         return powerMatch && (card.dataset.type === '場所札');
       }
@@ -2201,15 +2220,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.classList.remove('no-scroll');
     }
   });
-
-  // ESCキーでフィルター解除
-  document.addEventListener('keydown', function (event) {
-    // ESCキーが押され、モーダルが開いていない場合にフィルターをリセット
-    if (event.key === 'Escape' && document.getElementById('modal').style.display !== 'block' && document.getElementById('image-modal').style.display !== 'flex') {
-      resetFilters();
-    }
-  });
-
+  
   deckManager.initialize();
 });
 
