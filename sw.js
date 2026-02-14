@@ -12,7 +12,7 @@ const STATIC_ASSETS = [
   './styles.css',
   './scripts.js',
   './cards.js',
-  './images/placeholder.jpg',
+  './placeholder.jpg',
   './favicon/favicon.ico'
 ];
 
@@ -66,7 +66,7 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           }).catch(() => {
             // オフライン時のフォールバック: プレースホルダーを返す
-            return cache.match('./images/placeholder.jpg');
+            return cache.match('./placeholder.jpg');
           });
         });
       })
