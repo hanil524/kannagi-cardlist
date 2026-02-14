@@ -298,7 +298,7 @@ let startY = 0;
 let observer = null;
 let isObserverSetup = false;
 
-const MAX_CONCURRENT_IMAGE_LOADS = 6;
+const MAX_CONCURRENT_IMAGE_LOADS = 15;
 const imageLoadQueue = [];
 const queuedImages = new Set();
 const loadingImages = new Set();
@@ -740,13 +740,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 遅延読み込みの処理
   // 表示の先読み枚数と初期読み込み枚数を適度に増やす
-  const PRELOAD_AHEAD_COUNT = 12;
-  const INITIAL_LAZYLOAD_COUNT = 30;
+  const PRELOAD_AHEAD_COUNT = 24;
+  const INITIAL_LAZYLOAD_COUNT = 40;
   const options = {
-    root: null,
-    rootMargin: '400px 0px',
-    threshold: 0.01
-  };
+  root: null,
+  rootMargin: '1000px 0px',
+  threshold: 0.01
+};
 
   // ObserverをグローバルObserverとして初期化（全デバイス共通）
   if (!observer) {
@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         lastScrollTop = st <= 0 ? 0 : st;
         loadVisibleImages();
-      }, 200);
+      }, 80);
     },
     false
   );  
@@ -3429,35 +3429,32 @@ const deckBuilder = {
     const attributeContent = document.createElement('div');
     attributeContent.className = 'attribute-content';
 
-    // 属性ごとの枚数をカウント
     const attributeCounts = {};
-    this.deck.forEach((card) => {
-      if (card.dataset.attribute) {
-        const attributes = card.dataset.attribute.split(' ');
-        attributes.forEach((attr) => {
-          attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
-        });
-      }
+    (this.deck || []).forEach((card) => {
+      const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
+      if (!attrs) return;
+      attrs.split(' ').forEach((attr) => {
+        if (!attr) return;
+        attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+      });
     });
 
-    // 属性を枚数順にソート
-    const sortedAttributes = Object.entries(attributeCounts)
+    const top10 = Object.entries(attributeCounts)
       .sort(([, a], [, b]) => b - a)
-      .slice(0, 5); // 上位5つのみを取得
+      .slice(0, 10);
 
-    // 属性の表示
-    const attributeRows = document.createElement('div');
-    attributeRows.className = 'attribute-rows';
+    const rows = document.createElement('div');
+    rows.className = 'attribute-rows two-columns';
 
-    sortedAttributes.forEach(([attribute, count]) => {
-      const attributeText = document.createElement('div');
-      attributeText.className = 'attribute-text';
-      attributeText.setAttribute('data-name', attribute);
-      attributeText.setAttribute('data-count', `：${count}枚`);
-      attributeRows.appendChild(attributeText);
+    top10.forEach(([attribute, count]) => {
+      const item = document.createElement('div');
+      item.className = 'attribute-text';
+      item.setAttribute('data-name', attribute);
+      item.setAttribute('data-count', String(count));
+      rows.appendChild(item);
     });
 
-    attributeContent.appendChild(attributeRows);
+    attributeContent.appendChild(rows);
     return attributeContent;
   }
 };
@@ -3485,75 +3482,6 @@ deckBuilder.getMaxAllowed = function (cardName) {
     return 4;
   }
   return base;
-};
-
-// 4-a-2) 主な属性の再定義（数値のみを埋め込み、装飾はCSSで付与）
-deckBuilder.createAttributeDistribution = function () {
-  const attributeContent = document.createElement('div');
-  attributeContent.className = 'attribute-content';
-
-  const attributeCounts = {};
-  (this.deck || []).forEach((card) => {
-    const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
-    if (!attrs) return;
-    attrs.split(' ').forEach((attr) => {
-      if (!attr) return;
-      attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
-    });
-  });
-
-  const top10 = Object.entries(attributeCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10);
-
-  const rows = document.createElement('div');
-  rows.className = 'attribute-rows two-columns';
-
-  top10.forEach(([attribute, count]) => {
-    const item = document.createElement('div');
-    item.className = 'attribute-text';
-    item.setAttribute('data-name', attribute);
-    item.setAttribute('data-count', String(count));
-    rows.appendChild(item);
-  });
-
-  attributeContent.appendChild(rows);
-  return attributeContent;
-};
-
-// 4-a) 主な属性: 上位10件を2列で中央表示に差し替え
-deckBuilder.createAttributeDistribution = function () {
-  const attributeContent = document.createElement('div');
-  attributeContent.className = 'attribute-content';
-
-  // 属性ごとの頻度カウント
-  const attributeCounts = {};
-  (this.deck || []).forEach((card) => {
-    const attrs = card?.dataset?.attribute || '';
-    if (!attrs) return;
-    attrs.split(' ').forEach((attr) => {
-      if (!attr) return;
-      attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
-    });
-  });
-
-  const sortedAttributes = Object.entries(attributeCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10);
-
-  const rows = document.createElement('div');
-  rows.className = 'attribute-rows two-columns';
-
-  sortedAttributes.forEach(([attribute, count]) => {
-    const item = document.createElement('div');
-    item.className = 'attribute-text';
-    item.setAttribute('data-name', attribute);
-    item.setAttribute('data-count', `�F${count}��`);
-    rows.appendChild(item);
-  });
-
-  attributeContent.appendChild(rows);
-  return attributeContent;
 };
 
 // 4) addCard の上書き（上限判定を一本化）
@@ -5899,44 +5827,6 @@ async function deckToCodeV6(map) {
   const payload = b64urlEncode(v6_bytesToBin(bytes));
   const checksum = (await sha256Hex(payload)).slice(0, 10);
   return `5|${checksum}|${payload}`;
-}
-
-// === Final override: createAttributeDistribution ===
-// 数値のみを data-count に持たせ、記号はCSSで付与することで文字化けを防ぐ。
-// 上位10件を2列表示。呼び出し側は既存のまま。
-if (typeof deckBuilder !== 'undefined') {
-  deckBuilder.createAttributeDistribution = function () {
-    const attributeContent = document.createElement('div');
-    attributeContent.className = 'attribute-content';
-
-    const attributeCounts = {};
-    (this.deck || []).forEach((card) => {
-      const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
-      if (!attrs) return;
-      attrs.split(' ').forEach((attr) => {
-        if (!attr) return;
-        attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
-      });
-    });
-
-    const top10 = Object.entries(attributeCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 10);
-
-    const rows = document.createElement('div');
-    rows.className = 'attribute-rows two-columns';
-
-    top10.forEach(([attribute, count]) => {
-      const item = document.createElement('div');
-      item.className = 'attribute-text';
-      item.setAttribute('data-name', attribute);
-      item.setAttribute('data-count', String(count));
-      rows.appendChild(item);
-    });
-
-    attributeContent.appendChild(rows);
-    return attributeContent;
-  };
 }
 
 // スクロール可能かチェックしてスクロールバーを表示
