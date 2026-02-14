@@ -2,10 +2,7 @@
 html,
 body {
   overscroll-behavior: none;
-  -webkit-overscroll-behavior: none;
-  touch-action: pan-x pan-y;
-  -ms-touch-action: pan-x pan-y;
-  -webkit-touch-action: pan-x pan-y;
+  -webkit-overscroll-behavior: none;  
 }
 
 body {
@@ -315,14 +312,6 @@ main {
   .limit-release:hover {
     background-color: rgba(90, 90, 150, 0.95);
   }
-}
-main,
-#card-list,
-#card-list .card,
-#card-list .card img,
-#card-list * {
-  touch-action: pan-y;
-  -ms-touch-action: pan-y;
 }
 
 @media (max-width: 768px) {
