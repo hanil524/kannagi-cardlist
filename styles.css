@@ -4174,3 +4174,7 @@ body.modal-open {
     min-width: 0;
   }
 }
+
+* {
+  touch-action: manipulation;
+}
