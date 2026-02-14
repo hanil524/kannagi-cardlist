@@ -939,8 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = e.target.closest('.card');
     if (!card) return;
 
-    if (e.target.closest('.card-buttons')) {
-      // ボタンクリックの場合はその処理を実行
+    if (e.target.closest('.card-add-button') || e.target.closest('.card-remove-button')) {
       return;
     } else {
       // カードクリックは画像表示のみ
@@ -1923,7 +1922,7 @@ const openImageModal = (src) => {
   const now = Date.now();
   if (now - lastModalOpenTime < 300) return;
   lastModalOpenTime = now;
-  
+
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
