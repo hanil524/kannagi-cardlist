@@ -341,16 +341,16 @@ main,
   padding: 20px; /* デフォルトのパディング */
 }
 
+@media (max-width: 480px) {
+  #card-list {
+    padding: 5px; /* さらに小さい画面ではパディングをより小さく */
+  }
+}
+
 @media (max-width: 768px) {
   #card-list {
     gap: 8px;
     padding: 10px; /* スマートフォン表示時はパディングを小さく */
-  }
-}
-
-@media (max-width: 480px) {
-  #card-list {
-    padding: 5px; /* さらに小さい画面ではパディングをより小さく */
   }
 }
 
@@ -3968,7 +3968,11 @@ body.modal-open {
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: contain;
+  width: 32px;          /* ← 追加 */
+  height: 32px;         /* ← 追加 */
+  max-width: 32px;      /* ← 追加 */
+  max-height: 32px;     /* ← 追加 */
 }
 
 .card-add-button::before,
@@ -4008,7 +4012,11 @@ body.modal-open {
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: contain;
+  width: 32px;          /* ← 追加 */
+  height: 32px;         /* ← 追加 */
+  max-width: 32px;      /* ← 追加 */
+  max-height: 32px;     /* ← 追加 */
 }
 
 /* モーダル内のタップ範囲を広げる */
