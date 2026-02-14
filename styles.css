@@ -633,30 +633,49 @@ main,
   right: 20px;
   width: 50px;
   height: 50px;
-  background-color: #363636;
-  color: rgb(236, 47, 47);
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  color: #e0e0e0;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, box-shadow 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
   font-weight: bold;
+  font-size: 10px;
+  letter-spacing: 0.5px;
 }
 
 .top-button.show {
   display: flex;
   opacity: 1;
   visibility: visible;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* ホバー時の影のスタイルを追加 */
 }
 
 .top-button:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.top-button::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 3px solid #e0e0e0;
+  border-right: 3px solid #e0e0e0;
+  border-radius: 2px;
+  transform: rotate(-45deg);
+  margin-top: 5px;
 }
 
 @media (min-width: 768px) {
@@ -1829,26 +1848,35 @@ body.modal-open {
 /* デッキボタンのスタイル */
 .deck-button {
   position: fixed;
-  bottom: 80px; /* TOPボタンの上に配置 */
+  bottom: 80px;
   right: 20px;
   width: 50px;
   height: 50px;
-  background-color: #363636;
-  color: #ec2f2f;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  color: #e0e0e0;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s ease;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: bold;
+  letter-spacing: 0.5px;
+  padding-left: 1.5px;
 }
 
 .deck-button:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 /* スマホ表示時はヘッダーアイコンを使用するため、デッキボタンを非表示に */
@@ -2534,17 +2562,34 @@ body.modal-open {
   right: 20px;
   width: 50px;
   height: 50px;
-  background-color: #363636;
-  color: #ec2f2f;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  color: #e0e0e0;
   border-radius: 50%;
-  display: flex; /* noneから変更 */
+  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
-  transition: box-shadow 0.3s ease;
-  z-index: 2001; /* デッキモーダル(2000)より上に */
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2001;
   font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 0;
+  padding-left: 2.5px;
+  text-indent: 0;  
+  text-align: center;
+}
+
+.deck-back-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 /* スマホでは非表示 */
@@ -3969,10 +4014,6 @@ body.modal-open {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  width: 32px;          /* ← 追加 */
-  height: 32px;         /* ← 追加 */
-  max-width: 32px;      /* ← 追加 */
-  max-height: 32px;     /* ← 追加 */
 }
 
 .card-add-button::before,
@@ -4013,10 +4054,6 @@ body.modal-open {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  width: 32px;          /* ← 追加 */
-  height: 32px;         /* ← 追加 */
-  max-width: 32px;      /* ← 追加 */
-  max-height: 32px;     /* ← 追加 */
 }
 
 /* モーダル内のタップ範囲を広げる */
