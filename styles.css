@@ -1865,10 +1865,10 @@ body.modal-open {
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  padding-left: 1.5px;
+  letter-spacing: 0.5px; /* 文字間のスペース */
+  padding-left: 1.5px; /* ボタン内部の文字、位置調整 */
 }
 
 .deck-button:hover {
