@@ -1916,8 +1916,14 @@ const updateModalControls = (cardName, controls) => {
 let modalContainer = null;
 let modalSeriesInfo = null;
 let modalControls = null;
+let lastModalOpenTime = 0;
+
 
 const openImageModal = (src) => {
+  const now = Date.now();
+  if (now - lastModalOpenTime < 300) return;
+  lastModalOpenTime = now;
+  
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -2042,20 +2048,7 @@ const openImageModal = (src) => {
         showNextImage();
       } else {
         showPreviousImage();
-      }
-      
-      // スワイプ後、modalImage自体のlastTouchを削除
-      delete modalImage.dataset.lastTouch;
-      
-      // 念のためモーダル内の全要素のlastTouchも削除
-      const modal = document.getElementById('image-modal');
-      if (modal) {
-        modal.querySelectorAll('*').forEach(el => {
-          if (el.dataset && el.dataset.lastTouch) {
-            delete el.dataset.lastTouch;
-          }
-        });
-      }
+      }      
     }
     
     swiping = false;
@@ -2163,11 +2156,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const menuOverlay = document.querySelector('.menu-overlay');
   const closeMenuButton = document.querySelector('.close-menu');
 
-  // iOS only: prevent double-tap zoom without blocking scroll
-  if (isIOS()) {
-    document.addEventListener('touchstart', preventZoom, { passive: false });
-  }
-
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
   imageModal.addEventListener('click', function (event) {
@@ -2223,29 +2211,6 @@ document.addEventListener('DOMContentLoaded', function () {
   
   deckManager.initialize();
 });
-
-// ズームを防止する関数
-function preventZoom(e) {
-  if (e.touches.length > 1) {
-    e.preventDefault();
-    return; // マルチタッチの場合はここで終了
-  }
-
-  var target = e.target;
-  var t2 = e.timeStamp;
-  var t1 = target && target.dataset && target.dataset.lastTouch ? Number(target.dataset.lastTouch) : 0;
-  var dt = t2 - t1;
-
-  if (t1 && dt < 500) {
-    e.preventDefault();
-    target.click();
-  }
-
-  // 最後のタッチ時間を更新
-  if (target && target.dataset) {
-    target.dataset.lastTouch = t2;
-  }
-}
 
 document.querySelectorAll('.card-image-container').forEach((container) => {
   container.addEventListener('mouseover', () => {
