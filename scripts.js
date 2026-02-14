@@ -439,6 +439,42 @@ const filters = {
   power: new Set()
 };
 
+// === フィルター高速化: 逆引きインデックス ===
+// カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
+const cardIndexCache = {
+  built: false,
+  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:'', cost:'', power:'', name:'', nameLower:'', attributeLower:'', doubleFor:''}]
+  build() {
+    if (this.built) return;
+    const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+    this.entries = [];
+    cards.forEach(card => {
+      this.entries.push({
+        el: card,
+        series: card.dataset.series ? card.dataset.series.split(' ') : [],
+        season: card.dataset.season ? card.dataset.season.split(' ') : [],
+        type: card.dataset.type || '',
+        role: card.dataset.role ? card.dataset.role.split(' ') : [],
+        keyword: card.dataset.keyword ? card.dataset.keyword.split(' ') : [],
+        attribute: card.dataset.attribute ? card.dataset.attribute.split(' ') : [],
+        rare: card.dataset.rare || '',
+        cost: card.dataset.cost || '',
+        power: card.dataset.power || '',
+        name: card.dataset.name || '',
+        nameLower: (card.dataset.name || '').toLowerCase(),
+        attributeLower: (card.dataset.attribute || '').toLowerCase(),
+        doubleFor: card.getAttribute('data-double-for') || '',
+        number: card.dataset.number || ''
+      });
+    });
+    this.built = true;
+  },
+  invalidate() {
+    this.built = false;
+    this.entries = [];
+  }
+};
+
 let seasonAutoConfig = null;
 const autoSeasonFilters = new Set();
 
@@ -1228,33 +1264,8 @@ function clearSearch(inputId, buttonId) {
 }
 
 const filterCardsByName = (event) => {
-  const query = event.target.value.toLowerCase();
-  const cards = document.querySelectorAll('.card');
-
-  cards.forEach((card) => {
-    // フィルター条件に合致するかどうかを確認
-    const matchesFilters = checkFilters(card);
-
-    if (query === '') {
-      // 検索欄が空の場合は、フィルター条件のみで表示/非表示を決定
-      card.style.display = matchesFilters ? 'block' : 'none';
-    } else {
-      // 検索文字列がある場合は、フィルター条件に加えて検索条件も確認
-      const name = card.dataset.name.toLowerCase();
-      const attribute = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
-      const matchesSearch = name.includes(query) || attribute.includes(query);
-
-      // フィルター条件と検索条件の両方に合致する場合のみ表示
-      card.style.display = matchesFilters && matchesSearch ? 'block' : 'none';
-    }
-  });
-
-  // 検索結果が0件の場合のメッセージ表示
-  const anyVisible = Array.from(cards).some((card) => card.style.display !== 'none');
-  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
-
-  // カード数を更新
-  updateCardCount();
+  // filterCards()を使って統一的にフィルタリング（インデックスキャッシュも活用）
+  filterCards();
 };
 
 // フィルター条件のチェック関数
@@ -1509,11 +1520,19 @@ const toggleFilterCard = (attribute, value) => {
 };
 
 const filterCards = () => {
-  const cards = document.querySelectorAll('.card');
+  // インデックスキャッシュを構築（初回のみ）
+  cardIndexCache.build();
+
   let anyVisible = false;
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
   const has廃Filter = filters.attribute.has('廃');
+
+  // 「廃」フィルター用: 他の属性フィルターを事前計算
+  let otherAttributeFilters = null;
+  if (has廃Filter) {
+    otherAttributeFilters = [...filters.attribute].filter(v => v !== '廃');
+  }
 
   // 検索欄の文字を取得
   const searchBox = document.getElementById('search-box');
@@ -1523,59 +1542,95 @@ const filterCards = () => {
   // 複製カードの削除
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
 
-  cards.forEach((card) => {
-    if (card.hasAttribute('data-cloned')) return; // 複製カードはスキップ
+  // インデックスキャッシュを使った高速フィルタリング
+  const entries = cardIndexCache.entries;
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const card = entry.el;
 
     let shouldDisplay = true;
-    for (const [attribute, values] of Object.entries(filters)) {
-      if (values.size > 0) {
-        const cardAttribute = card.getAttribute(`data-${attribute}`);
-        const cardAttributes = cardAttribute ? cardAttribute.split(' ') : [];
-        
-        let matches = false;
-        
-        
-        // 「廃」フィルターの特別処理
-        if (attribute === 'attribute' && has廃Filter) {
-          // 「廃」フィルターがある場合は、属性に「廃」を含むカードを表示
-          const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
-          
-          // 他の属性フィルターもチェック
-          const otherAttributeFilters = [...values].filter(v => v !== '廃');
-          const matchesOtherFilters = otherAttributeFilters.length === 0 || 
-                                    cardAttributes.some(attr => otherAttributeFilters.includes(attr));
-          
-          // 「廃」を含むか、他の属性フィルターに一致する場合
-          if (otherAttributeFilters.length === 0) {
-            // 「廃」だけが選択されている場合、「廃」を含む属性を持つカードだけを表示
-            matches = has廃InAttributes;
-          } else {
-            // 「廃」と他の属性が選択されている場合、「廃」を含む属性があるか、他の選択された属性に一致するカードを表示
-            matches = has廃InAttributes || matchesOtherFilters;
-          }
-        } else {
-          // 通常の完全一致フィルター
-          matches = values.has(cardAttribute) || cardAttributes.some((attr) => values.has(attr));
-        }
-        
-        // 「力」で「0」を含むときは場所札（data-type=場所札）のみ表示
-        if (attribute === 'power' && values.has('0')) {
-          matches = matches && (card.getAttribute('data-type') === '場所札');
-        }
-        
-        if (!matches) {
-          shouldDisplay = false;
-          break;
-        }
+
+    // series フィルター
+    if (filters.series.size > 0) {
+      if (!entry.series.some(v => filters.series.has(v))) {
+        shouldDisplay = false;
       }
     }
 
-    // 検索条件もチェック
+    // season フィルター
+    if (shouldDisplay && filters.season.size > 0) {
+      if (!entry.season.some(v => filters.season.has(v))) {
+        shouldDisplay = false;
+      }
+    }
+
+    // type フィルター
+    if (shouldDisplay && filters.type.size > 0) {
+      if (!filters.type.has(entry.type)) {
+        shouldDisplay = false;
+      }
+    }
+
+    // role フィルター
+    if (shouldDisplay && filters.role.size > 0) {
+      if (!entry.role.some(v => filters.role.has(v))) {
+        shouldDisplay = false;
+      }
+    }
+
+    // keyword フィルター
+    if (shouldDisplay && filters.keyword.size > 0) {
+      if (!entry.keyword.some(v => filters.keyword.has(v))) {
+        shouldDisplay = false;
+      }
+    }
+
+    // attribute フィルター（「廃」特別処理あり）
+    if (shouldDisplay && filters.attribute.size > 0) {
+      let matches = false;
+      if (has廃Filter) {
+        const has廃InAttributes = entry.attribute.some(attr => attr.includes('廃'));
+        if (otherAttributeFilters.length === 0) {
+          matches = has廃InAttributes;
+        } else {
+          matches = has廃InAttributes || entry.attribute.some(attr => otherAttributeFilters.includes(attr));
+        }
+      } else {
+        matches = entry.attribute.some(attr => filters.attribute.has(attr));
+      }
+      if (!matches) {
+        shouldDisplay = false;
+      }
+    }
+
+    // rare フィルター
+    if (shouldDisplay && filters.rare.size > 0) {
+      if (!filters.rare.has(entry.rare)) {
+        shouldDisplay = false;
+      }
+    }
+
+    // cost フィルター
+    if (shouldDisplay && filters.cost.size > 0) {
+      if (!filters.cost.has(entry.cost)) {
+        shouldDisplay = false;
+      }
+    }
+
+    // power フィルター
+    if (shouldDisplay && filters.power.size > 0) {
+      let powerMatch = filters.power.has(entry.power);
+      if (filters.power.has('0')) {
+        powerMatch = powerMatch && (entry.type === '場所札');
+      }
+      if (!powerMatch) {
+        shouldDisplay = false;
+      }
+    }
+
+    // 検索条件もチェック（キャッシュ済みの小文字値を使用）
     if (shouldDisplay && query !== '') {
-      const name = card.dataset.name.toLowerCase();
-      const attribute = card.dataset.attribute ? card.dataset.attribute.toLowerCase() : '';
-      const matchesSearch = name.includes(query) || attribute.includes(query);
-      if (!matchesSearch) {
+      if (!entry.nameLower.includes(query) && !entry.attributeLower.includes(query)) {
         shouldDisplay = false;
       }
     }
@@ -1584,15 +1639,13 @@ const filterCards = () => {
       anyVisible = true;
       card.style.display = 'block';
 
-      const doubleFor = card.getAttribute('data-double-for');
-      if (doubleFor) {
-        const doubleFilters = doubleFor.split(',');
+      if (entry.doubleFor) {
+        const doubleFilters = entry.doubleFor.split(',');
         const shouldDouble = doubleFilters.some((filter) => activeFilters.has(filter));
 
         if (shouldDouble) {
           const clone = card.cloneNode(true);
           clone.setAttribute('data-cloned', 'true');
-          // クローンの画像に対して即時読み込みを設定
           const cloneImg = clone.querySelector('img');
           if (cloneImg) {
             cloneImg.src = cloneImg.getAttribute('data-src') || cloneImg.src;
@@ -1606,7 +1659,7 @@ const filterCards = () => {
     } else {
       card.style.display = 'none';
     }
-  });  
+  }
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
