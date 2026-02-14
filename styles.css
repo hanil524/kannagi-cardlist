@@ -227,6 +227,31 @@ main {
   }
 }
 
+@media (max-width: 768px) {
+  .sort-buttons,
+  .filter-buttons {
+    gap: 4px;
+  }
+  
+  .filter-buttons button,
+  .sort-buttons button {
+    flex-shrink: 1;
+    min-width: 0;
+    padding: 0 5px;
+    white-space: nowrap;
+  }
+  
+  .filter-group {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .filter-group > label:not(.limit-release) {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
 /* フィルターボタンのデザイン */
 .filter-group {
   color: #fff;
@@ -248,7 +273,7 @@ main {
 .sort-buttons,
 .filter-buttons {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
 }
 
