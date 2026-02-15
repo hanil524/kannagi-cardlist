@@ -13651,5 +13651,21 @@ data-role=""
 >
 <img data-src="images/card_14_p (78).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10045"
+  data-name="アイリスラーメンch(あいりすらーめんちゃんねる)"
+  data-cost="3"
+  data-power="3"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="怨霊 糧"
+  data-keyword="召喚時"
+  data-role="特殊召喚 追加行動"
+>
+  <img data-src="images/card_14_p (126).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
