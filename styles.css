@@ -2789,6 +2789,39 @@ body.modal-open {
   pointer-events: none;
 }
 
+/* バックアップボタンの位置調整 */
+.deck-backup-button {
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 4px 10px;
+  background-color: #3a6b3a;
+  border: none;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-height: 28px;
+  line-height: 1.2;
+}
+
+.deck-backup-button:hover {
+  background-color: #4a8a4a;
+  color: #fff;
+}
+
+.deck-backup-button:active {
+  background-color: #2e5a2e;
+}
+
 /* 閉じるボタンの位置調整 */
 .deck-list-close {
   position: absolute;
