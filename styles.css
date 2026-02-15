@@ -2797,7 +2797,7 @@ body.modal-open {
   transform: translateY(-50%);
   z-index: 1;
   padding: 4px 10px;
-  background-color: #3a6b3a;
+  background-color: #4A4A4A;
   border: none;
   border-radius: 6px;
   color: #e0e0e0;
@@ -2814,12 +2814,12 @@ body.modal-open {
 }
 
 .deck-backup-button:hover {
-  background-color: #4a8a4a;
+  background-color: #4A4A4A;
   color: #fff;
 }
 
 .deck-backup-button:active {
-  background-color: #2e5a2e;
+  background-color: #4A4A4A;
 }
 
 /* 閉じるボタンの位置調整 */
