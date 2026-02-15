@@ -37,7 +37,7 @@ const isAndroid = () => {
 };
 
 const hasVisibleModal = () => {
-  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal'];
+  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal', 'deck-backup-modal'];
   const modalOpen = modalIds.some((id) => {
     const el = document.getElementById(id);
     return el && el.style.display && el.style.display !== 'none';
@@ -110,7 +110,7 @@ const setupAndroidScrollAssist = () => {
 
   const isBlockedRegion = (target) => {
     return !!target.closest(
-      '.mobile-nav, .menu-overlay, #modal, #image-modal, #deck-modal, #deck-list-modal, #deck-share-modal, ' +
+      '.mobile-nav, .menu-overlay, #modal, #image-modal, #deck-modal, #deck-list-modal, #deck-share-modal, #deck-backup-modal, ' +
         '.deck-image-modal, .distribution-modal, .zero-search-modal, .confirm-popup'
     );
   };
@@ -457,7 +457,7 @@ const cardIndexCache = {
         role: card.dataset.role ? card.dataset.role.split(' ') : [],
         keyword: card.dataset.keyword ? card.dataset.keyword.split(' ') : [],
         attribute: card.dataset.attribute ? card.dataset.attribute.split(' ') : [],
-        rare: card.dataset.rare || '',
+        rare: card.dataset.rare ? card.dataset.rare.split(' ') : [],
         cost: card.dataset.cost || '',
         power: card.dataset.power || '',
         name: card.dataset.name || '',
@@ -1310,7 +1310,7 @@ const checkFilters = (card) => {
 
       return cardAttributes.some((attr) => filters.attribute.has(attr));
     },
-    rare: () => filters.rare.size === 0 || filters.rare.has(card.dataset.rare),
+    rare: () => filters.rare.size === 0 || (card.dataset.rare ? card.dataset.rare.split(' ') : []).some(v => filters.rare.has(v)),
     cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
     power: () => {
       if (filters.power.size === 0) return true;
@@ -1603,9 +1603,9 @@ const filterCards = () => {
       }
     }
 
-    // rare フィルター
+    // rare フィルター（スペース区切りで部分一致）
     if (shouldDisplay && filters.rare.size > 0) {
-      if (!filters.rare.has(entry.rare)) {
+      if (!entry.rare.some(v => filters.rare.has(v))) {
         shouldDisplay = false;
       }
     }
@@ -5375,16 +5375,18 @@ function updateFilterDetails() {
     }
   });
 
-  // レア詳細を作成
+  // レア詳細を作成（data-tooltipがあるもののみ表示）
   rareDetailsElement.innerHTML = '';
   selectedRares.forEach(rare => {
     const rareButton = document.querySelector(`#rare button[onclick*="toggleFilterCard('rare', '${rare}')"]`);
     if (rareButton) {
       const tooltip = rareButton.getAttribute('data-tooltip') || '';
-      const detailItem = document.createElement('div');
-      detailItem.className = 'details-item';
-      detailItem.innerHTML = `<span class="item-name">${rare}</span>：<span class="item-description">${tooltip}</span>`;
-      rareDetailsElement.appendChild(detailItem);
+      if (tooltip) {
+        const detailItem = document.createElement('div');
+        detailItem.className = 'details-item';
+        detailItem.innerHTML = `<span class="item-name">${rare}</span>：<span class="item-description">${tooltip}</span>`;
+        rareDetailsElement.appendChild(detailItem);
+      }
     }
   });
 
@@ -5857,3 +5859,364 @@ const updateScrollbarVisibility = () => {
     }
   }
 };
+
+// =====================
+// 全デッキバックアップ機能
+// =====================
+
+// 全デッキをバックアップコードに変換
+async function generateAllDecksBackupCode() {
+  // 現在のデッキも保存してから開始
+  deckManager.saveDeck(deckManager.currentDeckId);
+
+  const backupData = {
+    decks: {},
+    deckOrder: deckManager.deckOrder,
+    currentDeckId: deckManager.currentDeckId
+  };
+
+  // 各デッキのカードを {number: count} 形式に変換
+  for (const [deckId, deck] of Object.entries(deckManager.decks)) {
+    if (deck && Array.isArray(deck.cards) && deck.cards.length > 0) {
+      const map = {};
+      deck.cards.forEach(card => {
+        const num = card?.dataset?.number;
+        if (num) map[num] = (map[num] || 0) + 1;
+      });
+      backupData.decks[deckId] = {
+        name: deck.name || ('デッキ' + deckId),
+        cards: map
+      };
+    } else {
+      // 空デッキも名前だけ保存
+      backupData.decks[deckId] = {
+        name: deck?.name || ('デッキ' + deckId),
+        cards: {}
+      };
+    }
+  }
+
+  // JSON -> UTF-8対応Base64URL化（日本語デッキ名に対応）
+  const json = JSON.stringify(backupData);
+  const utf8 = encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)));
+  const payload = b64urlEncode(utf8);
+  const checksum = (await sha256Hex(payload)).slice(0, 8);
+  return `BK1|${checksum}|${payload}`;
+}
+
+// バックアップコードから全デッキを復元
+async function restoreAllDecksFromBackup(code) {
+  try {
+    const raw = normalizeWholeCode(code);
+    if (!raw.startsWith('BK1|')) throw new Error('無効なバックアップコードです');
+
+    const firstBar = raw.indexOf('|');
+    const rest = raw.slice(firstBar + 1);
+    const sep = rest.indexOf('|');
+    if (sep < 0) throw new Error('無効なバックアップコードです');
+
+    const checksum = rest.slice(0, sep).replace(/[^0-9a-f]/gi, '').toLowerCase();
+    const payload = rest.slice(sep + 1);
+    const expect = (await sha256Hex(payload)).slice(0, 8);
+    if (checksum !== expect) throw new Error('バックアップコードが壊れています');
+
+    const decoded = b64urlDecode(payload);
+    const json = decodeURIComponent(decoded.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    const backupData = JSON.parse(json);
+
+    if (!backupData.decks || typeof backupData.decks !== 'object') {
+      throw new Error('無効なバックアップデータです');
+    }
+
+    return backupData;
+  } catch (e) {
+    throw new Error(e.message || '無効なバックアップコードです');
+  }
+}
+
+// バックアップデータを実際に適用
+function applyBackupData(backupData) {
+  // 全デッキを上書き
+  deckManager.decks = {};
+  for (const [deckId, deckInfo] of Object.entries(backupData.decks)) {
+    const cards = [];
+    if (deckInfo.cards && Object.keys(deckInfo.cards).length > 0) {
+      Object.entries(deckInfo.cards)
+        .sort(([a], [b]) => parseInt(a, 10) - parseInt(b, 10))
+        .forEach(([num, count]) => {
+          const original = document.querySelector(`.card[data-number="${num}"]`);
+          if (original) {
+            for (let i = 0; i < count; i++) {
+              const card = document.createElement('div');
+              card.className = 'card';
+              Object.assign(card.dataset, {
+                name: original.dataset.name,
+                type: original.dataset.type,
+                season: original.dataset.season,
+                cost: original.dataset.cost,
+                number: original.dataset.number
+              });
+              if (original.dataset.attribute) {
+                card.dataset.attribute = original.dataset.attribute;
+              }
+              const img = document.createElement('img');
+              const originalImg = original.querySelector('img');
+              img.src = originalImg.getAttribute('data-src') || originalImg.src;
+              img.alt = original.dataset.name;
+              card.appendChild(img);
+              cards.push(card);
+            }
+          }
+        });
+    }
+    deckManager.decks[deckId] = {
+      name: deckInfo.name || ('デッキ' + deckId),
+      cards: cards.map(card => ({
+        dataset: { ...card.dataset },
+        src: card.querySelector('img')?.src
+      }))
+    };
+
+    // ボタン名を更新
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+    if (button) button.textContent = deckInfo.name || ('デッキ' + deckId);
+  }
+
+  // deckOrderがあれば復元
+  if (Array.isArray(backupData.deckOrder) && backupData.deckOrder.length > 0) {
+    deckManager.deckOrder = backupData.deckOrder.map(id => parseInt(id, 10)).filter(id => Number.isFinite(id));
+    deckManager.applyDeckOrder();
+  }
+
+  // currentDeckIdを復元
+  const targetDeckId = backupData.currentDeckId || 1;
+  deckManager.currentDeckId = targetDeckId;
+  deckManager.loadDeck(targetDeckId);
+  deckManager.saveToLocalStorage();
+
+  // デッキ一覧のUI（サムネイル・ハイライト）を即座に更新
+  deckManager.updateDeckPreviews();
+  deckManager.updateActiveButton();
+}
+
+// バックアップモーダルを開く
+function openDeckBackupModal() {
+  // スタイル注入（1回だけ）
+  if (!document.getElementById('deck-backup-style')) {
+    const st = document.createElement('style');
+    st.id = 'deck-backup-style';
+    st.textContent = `
+    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4}
+    .deck-backup-section-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
+    .deck-backup-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;line-height:1.4;max-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch;user-select:all;-webkit-user-select:all}
+    .deck-backup-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0;flex-wrap:wrap}
+    .deck-backup-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:13px;line-height:1.4}
+    .deck-backup-body .deck-menu-button{font-size:13px;font-weight:600;padding:6px 10px;height:auto;min-height:32px;line-height:1.2}
+    .deck-backup-separator{border:0;border-top:1px solid rgba(255,255,255,.15);margin:4px 0}
+    .deck-backup-desc{color:#aaa;font-size:12px;margin:0;line-height:1.4}
+    .deck-backup-warning{color:#ff9800;font-size:12px;margin:0;line-height:1.4}
+    .deck-backup-body textarea,.deck-backup-body input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+    .deck-backup-deck-summary{color:#ccc;font-size:12px;margin:2px 0 0 0;line-height:1.3}
+    `;
+    document.head.appendChild(st);
+  }
+
+  let modal = document.getElementById('deck-backup-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'deck-backup-modal';
+    modal.className = 'deck-list-modal';
+    const content = document.createElement('div');
+    content.className = 'deck-list-content';
+    content.innerHTML = `
+      <div class="deck-list-header">
+        <h2>デッキバックアップ</h2>
+        <button class="deck-list-close" id="deck-backup-close">&times;</button>
+      </div>
+      <div class="deck-backup-body">
+        <p class="deck-backup-desc">全デッキのバックアップコードを生成します。<br>コードをコピーしてメモ帳などに保存しておくと、キャッシュクリアしても復元できます。</p>
+
+        <div class="deck-backup-section-title">バックアップコード</div>
+        <div id="deck-backup-code-display" class="deck-backup-code-display">生成中...</div>
+        <div id="deck-backup-deck-summary" class="deck-backup-deck-summary"></div>
+        <div class="deck-backup-buttons">
+          <button id="copy-backup-code" class="deck-menu-button">コードをコピー</button>
+        </div>
+
+        <hr class="deck-backup-separator">
+
+        <div class="deck-backup-section-title">バックアップから復元</div>
+        <textarea id="deck-backup-input" class="deck-backup-input" rows="3" placeholder="バックアップコードをここに貼り付け"></textarea>
+        <div class="deck-backup-buttons">
+          <button id="paste-backup-code" class="deck-menu-button">クリップボードから貼り付け</button>
+          <button id="apply-backup-code" class="deck-menu-button">適用</button>
+          <button id="clear-backup-input" class="deck-menu-button">消去</button>
+        </div>
+        <p class="deck-backup-warning">※ 適用すると現在の全デッキが上書きされます。</p>
+      </div>`;
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // 閉じる
+    const closeBtn = content.querySelector('#deck-backup-close');
+    closeBtn?.addEventListener('click', () => {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+      }
+    });
+
+    // コピー
+    content.querySelector('#copy-backup-code')?.addEventListener('click', async () => {
+      const code = content.querySelector('#deck-backup-code-display')?.textContent?.trim() || '';
+      if (!code || code === '生成中...') return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(code);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('バックアップコードをコピーしました。');
+      } catch (_) {
+        alert('コピーに失敗しました');
+      }
+    });
+
+    // クリップボードから貼り付け
+    content.querySelector('#paste-backup-code')?.addEventListener('click', async () => {
+      try {
+        const txt = await navigator.clipboard.readText();
+        const input = content.querySelector('#deck-backup-input');
+        if (input) {
+          input.value = txt || '';
+          if (document.activeElement === input) input.blur();
+        }
+      } catch (_) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('クリップボードの読み取りに失敗しました。手動で貼り付けてください。');
+      }
+    });
+
+    // 消去
+    content.querySelector('#clear-backup-input')?.addEventListener('click', () => {
+      const input = content.querySelector('#deck-backup-input');
+      if (input) {
+        input.value = '';
+        if (document.activeElement === input) input.blur();
+      }
+    });
+
+    // 適用（確認ダイアログ付き）
+    content.querySelector('#apply-backup-code')?.addEventListener('click', async () => {
+      const input = content.querySelector('#deck-backup-input');
+      const val = input?.value?.trim() || '';
+      if (!val) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('バックアップコードを入力してください。');
+        return;
+      }
+
+      // まずコードを検証
+      let backupData;
+      try {
+        backupData = await restoreAllDecksFromBackup(val);
+      } catch (e) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage(e.message || '無効なバックアップコードです');
+        return;
+      }
+
+      // デッキ内容のサマリーを作成
+      let summaryText = '';
+      const deckEntries = Object.entries(backupData.decks);
+      const nonEmptyDecks = deckEntries.filter(([, d]) => d.cards && Object.keys(d.cards).length > 0);
+      summaryText = `${nonEmptyDecks.length}個のデッキが含まれています。`;
+
+      // 確認ポップアップ
+      const confirmPopup = document.createElement('div');
+      confirmPopup.className = 'confirm-popup';
+      confirmPopup.innerHTML = `
+        <div class="confirm-content">
+          <p style="font-weight:bold;color:#ff5722;margin-bottom:8px;">全デッキが上書きされます</p>
+          <p style="font-size:13px;margin-bottom:4px;">この操作は取り消せません。<br>現在の全デッキデータが、バックアップの内容に置き換わります。</p>
+          <p style="font-size:12px;color:#888;margin-bottom:12px;">${summaryText}</p>
+          <div class="confirm-buttons">
+            <button id="apply-backup-yes">復元する</button>
+            <button id="apply-backup-no">やめる</button>
+          </div>
+        </div>`;
+      confirmPopup.addEventListener('click', (e) => {
+        if (e.target === confirmPopup) document.body.removeChild(confirmPopup);
+      });
+      document.body.appendChild(confirmPopup);
+
+      document.getElementById('apply-backup-no')?.addEventListener('click', () => {
+        document.body.removeChild(confirmPopup);
+      });
+
+      document.getElementById('apply-backup-yes')?.addEventListener('click', () => {
+        document.body.removeChild(confirmPopup);
+        try {
+          applyBackupData(backupData);
+          if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('全デッキを復元しました。');
+          // バックアップモーダルを閉じる
+          modal.classList.remove('active');
+          setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+        } catch (e) {
+          if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('復元に失敗しました。');
+        }
+      });
+    });
+  }
+
+  // バックアップコード生成
+  (async () => {
+    try {
+      const code = await generateAllDecksBackupCode();
+      const display = modal.querySelector('#deck-backup-code-display');
+      if (display) display.textContent = code;
+
+      // デッキサマリー表示
+      const summaryEl = modal.querySelector('#deck-backup-deck-summary');
+      if (summaryEl) {
+        const deckEntries = Object.entries(deckManager.decks);
+        const lines = [];
+        deckEntries.forEach(([id, deck]) => {
+          if (deck) {
+            const cardCount = Array.isArray(deck.cards) ? deck.cards.length : 0;
+            const name = deck.name || ('デッキ' + id);
+            if (cardCount > 0) {
+              lines.push(`${name}: ${cardCount}枚`);
+            }
+          }
+        });
+        summaryEl.textContent = lines.length > 0
+          ? lines.join(' / ')
+          : 'デッキにカードがありません';
+      }
+    } catch (e) {
+      const display = modal.querySelector('#deck-backup-code-display');
+      if (display) display.textContent = 'コード生成に失敗しました';
+    }
+  })();
+
+  // 表示
+  modal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+}
+
+// バックアップボタンのイベントリスナー登録
+document.addEventListener('DOMContentLoaded', () => {
+  const backupBtn = document.getElementById('deck-backup-btn');
+  if (backupBtn) {
+    backupBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeckBackupModal();
+    });
+  }
+});
