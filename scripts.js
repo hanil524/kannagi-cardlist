@@ -5390,8 +5390,8 @@ function updateFilterDetails() {
     }
   });
 
-  // コンテナの表示・非表示を制御
-  const hasContent = selectedKeywords.length > 0 || selectedRoles.length > 0 || selectedSeries.length > 0 || selectedRares.length > 0;
+  // コンテナの表示・非表示を制御（実際に中身があるセクションのみカウント）
+  const hasContent = keywordDetailsElement.children.length > 0 || roleDetailsElement.children.length > 0 || seriesDetailsElement.children.length > 0 || rareDetailsElement.children.length > 0;
   containerElement.style.display = hasContent ? 'block' : 'none';
 }
 
