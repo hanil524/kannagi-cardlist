@@ -429,7 +429,6 @@
         <span class="filter-category">さ</span>
         <button onclick="toggleFilterCard('keyword', '四季欲')" data-tooltip="召喚時、自分の場の季節札を魂に送り、効果を発動する">四季欲</button>
         <button onclick="toggleFilterCard('keyword', '襲撃')" data-tooltip="相手の場所札にのみ攻撃できる。この攻撃で力が0になった札は除外される">襲撃</button>
-        <button onclick="toggleFilterCard('keyword', '召喚時')" data-tooltip="召喚時に効果が発動する">召喚時</button>
         <button onclick="toggleFilterCard('keyword', '正体不明')" data-tooltip="デッキの1番上を裏向き、「伏せ」状態で場に召喚する。その札は季節「無」でコスト、力が指定される">正体不明</button>
         <button onclick="toggleFilterCard('keyword', '神秘')" data-tooltip="この札が場にある時、相手札の効果を受けず、選択もされない">神秘</button>
         <button onclick="toggleFilterCard('keyword', '潜在能力')" data-tooltip="零探しの後、この札が自分の手札にある場合、召喚（展開）してもよい">潜在能力</button>
@@ -456,8 +455,9 @@
       <!-- 役割 -->
       <div id="role" class="filter-content" style="display: none">
         <span class="filter-category">メイン</span>
-        <button onclick="toggleFilterCard('role', '常時')" data-tooltip="カードが場にある限り、常に発動する効果">常時</button>
-        <button onclick="toggleFilterCard('role', '攻撃時')" data-tooltip="攻撃時に効果が発動すること">攻撃時</button>
+        <button onclick="toggleFilterCard('role', '召喚時')" data-tooltip="カードの効果が召喚時に発動すること">召喚時</button>
+        <button onclick="toggleFilterCard('role', '常時')" data-tooltip="カードの効果が常に発動していること">常時</button>
+        <button onclick="toggleFilterCard('role', '攻撃時')" data-tooltip="カードの効果が攻撃時に発動すること">攻撃時</button>
         <button onclick="toggleFilterCard('role', '回復フェイズ')" data-tooltip="「回復フェイズ」に影響するカード全般">回復フェイズ</button>
         <button onclick="toggleFilterCard('role', '「起き」')" data-tooltip="場にある札を「起き」状態にすること">「起き」</button>
         <button onclick="toggleFilterCard('role', '「伏せ」')" data-tooltip="場にある札を「伏せ」状態にすること">「伏せ」</button>
@@ -524,12 +524,13 @@
         <span class="filter-category">無敵</span>
         <button onclick="toggleFilterCard('role', '神秘付与')" data-tooltip="神秘や秘境などを付与する効果">神秘付与</button>
         <span class="filter-category">特殊</span>
+        <button onclick="toggleFilterCard('role', '特殊召喚')" data-tooltip="ターン1回の制限なく、場所札を特殊に召喚すること">特殊召喚</button>
+        <button onclick="toggleFilterCard('role', '追加行動')" data-tooltip="ターン1回の制限なく、追加で行動すること">追加行動</button>
         <button onclick="toggleFilterCard('role', '特殊勝利')" data-tooltip="特殊な勝利条件を持つカード">特殊勝利</button>
         <button onclick="toggleFilterCard('role', '上限解放')" data-tooltip="手札の枚数上限などがなくなる効果">上限解放</button>
-        <button onclick="toggleFilterCard('role', '追加行動')" data-tooltip="ターン1回の制限なく、追加で行動すること">追加行動</button>        
         <button onclick="toggleFilterCard('role', '2種類札')" data-tooltip="1つのカードが2つの札種類を持つこと">2種類札</button>
         <span class="filter-category">裏</span>
-        <button onclick="toggleFilterCard('role', '裏指定')" data-tooltip="正体不明などで裏向きになっている札を指定する効果">裏指定</button>        
+        <button onclick="toggleFilterCard('role', '裏指定')" data-tooltip="正体不明などで裏向きになっている札を指定する効果">裏指定</button>
       </div>
       <!-- レア度 -->
       <div id="rare" class="filter-content" style="display: none">
