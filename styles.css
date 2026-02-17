@@ -3308,6 +3308,8 @@ body.modal-open {
   white-space: nowrap;
   color: white;
   width: 100%;
+  line-height: 1.1;
+  padding: 1px 0;
 }
 
 /* data属性を使用して中央揃えを実現 */
@@ -3552,7 +3554,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 0px;
   width: calc(100% - 35px);
   margin-left: 40px;
 }
@@ -3562,7 +3564,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 0px;
   width: calc(100% - 35px);
   margin-left: 50px; /* 右側だからか、謎の微調整が必要 */
 }
@@ -3709,7 +3711,7 @@ body.modal-open {
   .season-rows,
   .type-rows,
   .attribute-rows {
-    gap: 2px;
+    gap: 0px;
   }
 
   /* フォントサイズをさらに小さく */
