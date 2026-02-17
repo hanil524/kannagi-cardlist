@@ -3948,9 +3948,10 @@ body.modal-open {
 /* 収録情報のスタイル */
 .card-series-info {
   position: absolute;
-  top: -60px;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 6px;
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 6px 20px;
@@ -3965,6 +3966,28 @@ body.modal-open {
   z-index: 10;
   word-wrap: break-word;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* data-series-info用オーバーレイ（闇カード専用：画像に被せる） */
+.card-overlay-info {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: left;
+  max-width: 90%;
+  width: max-content;
+  z-index: 11;
+  word-wrap: break-word;
+  white-space: pre-line;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* キーワード・役割詳細表示エリアのスタイル */
