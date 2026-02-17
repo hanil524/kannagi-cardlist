@@ -1915,6 +1915,62 @@ let savedScrollPosition = 0;
 let currentImageIndex = 0;
 let visibleCards = [];
 
+// 制限カード情報を取得（3枚以下の制限カードのみ表示）
+function getCardLimitText(cardName) {
+  if (typeof deckBuilder === 'undefined' || typeof deckBuilder.getBaseLimit !== 'function') return '';
+  const base = deckBuilder.getBaseLimit(cardName);
+  if (base <= 3) return `${base}枚制限カード`;
+  return '';
+}
+
+// 収録情報（data-seriesのみ）を取得
+function getSeriesOnlyText(cardName) {
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const allSeriesSet = new Set();
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      card.dataset.series.split(' ').forEach(s => allSeriesSet.add(s));
+    }
+  });
+  return allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+}
+
+// data-series-info（特殊演出用）を取得
+function getSeriesExtraInfo(cardName) {
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const infoSet = new Set();
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.seriesInfo) infoSet.add(card.dataset.seriesInfo);
+  });
+  return infoSet.size > 0 ? Array.from(infoSet).join('\n') : '';
+}
+
+// 収録情報 + 制限情報をseriesInfo要素に反映（画像の上、被らない）
+// data-series-infoは別要素で画像に重ねる
+function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName) {
+  // 収録 + 制限（画像の上）
+  const series = getSeriesOnlyText(cardName);
+  const limit = getCardLimitText(cardName);
+  if (!series && !limit) { seriesEl.innerHTML = ''; }
+  else if (!limit) { seriesEl.textContent = series; }
+  else {
+    const escaped = series.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    seriesEl.innerHTML = escaped + (series ? '<br>' : '') + '<span style="color:#ff9800;font-size:12px">' + limit + '</span>';
+  }
+
+  // series-info（画像に被せるオーバーレイ）
+  if (overlayEl) {
+    const extraRaw = getSeriesExtraInfo(cardName);
+    if (extraRaw) {
+      overlayEl.innerHTML = normalizeSeriesInfoText(extraRaw).replace(/\n/g, '<br>');
+      overlayEl.style.display = '';
+    } else {
+      overlayEl.innerHTML = '';
+      overlayEl.style.display = 'none';
+    }
+  }
+}
+
 // 収録情報のキャッシュ
 const seriesInfoCache = new Map();
 
@@ -1975,6 +2031,7 @@ const updateModalControls = (cardName, controls) => {
 // モーダル内の固定要素を一度だけ作成して再利用
 let modalContainer = null;
 let modalSeriesInfo = null;
+let modalOverlayInfo = null;
 let modalControls = null;
 let lastModalOpenTime = 0;
 
@@ -2019,30 +2076,37 @@ const openImageModal = (src) => {
   
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
-  
+
   const controls = document.createElement('div');
   controls.className = 'card-controls';
-  
+
+  // data-series-info用オーバーレイ（闇カード専用、画像に被せる）
+  const overlayInfo = document.createElement('div');
+  overlayInfo.className = 'card-overlay-info';
+  overlayInfo.style.display = 'none';
+
   // 新しい画像要素を作成
   const modalImage = document.createElement('img');
   modalImage.id = 'modal-image';
   modalImage.alt = 'Modal Image';
-  
+
   // モーダルコンテンツをクリアしてから再構築
   modalContent.innerHTML = '';
-  
+
   // コンテンツを順番に追加
   container.appendChild(seriesInfo);
   container.appendChild(modalImage);
+  container.appendChild(overlayInfo);
   container.appendChild(controls);
-  
+
   modalContent.appendChild(container);
   modalContent.appendChild(prevButton);
   modalContent.appendChild(nextButton);
-  
+
   // グローバル変数に保存（クリーンアップ用）
   modalContainer = container;
   modalSeriesInfo = seriesInfo;
+  modalOverlayInfo = overlayInfo;
   modalControls = controls;
 
   // カウント情報の取得と表示
@@ -2061,8 +2125,8 @@ const openImageModal = (src) => {
   const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
 
   // 既存要素の内容のみ更新（新しい要素は作成しない）
-  modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
-  
+  updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
   modalControls.innerHTML = `
     <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
     <div class="card-count">${currentCount}/${displayMax}</div>
@@ -2594,12 +2658,12 @@ const showNextImage = () => {
     }
 
     const cardName = nextCard.dataset.name;
-    
+
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
-      modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
-      
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
       let maxAllowed = 4;
@@ -2610,21 +2674,21 @@ const showNextImage = () => {
       } else if (deckBuilder.sevenCardLimit.has(cardName)) {
         maxAllowed = 7;
       }
-      
+
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
         <div class="card-count">${currentCount}/${displayMax}</div>
         <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
       `;
-      
+
       // カード情報とボタン状態を更新
       currentModalCard = nextCard;
       currentModalCardName = cardName;
-      
+
       // 新しいボタンにイベントリスナーを設定
       setupModalButtonListeners(modalControls);
-      
+
       updateModalButtonStates(modalControls, cardName);
     }
 
@@ -2662,12 +2726,12 @@ const showPreviousImage = () => {
     }
 
     const cardName = prevCard.dataset.name;
-    
+
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
-      modalSeriesInfo.textContent = getSeriesInfo(cardName) || '';
-      
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
       let maxAllowed = 4;
@@ -2678,18 +2742,18 @@ const showPreviousImage = () => {
       } else if (deckBuilder.sevenCardLimit.has(cardName)) {
         maxAllowed = 7;
       }
-      
+
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
         <div class="card-count">${currentCount}/${displayMax}</div>
         <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
       `;
-      
+
       // カード情報とボタン状態を更新
       currentModalCard = prevCard;
       currentModalCardName = cardName;
-      
+
       // 新しいボタンにイベントリスナーを設定
       setupModalButtonListeners(modalControls);
       
