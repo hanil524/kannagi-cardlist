@@ -657,6 +657,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
   });
 
+  // Enter/確定キーでキーボードを閉じる（スマホ対応）
+  searchBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); searchBox.blur(); }
+  });
+  mobileSearchBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); mobileSearchBox.blur(); }
+  });
+
   // 初期状態を設定
   updateClearButtonVisibility('search-box', 'clear-button-desktop');
   updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
