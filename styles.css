@@ -1358,7 +1358,10 @@ button[onclick='resetFilters()']:active {
 
 .modal-buttons button.konkairo {
   background-color: #111111;
-  color: #ffffff;
+  color: #ffffff;  
+}
+
+.modal-buttons button.syunkasyuutoiro {
   border: 2px solid #ffffff;
 }
 
