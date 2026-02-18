@@ -1,11 +1,8 @@
-/* 画面更新の無効化 */
+/* 横方向のオーバースクロールのみ無効化（縦方向はプルダウンリフレッシュ許可） */
 html,
 body {
-  overscroll-behavior: none;
-  -webkit-overscroll-behavior: none;
-  touch-action: pan-x pan-y;
-  -ms-touch-action: pan-x pan-y;
-  -webkit-touch-action: pan-x pan-y;
+  overscroll-behavior-x: none;
+  -webkit-overscroll-behavior-x: none;
 }
 
 body {
@@ -321,8 +318,7 @@ main,
 #card-list .card,
 #card-list .card img,
 #card-list * {
-  touch-action: pan-y;
-  -ms-touch-action: pan-y;
+  touch-action: auto;
 }
 
 @media (max-width: 768px) {
@@ -3968,16 +3964,16 @@ body.modal-open {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* data-series-info用オーバーレイ（闇カード専用：画像に被せる） */
+/* data-series-info用オーバーレイ（闇カード専用：画像上端から下に被せる） */
 .card-overlay-info {
   position: absolute;
-  bottom: 60px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.85);
   color: white;
   padding: 10px 16px;
-  border-radius: 6px;
+  border-radius: 0 0 6px 6px;
   font-size: 11px;
   line-height: 1.5;
   text-align: left;
@@ -3986,8 +3982,7 @@ body.modal-open {
   z-index: 11;
   word-wrap: break-word;
   white-space: pre-line;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* キーワード・役割詳細表示エリアのスタイル */
@@ -4306,6 +4301,3 @@ body.modal-open {
   }
 }
 
-* {
-  touch-action: manipulation;
-}
