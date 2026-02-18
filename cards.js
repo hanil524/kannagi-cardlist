@@ -9204,7 +9204,7 @@ data-role="サーチ 回復フェイズ 自傷ダメ 直接ダメ"
 <div
 class="card"
 data-number="1817"
-data-name="複製体(くろーん クローン)"
+data-name="複製体(くろーん)"
 data-cost="0"
 data-power="1"
 data-series="都市伝説"
