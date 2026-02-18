@@ -239,6 +239,11 @@ const setupAndroidScrollAssist = () => {
         state.nativeScrollDetected = true;
         return;
       }
+      // ページ最上部で下に引っ張る場合はブラウザに任せる（プルダウンリフレッシュ許可）
+      if (currentScrollY <= 0 && dy > 0) {
+        state.nativeScrollDetected = true;
+        return;
+      }
       state.moveCount += 1;
       if (state.moveCount < 2) {
         return;
