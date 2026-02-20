@@ -13667,5 +13667,21 @@ data-role=""
 >
   <img data-src="images/card_14_p (126).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+class="card"
+data-number="10046"
+data-name="雪女（ゆきおんな）"
+data-cost="6"
+data-power="0"
+data-series="プロモ"
+data-rare=""
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="妖怪 幽霊"
+>
+<img data-src="images/card_14_p (127).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
