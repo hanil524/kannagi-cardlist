@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
   <!-- メタデータ -->
   <head>
@@ -32,10 +32,16 @@
     <meta name="description" content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
-    <meta name="msapplication-TileImage" content="favicon/favicon.ico" />
+    <!-- Windows タイル -->
+     <meta name="msapplication-TileImage" content="images/icon.jpg" />
+     <meta name="msapplication-TileColor" content="#ffffff" />
+     <!-- iOS Safari（ホーム画面・ブックマーク） -->
+      <link rel="apple-touch-icon" sizes="180x180" href="images/icon.png" />
+      <!-- Android Chrome / 汎用 -->
+       <link rel="icon" type="image/png" sizes="192x192" href="images/icon.png" />
     <script src="scripts.js"></script>
     <script>
-      // Service Worker登録（キャッシュ戦略でリピーターの読み込みを高速化）
+      // Service Worker登録（キャッシュでリピーターの読み込みを高速化）
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('./sw.js').catch(function() {});
