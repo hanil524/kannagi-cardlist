@@ -725,7 +725,8 @@ header input::placeholder,
 
 /* スマホのサイドメニュー */
 .mobile-nav {
-  display: block; /* 'display: none' を削除 */
+  display: flex; /* flexで閉じるボタン末尾固定 */
+  flex-direction: column;
   position: fixed;
   top: 50px; /* ヘッダーの高さ分 */
   left: -100%; /* 初期位置を画面外に */
@@ -745,6 +746,12 @@ header input::placeholder,
   list-style-type: none;
   padding: 0;
   margin: 0;
+  flex-shrink: 0; /* コンテンツ分だけ使う（伸ばさない） */
+}
+
+/* リンクリスト本体はコンテンツ分だけ（伸ばさない） */
+.mobile-nav > ul {
+  flex: 0 0 auto;
 }
 
 .mobile-nav li {
@@ -775,16 +782,91 @@ header input::placeholder,
 
 /* スマホ サイドメニューの閉じるボタン */
 .mobile-nav .close-menu {
+  display: block;
+  flex-shrink: 0; /* 縮まない */
   background-color: rgba(165, 70, 70, 0.9);
   color: #ffffff;
   text-align: center;
   padding: 10px;
   font-weight: bold;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .mobile-nav .close-menu:hover {
   background-color: rgba(185, 80, 80, 0.9);
+}
+
+/* メニュー上部のショートカットボタン */
+.mobile-nav .nav-header-buttons {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.mobile-nav .nav-header-buttons a {
+  flex: 1;
+  text-align: center;
+  padding: 9px 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.2s;
+}
+.mobile-nav .nav-header-buttons a:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+/* アコーディオン親ボタン */
+.mobile-nav .nav-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* テキスト左・アイコン右 */
+  width: 100%;
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 14px;
+  font-weight: bold; /* メイントピックのみ太字 */
+  padding: 8.5px 20px;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.mobile-nav .nav-accordion-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.mobile-nav .nav-accordion-icon {
+  font-style: normal;
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: #e05555; /* 赤色 */
+  font-weight: bold;
+}
+
+/* アコーディオン子リスト */
+.mobile-nav .nav-accordion-children {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.mobile-nav .nav-accordion-children.open {
+  display: block;
+}
+.mobile-nav .nav-accordion-children li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.mobile-nav .nav-accordion-children a {
+  padding-left: 40px; /* 子リンクの字下げ（一段分 + 追加スペース） */
+  font-weight: normal; /* 子リンクは太字なし */
 }
 
 /* スマートフォン用スタイル */

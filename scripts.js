@@ -2338,6 +2338,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   
+  // アコーディオンメニューの開閉
+  document.querySelectorAll('.nav-accordion-toggle').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      const children = this.nextElementSibling;
+      const isOpen = children.classList.contains('open');
+      children.classList.toggle('open', !isOpen);
+      this.setAttribute('aria-expanded', String(!isOpen));
+      this.querySelector('.nav-accordion-icon').textContent = isOpen ? '＋' : '－';
+    });
+  });
+
   deckManager.initialize();
 });
 
