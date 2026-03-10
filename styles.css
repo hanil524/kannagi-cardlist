@@ -49,10 +49,12 @@ body.modal-open .header-content {
 
 header a {
   color: white;
-  text-decoration: none; /* リンクのアンダーバーを削除 */
+  text-decoration: none;
+  /* リンクのアンダーバーを削除 */
   margin-right: 10px;
   margin-left: 10px;
-  white-space: nowrap; /* リンクを改行させない */
+  white-space: nowrap;
+  /* リンクを改行させない */
   font-weight: bold;
 }
 
@@ -61,7 +63,8 @@ header a {
   background: #1f1f1f;
   color: white;
   padding: 6px 8px;
-  height: 50px; /* 明示的に高さを指定 */
+  height: 50px;
+  /* 明示的に高さを指定 */
   position: fixed;
   width: 100%;
   top: 0;
@@ -91,26 +94,33 @@ header a {
 
 /* スマホ表示でのヘッダー内の検索バーを中央揃え */
 .mobile-header input {
-  width: calc(100% - 20px); /* 親要素のパディングを考慮して幅を設定 */
-  max-width: 100%; /* 検索バーの最大幅を100%に設定 */
-  margin: 0; /* マージンをリセット */
-  padding: 5px; /* 内側のパディングを追加 */
+  width: calc(100% - 20px);
+  /* 親要素のパディングを考慮して幅を設定 */
+  max-width: 100%;
+  /* 検索バーの最大幅を100%に設定 */
+  margin: 0;
+  /* マージンをリセット */
+  padding: 5px;
+  /* 内側のパディングを追加 */
   border: none;
   border-radius: 5px;
   text-align: center;
-  box-sizing: border-box; /* パディングを含む幅調整 */
+  box-sizing: border-box;
+  /* パディングを含む幅調整 */
 }
 
 /* プレースホルダーテキストのスタイルを統一 */
 .mobile-header input::placeholder {
-  text-align: center; /* プレースホルダーテキストを中央揃え */
+  text-align: center;
+  /* プレースホルダーテキストを中央揃え */
 }
 
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
-  max-width: 250px; /* 検索バーの幅を広げる */
+  max-width: 250px;
+  /* 検索バーの幅を広げる */
   width: 100%;
   margin: 0 auto;
 }
@@ -124,18 +134,21 @@ header a {
 
 .search-container input {
   width: 100%;
-  padding-right: 30px; /* ×ボタンのスペースを確保 */
+  padding-right: 30px;
+  /* ×ボタンのスペースを確保 */
   box-sizing: border-box;
   padding: 5px;
   border: none;
   border-radius: 5px;
   text-align: center;
-  height: 30px; /* ヘッダー検索欄の縦幅 */
+  height: 30px;
+  /* ヘッダー検索欄の縦幅 */
 }
 
 .clear-button {
   position: absolute;
-  right: 10px; /* 右端からの距離を調整 */
+  right: 10px;
+  /* 右端からの距離を調整 */
   background: none;
   border: none;
   font-size: 20px;
@@ -158,7 +171,7 @@ header a {
     gap: clamp(4px, 1.2vw, 8px);
   }
 
-  .deck-menu > * {
+  .deck-menu>* {
     flex: 1 1 0;
     min-width: 0;
   }
@@ -196,7 +209,8 @@ main {
 
 @media (max-width: 768px) {
   main {
-    margin-top: 60px; /* ヘッダーの高さに合わせて調整 */
+    margin-top: 60px;
+    /* ヘッダーの高さに合わせて調整 */
     padding: 10px;
     padding-bottom: 80px;
   }
@@ -213,23 +227,26 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px; /* フィルターボタンからカード画像までの間隔を広げる */
+  margin-bottom: 20px;
+  /* フィルターボタンからカード画像までの間隔を広げる */
   gap: 5px;
 }
 
 /* フィルターボタンからカード画像までの間隔を広げる（PC表示のみ） */
 @media (min-width: 768px) {
   #filter-section {
-    margin-bottom: 80px; /* フィルターボタンからカード画像までの間隔を広げる */
+    margin-bottom: 80px;
+    /* フィルターボタンからカード画像までの間隔を広げる */
   }
 }
 
 @media (max-width: 768px) {
+
   .sort-buttons,
   .filter-buttons {
     gap: 4px;
   }
-  
+
   .filter-buttons button,
   .sort-buttons button {
     flex-shrink: 1;
@@ -237,13 +254,13 @@ main {
     padding: 0 5px;
     white-space: nowrap;
   }
-  
+
   .filter-group {
     gap: 6px;
     padding: 8px;
   }
 
-  .filter-group > label:not(.limit-release) {
+  .filter-group>label:not(.limit-release) {
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -252,18 +269,22 @@ main {
 /* フィルターボタンのデザイン */
 .filter-group {
   color: #fff;
-  display: flex; /* 「シリーズ：」とそのボタンを1行で表示 */
+  display: flex;
+  /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  gap: 10px; /* ボタン間の隙間を調整 */
+  gap: 10px;
+  /* ボタン間の隙間を調整 */
   font-weight: bold;
-  background-color: rgba(60, 60, 60, 0.9); /* サイトの背景よりも少し明るく */
+  background-color: rgba(60, 60, 60, 0.9);
+  /* サイトの背景よりも少し明るく */
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   margin: 10px;
-  border: 1px solid rgba(100, 100, 100, 0.5); /* 境界線を追加 */
+  border: 1px solid rgba(100, 100, 100, 0.5);
+  /* 境界線を追加 */
 }
 
 /* フィルターボタン */
@@ -282,17 +303,21 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1; /* 1.2から1に変更 */
+  line-height: 1;
+  /* 1.2から1に変更 */
   font-size: 12px;
-  vertical-align: middle; /* 追加 */
-  box-sizing: border-box; /* 追加 */
+  vertical-align: middle;
+  /* 追加 */
+  box-sizing: border-box;
+  /* 追加 */
 }
 
 /* 制限解禁トグル */
 .limit-release {
   display: flex;
   align-items: center;
-  justify-content: center; /* 中央寄せ */
+  justify-content: center;
+  /* 中央寄せ */
   gap: 6px;
   height: 28px;
   padding: 0 12px;
@@ -303,16 +328,20 @@ main {
   cursor: pointer;
   user-select: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  margin-right: 0; /* 右側の余白を打ち消す */
+  margin-right: 0;
+  /* 右側の余白を打ち消す */
 }
+
 .limit-release input {
   margin: 0;
 }
+
 @media (hover: hover) and (pointer: fine) {
   .limit-release:hover {
     background-color: rgba(90, 90, 150, 0.95);
   }
 }
+
 main,
 #card-list,
 #card-list .card,
@@ -334,43 +363,54 @@ main,
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  padding: 20px; /* デフォルトのパディング */
+  padding: 20px;
+  /* デフォルトのパディング */
 }
 
 @media (max-width: 480px) {
   #card-list {
-    padding: 5px; /* さらに小さい画面ではパディングをより小さく */
+    padding: 5px;
+    /* さらに小さい画面ではパディングをより小さく */
   }
 }
 
 @media (max-width: 768px) {
   #card-list {
     gap: 8px;
-    padding: 10px; /* スマートフォン表示時はパディングを小さく */
+    padding: 10px;
+    /* スマートフォン表示時はパディングを小さく */
   }
 }
 
 @media (min-width: 1024px) {
   #card-list {
-    max-width: 75%; /* PC画面での最大幅を設定 */
-    margin: 0 auto; /* 中央に配置 */
+    max-width: 75%;
+    /* PC画面での最大幅を設定 */
+    margin: 0 auto;
+    /* 中央に配置 */
   }
 }
 
 /* カード表示エリアのスタイル */
 #card-list {
-  padding: 0px; /* カード一覧の両端に余白を追加 */
+  padding: 0px;
+  /* カード一覧の両端に余白を追加 */
 }
 
 .card {
   flex-basis: calc(20% - 10px);
   border-radius: 16px;
   overflow: hidden;
-  min-height: 200px; /* 画像読み込み前の最小の高さ */
-  background-color: #f0f0f0; /* 画像読み込み前の背景色 */
-  transition: transform 0.04s, box-shadow 0.06s; /* カードと影の遷移 */
-  position: relative; /* 影の位置調整のために必要 */
-  border: none; /*カードの白い枠を完全に削除*/
+  min-height: 200px;
+  /* 画像読み込み前の最小の高さ */
+  background-color: #f0f0f0;
+  /* 画像読み込み前の背景色 */
+  transition: transform 0.04s, box-shadow 0.06s;
+  /* カードと影の遷移 */
+  position: relative;
+  /* 影の位置調整のために必要 */
+  border: none;
+  /*カードの白い枠を完全に削除*/
   background: none;
   padding: 0;
   margin: 0;
@@ -383,7 +423,8 @@ main,
 
 @media (max-width: 768px) {
   .card {
-    border-radius: 12px; /* スマートフォン表示時は角の丸みを減らす */
+    border-radius: 12px;
+    /* スマートフォン表示時は角の丸みを減らす */
   }
 }
 
@@ -392,13 +433,16 @@ main,
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 画像比率を保持 */
+  object-fit: cover;
+  /* 画像比率を保持 */
   opacity: 0;
-  transition: opacity 0.1s ease-in-out; /* 無からカードが表示されるまでの秒数 */
+  transition: opacity 0.1s ease-in-out;
+  /* 無からカードが表示されるまでの秒数 */
   /* 画像が読み込まれるまでの間に何も表示されないように。透明のカードを表示してる */
   background: url("placeholder.jpg") center center no-repeat;
   background-size: cover;
 }
+
 /* 読み込み完了時にloadedクラスが付与され、滑らかに表示（opacity: 1）*/
 .card img.loaded {
   opacity: 1;
@@ -416,6 +460,7 @@ main,
     flex-basis: calc(50% - 10px);
     width: calc(50% - 10px);
   }
+
   .card:hover {
     transform: none;
     box-shadow: none;
@@ -432,15 +477,18 @@ main,
 /* PC表示 */
 @media (min-width: 769px) {
   .card {
-    width: calc(20% - 10px); /* 5列 */
-    min-height: 300px; /* PCは大きめに */
+    width: calc(20% - 10px);
+    /* 5列 */
+    min-height: 300px;
+    /* PCは大きめに */
   }
 }
 
 /* タブレット表示 */
 @media (max-width: 1024px) {
   .card {
-    width: calc(25% - 10px); /* 4列 */
+    width: calc(25% - 10px);
+    /* 4列 */
     min-height: 250px;
   }
 }
@@ -448,8 +496,10 @@ main,
 /* 極小画面でも2列を維持 */
 @media (max-width: 400px) {
   .card {
-    flex-basis: calc(50% - 8px); /* 2列（間隔を少し狭める） */
-    min-height: 150px; /* さらに小さく */
+    flex-basis: calc(50% - 8px);
+    /* 2列（間隔を少し狭める） */
+    min-height: 150px;
+    /* さらに小さく */
     width: calc(50% - 8px);
   }
 }
@@ -463,14 +513,20 @@ main,
 
 .pc-only {
   display: block;
-  background-color: none; /* 初期背景色 */
+  background-color: none;
+  /* 初期背景色 */
   border-radius: 20px;
-  padding: 3px; /* 要素の内側に余白を追加してマウスオーバー可能な範囲を広げる */
-  transition: background-color 0.2s ease, box-shadow 0.4s ease; /* 背景色の変化を0.2秒かけて行う */
+  padding: 3px;
+  /* 要素の内側に余白を追加してマウスオーバー可能な範囲を広げる */
+  transition: background-color 0.2s ease, box-shadow 0.4s ease;
+  /* 背景色の変化を0.2秒かけて行う */
 }
+
 .pc-only:hover {
-  background-color: rgba(255, 255, 255, 0.5); /* 薄い白色 */
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* ボックスシャドウで範囲を広げる */
+  background-color: rgba(255, 255, 255, 0.5);
+  /* 薄い白色 */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  /* ボックスシャドウで範囲を広げる */
 }
 
 @media (max-width: 768px) {
@@ -479,12 +535,15 @@ main,
   }
 
   header input {
-    max-width: 90%; /* スマホの検索バー幅を調整 */
-    margin: 0 5%; /* 左右に均等な余白を追加 */
+    max-width: 90%;
+    /* スマホの検索バー幅を調整 */
+    margin: 0 5%;
+    /* 左右に均等な余白を追加 */
   }
 
   main {
-    margin-top: 50px; /* ヘッダーからフィルターエリアまで */
+    margin-top: 50px;
+    /* ヘッダーからフィルターエリアまで */
   }
 }
 
@@ -493,12 +552,15 @@ main,
   font-size: 28px;
   font-weight: bold;
   position: absolute;
-  padding-left: 310px; /* ×マークの判定の長さ */
+  padding-left: 310px;
+  /* ×マークの判定の長さ */
   padding-right: 310px;
-  top: -1px; /* モーダルの外側に配置 */
+  top: -1px;
+  /* モーダルの外側に配置 */
   right: 50%;
   transform: translateX(50%);
-  margin-bottom: 15px; /* 閉じるボタンの下に余白を追加 */
+  margin-bottom: 15px;
+  /* 閉じるボタンの下に余白を追加 */
 }
 
 .close:hover,
@@ -512,6 +574,7 @@ main,
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -725,18 +788,27 @@ header input::placeholder,
 
 /* スマホのサイドメニュー */
 .mobile-nav {
-  display: flex; /* flexで閉じるボタン末尾固定 */
+  display: flex;
+  /* flexで閉じるボタン末尾固定 */
   flex-direction: column;
   position: fixed;
-  top: 50px; /* ヘッダーの高さ分 */
-  left: -100%; /* 初期位置を画面外に */
+  top: 50px;
+  /* ヘッダーの高さ分 */
+  left: -100%;
+  /* 初期位置を画面外に */
   width: 90%;
-  height: calc(100% - 60px); /* 上下幅100%から、px数分を底上げする */
-  z-index: 1001; /* z-indexを上げる */
-  transition: left 0.2s ease-in-out; /* スムーズな移動のためのトランジション */
-  overflow-y: auto; /* スクロール可能にする */
-  -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
-  overscroll-behavior-y: contain; /* スクロールの伝播を防止 */
+  height: calc(100% - 60px);
+  /* 上下幅100%から、px数分を底上げする */
+  z-index: 1001;
+  /* z-indexを上げる */
+  transition: left 0.2s ease-in-out;
+  /* スムーズな移動のためのトランジション */
+  overflow-y: auto;
+  /* スクロール可能にする */
+  -webkit-overflow-scrolling: touch;
+  /* iOSでのスムーズスクロール */
+  overscroll-behavior-y: contain;
+  /* スクロールの伝播を防止 */
   background-color: rgba(30, 30, 30, 0.95);
   box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
   font-size: 14px;
@@ -746,11 +818,12 @@ header input::placeholder,
   list-style-type: none;
   padding: 0;
   margin: 0;
-  flex-shrink: 0; /* コンテンツ分だけ使う（伸ばさない） */
+  flex-shrink: 0;
+  /* コンテンツ分だけ使う（伸ばさない） */
 }
 
 /* リンクリスト本体はコンテンツ分だけ（伸ばさない） */
-.mobile-nav > ul {
+.mobile-nav>ul {
   flex: 0 0 auto;
 }
 
@@ -770,7 +843,8 @@ header input::placeholder,
 }
 
 .mobile-nav.active {
-  left: 0; /* 画面内に移動 */
+  left: 0;
+  /* 画面内に移動 */
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
 }
@@ -783,7 +857,8 @@ header input::placeholder,
 /* スマホ サイドメニューの閉じるボタン */
 .mobile-nav .close-menu {
   display: block;
-  flex-shrink: 0; /* 縮まない */
+  flex-shrink: 0;
+  /* 縮まない */
   background-color: rgba(165, 70, 70, 0.9);
   color: #ffffff;
   text-align: center;
@@ -805,6 +880,7 @@ header input::placeholder,
   padding: 20px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
+
 .mobile-nav .nav-header-buttons a {
   flex: 1;
   text-align: center;
@@ -818,6 +894,7 @@ header input::placeholder,
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: background-color 0.2s;
 }
+
 .mobile-nav .nav-header-buttons a:hover {
   background-color: rgba(255, 255, 255, 0.22);
 }
@@ -826,27 +903,32 @@ header input::placeholder,
 .mobile-nav .nav-accordion-toggle {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* テキスト左・アイコン右 */
+  justify-content: space-between;
+  /* テキスト左・アイコン右 */
   width: 100%;
   background: none;
   border: none;
   color: #e0e0e0;
   font-size: 14px;
-  font-weight: bold; /* メイントピックのみ太字 */
+  font-weight: bold;
+  /* メイントピックのみ太字 */
   padding: 8.5px 20px;
   text-align: left;
   cursor: pointer;
   box-sizing: border-box;
 }
+
 .mobile-nav .nav-accordion-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
+
 .mobile-nav .nav-accordion-icon {
   font-style: normal;
   flex-shrink: 0;
   margin-left: 8px;
-  color: #e05555; /* 赤色 */
+  color: #e05555;
+  /* 赤色 */
   font-weight: bold;
 }
 
@@ -858,15 +940,20 @@ header input::placeholder,
   padding: 0;
   background-color: rgba(0, 0, 0, 0.2);
 }
+
 .mobile-nav .nav-accordion-children.open {
   display: block;
 }
+
 .mobile-nav .nav-accordion-children li {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .mobile-nav .nav-accordion-children a {
-  padding-left: 40px; /* 子リンクの字下げ（一段分 + 追加スペース） */
-  font-weight: normal; /* 子リンクは太字なし */
+  padding-left: 40px;
+  /* 子リンクの字下げ（一段分 + 追加スペース） */
+  font-weight: normal;
+  /* 子リンクは太字なし */
 }
 
 /* スマートフォン用スタイル */
@@ -888,9 +975,11 @@ header input::placeholder,
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 100px); /* ハンバーガーメニューとの間隔を確保 */
+    width: calc(100% - 100px);
+    /* ハンバーガーメニューとの間隔を確保 */
     max-width: 250px;
-    z-index: 1002; /* オーバーレイより上に表示 */
+    z-index: 1002;
+    /* オーバーレイより上に表示 */
   }
 
   /* ハンバーガーメニュー */
@@ -958,13 +1047,15 @@ header input::placeholder,
   border-radius: 5px;
   padding: 6px 8px;
   font-size: 12px;
-  letter-spacing: 1.2px; /* 文字と文字のスペース */
+  letter-spacing: 1.2px;
+  /* 文字と文字のスペース */
   transition: all 0.2s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   font-weight: bold;
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .filter-buttons button:hover,
   .sort-buttons button:hover {
     background-color: rgba(120, 120, 120, 0.9);
@@ -985,7 +1076,7 @@ header input::placeholder,
 }
 
 /* ボタングループのラベル */
-.filter-group > label:not(.limit-release) {
+.filter-group>label:not(.limit-release) {
   color: #e0e0e0;
   font-weight: bold;
   margin-right: 4px;
@@ -995,7 +1086,8 @@ header input::placeholder,
 
 /* フィルター解除ボタン */
 button[onclick='resetFilters()'] {
-  background-color: rgba(165, 70, 70, 0.9); /* より落ち着いた赤 */
+  background-color: rgba(165, 70, 70, 0.9);
+  /* より落ち着いた赤 */
   color: #ffffff;
   font-weight: bold;
   border-radius: 25px;
@@ -1003,7 +1095,8 @@ button[onclick='resetFilters()'] {
   border: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
-  letter-spacing: 1.2px; /* 文字と文字のスペース */
+  letter-spacing: 1.2px;
+  /* 文字と文字のスペース */
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1019,6 +1112,7 @@ button[onclick='resetFilters()']:active {
   transform: translateY(1px);
   box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
 }
+
 /* ハンバーガー アイコン */
 .hamburger-menu span {
   background-color: #e0e0e0;
@@ -1056,7 +1150,8 @@ button[onclick='resetFilters()']:active {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; /* カードとコントロール間の間隔 */
+  gap: 10px;
+  /* カードとコントロール間の間隔 */
 }
 
 /* 画像モーダルのベース設定 */
@@ -1068,9 +1163,11 @@ button[onclick='resetFilters()']:active {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   display: none;
-  z-index: 2500; /* デッキモーダル(2000)より大きい値 */
+  z-index: 2500;
+  /* デッキモーダル(2000)より大きい値 */
   overflow: hidden;
-  touch-action: none; /* タッチスクロールを無効化 */
+  touch-action: none;
+  /* タッチスクロールを無効化 */
 }
 
 /* モーダルコンテンツのコンテナ */
@@ -1087,7 +1184,8 @@ button[onclick='resetFilters()']:active {
   /* Safari UI要素の高さを考慮 */
   height: -webkit-fill-available;
   padding: 20px;
-  overflow: hidden; /* スクロールを防止 */
+  overflow: hidden;
+  /* スクロールを防止 */
 }
 
 /* モーダル内の画像設定 */
@@ -1103,7 +1201,8 @@ button[onclick='resetFilters()']:active {
   border: none;
   border-radius: 16px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
-  touch-action: none; /* タッチスクロールを無効化 */
+  touch-action: none;
+  /* タッチスクロールを無効化 */
 }
 
 /* iPhoneのSafari向け特別対応 */
@@ -1130,13 +1229,17 @@ button[onclick='resetFilters()']:active {
 /* スマートフォン向けのモーダル調整 */
 @media (max-width: 768px) {
   .image-modal .modal-content {
-    padding: 0 40px; /* 左右にわずかな余白を追加 */
+    padding: 0 40px;
+    /* 左右にわずかな余白を追加 */
   }
 
   .image-modal img {
-    width: auto; /* 幅を自動調整 */
-    height: auto; /* 高さを自動調整 */
-    max-width: 80%; /* 最大幅を画面幅に */
+    width: auto;
+    /* 幅を自動調整 */
+    height: auto;
+    /* 高さを自動調整 */
+    max-width: 80%;
+    /* 最大幅を画面幅に */
   }
 }
 
@@ -1165,12 +1268,18 @@ button[onclick='resetFilters()']:active {
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
   padding: 13px;
-  max-height: calc(80vh - 60px); /* モーダルの高さからヘッダー部分を引いた高さ */
-  overflow-y: overlay; /* スクロール可能時のみスクロールバー表示 */
-  overflow-x: hidden; /* 横スクロールを無効化 */
-  overscroll-behavior: contain; /* スクロールの跳ね返りを制御 */
-  -webkit-overflow-scrolling: touch; /* iOSでのスムーズスクロール */
-  margin-top: 10px; /* 上部に少し余白を追加 */
+  max-height: calc(80vh - 60px);
+  /* モーダルの高さからヘッダー部分を引いた高さ */
+  overflow-y: overlay;
+  /* スクロール可能時のみスクロールバー表示 */
+  overflow-x: hidden;
+  /* 横スクロールを無効化 */
+  overscroll-behavior: contain;
+  /* スクロールの跳ね返りを制御 */
+  -webkit-overflow-scrolling: touch;
+  /* iOSでのスムーズスクロール */
+  margin-top: 10px;
+  /* 上部に少し余白を追加 */
 }
 
 /* スクロール可能時のみスクロールバーを常に表示 */
@@ -1183,23 +1292,31 @@ button[onclick='resetFilters()']:active {
 /* スマートフォン向けの追加調整 */
 @media (max-width: 768px) {
   .modal-content {
-    margin: 5vh auto; /* スマホではより上部に配置 */
-    max-height: 90vh; /* スマホでは画面の90%まで使用 */
-    width: 90%; /* スマホでは幅を広げる */
+    margin: 5vh auto;
+    /* スマホではより上部に配置 */
+    max-height: 90vh;
+    /* スマホでは画面の90%まで使用 */
+    width: 90%;
+    /* スマホでは幅を広げる */
   }
 
   .modal-buttons {
-    max-height: calc(90vh - 60px); /* スマホ用に調整 */
+    max-height: calc(90vh - 60px);
+    /* スマホ用に調整 */
   }
 }
 
 /* モーダル内のボタンのテキスト */
 .modal-buttons button {
   width: 100%;
-  min-height: 36px; /* ボタンの高さを少し縮小 */
-  padding: 6px 8px; /* パディングを調整 */
-  font-size: 12px; /* フォントサイズを小さく */
-  letter-spacing: 1px; /* 文字間隔を0.2px広げる */
+  min-height: 36px;
+  /* ボタンの高さを少し縮小 */
+  padding: 6px 8px;
+  /* パディングを調整 */
+  font-size: 12px;
+  /* フォントサイズを小さく */
+  letter-spacing: 1px;
+  /* 文字間隔を0.2px広げる */
   font-weight: bold;
   line-height: 1.2;
   text-align: center;
@@ -1211,7 +1328,8 @@ button[onclick='resetFilters()']:active {
   background-color: rgba(80, 80, 80, 0.9);
   color: #ffffff;
   border: none;
-  border-radius: 4px; /* 角丸を少し小さく */
+  border-radius: 4px;
+  /* 角丸を少し小さく */
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -1258,24 +1376,31 @@ button[onclick='resetFilters()']:active {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* モーダル自体はスクロールさせない */
+  overflow: auto;
+  /* モーダル自体はスクロールさせない */
   background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modal-content {
   background-color: rgba(44, 44, 44, 0.95);
-  margin: 10vh auto; /* 上下中央に配置するよう変更 */
+  margin: 10vh auto;
+  /* 上下中央に配置するよう変更 */
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* 1pxの半透明白色の境界線を追加 */
-  width: calc(90% - 12px); /* 左右に2pxずつ、合計4pxのすき間を作る */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* 1pxの半透明白色の境界線を追加 */
+  width: calc(90% - 12px);
+  /* 左右に2pxずつ、合計4pxのすき間を作る */
   max-width: 600px;
-  max-height: 60vh; /* 画面の70%の高さに制限。スクロールバーを早く表示 */
+  max-height: 60vh;
+  /* 画面の70%の高さに制限。スクロールバーを早く表示 */
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column; /* 縦方向に並べる */
-  overflow: hidden; /* 内容がはみ出さないように */
+  flex-direction: column;
+  /* 縦方向に並べる */
+  overflow: hidden;
+  /* 内容がはみ出さないように */
 }
 
 /* 「シリーズ」ボタンの基本スタイル */
@@ -1349,7 +1474,7 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-buttons button.byoukairo {
-  background-color: #fc97c6;
+  background-color: #fd9a96;
   color: #ffffff;
 }
 
@@ -1442,7 +1567,7 @@ button[onclick='resetFilters()']:active {
 
 .modal-buttons button.konkairo {
   background-color: #111111;
-  color: #ffffff;  
+  color: #ffffff;
 }
 
 .modal-buttons button.syunkasyuutoiro {
@@ -1498,7 +1623,8 @@ body.modal-open {
 @media (min-width: 768px) {
   body.modal-open {
     overflow: hidden;
-    padding-right: 17px; /* 一般的なスクロールバーの幅 */
+    padding-right: 17px;
+    /* 一般的なスクロールバーの幅 */
   }
 }
 
@@ -1513,7 +1639,8 @@ body.modal-open {
   margin: 20px auto;
   max-width: 90%;
   display: flex;
-  flex-direction: column; /* 2列に */
+  flex-direction: column;
+  /* 2列に */
   align-items: center;
   justify-content: center;
 }
@@ -1521,10 +1648,11 @@ body.modal-open {
 #no-cards-message p {
   margin: 0;
   line-height: 1.5;
-  width: 100%; /* 1列を100%にすることで確実に改行させる */
+  width: 100%;
+  /* 1列を100%にすることで確実に改行させる */
 }
 
-#no-cards-message p + p {
+#no-cards-message p+p {
   margin-top: 10px;
 }
 
@@ -1553,8 +1681,10 @@ body.modal-open {
     text-align: center;
     opacity: 0;
     visibility: hidden;
-    margin-top: 10px; /* 0pxから10pxに変更してギャップを作成 */
-    padding-top: 5px; /* 上部に少しパディングを追加 */
+    margin-top: 10px;
+    /* 0pxから10pxに変更してギャップを作成 */
+    padding-top: 5px;
+    /* 上部に少しパディングを追加 */
   }
 
   /* サブメニューとメインメニュー間の透明な領域を作成 */
@@ -1590,7 +1720,8 @@ body.modal-open {
   color: white;
   font-weight: bold;
   padding: 10px;
-  margin: 10px 0 0 0; /* 下マージンを削除して上マージンのみに */
+  margin: 10px 0 0 0;
+  /* 下マージンを削除して上マージンのみに */
   background-color: rgba(15, 15, 15, 0.5);
   border-radius: 5px;
   text-align: center;
@@ -1603,7 +1734,8 @@ body.modal-open {
 }
 
 .active-filters-pc {
-  max-width: 75%; /* PC表示時の最大幅を制限 */
+  max-width: 75%;
+  /* PC表示時の最大幅を制限 */
 }
 
 .active-filters-pc .filter-item,
@@ -1668,7 +1800,8 @@ body.modal-open {
   font-size: 14px;
   opacity: 0.7;
   margin-bottom: 15px;
-  box-sizing: border-box; /* パディングを含めたwidth計算 */
+  box-sizing: border-box;
+  /* パディングを含めたwidth計算 */
 }
 
 /* 更新日のリンクスタイル */
@@ -1699,8 +1832,10 @@ body.modal-open {
   background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 25px 25px; /* ボタンサイズを大きく */
-  font-size: 24px; /* 矢印を大きく */
+  padding: 25px 25px;
+  /* ボタンサイズを大きく */
+  font-size: 24px;
+  /* 矢印を大きく */
   cursor: pointer;
   z-index: 2501;
   display: none;
@@ -1717,12 +1852,14 @@ body.modal-open {
 }
 
 .image-nav-button.prev {
-  left: 30%; /* カードの横に配置 */
+  left: 30%;
+  /* カードの横に配置 */
   border-radius: 10px;
 }
 
 .image-nav-button.next {
-  right: 30%; /* カードの横に配置 */
+  right: 30%;
+  /* カードの横に配置 */
   border-radius: 10px;
 }
 
@@ -1731,13 +1868,15 @@ body.modal-open {
   .image-nav-button.prev {
     left: 0;
     border-radius: 0 5px 5px 0;
-    padding: 35px 18px; /* スマホでより大きく */
+    padding: 35px 18px;
+    /* スマホでより大きく */
   }
 
   .image-nav-button.next {
     right: 0;
     border-radius: 5px 0 0 5px;
-    padding: 35px 18px; /* スマホでより大きく */
+    padding: 35px 18px;
+    /* スマホでより大きく */
   }
 }
 
@@ -1752,6 +1891,7 @@ body.modal-open {
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -1783,7 +1923,8 @@ body.modal-open {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    height: 100dvh; /* これだけを追加 */
+    height: 100dvh;
+    /* これだけを追加 */
     top: 0;
     left: 0;
     overscroll-behavior: none;
@@ -1954,8 +2095,10 @@ body.modal-open {
   z-index: 1000;
   font-size: 12px;
   font-weight: bold;
-  letter-spacing: 0.5px; /* 文字間のスペース */
-  padding-left: 1.5px; /* ボタン内部の文字、位置調整 */
+  letter-spacing: 0.5px;
+  /* 文字間のスペース */
+  padding-left: 1.5px;
+  /* ボタン内部の文字、位置調整 */
 }
 
 .deck-button:hover {
@@ -1999,6 +2142,7 @@ body.modal-open {
   border-radius: 8px;
   z-index: 3000;
   font-weight: bold;
+  animation: fadeOut 1.5s forwards;
 }
 
 /* PCのデッキボタンのバッジ */
@@ -2027,7 +2171,8 @@ body.modal-open {
 
 @media (min-width: 769px) {
   .add-to-deck-button {
-    display: none; /* PCでは非表示 */
+    display: none;
+    /* PCでは非表示 */
   }
 }
 
@@ -2043,8 +2188,8 @@ body.modal-open {
 }
 
 /* ボタンのホバー時は親要素のホバー効果を無効化 */
-.card-buttons:hover ~ img,
-.deck-card .card-buttons:hover ~ img {
+.card-buttons:hover~img,
+.deck-card .card-buttons:hover~img {
   box-shadow: none;
 }
 
@@ -2082,17 +2227,20 @@ body.modal-open {
   padding: 0 10px;
   opacity: 0;
   transition: opacity 0.2s ease;
-  pointer-events: none; /* 初期状態ではクリックを通過 */
+  pointer-events: none;
+  /* 初期状態ではクリックを通過 */
 }
 
 /* ボタンの順序を入れ替え */
 .card-buttons {
-  flex-direction: row-reverse; /* ボタンの順序を反転 */
+  flex-direction: row-reverse;
+  /* ボタンの順序を反転 */
 }
 
 .deck-card:hover .card-buttons {
   opacity: 1;
-  pointer-events: auto; /* ホバー時にクリック可能に */
+  pointer-events: auto;
+  /* ホバー時にクリック可能に */
 }
 
 /* スマホでボタン非表示 */
@@ -2276,8 +2424,10 @@ body.modal-open {
   display: grid;
   gap: 1px;
   width: -moz-fit-content;
-  width: fit-content; /* コンテンツ幅に合わせる */
-  margin: 0 auto; /* 中央寄せ */
+  width: fit-content;
+  /* コンテンツ幅に合わせる */
+  margin: 0 auto;
+  /* 中央寄せ */
   align-content: center;
   justify-content: center;
 
@@ -2287,8 +2437,10 @@ body.modal-open {
   grid-auto-flow: row dense;
 
   /* スクロール防止 */
-  touch-action: none; /* タッチによるスクロールも防止 */
-  -webkit-overflow-scrolling: none; /* iOSのスクロールも防止 */
+  touch-action: none;
+  /* タッチによるスクロールも防止 */
+  -webkit-overflow-scrolling: none;
+  /* iOSのスクロールも防止 */
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
 }
@@ -2299,6 +2451,7 @@ body.modal-open {
     padding-top: 40px;
   }
 }
+
 @media (max-width: 768px) {
   .deck-display {
     padding-top: 30px;
@@ -2307,38 +2460,47 @@ body.modal-open {
 
 /* 40枚以下の固定グリッド */
 .deck-display.fixed-grid {
+
   /* スマホ縦向き */
   @media (max-width: 768px) and (orientation: portrait) {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: repeat(8, min-content); /* 高さを内容に合わせる */
+    grid-template-rows: repeat(8, min-content);
+    /* 高さを内容に合わせる */
   }
 
   /* スマホ横向き・PC */
-  @media (min-width: 769px), (orientation: landscape) {
+  @media (min-width: 769px),
+  (orientation: landscape) {
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-template-rows: repeat(5, min-content); /* 高さを内容に合わせる */
+    grid-template-rows: repeat(5, min-content);
+    /* 高さを内容に合わせる */
   }
 }
 
 /* 41枚以上の可変グリッド */
 .deck-display:not(.fixed-grid) {
+
   /* スマホ縦向き */
   @media (max-width: 768px) and (orientation: portrait) {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-auto-rows: min-content; /* 高さを内容に合わせる */
+    grid-auto-rows: min-content;
+    /* 高さを内容に合わせる */
   }
 
   /* スマホ横向き・PC */
-  @media (min-width: 769px), (orientation: landscape) {
+  @media (min-width: 769px),
+  (orientation: landscape) {
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    grid-auto-rows: min-content; /* 高さを内容に合わせる */
+    grid-auto-rows: min-content;
+    /* 高さを内容に合わせる */
   }
 }
 
 .deck-card {
   position: relative;
   width: 100%;
-  width: var(--card-width); /* JSで動的に設定 */
+  width: var(--card-width);
+  /* JSで動的に設定 */
   aspect-ratio: 745/1041;
   /* Firefox対応を追加 */
   display: flex;
@@ -2349,7 +2511,8 @@ body.modal-open {
 .deck-card::before {
   content: '';
   display: block;
-  padding-top: calc(1041 / 745 * 100%); /* アスペクト比を維持 */
+  padding-top: calc(1041 / 745 * 100%);
+  /* アスペクト比を維持 */
 }
 
 .deck-card img {
@@ -2366,6 +2529,7 @@ body.modal-open {
   .deck-card img {
     border-radius: 8px;
   }
+
   .deck-card {
     border-radius: 8px;
   }
@@ -2376,6 +2540,7 @@ body.modal-open {
   .deck-card img {
     border-radius: 4px;
   }
+
   .deck-card {
     border-radius: 4px;
   }
@@ -2404,10 +2569,14 @@ body.modal-open {
 /* モーダル内の画像コンテナ */
 .image-container {
   position: relative;
-  display: flex; /* Flexboxを使用 */
-  flex-direction: column; /* 縦方向に並べる */
-  align-items: center; /* 横方向の中央揃え */
-  width: 100%; /* 幅を100%に */
+  display: flex;
+  /* Flexboxを使用 */
+  flex-direction: column;
+  /* 縦方向に並べる */
+  align-items: center;
+  /* 横方向の中央揃え */
+  width: 100%;
+  /* 幅を100%に */
 }
 
 /* カード増減ボタンのスタイル */
@@ -2415,7 +2584,8 @@ body.modal-open {
   position: absolute;
   left: 50%;
   bottom: -70px;
-  transform: translateX(-50%); /* 中央揃えのための変換 */
+  transform: translateX(-50%);
+  /* 中央揃えのための変換 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2426,8 +2596,10 @@ body.modal-open {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
   z-index: 2502;
-  margin: 0 auto; /* 水平方向の中央揃え */
-  overflow: visible; /* 子要素が切り取られないようにする */
+  margin: 0 auto;
+  /* 水平方向の中央揃え */
+  overflow: visible;
+  /* 子要素が切り取られないようにする */
   border: 2px solid #ffffff28;
 }
 
@@ -2469,13 +2641,18 @@ body.modal-open {
   transition: all 0.2s ease;
 
   /* iOS対策を追加 */
-  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  -webkit-appearance: none;
+  /* iOSのデフォルトスタイルを削除 */
   -moz-appearance: none;
   appearance: none;
-  padding: 0; /* パディングをリセット */
-  min-width: 40px; /* 最小幅を設定 */
-  min-height: 40px; /* 最小高さを設定 */
-  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
+  padding: 0;
+  /* パディングをリセット */
+  min-width: 40px;
+  /* 最小幅を設定 */
+  min-height: 40px;
+  /* 最小高さを設定 */
+  aspect-ratio: 1 / 1;
+  /* アスペクト比を1:1に強制 */
 }
 
 /* PCとスマホで微調整 */
@@ -2496,8 +2673,10 @@ body.modal-open {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80px; /* ボタンの2倍 */
-  height: 80px; /* ボタンの2倍 */
+  width: 80px;
+  /* ボタンの2倍 */
+  height: 80px;
+  /* ボタンの2倍 */
   background: transparent;
   cursor: pointer;
 }
@@ -2524,11 +2703,14 @@ body.modal-open {
 }
 
 .card-count.is-infinite {
-  font-size: 0; /* 元のテキストを非表示にする */
+  font-size: 0;
+  /* 元のテキストを非表示にする */
 }
+
 .card-count.is-infinite::before {
   content: attr(data-count) ' / ∞';
-  font-size: 18px; /* フォントサイズを元に戻す */
+  font-size: 18px;
+  /* フォントサイズを元に戻す */
 }
 
 /* スマホ対応 */
@@ -2547,6 +2729,7 @@ body.modal-open {
 
 /* カードホバー時のボタン表示（PC専用） */
 @media (min-width: 769px) {
+
   /* カードの相対位置を設定 */
   .card {
     position: relative;
@@ -2563,13 +2746,15 @@ body.modal-open {
     padding: 0 10px;
     opacity: 0;
     transition: opacity 0.2s ease;
-    pointer-events: none; /* 初期状態ではクリックを通過 */
+    pointer-events: none;
+    /* 初期状態ではクリックを通過 */
   }
 
   /* カードホバー時のみボタンを表示 */
   .card:hover .card-buttons {
     opacity: 1;
-    pointer-events: auto; /* ホバー時にクリック可能に */
+    pointer-events: auto;
+    /* ホバー時にクリック可能に */
   }
 
   /* 追加・削除ボタンの共通スタイル */
@@ -2634,9 +2819,11 @@ body.modal-open {
   0% {
     opacity: 1;
   }
+
   70% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -2667,7 +2854,7 @@ body.modal-open {
   letter-spacing: 1.5px;
   padding: 0;
   padding-left: 2.5px;
-  text-indent: 0;  
+  text-indent: 0;
   text-align: center;
 }
 
@@ -2704,7 +2891,8 @@ body.modal-open {
   transition: opacity 0.2s;
   white-space: normal;
   max-width: 90%;
-  transition: opacity 0s; /* 即座に非表示 */
+  transition: opacity 0s;
+  /* 即座に非表示 */
 }
 
 .tooltip::after {
@@ -2736,6 +2924,7 @@ body.modal-open {
 
 /* スマホ表示時のviewport制御 */
 @media (max-width: 768px) {
+
   html,
   body {
     overflow-x: hidden;
@@ -2770,7 +2959,8 @@ body.modal-open {
 }
 
 .deck-icon-container i {
-  font-size: 21px; /*フォントサイズだけど、アイコンのサイズが変動*/
+  font-size: 21px;
+  /*フォントサイズだけど、アイコンのサイズが変動*/
   color: #e0e0e0;
 }
 
@@ -2832,7 +3022,8 @@ body.modal-open {
   z-index: 3000;
   opacity: 0;
   transition: opacity 0.3s ease;
-  overflow: hidden; /* モーダル自体はスクロールしない */
+  overflow: hidden;
+  /* モーダル自体はスクロールしない */
 }
 
 .deck-list-modal.active {
@@ -2850,22 +3041,26 @@ body.modal-open {
   border-radius: 8px;
   width: 90%;
   max-width: 400px;
-  max-height: 80vh; /* ビューポートの80%を最大高さに設定 */
+  max-height: 80vh;
+  /* ビューポートの80%を最大高さに設定 */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column; /* ヘッダーとコンテンツを縦に配置 */
+  flex-direction: column;
+  /* ヘッダーとコンテンツを縦に配置 */
 }
 
 /* デッキ一覧のヘッダー部分の調整 */
 .deck-list-header {
   display: flex;
-  justify-content: center; /* 中央揃えに変更 */
+  justify-content: center;
+  /* 中央揃えに変更 */
   align-items: center;
   margin-bottom: 20px;
   color: white;
   flex-shrink: 0;
   position: relative;
-  padding: 0 10px; /* 左右に余白を追加 */
+  padding: 0 10px;
+  /* 左右に余白を追加 */
 }
 
 /* デッキ一覧のヘッダータイトルのスタイル調整 */
@@ -2912,9 +3107,11 @@ body.modal-open {
 /* 閉じるボタンの位置調整 */
 .deck-list-close {
   position: absolute;
-  right: 0px; /* 右端からの距離 */
+  right: 0px;
+  /* 右端からの距離 */
   top: 50%;
-  transform: translateY(-50%); /* 縦方向の中央揃え */
+  transform: translateY(-50%);
+  /* 縦方向の中央揃え */
   z-index: 1;
   width: 36px;
   height: 36px;
@@ -2950,8 +3147,10 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  overflow-y: auto; /* 縦方向のスクロールを有効化 */
-  flex-grow: 1; /* 残りのスペースを全て使用 */
+  overflow-y: auto;
+  /* 縦方向のスクロールを有効化 */
+  flex-grow: 1;
+  /* 残りのスペースを全て使用 */
   position: relative;
 }
 
@@ -2996,8 +3195,10 @@ body.modal-open {
 .deck-list-items {
   overflow-y: auto;
   flex-grow: 1;
-  -ms-overflow-style: none; /* IE, Edgeのスクロールバーを非表示 */
-  scrollbar-width: none; /* Firefoxのスクロールバーを非表示 */
+  -ms-overflow-style: none;
+  /* IE, Edgeのスクロールバーを非表示 */
+  scrollbar-width: none;
+  /* Firefoxのスクロールバーを非表示 */
 }
 
 /* Chromeなどのスクロールバーを非表示 */
@@ -3016,7 +3217,8 @@ body.modal-open {
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  border-left: 4px solid transparent; /* アクティブ状態との整合性のため */
+  border-left: 4px solid transparent;
+  /* アクティブ状態との整合性のため */
   transition: all 0.2s ease;
 }
 
@@ -3046,8 +3248,10 @@ body.modal-open {
 /* deck-list-modal 内の選択中デッキのスタイルを強調 */
 .deck-select-button.active {
   background-color: #4a4a4a;
-  border-left: 4px solid #ec2f2f; /* 赤いバーを追加 */
-  box-shadow: 0 0 10px rgba(236, 47, 47, 0.2); /* 赤い光彩効果 */
+  border-left: 4px solid #ec2f2f;
+  /* 赤いバーを追加 */
+  box-shadow: 0 0 10px rgba(236, 47, 47, 0.2);
+  /* 赤い光彩効果 */
   font-weight: bold;
   color: #ffffff;
 }
@@ -3055,7 +3259,8 @@ body.modal-open {
 /* デッキ編集ボタンのスタイル調整 */
 .deck-edit-button {
   width: 36px;
-  height: 36px; /* デッキ名ボタンと同じ高さに */
+  height: 36px;
+  /* デッキ名ボタンと同じ高さに */
   border: none;
   border-radius: 4px;
   background-color: #3a3a3a;
@@ -3063,14 +3268,18 @@ body.modal-open {
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
-  align-items: center; /* アイコンを縦方向中央に */
-  justify-content: center; /* アイコンを横方向中央に */
-  align-self: center; /* ボタン自体を親要素の中央に */
+  align-items: center;
+  /* アイコンを縦方向中央に */
+  justify-content: center;
+  /* アイコンを横方向中央に */
+  align-self: center;
+  /* ボタン自体を親要素の中央に */
 }
 
 .deck-edit-button i {
   font-size: 14px;
-  line-height: 1; /* アイコンの行の高さを調整 */
+  line-height: 1;
+  /* アイコンの行の高さを調整 */
 }
 
 .deck-edit-button:hover i {
@@ -3099,9 +3308,12 @@ body.modal-open {
 
 /* メニューバーの×ボタンのスタイル調整 */
 #back-to-gallery {
-  font-size: 24px; /* ×のサイズを大きく */
-  line-height: 1; /* 行の高さを調整して中央揃えを維持 */
-  padding: 0 10px; /* ×用に特別な余白設定 */
+  font-size: 24px;
+  /* ×のサイズを大きく */
+  line-height: 1;
+  /* 行の高さを調整して中央揃えを維持 */
+  padding: 0 10px;
+  /* ×用に特別な余白設定 */
 }
 
 /* 保存中メッセージのスタイル追加 */
@@ -3114,7 +3326,8 @@ body.modal-open {
   color: white;
   padding: 15px 25px;
   border-radius: 8px;
-  z-index: 10001; /* モーダルより上に表示 */
+  z-index: 10001;
+  /* モーダルより上に表示 */
   font-size: 16px;
   text-align: center;
   pointer-events: none;
@@ -3162,7 +3375,8 @@ body.modal-open {
 .deck-image-container img {
   display: block;
   max-width: 100%;
-  max-height: calc(70vh - 80px); /* ボタンとテキストの余白を確保 */
+  max-height: calc(70vh - 80px);
+  /* ボタンとテキストの余白を確保 */
   object-fit: contain;
 }
 
@@ -3246,11 +3460,13 @@ textarea {
 
 /* モーダル自体のタッチ操作も最適化 */
 .deck-image-modal {
-  touch-action: none; /* モーダル背景のスクロールを防止 */
+  touch-action: none;
+  /* モーダル背景のスクロールを防止 */
 }
 
 .deck-image-container {
-  touch-action: pan-x pan-y; /* コンテナ内のスクロールは許可 */
+  touch-action: pan-x pan-y;
+  /* コンテナ内のスクロールは許可 */
 }
 
 /* スクロールバー分の余白を常に確保 */
@@ -3261,7 +3477,8 @@ html {
 /* モーダル表示時のスクロールバー調整 */
 body.modal-open {
   overflow: hidden;
-  padding-right: var(--scrollbar-width, 17px); /* スクロールバー幅を動的に設定 */
+  padding-right: var(--scrollbar-width, 17px);
+  /* スクロールバー幅を動的に設定 */
   position: fixed;
   width: 100%;
   height: 100%;
@@ -3323,7 +3540,8 @@ body.modal-open {
 
   /* 文字の位置調整を追加 */
   text-align: center;
-  line-height: 28px; /* widthと同じ値 */
+  line-height: 28px;
+  /* widthと同じ値 */
   transform-origin: center center;
 }
 
@@ -3331,27 +3549,33 @@ body.modal-open {
   .area-title {
     width: 24px;
     padding: 12px 0;
-    line-height: 24px; /* スマホ用のwidthと同じ値 */
+    line-height: 24px;
+    /* スマホ用のwidthと同じ値 */
   }
 }
 
 /* 札種類のタイトル位置調整 */
 .middle-section .type-distribution .area-title {
-  left: 10px; /* 左の位置を統一 */
+  left: 10px;
+  /* 左の位置を統一 */
 }
 
 .distribution-content {
   background: #2a2a2a;
-  padding: 20px 30px; /* 左右の余白を追加 */
+  padding: 20px 30px;
+  /* 左右の余白を追加 */
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative; /* ×ボタンの位置決めのため */
-  margin: 0 15px; /* 左右の余白を均等に */
-  box-sizing: border-box; /* パディングを幅に含める */
+  position: relative;
+  /* ×ボタンの位置決めのため */
+  margin: 0 15px;
+  /* 左右の余白を均等に */
+  box-sizing: border-box;
+  /* パディングを幅に含める */
 }
 
 /* 各セクションの共通スタイル */
@@ -3369,7 +3593,8 @@ body.modal-open {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  min-height: 130px; /* 全体の高さを縮小 */
+  min-height: 130px;
+  /* 全体の高さを縮小 */
 }
 
 /* 各セクションのコンテンツ */
@@ -3390,7 +3615,8 @@ body.modal-open {
 .attribute-text {
   font-size: 14px;
   display: grid;
-  grid-template-columns: 1fr auto 1fr; /* 3列のグリッド */
+  grid-template-columns: 1fr auto 1fr;
+  /* 3列のグリッド */
   align-items: center;
   white-space: nowrap;
   color: white;
@@ -3405,7 +3631,8 @@ body.modal-open {
 .attribute-text::before {
   content: attr(data-name);
   text-align: right;
-  margin-right: 4px; /* ：との間隔 */
+  margin-right: 4px;
+  /* ：との間隔 */
 }
 
 .season-text::after,
@@ -3413,7 +3640,8 @@ body.modal-open {
 .attribute-text::after {
   content: attr(data-count);
   text-align: left;
-  margin-left: 1px; /* ：との間隔を調整 */
+  margin-left: 1px;
+  /* ：との間隔を調整 */
 }
 
 /* コスト分布エリアはタイトル不要 */
@@ -3461,21 +3689,26 @@ body.modal-open {
 .cost-bar-background {
   position: absolute;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.1); /* 灰色の背景 */
+  background: rgba(255, 255, 255, 0.1);
+  /* 灰色の背景 */
   border-radius: 4px 4px 0 0;
-  z-index: 1; /* 赤いバーの後ろに配置 */
+  z-index: 1;
+  /* 赤いバーの後ろに配置 */
 }
 
 .cost-bar {
   background: rgba(236, 47, 47, 0.8);
   transition: height 0.3s ease;
   border-radius: 4px 4px 0 0;
-  position: relative; /* 枚数表示のため */
+  position: relative;
+  /* 枚数表示のため */
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 1px; /* 0枚でも1pxは表示 */
-  z-index: 2; /* 背景バーの前面に配置 */
+  min-height: 1px;
+  /* 0枚でも1pxは表示 */
+  z-index: 2;
+  /* 背景バーの前面に配置 */
 }
 
 .cost-bar-count {
@@ -3489,15 +3722,19 @@ body.modal-open {
 .cost-label {
   position: absolute;
   bottom: -24px;
-  width: 100%; /* バーの幅に合わせる */
-  height: 100%; /* 幅と同じ高さを保持 */
-  max-height: 24px; /* 高さの上限を設定 */
+  width: 100%;
+  /* バーの幅に合わせる */
+  height: 100%;
+  /* 幅と同じ高さを保持 */
+  max-height: 24px;
+  /* 高さの上限を設定 */
   display: flex;
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  font-size: clamp(10px, 3vw, 12px); /* フォントサイズも調整 */
+  font-size: clamp(10px, 3vw, 12px);
+  /* フォントサイズも調整 */
 }
 
 /* コスト値の表示 */
@@ -3556,13 +3793,18 @@ body.modal-open {
   z-index: 1001;
 
   /* iPhoneでの丸潰れ防止 */
-  -webkit-appearance: none; /* iOSのデフォルトスタイルを削除 */
+  -webkit-appearance: none;
+  /* iOSのデフォルトスタイルを削除 */
   -moz-appearance: none;
   appearance: none;
-  padding: 0; /* パディングをリセット */
-  min-width: 30px; /* 最小幅を設定 */
-  min-height: 30px; /* 最小高さを設定 */
-  aspect-ratio: 1 / 1; /* アスペクト比を1:1に強制 */
+  padding: 0;
+  /* パディングをリセット */
+  min-width: 30px;
+  /* 最小幅を設定 */
+  min-height: 30px;
+  /* 最小高さを設定 */
+  aspect-ratio: 1 / 1;
+  /* アスペクト比を1:1に強制 */
 
   /* ×マークの位置調整 */
   line-height: 1;
@@ -3653,7 +3895,8 @@ body.modal-open {
   align-items: center;
   gap: 0px;
   width: calc(100% - 35px);
-  margin-left: 50px; /* 右側だからか、謎の微調整が必要 */
+  margin-left: 50px;
+  /* 右側だからか、謎の微調整が必要 */
 }
 
 /* デッキプレビュー画像のスタイル */
@@ -3661,15 +3904,19 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%; /* プレビュー全体を最大幅に */
+  width: 100%;
+  /* プレビュー全体を最大幅に */
 }
 
 .deck-preview-image {
-  height: 37px; /* デッキ名ボタンと同じ高さ */
+  height: 37px;
+  /* デッキ名ボタンと同じ高さ */
   width: auto;
   object-fit: contain;
-  display: none; /* 初期状態は非表示 */
+  display: none;
+  /* 初期状態は非表示 */
 }
+
 @media (pointer: coarse) {
   .deck-list-modal .deck-preview-image {
     pointer-events: none;
@@ -3689,15 +3936,19 @@ body.modal-open {
 
 /* デッキ選択ボタンを伸縮可能に */
 .deck-select-button {
-  flex-grow: 1; /* 利用可能なスペースを最大限使用 */
-  width: 100%; /* ボタン自体も最大幅に */
+  flex-grow: 1;
+  /* 利用可能なスペースを最大限使用 */
+  width: 100%;
+  /* ボタン自体も最大幅に */
 }
 
 /* デッキ一覧のタイトルスタイル */
 .deck-list-header h2 {
   text-align: center;
-  width: 100%; /* タイトルの幅を親要素いっぱいに */
-  display: block; /* ブロック要素として表示 */
+  width: 100%;
+  /* タイトルの幅を親要素いっぱいに */
+  display: block;
+  /* ブロック要素として表示 */
 }
 
 /* スマホ表示時の調整 */
@@ -3705,18 +3956,23 @@ body.modal-open {
   .distribution-content {
     padding: 15px;
     width: calc(100% - 30px);
-    gap: 10px; /* モーダル同士の間隔 */
+    gap: 10px;
+    /* モーダル同士の間隔 */
   }
 
   .middle-section {
-    flex-direction: row; /* columnからrowに変更 */
-    gap: 10px; /* モーダル同士の間隔 */
+    flex-direction: row;
+    /* columnからrowに変更 */
+    gap: 10px;
+    /* モーダル同士の間隔 */
   }
 
   .middle-section .season-distribution,
   .middle-section .type-distribution {
-    width: calc(50% - 5px); /* ギャップを考慮した幅に調整 */
-    min-height: 100px; /* スマホでは高さを少し小さく */
+    width: calc(50% - 5px);
+    /* ギャップを考慮した幅に調整 */
+    min-height: 100px;
+    /* スマホでは高さを少し小さく */
   }
 
   .cost-graph-container {
@@ -3726,8 +3982,10 @@ body.modal-open {
   .season-rows,
   .type-rows,
   .attribute-rows {
-    width: calc(100% - 34px); /* タイトル幅(24px)と余白(10px)を引く */
-    margin-left: 34px; /* タイトル幅(24px)と余白(10px)分ずらす */
+    width: calc(100% - 34px);
+    /* タイトル幅(24px)と余白(10px)を引く */
+    margin-left: 34px;
+    /* タイトル幅(24px)と余白(10px)分ずらす */
   }
 
   .season-text,
@@ -3738,25 +3996,30 @@ body.modal-open {
   }
 
   .cost-graph-container {
-    gap: 4px; /* PCと同じ間隔を維持 */
+    gap: 4px;
+    /* PCと同じ間隔を維持 */
   }
 }
 
 /* スマホ横向きなど、高さが狭い場合の調整 */
 @media screen and (max-height: 700px) {
+
   /* モーダル自体の調整 */
   .distribution-content {
-    gap: 10px; /* セクション間の間隔を縮小 */
+    gap: 10px;
+    /* セクション間の間隔を縮小 */
   }
 
   .middle-section {
-    gap: 10px; /* 中段モーダル同士の間隔を縮小 */
+    gap: 10px;
+    /* 中段モーダル同士の間隔を縮小 */
   }
 
   /* コストグラフを小さく */
   .cost-distribution {
     height: 150px;
-    padding: 10px 5px 0; /* 上部のパディングを調整 */
+    padding: 10px 5px 0;
+    /* 上部のパディングを調整 */
   }
 
   /* 各セクションの高さを調整 */
@@ -3764,8 +4027,10 @@ body.modal-open {
   .season-distribution,
   .type-distribution,
   .attribute-distribution {
-    min-height: 120px; /* 最小の高さを縮小 */
-    padding: 10px; /* パディングも縮小 */
+    min-height: 120px;
+    /* 最小の高さを縮小 */
+    padding: 10px;
+    /* パディングも縮小 */
   }
 
   /* フォントサイズを少し小さく */
@@ -3779,7 +4044,8 @@ body.modal-open {
 /* さらに画面が小さい場合 */
 @media screen and (max-height: 600px) {
   .distribution-content {
-    gap: 4px; /* 中段モーダルと上下モーダルの間隔 */
+    gap: 4px;
+    /* 中段モーダルと上下モーダルの間隔 */
   }
 
   .cost-distribution {
@@ -3791,7 +4057,8 @@ body.modal-open {
   .type-distribution,
   .attribute-distribution {
     min-height: 100px;
-    padding: 2px; /* 中段モーダル内の広さを調整 */
+    padding: 2px;
+    /* 中段モーダル内の広さを調整 */
   }
 
   /* テキスト間をさらに詰める */
@@ -3869,7 +4136,8 @@ body.modal-open {
 
 .deck-delete-button:hover {
   background-color: #4a4a4a;
-  color: #ff4444; /* 削除ボタンは赤くハイライト */
+  color: #ff4444;
+  /* 削除ボタンは赤くハイライト */
 }
 
 /* 確認ポップアップのスタイル */
@@ -3927,8 +4195,10 @@ body.modal-open {
   text-align: left;
   padding: 5px 20px;
   font-size: 17px;
-  margin-top: -5px; /* 上部スペースを詰める */
-  margin-bottom: 10px; /* 下部マージンを小さく */
+  margin-top: -5px;
+  /* 上部スペースを詰める */
+  margin-bottom: 10px;
+  /* 下部マージンを小さく */
   width: 100%;
   box-sizing: border-box;
   font-weight: bold;
@@ -3943,14 +4213,16 @@ body.modal-open {
   .search-result-count {
     font-size: 16px;
     padding: 5px 10px;
-    margin-top: 0; /* スマホではマージントップを0に */
+    margin-top: 0;
+    /* スマホではマージントップを0に */
   }
 }
 
 @media (min-width: 769px) {
   .search-result-count {
     max-width: 75%;
-    margin: -20px auto 15px; /* PCでは上部マージンをさらに詰める */
+    margin: -20px auto 15px;
+    /* PCでは上部マージンをさらに詰める */
   }
 }
 
@@ -4120,7 +4392,8 @@ body.modal-open {
   .search-result-count {
     font-size: 16px;
     padding: 5px 10px;
-    margin-top: 0; /* スマホではマージントップを0に */
+    margin-top: 0;
+    /* スマホではマージントップを0に */
   }
 
   .keyword-role-details {
@@ -4137,12 +4410,14 @@ body.modal-open {
 @media (min-width: 769px) {
   .search-result-count {
     max-width: 75%;
-    margin: 0 auto 15px; /* PC表示では通常のマージンに変更 */
+    margin: 0 auto 15px;
+    /* PC表示では通常のマージンに変更 */
   }
 
   .keyword-role-details {
     max-width: 75%;
-    margin: 1px auto 15px; /* PC表示では適切な上下マージンを設定 */
+    margin: 1px auto 15px;
+    /* PC表示では適切な上下マージンを設定 */
   }
 }
 
@@ -4270,7 +4545,7 @@ body.modal-open {
   border-radius: 4px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 0, 0, 0.3);
-  text-shadow: 
+  text-shadow:
     2px 2px 2px rgba(0, 0, 0, 0.6),
     -2px -2px 2px rgba(0, 0, 0, 0.6),
     2px -2px 2px rgba(0, 0, 0, 0.6),
@@ -4349,7 +4624,7 @@ body.modal-open {
     gap: clamp(4px, 1.2vw, 8px);
   }
 
-  .deck-menu > * {
+  .deck-menu>* {
     flex: 1 1 0;
     min-width: 0;
   }
@@ -4388,4 +4663,3 @@ body.modal-open {
     min-width: 0;
   }
 }
-

@@ -2873,36 +2873,30 @@ const deckBuilder = {
     }, 300);
   },
 
-  showLimitMessage() {
+  _showLimitMsg(text) {
+    document.querySelectorAll('.deck-message, .deck-limit-message').forEach(el => el.remove());
+    clearTimeout(this._limitMsgTimer);
     const message = document.createElement('div');
     message.className = 'deck-limit-message';
-    message.textContent = '制限カードはデッキに1枚まで。';
+    message.textContent = text;
     document.body.appendChild(message);
-    setTimeout(() => message.remove(), 2000);
+    this._limitMsgTimer = setTimeout(() => message.remove(), 2000);
+  },
+
+  showLimitMessage() {
+    this._showLimitMsg('制限カードはデッキに1枚まで。');
   },
 
   showTwoCardMessage() {
-    const message = document.createElement('div');
-    message.className = 'deck-limit-message';
-    message.textContent = '準制限カードはデッキに2枚まで。';
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 2000);
+    this._showLimitMsg('準制限カードはデッキに2枚まで。');
   },
 
   showTenCardMessage() {
-    const message = document.createElement('div');
-    message.className = 'deck-limit-message';
-    message.textContent = 'このカードはデッキに10枚まで。';
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 2000);
+    this._showLimitMsg('このカードはデッキに10枚まで。');
   },
 
   showSevenCardMessage() {
-    const message = document.createElement('div');
-    message.className = 'deck-limit-message';
-    message.textContent = 'このカードはデッキに7枚まで。';
-    document.body.appendChild(message);
-    setTimeout(() => message.remove(), 2000);
+    this._showLimitMsg('このカードはデッキに7枚まで。');
   },
 
   // カードを追加
@@ -3219,12 +3213,14 @@ const deckBuilder = {
 
   // メッセージを表示
   showMessage(message) {
+    document.querySelectorAll('.deck-message, .deck-limit-message').forEach(el => el.remove());
+    clearTimeout(this._messageTimer);
     const messageDiv = document.createElement('div');
     messageDiv.className = 'deck-message';
     messageDiv.textContent = message;
     document.body.appendChild(messageDiv);
 
-    setTimeout(() => {
+    this._messageTimer = setTimeout(() => {
       messageDiv.remove();
     }, 2000);
   },
