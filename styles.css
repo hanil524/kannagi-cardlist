@@ -1287,6 +1287,7 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.saigoiro,
 .modal-buttons button.anatairo,
 .modal-buttons button.kaidaniro,
+.modal-buttons button.byoukairo,
 .modal-buttons button.nanahushigiiro,
 .modal-buttons button.sssiro,
 .modal-buttons button.toshiiro,
@@ -1344,6 +1345,11 @@ button[onclick='resetFilters()']:active {
 
 .modal-buttons button.kaidaniro {
   background-color: #111111;
+  color: #ffffff;
+}
+
+.modal-buttons button.byoukairo {
+  background-color: #fc97c6;
   color: #ffffff;
 }
 

@@ -12972,6 +12972,42 @@ data-role="ロック"
   <img data-src="images/card_14_p (109).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
+<!-- 猫花の約束（びょうかのやくそく） -->
+
+<div
+  class="card"
+  data-number="2301"
+  data-name="猫面の耳打ち(みょうめんのみみうち)"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="仮面 猫 猫面"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<div
+  class="card"
+  data-number="2302"
+  data-name="花面の耳打ち(かめんのみみうち)"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="仮面 花 花面"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
 <!-- ★★ -->
 
 <!-- プロモ ぷろも -->
