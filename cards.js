@@ -9437,7 +9437,7 @@ data-season="冬"
 data-rare="R"
 data-attribute="都市伝説 龍 妖怪"
 data-keyword=""
-data-role="除外加速"
+data-role="除外加速 底利用"
 >
 <img data-src="images/card_11_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
