@@ -353,7 +353,7 @@ data-series="夏VS冬バトルセット"
 data-rare="R"
 data-season="夏"
 data-type="道具札"
-data-role="直接ダメ 手札入替 底ドロー ドロー"
+data-role="直接ダメ 手札入替 底ドロー ドロー 底利用"
 data-keyword=""
 data-attribute="人形 日本人形"
 >
@@ -1440,7 +1440,7 @@ data-series="新季の到来"
 data-rare="C"
 data-season="夏"
 data-type="怪異札"
-data-role="底ドロー ドロー 公開ドロー"
+data-role="底ドロー ドロー 公開ドロー 底利用"
 data-keyword=""
 data-attribute="視線"
 >
@@ -2056,7 +2056,7 @@ data-double-for="おいしゃさんごっこ"
 data-rare="C"
 data-season="冬"
 data-type="怪異札"
-data-role="底ドロー ドロー 公開ドロー"
+data-role="底ドロー ドロー 公開ドロー 底利用"
 data-keyword=""
 data-attribute="視線"
 >
@@ -2961,7 +2961,7 @@ data-double-for="うつくしいせかい"
 data-rare="C"
 data-season="夏"
 data-type="道具札"
-data-role="直接ダメ 底ドロー 公開ドロー ドロー"
+data-role="直接ダメ 底ドロー 公開ドロー ドロー 底利用"
 data-keyword=""
 data-attribute="蟲 動物"
 >
@@ -3335,7 +3335,7 @@ data-series="百鬼夜行"
 data-rare="UC"
 data-season="秋"
 data-type="道具札"
-data-role="底ドロー ドロー 自傷ダメ"
+data-role="底ドロー ドロー 自傷ダメ 底利用"
 data-keyword=""
 data-attribute="廃神社 罪"
 >
@@ -6679,7 +6679,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="SSS 廃屋 怨霊"
 data-keyword=""
-data-role="札除去"
+data-role="札除去 底利用"
 >
 <img data-src="images/card_8_p (36).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8042,7 +8042,7 @@ data-season="秋"
 data-rare="エキスパンション"
 data-attribute="怨霊 人形"
 data-keyword=""
-data-role="除外加速 ドロー"
+data-role="除外加速 ドロー 底利用"
 >
 <img data-src="images/card_10_p (95).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8618,7 +8618,7 @@ data-season="無"
 data-rare="エキスパンション"
 data-attribute="幽霊 交通事故"
 data-keyword=""
-data-role="召喚時"
+data-role="召喚時 底利用"
 >
 <img data-src="images/card_10_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13019,7 +13019,7 @@ data-role="ロック"
   data-rare="C"
   data-attribute="廃隧道 廃門"
   data-keyword=""
-  data-role="召喚時 "
+  data-role="召喚時 底送り"
 >
   <img data-src="images/card_15_p (3).jpg" src="placeholder.jpg" decoding="async" />
 </div>
