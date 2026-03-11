@@ -12976,7 +12976,7 @@ data-role="ロック"
 
 <div
   class="card"
-  data-number="2301"
+  data-number="2303"
   data-name="猫面の耳打ち(みょうめんのみみうち)"
   data-cost="0"
   data-power="1"
@@ -12993,7 +12993,7 @@ data-role="ロック"
 
 <div
   class="card"
-  data-number="2302"
+  data-number="2343"
   data-name="花面の耳打ち(かめんのみみうち)"
   data-cost="0"
   data-power="1"
@@ -13006,6 +13006,22 @@ data-role="ロック"
   data-role="バニラ"
 >
   <img data-src="images/card_15_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2344"
+  data-name="第13號隧道(だいじゅうさんごうずいどう)"
+  data-cost="1"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="廃隧道 廃門"
+  data-keyword=""
+  data-role="召喚時 "
+>
+  <img data-src="images/card_15_p (3).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
