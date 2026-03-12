@@ -12990,7 +12990,22 @@ data-role="ロック"
 >
   <img data-src="images/card_15_p (1).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
+<div
+  class="card"
+  data-number="2309"
+  data-name="沼(ぬま)"
+  data-cost="4"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type=""
+  data-season="春"
+  data-rare="C"
+  data-attribute="事件"
+  data-keyword=""
+  data-role="召喚時 ヒール"
+>
+  <img data-src="images/card_15_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 <div
   class="card"
   data-number="2343"
