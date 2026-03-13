@@ -13038,6 +13038,22 @@ data-role="ロック"
 >
   <img data-src="images/card_15_p (3).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2361"
+  data-name="痰壺小僧(たんつぼこぞう)"
+  data-cost="1"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="病 腐乱 罪"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_15_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
