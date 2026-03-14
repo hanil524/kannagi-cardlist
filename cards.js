@@ -12992,6 +12992,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2305"
+  data-name="赤い滝(あかいたき)"
+  data-cost="1"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="渓谷 血液"
+  data-keyword=""
+  data-role="攻撃時 除外戻し"
+>
+  <img data-src="images/card_15_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2309"
   data-name="沼(ぬま)"
   data-cost="4"
