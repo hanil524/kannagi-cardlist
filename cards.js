@@ -13070,6 +13070,22 @@ data-role="ロック"
 >
   <img data-src="images/card_15_p (5).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2371"
+  data-name="カーブミラー(かーぶみらー)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="鏡 交通事故 道路"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
