@@ -12558,7 +12558,7 @@ data-role="ロック"
 <div
   class="card"
   data-number="2195"
-  data-name="妙味真似(みょうみまね)"
+  data-name="妙味真似(みようみまね)"
   data-cost="0"
   data-power="1"
   data-series="怪談師三章"
