@@ -13025,7 +13025,7 @@ data-role="ロック"
 <div
   class="card"
   data-number="2326"
-  data-name=""
+  data-name="猫面の神(みょうめんのかみ)"
   data-cost="7"
   data-power="0"
   data-series="猫花の約束"
