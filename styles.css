@@ -3518,46 +3518,40 @@ body.modal-open {
 
 .area-title {
   position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  writing-mode: vertical-rl;
+  left: 0;
+  top: 0;
+  height: 100%;
+  writing-mode: vertical-lr;
   text-orientation: upright;
   color: white;
   font-size: clamp(13px, 2vw, 14px);
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   box-sizing: border-box;
-  width: 28px;
-  padding: 16px 0;
-  height: fit-content;
+  width: 32px;
+  padding: 0 1px 0 0;
+  /* 右に1pxパディングで視覚的な中央補正 */
   letter-spacing: 2px;
-
-  /* 文字の位置調整を追加 */
   text-align: center;
-  line-height: 28px;
-  /* widthと同じ値 */
-  transform-origin: center center;
+  line-height: 32px;
+  border-radius: 8px 0 0 8px;
 }
 
 @media (max-width: 768px) {
   .area-title {
-    width: 24px;
-    padding: 12px 0;
-    line-height: 24px;
-    /* スマホ用のwidthと同じ値 */
+    width: 28px;
+    line-height: 28px;
   }
 }
 
 /* 札種類のタイトル位置調整 */
 .middle-section .type-distribution .area-title {
-  left: 10px;
-  /* 左の位置を統一 */
+  left: 0;
 }
 
 .distribution-content {
@@ -3597,51 +3591,95 @@ body.modal-open {
   /* 全体の高さを縮小 */
 }
 
-/* 各セクションのコンテンツ */
+/* 各セクションのコンテンツ - 季節・札種類は共有グリッド */
 .season-rows,
-.type-rows,
+.type-rows {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 1px 0;
+  width: auto;
+}
+
+/* 属性行は従来のflexレイアウトを維持 */
 .attribute-rows {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1px;
-  width: calc(100% - 35px);
-  margin-left: 35px;
+  width: auto;
 }
 
-/* テキスト表示のスタイル */
+/* コンテンツラッパーを中央配置 */
+.season-content,
+.type-content,
+.attribute-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+
+/* 季節・札種類のテキスト: display:contentsで親グリッドに参加 */
 .season-text,
-.type-text,
+.type-text {
+  display: contents;
+  font-size: 14px;
+  color: white;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+/* 属性テキストは従来のグリッドを維持 */
 .attribute-text {
   font-size: 14px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  /* 3列のグリッド */
   align-items: center;
   white-space: nowrap;
   color: white;
-  width: 100%;
+  width: auto;
   line-height: 1.1;
   padding: 1px 0;
 }
 
-/* data属性を使用して中央揃えを実現 */
+/* 季節・札種類の擬似要素(共有グリッドのセルとして配置) */
 .season-text::before,
-.type-text::before,
+.type-text::before {
+  content: attr(data-name);
+  text-align: right;
+  margin-right: 4px;
+  font-size: 14px;
+  color: white;
+  white-space: nowrap;
+  line-height: 1.1;
+  padding: 1px 0;
+}
+
+.season-text::after,
+.type-text::after {
+  content: attr(data-count);
+  text-align: left;
+  margin-left: 1px;
+  font-size: 14px;
+  color: white;
+  white-space: nowrap;
+  line-height: 1.1;
+  padding: 1px 0;
+}
+
+/* 属性テキストの擬似要素 */
 .attribute-text::before {
   content: attr(data-name);
   text-align: right;
   margin-right: 4px;
-  /* ：との間隔 */
 }
 
-.season-text::after,
-.type-text::after,
 .attribute-text::after {
   content: attr(data-count);
   text-align: left;
   margin-left: 1px;
-  /* ：との間隔を調整 */
 }
 
 /* コスト分布エリアはタイトル不要 */
@@ -3763,14 +3801,21 @@ body.modal-open {
   display: block;
 }
 
-/* 季節・札種類の分布表示を中央寄せ */
+/* 季節・札種類の分布表示: 帯除外エリアで対称に中央寄せ */
 .season-distribution,
 .type-distribution {
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
+  justify-content: center;
+  padding: 15px 6px 15px 38px;
+  /* left(38) - right(6) = 32 = 帯幅 → 帯除外エリアの中央に配置 */
+}
+
+/* 属性分布エリアも同様に対称 */
+.attribute-distribution {
+  padding: 15px 6px 15px 38px;
 }
 
 /* ×ボタンのスタイル */
@@ -3872,31 +3917,21 @@ body.modal-open {
 /* 中段のエリアタイトル調整 */
 .middle-section .area-title {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  writing-mode: vertical-rl;
+  top: 0;
+  left: 0;
+  height: 100%;
+  writing-mode: vertical-lr;
   text-orientation: upright;
 }
 
 /* 中段のコンテンツエリア */
-.middle-section .season-rows {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0px;
-  width: calc(100% - 35px);
-  margin-left: 40px;
-}
-
-/* 札種類のコンテンツエリアを明示的に指定 */
+.middle-section .season-rows,
 .middle-section .type-rows {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0px;
-  width: calc(100% - 35px);
-  margin-left: 50px;
-  /* 右側だからか、謎の微調整が必要 */
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 0;
+  width: auto;
 }
 
 /* デッキプレビュー画像のスタイル */
@@ -3982,14 +4017,28 @@ body.modal-open {
   .season-rows,
   .type-rows,
   .attribute-rows {
-    width: calc(100% - 34px);
-    /* タイトル幅(24px)と余白(10px)を引く */
-    margin-left: 34px;
-    /* タイトル幅(24px)と余白(10px)分ずらす */
+    width: auto;
   }
 
-  .season-text,
-  .type-text,
+  /* スマホ用: 帯除外エリアで対称に中央寄せ */
+  .season-distribution,
+  .type-distribution {
+    padding: 15px 6px 15px 34px;
+    /* left(34) - right(6) = 28 = スマホ帯幅 */
+  }
+
+  .attribute-distribution {
+    padding: 15px 6px 15px 34px;
+  }
+
+  /* スマホ用のフォントサイズ調整 */
+  .season-text::before,
+  .season-text::after,
+  .type-text::before,
+  .type-text::after {
+    font-size: 13px;
+  }
+
   .attribute-text {
     font-size: 13px;
     min-width: 100px;
@@ -4029,13 +4078,27 @@ body.modal-open {
   .attribute-distribution {
     min-height: 120px;
     /* 最小の高さを縮小 */
-    padding: 10px;
-    /* パディングも縮小 */
+  }
+
+  /* 帯除外エリアで対称に中央寄せ(高さが狭い場合) */
+  .season-distribution,
+  .type-distribution {
+    padding: 10px 4px 10px 36px;
+    /* left(36) - right(4) = 32 = 帯幅 */
+  }
+
+  .attribute-distribution {
+    padding: 10px 4px 10px 36px;
   }
 
   /* フォントサイズを少し小さく */
-  .season-text,
-  .type-text,
+  .season-text::before,
+  .season-text::after,
+  .type-text::before,
+  .type-text::after {
+    font-size: 13px;
+  }
+
   .attribute-text {
     font-size: 13px;
   }
@@ -4057,8 +4120,21 @@ body.modal-open {
   .type-distribution,
   .attribute-distribution {
     min-height: 100px;
+  }
+
+  /* 帯除外エリアで対称に中央寄せ(非常に狭い場合) */
+  .season-distribution,
+  .type-distribution {
+    padding: 2px 2px 2px 34px;
+    /* left(34) - right(2) = 32 = 帯幅 */
+  }
+
+  .attribute-distribution {
+    padding: 2px 2px 2px 34px;
+  }
+
+  .cost-distribution {
     padding: 2px;
-    /* 中段モーダル内の広さを調整 */
   }
 
   /* テキスト間をさらに詰める */
@@ -4069,8 +4145,13 @@ body.modal-open {
   }
 
   /* フォントサイズをさらに小さく */
-  .season-text,
-  .type-text,
+  .season-text::before,
+  .season-text::after,
+  .type-text::before,
+  .type-text::after {
+    font-size: 12px;
+  }
+
   .attribute-text {
     font-size: 12px;
   }
@@ -4507,18 +4588,42 @@ body.modal-open {
 /* デッキの詳細 → 属性の2列表示 */
 .attribute-rows.two-columns {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: auto auto auto auto;
+  /* 名前1, 数値1, 名前2, 数値2 の4列 */
   justify-content: center;
-  gap: 4px 0px;
-  width: 100%;
+  gap: 1px 4px;
+  width: auto;
   margin: 0 auto;
-  padding: 0 15px;
-  padding-left: 90px;
+  padding: 0;
   box-sizing: border-box;
 }
 
 .attribute-rows.two-columns .attribute-text {
+  display: contents;
   font-size: 13px;
+  color: white;
+  white-space: nowrap;
+}
+
+.attribute-rows.two-columns .attribute-text::before {
+  text-align: right;
+  font-size: 13px;
+  color: white;
+  white-space: nowrap;
+  padding: 1px 0;
+}
+
+/* 右列ペアの先頭（偶数番目の名前）にだけ左マージンを追加 → ペア間の隙間 */
+.attribute-rows.two-columns .attribute-text:nth-child(even)::before {
+  margin-left: 24px;
+}
+
+.attribute-rows.two-columns .attribute-text::after {
+  text-align: left;
+  font-size: 13px;
+  color: white;
+  white-space: nowrap;
+  padding: 1px 0;
 }
 
 /* デフォルトはスクロールバー非表示 */

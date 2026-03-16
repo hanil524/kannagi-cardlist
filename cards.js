@@ -13024,6 +13024,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2326"
+  data-name=""
+  data-cost="7"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="神 猫面 猫面の神"
+  data-keyword="神秘"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2343"
   data-name="花面の耳打ち(かめんのみみうち)"
   data-cost="0"
@@ -13069,6 +13085,22 @@ data-role="ロック"
   data-role="ドロー"
 >
   <img data-src="images/card_15_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2366"
+  data-name="花面の神(かめんのかみ)"
+  data-cost="7"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="神 花面 花面の神"
+  data-keyword="神秘"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"

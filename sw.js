@@ -1,4 +1,4 @@
-// Service Worker - 巫カードフィルター キャッシュ戦略
+// Service Worker - 巫カードフィルター キャッシュ
 // GitHub Pages対応: 静的リソースをキャッシュしてリピーターの読み込みを高速化
 
 const CACHE_VERSION = 'kannagi-v1';

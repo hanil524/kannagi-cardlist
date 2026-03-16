@@ -3547,7 +3547,13 @@ const deckBuilder = {
     const rows = document.createElement('div');
     rows.className = 'attribute-rows two-columns';
 
-    top10.forEach(([attribute, count]) => {
+    // 左列(0〜4位)と右列(5〜9位)を交互に追加 → 左列に上位5件、右列に下位5件が縦に並ぶ
+    const half = Math.ceil(top10.length / 2);
+    const leftCol = top10.slice(0, half);
+    const rightCol = top10.slice(half);
+    const interleaved = leftCol.map((item, i) => [item, rightCol[i]]).flat().filter(Boolean);
+
+    interleaved.forEach(([attribute, count]) => {
       const item = document.createElement('div');
       item.className = 'attribute-text';
       item.setAttribute('data-name', attribute);
