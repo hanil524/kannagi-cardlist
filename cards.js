@@ -13013,7 +13013,7 @@ data-role="ロック"
   data-cost="4"
   data-power="1"
   data-series="猫花の約束"
-  data-type=""
+  data-type="場所札"
   data-season="春"
   data-rare="C"
   data-attribute="事件"
@@ -13021,6 +13021,22 @@ data-role="ロック"
   data-role="召喚時 ヒール"
 >
   <img data-src="images/card_15_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2322"
+  data-name="黒犬(こっけん)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="犬族 動物"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
