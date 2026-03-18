@@ -13862,5 +13862,21 @@ data-attribute="妖怪 幽霊"
 >
 <img data-src="images/card_14_p (127).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2353"
+  data-name="モノフシギ(ものふしぎ)"
+  data-cost="5"
+  data-power="3"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="七不思議 家屋"
+  data-keyword=""
+  data-role="召喚時 直接ダメ"
+>
+  <img data-src="images/card_15_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
