@@ -13864,7 +13864,7 @@ data-attribute="妖怪 幽霊"
 </div>
 <div
   class="card"
-  data-number="2353"
+  data-number="10047"
   data-name="モノフシギ(ものふしぎ)"
   data-cost="5"
   data-power="3"
