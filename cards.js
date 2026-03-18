@@ -13088,6 +13088,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2353"
+  data-name="煽り(あおり)"
+  data-cost="8"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="交通事故 道路"
+  data-keyword=""
+  data-role="召喚時 攻撃時 ハンデス"
+>
+  <img data-src="images/card_15_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2361"
   data-name="痰壺小僧(たんつぼこぞう)"
   data-cost="1"
