@@ -13056,6 +13056,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2331"
+  data-name="黄泉酒(よみき)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="糧 妖怪 動物"
+  data-keyword=""
+  data-role="ヒール ドロー 魂加速"
+>
+  <img data-src="images/card_15_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2343"
   data-name="花面の耳打ち(かめんのみみうち)"
   data-cost="0"
