@@ -4004,81 +4004,52 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// 零探し機能
-function performZeroSearch() {
-  let modal = document.querySelector('.zero-search-modal');
+// 零探し状態管理
+let _zeroPhase = 'initial'; // 'initial' | 'redrawn' | 'retried'
+let _zeroDeckPool = [];      // 山札の残り（引ける順序）
+let _zeroCurrentHand = [];   // 現在表示中の8枚
+
+function _zeroShuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function _renderZeroModal(message, actionLabel) {
   const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
-
-  // 選択済みカードと未選択カードを分ける
-  function separateCards(deck) {
-    // 選択済みカードと未選択カードを分離
-    const selectedCards = deck.filter((card) => card.dataset.zeroSelected === 'true');
-    const unselectedCards = deck.filter((card) => card.dataset.zeroSelected !== 'true');
-
-    return { selectedCards, unselectedCards };
-  }
-
-  // 未選択カードからランダムに必要な枚数を選ぶ
-  function getRandomCards(unselectedCards, neededCount) {
-    if (unselectedCards.length < neededCount) {
-      deckBuilder.showMessage(`デッキ内のカードが8枚ありません。`);
-      return unselectedCards;
-    }
-
-    const shuffled = [...unselectedCards];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled.slice(0, neededCount);
-  }
-
-  // カードを分離
-  const { selectedCards, unselectedCards } = separateCards(deckBuilder.deck);
-
-  // 選択済みカードと、残りの枠に必要なランダムカードを組み合わせる
-  const neededRandomCards = 8 - selectedCards.length;
-  const randomCards = getRandomCards(unselectedCards, neededRandomCards);
-
-  // 最終的な表示カード（選択済み + ランダム）
-  const displayCards = [...selectedCards, ...randomCards].sort((a, b) => {
+  const displayCards = [..._zeroCurrentHand].sort((a, b) => {
     const typeA = typeOrder.indexOf(a.dataset.type);
     const typeB = typeOrder.indexOf(b.dataset.type);
     if (typeA !== typeB) return typeA - typeB;
     return parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
   });
 
-  // 8枚に満たない場合は処理を中止
-  if (displayCards.length < 8 && unselectedCards.length + selectedCards.length >= 8) {
-    return;
-  }
+  const actionFn = actionLabel === '引き直し' ? 'performZeroRedraw()' : 'performZeroRetry()';
 
-  // モーダル表示処理
   const content = `
-      <div class="zero-search-content">
-          <div class="zero-search-result">
-              ${displayCards
-                .map(
-                  (card, index) => `
-                      <div class="deck-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}" 
-                           data-number="${card.dataset.number}" 
-                           data-name="${card.dataset.name}"
-                           data-index="${index}">
-                          <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
-                          ${card.dataset.zeroSelected === 'true' ? '<div class="zero-selected-mark"></div>' : ''}
-                      </div>
-                  `
-                )
-                .join('')}
+    <div class="zero-search-content">
+      <div class="zero-search-result">
+        ${displayCards.map((card, index) => `
+          <div class="deck-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
+               data-number="${card.dataset.number}"
+               data-name="${card.dataset.name}"
+               data-index="${index}">
+            <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
+            ${card.dataset.zeroSelected === 'true' ? '<div class="zero-selected-mark"></div>' : ''}
           </div>
-          <div class="zero-search-buttons">
-              <button onclick="performZeroSearch()">リトライ</button>
-              <button onclick="closeZeroSearch()">戻る</button>
-              <button onclick="resetZeroSelection()">キープ解除</button>
-          </div>
+        `).join('')}
       </div>
+      <div class="zero-search-message">${message}</div>
+      <div class="zero-search-buttons">
+        <button onclick="${actionFn}">${actionLabel}</button>
+        <button onclick="closeZeroSearch()">戻る</button>
+        <button onclick="resetZeroSelection()">キープ解除</button>
+      </div>
+    </div>
   `;
 
+  let modal = document.querySelector('.zero-search-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.className = 'zero-search-modal';
@@ -4087,27 +4058,78 @@ function performZeroSearch() {
 
   modal.innerHTML = content;
 
-  // カードクリックイベントを追加
-  const resultCards = modal.querySelectorAll('.zero-search-result .deck-card');
-  resultCards.forEach((card) => {
-    card.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      // 表示カードの配列から対応するカードを取得
-      const targetCard = displayCards[index];
-      if (targetCard) {
-        toggleZeroCardSelection(targetCard, this);
-      }
+  // カードクリックイベント
+  modal.querySelectorAll('.zero-search-result .deck-card').forEach((cardEl) => {
+    cardEl.addEventListener('click', function () {
+      const targetCard = displayCards[this.getAttribute('data-index')];
+      if (targetCard) toggleZeroCardSelection(targetCard, this);
     });
   });
 
   modal.addEventListener('click', (e) => {
-    if (e.target.classList.contains('zero-search-modal')) {
-      closeZeroSearch();
-    }
+    if (e.target.classList.contains('zero-search-modal')) closeZeroSearch();
   });
 
   document.body.classList.add('modal-open');
   requestAnimationFrame(() => modal.classList.add('active'));
+}
+
+// 零探しを開く（初回ドロー）
+function performZeroSearch() {
+  if (deckBuilder.deck.length < 8) {
+    deckBuilder.showMessage('デッキ内のカードが8枚ありません。');
+    return;
+  }
+
+  // 全選択リセット
+  deckBuilder.deck.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  // シャッフルして山札を作り、上から8枚引く
+  _zeroDeckPool = [...deckBuilder.deck];
+  _zeroShuffle(_zeroDeckPool);
+  _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
+  _zeroPhase = 'initial';
+
+  _renderZeroModal('山札の上から8枚ドローしました。', '引き直し');
+}
+
+// 「引き直し」ボタン：キープしてドロー（デッキをシャッフルしない）
+function performZeroRedraw() {
+  const keptCards    = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected === 'true');
+  const droppedCards = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected !== 'true');
+  const x = keptCards.length;
+  const y = droppedCards.length; // 8 - x
+
+  // 非キープカードはデッキの底に送る（プールから除外済み扱い → draw対象外）
+  droppedCards.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  if (_zeroDeckPool.length < y) {
+    deckBuilder.showMessage('残り山札が不足しています。');
+    return;
+  }
+
+  const newCards = _zeroDeckPool.splice(0, y);
+  _zeroCurrentHand = [...keptCards, ...newCards];
+  _zeroPhase = 'redrawn';
+
+  _renderZeroModal(`${x}枚キープし、${y}枚ドローしました。`, 'リトライ');
+}
+
+// 「リトライ」ボタン：完全リセットして再シャッフル
+function performZeroRetry() {
+  if (deckBuilder.deck.length < 8) {
+    deckBuilder.showMessage('デッキ内のカードが8枚ありません。');
+    return;
+  }
+
+  deckBuilder.deck.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  _zeroDeckPool = [...deckBuilder.deck];
+  _zeroShuffle(_zeroDeckPool);
+  _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
+  _zeroPhase = 'retried';
+
+  _renderZeroModal('シャッフルし、新たに8枚ドローしました。', '引き直し');
 }
 
 // 零探し用のカード選択状態を切り替える関数

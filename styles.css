@@ -1904,7 +1904,7 @@ body.modal-open {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: #000;
   z-index: 2000;
   overflow: hidden;
   opacity: 0;
@@ -2370,7 +2370,16 @@ body.modal-open {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+}
+
+/* カード下のドロー状況テキスト */
+.zero-search-message {
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  font-size: 13px;
+  white-space: nowrap;
+  margin-bottom: 0;
 }
 
 /* 零探し下のボタン */
@@ -2378,7 +2387,7 @@ body.modal-open {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 
 .zero-search-buttons button {
@@ -2430,6 +2439,7 @@ body.modal-open {
   /* 中央寄せ */
   align-content: center;
   justify-content: center;
+  background-color: #1c1c1c;
 
   /* Firefox対応を追加 */
   align-items: start;
@@ -2448,13 +2458,13 @@ body.modal-open {
 /* PC ページ上部からデッキカードまでの距離 */
 @media (min-width: 768px) {
   .deck-display {
-    padding-top: 40px;
+    margin-top: 40px;
   }
 }
 
 @media (max-width: 768px) {
   .deck-display {
-    padding-top: 30px;
+    margin-top: 30px;
   }
 }
 
@@ -4365,7 +4375,7 @@ body.modal-open {
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 
 .zero-search-buttons button {
