@@ -444,6 +444,244 @@ const filters = {
   power: new Set()
 };
 
+// === 範囲フィルター ===
+// min/max が null の場合は範囲フィルター未適用
+const rangeFilters = {
+  cost: { min: null, max: null },
+  power: { min: null, max: null }
+};
+// 範囲選択の数値リスト（変更したい場合はここを編集）
+const RANGE_VALUES = { cost: 20, power: 20 };
+// デフォルト初期値（変更したい場合はここを編集）
+const RANGE_DEFAULTS = { min: 0, max: 3 };
+let currentRangeType = null; // 'cost' or 'power'
+let rangePickerMinIndex = 0;
+let rangePickerMaxIndex = 3;
+// キャンセル後も保持する最後のピッカー値
+const _lastPickerValues = {
+  cost: { min: null, max: null },
+  power: { min: null, max: null }
+};
+
+function openRangeModal(type) {
+  currentRangeType = type;
+  const overlay = document.getElementById('range-modal-overlay');
+  const title = document.getElementById('range-modal-title');
+  const maxVal = RANGE_VALUES[type];
+  title.textContent = type === 'cost' ? 'コストの範囲選択' : '力の範囲選択';
+
+  // 優先順位: 前回ピッカーで選んだ値 > 適用済み範囲 > デフォルト
+  const last = _lastPickerValues[type];
+  const applied = rangeFilters[type];
+  if (last.min !== null && last.max !== null) {
+    rangePickerMinIndex = last.min;
+    rangePickerMaxIndex = last.max;
+  } else if (applied.min !== null && applied.max !== null) {
+    rangePickerMinIndex = applied.min;
+    rangePickerMaxIndex = applied.max;
+  } else {
+    rangePickerMinIndex = RANGE_DEFAULTS.min;
+    rangePickerMaxIndex = RANGE_DEFAULTS.max;
+  }
+  updateRangeDisplay();
+
+  // モーダルを先に表示してからピッカーを構築（高さ計算のため）
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    buildPickerItems('range-scroll-min', maxVal, rangePickerMinIndex);
+    buildPickerItems('range-scroll-max', maxVal, rangePickerMaxIndex);
+  });
+}
+
+function closeRangeModal() {
+  document.getElementById('range-modal-overlay').style.display = 'none';
+  currentRangeType = null;
+}
+
+function applyRangeFilter() {
+  const type = currentRangeType;
+  let minVal = rangePickerMinIndex;
+  let maxVal = rangePickerMaxIndex;
+  // min > max の場合は入れ替え
+  if (minVal > maxVal) { [minVal, maxVal] = [maxVal, minVal]; }
+
+  // 既存の個別選択をクリア
+  filters[type].clear();
+  rangeFilters[type] = { min: minVal, max: maxVal };
+
+  closeRangeModal();
+  // フィルターモーダルも閉じる
+  closeModal();
+  filterCards();
+  updateActiveFilters();
+  updateFilterDetails();
+  saveFiltersToLocalStorage();
+}
+
+function buildPickerItems(scrollId, maxVal, selectedIndex) {
+  const scrollEl = document.getElementById(scrollId);
+  scrollEl.innerHTML = '';
+  for (let i = 0; i <= maxVal; i++) {
+    const item = document.createElement('div');
+    item.className = 'range-picker-item' + (i === selectedIndex ? ' selected' : '');
+    item.textContent = i;
+    item.dataset.value = i;
+    item.addEventListener('click', () => {
+      onPickerItemClick(scrollId, i);
+    });
+    scrollEl.appendChild(item);
+  }
+  // ピッカーの中央位置にスクロール
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+  scrollEl.style.transform = `translateY(${centerOffset - selectedIndex * itemH}px)`;
+
+  // タッチ/マウスドラッグでスクロール
+  setupPickerDrag(scrollEl, maxVal);
+}
+
+function onPickerItemClick(scrollId, index) {
+  const scrollEl = document.getElementById(scrollId);
+  const isMin = scrollId === 'range-scroll-min';
+  if (isMin) {
+    rangePickerMinIndex = index;
+  } else {
+    rangePickerMaxIndex = index;
+  }
+  // 前回値を保存（キャンセルしても次回に引き継ぐ）
+  if (currentRangeType) {
+    _lastPickerValues[currentRangeType] = { min: rangePickerMinIndex, max: rangePickerMaxIndex };
+  }
+  // 選択状態を更新
+  scrollEl.querySelectorAll('.range-picker-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === index);
+  });
+  // スクロール位置を調整
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+  scrollEl.style.transition = 'transform 0.15s ease-out';
+  scrollEl.style.transform = `translateY(${centerOffset - index * itemH}px)`;
+  updateRangeDisplay();
+}
+
+// ピッカーのドラッグ用AbortControllerを保持
+const _pickerAbortControllers = {};
+
+function setupPickerDrag(scrollEl, maxVal) {
+  // 既存のイベントリスナーを解除
+  if (_pickerAbortControllers[scrollEl.id]) {
+    _pickerAbortControllers[scrollEl.id].abort();
+  }
+  const ac = new AbortController();
+  _pickerAbortControllers[scrollEl.id] = ac;
+  const signal = ac.signal;
+
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  let startY = 0;
+  let startTranslate = 0;
+  let isDragging = false;
+
+  function getTranslateY() {
+    const match = scrollEl.style.transform.match(/translateY\((.+?)px\)/);
+    return match ? parseFloat(match[1]) : 0;
+  }
+
+  function snapToNearest() {
+    const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+    const currentY = getTranslateY();
+    let index = Math.round((centerOffset - currentY) / itemH);
+    index = Math.max(0, Math.min(index, maxVal));
+    const isMin = scrollEl.id === 'range-scroll-min';
+    if (isMin) {
+      rangePickerMinIndex = index;
+    } else {
+      rangePickerMaxIndex = index;
+    }
+    // 前回値を保存
+    if (currentRangeType) {
+      _lastPickerValues[currentRangeType] = { min: rangePickerMinIndex, max: rangePickerMaxIndex };
+    }
+    scrollEl.querySelectorAll('.range-picker-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === index);
+    });
+    scrollEl.style.transition = 'transform 0.15s ease-out';
+    scrollEl.style.transform = `translateY(${centerOffset - index * itemH}px)`;
+    updateRangeDisplay();
+  }
+
+  // --- タッチ ---
+  function onTouchStart(e) {
+    isDragging = true;
+    startY = e.touches[0].clientY;
+    startTranslate = getTranslateY();
+    scrollEl.style.transition = 'none';
+    e.preventDefault();
+  }
+
+  function onTouchMove(e) {
+    if (!isDragging) return;
+    const diff = e.touches[0].clientY - startY;
+    scrollEl.style.transform = `translateY(${startTranslate + diff}px)`;
+  }
+
+  function onTouchEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    snapToNearest();
+  }
+
+  pickerEl.addEventListener('touchstart', onTouchStart, { passive: false, signal });
+  window.addEventListener('touchmove', onTouchMove, { passive: false, signal });
+  window.addEventListener('touchend', onTouchEnd, { signal });
+  window.addEventListener('touchcancel', onTouchEnd, { signal });
+
+  // --- マウス（Pointer Capture でブラウザ外リリースも確定）---
+  function onPointerDown(e) {
+    if (e.pointerType === 'touch') return; // タッチは上のハンドラに任せる
+    isDragging = true;
+    startY = e.clientY;
+    startTranslate = getTranslateY();
+    scrollEl.style.transition = 'none';
+    pickerEl.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging || e.pointerType === 'touch') return;
+    const diff = e.clientY - startY;
+    scrollEl.style.transform = `translateY(${startTranslate + diff}px)`;
+  }
+
+  function onPointerUp(e) {
+    if (!isDragging || e.pointerType === 'touch') return;
+    isDragging = false;
+    snapToNearest();
+  }
+
+  pickerEl.addEventListener('pointerdown', onPointerDown, { signal });
+  pickerEl.addEventListener('pointermove', onPointerMove, { signal });
+  pickerEl.addEventListener('pointerup', onPointerUp, { signal });
+  pickerEl.addEventListener('pointercancel', onPointerUp, { signal });
+
+  // マウスホイール（ピッカーエリア内のみ）
+  pickerEl.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 1 : -1;
+    const isMin = scrollEl.id === 'range-scroll-min';
+    const current = isMin ? rangePickerMinIndex : rangePickerMaxIndex;
+    const next = Math.max(0, Math.min(current + delta, maxVal));
+    onPickerItemClick(scrollEl.id, next);
+  }, { passive: false, signal });
+}
+
+function updateRangeDisplay() {
+  document.getElementById('range-display-min').textContent = rangePickerMinIndex;
+  document.getElementById('range-display-max').textContent = rangePickerMaxIndex;
+}
+
 // === フィルター高速化: 逆引きインデックス ===
 // カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
 const cardIndexCache = {
@@ -1423,6 +1661,9 @@ window.scrollToTop = () => {
 const resetFilters = () => {
   // 既存のフィルターリセット処理
   Object.keys(filters).forEach((key) => filters[key].clear());
+  // 範囲フィルターもリセット
+  rangeFilters.cost = { min: null, max: null };
+  rangeFilters.power = { min: null, max: null };
   autoSeasonFilters.clear();
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
   const originalCards = document.querySelectorAll('.card:not([data-cloned])');
@@ -1443,6 +1684,7 @@ const resetFilters = () => {
   // ローカルストレージのクリア
   localStorage.removeItem('cardFilters');
   localStorage.removeItem('sortState');
+  localStorage.removeItem('rangeFilters');
 
   // ボタンの状態をリセット
   const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
@@ -1476,6 +1718,11 @@ const resetFilters = () => {
 
 // キーボードイベントリスナーを更新
 document.addEventListener('keydown', function (event) {
+  // ESCキーで範囲選択モーダルを閉じる
+  if (event.key === 'Escape' && document.getElementById('range-modal-overlay').style.display === 'flex') {
+    closeRangeModal();
+    return;
+  }
   // ESCキーが押され、モーダルが開いていない場合にフィルターをリセットしてトップにスクロール
   if (event.key === 'Escape' && document.getElementById('modal').style.display !== 'block' && document.getElementById('image-modal').style.display !== 'flex') {
     resetFilters();
@@ -1512,6 +1759,10 @@ const toggleFilterCard = (attribute, value) => {
   if (!attribute || !filters[attribute]) {
     console.error(`Attribute "${attribute}" not found in filters.`);
     return;
+  }
+  // 個別選択時は範囲フィルターを解除
+  if (rangeFilters[attribute] && rangeFilters[attribute].min !== null) {
+    rangeFilters[attribute] = { min: null, max: null };
   }
   if (filters[attribute].has(value)) {
     filters[attribute].delete(value);
@@ -1623,21 +1874,35 @@ const filterCards = () => {
       }
     }
 
-    // cost フィルター
-    if (shouldDisplay && filters.cost.size > 0) {
-      if (!filters.cost.has(entry.cost)) {
-        shouldDisplay = false;
+    // cost フィルター（個別選択 or 範囲）
+    if (shouldDisplay) {
+      if (rangeFilters.cost.min !== null && rangeFilters.cost.max !== null) {
+        const costNum = parseInt(entry.cost, 10);
+        if (isNaN(costNum) || costNum < rangeFilters.cost.min || costNum > rangeFilters.cost.max) {
+          shouldDisplay = false;
+        }
+      } else if (filters.cost.size > 0) {
+        if (!filters.cost.has(entry.cost)) {
+          shouldDisplay = false;
+        }
       }
     }
 
-    // power フィルター
-    if (shouldDisplay && filters.power.size > 0) {
-      let powerMatch = filters.power.has(entry.power);
-      if (filters.power.has('0')) {
-        powerMatch = powerMatch && (entry.type === '場所札');
-      }
-      if (!powerMatch) {
-        shouldDisplay = false;
+    // power フィルター（個別選択 or 範囲）
+    if (shouldDisplay) {
+      if (rangeFilters.power.min !== null && rangeFilters.power.max !== null) {
+        const powerNum = parseInt(entry.power, 10);
+        if (isNaN(powerNum) || powerNum < rangeFilters.power.min || powerNum > rangeFilters.power.max) {
+          shouldDisplay = false;
+        }
+      } else if (filters.power.size > 0) {
+        let powerMatch = filters.power.has(entry.power);
+        if (filters.power.has('0')) {
+          powerMatch = powerMatch && (entry.type === '場所札');
+        }
+        if (!powerMatch) {
+          shouldDisplay = false;
+        }
       }
     }
 
@@ -1809,6 +2074,26 @@ const openModal = (filterId) => {
         return;
       }
 
+      if (element.classList.contains('filter-category-header')) {
+        const header = document.createElement('div');
+        header.className = 'filter-category-header';
+        const label = document.createElement('span');
+        label.className = 'filter-category-label';
+        label.textContent = element.querySelector('.filter-category-label').textContent;
+        const btn = document.createElement('button');
+        btn.className = 'range-select-btn';
+        btn.textContent = '範囲選択';
+        btn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openRangeModal(filterId);
+        };
+        header.appendChild(label);
+        header.appendChild(btn);
+        modalButtons.appendChild(header);
+        return;
+      }
+
       const button = element;
       const tooltipText = button.getAttribute('data-tooltip');
       const newButton = createModalButton(button.innerText, button.className, tooltipText);
@@ -1869,7 +2154,7 @@ const openModal = (filterId) => {
   if (filterId === 'attribute') {
     renderAttributeModal();
   } else {
-    const filterContent = filterElement.querySelectorAll('button, .filter-category');
+    const filterContent = filterElement.querySelectorAll(':scope > button, :scope > .filter-category, :scope > .filter-category-header');
     appendFilterElements(filterContent);
   }
 
@@ -1902,7 +2187,8 @@ const closeModal = () => {
   headerContent.style.paddingRight = '';
 
   // フィルターが適用されていない場合のみ、カードの表示をリセット
-  if (Object.values(filters).every((filter) => filter.size === 0)) {
+  const hasRangeFilter = Object.values(rangeFilters).some(r => r.min !== null);
+  if (Object.values(filters).every((filter) => filter.size === 0) && !hasRangeFilter) {
     document.getElementById('no-cards-message').style.display = 'none';
     // ソート状態を維持したまま、カードの表示をリセット
     filterCards();
@@ -2377,15 +2663,25 @@ function updateActiveFilters() {
     }
   }
 
+  // 範囲フィルターをアクティブフィルターに追加
+  for (const [key, range] of Object.entries(rangeFilters)) {
+    if (range.min !== null && range.max !== null) {
+      activeFilters.push({ key, value: `${range.min}～${range.max}`, isRange: true });
+    }
+  }
+
   // フィルターキーと表示名のマッピング
   const filterLabels = {
     cost: 'コスト：',
     power: '力：'
   };
-  
+
   const filterDisplay = activeFilters.map((filter) => {
     const label = filterLabels[filter.key] || '';
     const displayText = label ? `${label}${filter.value}` : filter.value;
+    if (filter.isRange) {
+      return `<button class="filter-item" onclick="removeRangeFilter('${filter.key}')">${displayText}</button>`;
+    }
     return `<button class="filter-item" onclick="removeFilter('${filter.key}', '${filter.value}')">${displayText}</button>`;
   }).join('');
 
@@ -2422,8 +2718,17 @@ function removeFilter(key, value) {
     }
     filterCards();
     updateActiveFilters();
-    updateFilterDetails(); // フィルター詳細を更新
-    // フィルター削除時にもローカルストレージを更新
+    updateFilterDetails();
+    saveFiltersToLocalStorage();
+  }
+}
+
+function removeRangeFilter(key) {
+  if (rangeFilters[key]) {
+    rangeFilters[key] = { min: null, max: null };
+    filterCards();
+    updateActiveFilters();
+    updateFilterDetails();
     saveFiltersToLocalStorage();
   }
 }
@@ -2520,6 +2825,7 @@ const saveFiltersToLocalStorage = () => {
 
   localStorage.setItem('cardFilters', JSON.stringify(filtersToSave));
   localStorage.setItem('sortState', JSON.stringify(sortState));
+  localStorage.setItem('rangeFilters', JSON.stringify(rangeFilters));
 };
 
 // ローカルストレージからフィルター条件を読み込む関数
@@ -2532,6 +2838,15 @@ const loadFiltersFromLocalStorage = () => {
   if (savedFilters) {
     for (const [key, value] of Object.entries(savedFilters)) {
       filters[key] = new Set(value);
+    }
+  }
+  // 範囲フィルターの復元
+  const savedRange = JSON.parse(localStorage.getItem('rangeFilters'));
+  if (savedRange) {
+    for (const [key, value] of Object.entries(savedRange)) {
+      if (rangeFilters[key]) {
+        rangeFilters[key] = value;
+      }
     }
   }
   syncSeasonAutoFilters();

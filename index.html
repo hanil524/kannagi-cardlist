@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <!-- メタデータ -->
 
@@ -437,6 +437,39 @@
       </div>
     </div>
 
+    <!-- 範囲選択モーダル -->
+    <div id="range-modal-overlay" class="range-modal-overlay" style="display: none" onclick="if(event.target===this)closeRangeModal()">
+      <div class="range-modal">
+        <div class="range-modal-title" id="range-modal-title">コストの範囲選択</div>
+        <div class="range-modal-display">
+          <span id="range-display-min">0</span>
+          <span class="range-tilde">～</span>
+          <span id="range-display-max">20</span>
+        </div>
+        <div class="range-modal-instruction">最低値、最高値を選択してください。</div>
+        <div class="range-pickers">
+          <div class="range-picker-wrapper">
+            <div class="range-picker-label">最低値</div>
+            <div class="range-picker" id="range-picker-min">
+              <div class="range-picker-highlight"></div>
+              <div class="range-picker-scroll" id="range-scroll-min"></div>
+            </div>
+          </div>
+          <div class="range-picker-wrapper">
+            <div class="range-picker-label">最高値</div>
+            <div class="range-picker" id="range-picker-max">
+              <div class="range-picker-highlight"></div>
+              <div class="range-picker-scroll" id="range-scroll-max"></div>
+            </div>
+          </div>
+        </div>
+        <div class="range-modal-buttons">
+          <button class="range-btn-cancel" onclick="closeRangeModal()">キャンセル</button>
+          <button class="range-btn-apply" onclick="applyRangeFilter()">適用</button>
+        </div>
+      </div>
+    </div>
+
     <!-- シリーズ -->
     <div id="series" class="filter-content" style="display: none">
       <span class="filter-category">シリーズ</span>
@@ -478,7 +511,10 @@
     </div>
     <!-- コスト -->
     <div id="cost" class="filter-content" style="display: none">
-      <span class="filter-category">コスト</span>
+      <div class="filter-category-header">
+        <span class="filter-category-label">コスト</span>
+        <button class="range-select-btn" onclick="openRangeModal('cost')">範囲選択</button>
+      </div>
       <button onclick="toggleFilterCard('cost', '0')">0</button>
       <button onclick="toggleFilterCard('cost', '1')">1</button>
       <button onclick="toggleFilterCard('cost', '2')">2</button>
@@ -499,7 +535,10 @@
     </div>
     <!-- 力 -->
     <div id="power" class="filter-content" style="display: none">
-      <span class="filter-category">力</span>
+      <div class="filter-category-header">
+        <span class="filter-category-label">力</span>
+        <button class="range-select-btn" onclick="openRangeModal('power')">範囲選択</button>
+      </div>
       <button onclick="toggleFilterCard('power', '0')">0</button>
       <button onclick="toggleFilterCard('power', '1')">1</button>
       <button onclick="toggleFilterCard('power', '2')">2</button>

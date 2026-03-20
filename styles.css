@@ -4657,8 +4657,225 @@ body.modal-open {
     -2px 2px 2px rgba(0, 0, 0, 0.6);
 }
 
-.filter-category:first-child {
+.filter-category:first-child,
+.filter-category-header:first-child {
   margin-top: 0;
+}
+
+/* コスト・力の分割ヘッダー（ラベル＋範囲選択ボタン） */
+.filter-category-header {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.filter-category-label {
+  flex: 1;
+  text-align: center;
+  color: #cf4646;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 8px 0 7px 0;
+  text-shadow:
+    2px 2px 2px rgba(0, 0, 0, 0.6),
+    -2px -2px 2px rgba(0, 0, 0, 0.6),
+    2px -2px 2px rgba(0, 0, 0, 0.6),
+    -2px 2px 2px rgba(0, 0, 0, 0.6);
+}
+
+.range-select-btn {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(60, 60, 130, 0.9), rgba(90, 90, 160, 0.8));
+  color: #fff;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 0 7px 0;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .range-select-btn:hover {
+    background: linear-gradient(135deg, rgba(80, 80, 160, 1), rgba(110, 110, 190, 0.9));
+  }
+}
+
+.range-select-btn:active {
+  background: linear-gradient(135deg, rgba(100, 100, 180, 1), rgba(130, 130, 210, 1));
+}
+
+/* 範囲選択モーダル */
+.range-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.range-modal {
+  background: rgba(36, 36, 48, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  color: #fff;
+}
+
+.range-modal-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #cf4646;
+}
+
+.range-modal-display {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.range-modal-display span {
+  display: inline-block;
+  min-width: 40px;
+}
+
+.range-tilde {
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 4px;
+}
+
+.range-modal-instruction {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 20px;
+}
+
+.range-pickers {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.range-picker-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.range-picker-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.range-picker {
+  position: relative;
+  width: 80px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.range-picker-highlight {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 36px;
+  transform: translateY(-50%);
+  background: rgba(90, 90, 160, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.range-picker-scroll {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s ease-out;
+}
+
+.range-picker-item {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s, font-size 0.15s;
+  flex-shrink: 0;
+}
+
+.range-picker-item.selected {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.range-modal-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.range-btn-cancel,
+.range-btn-apply {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.range-btn-cancel {
+  background: rgba(80, 80, 80, 0.8);
+  color: #fff;
+}
+
+.range-btn-cancel:hover {
+  background: rgba(100, 100, 100, 0.9);
+}
+
+.range-btn-apply {
+  background: linear-gradient(135deg, rgba(60, 60, 130, 0.9), rgba(90, 90, 160, 0.8));
+  color: #fff;
+}
+
+.range-btn-apply:hover {
+  background: linear-gradient(135deg, rgba(80, 80, 160, 1), rgba(110, 110, 190, 0.9));
 }
 
 /* 属性モーダル上部の情報バー */
