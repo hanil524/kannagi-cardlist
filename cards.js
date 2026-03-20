@@ -13166,6 +13166,22 @@ data-role="ロック"
 >
   <img data-src="images/card_15_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2377"
+  data-name="灰被り(はいかぶり)"
+  data-cost="3"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="野営"
+  data-keyword=""
+  data-role="ロック"
+>
+  <img data-src="images/card_15_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
