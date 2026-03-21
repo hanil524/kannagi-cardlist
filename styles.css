@@ -2365,6 +2365,25 @@ body.modal-open {
   margin: auto;
 }
 
+/* 零探しヘッダー */
+.zero-search-header {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.zero-search-title {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0 0 2px;
+}
+
+.zero-search-subtitle {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.8;
+}
+
 /* 零探しの結果表示 */
 .zero-search-result {
   display: grid;
@@ -2537,22 +2556,22 @@ body.modal-open {
 /* PC用のデッキ作成画面 画像 */
 @media (min-width: 768px) {
   .deck-card img {
-    border-radius: 8px;
+    border-radius: 12px;
   }
 
   .deck-card {
-    border-radius: 8px;
+    border-radius: 12px;
   }
 }
 
 /* スマホ用のデッキ作成画面 画像 */
 @media (max-width: 768px) {
   .deck-card img {
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   .deck-card {
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 

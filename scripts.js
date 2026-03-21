@@ -28,8 +28,8 @@ document.addEventListener('readystatechange', function (event) {
 
 // iOS判定関数を追加
 const isIOS = () => {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 };
 
 const isAndroid = () => {
@@ -111,7 +111,7 @@ const setupAndroidScrollAssist = () => {
   const isBlockedRegion = (target) => {
     return !!target.closest(
       '.mobile-nav, .menu-overlay, #modal, #image-modal, #deck-modal, #deck-list-modal, #deck-share-modal, #deck-backup-modal, ' +
-        '.deck-image-modal, .distribution-modal, .zero-search-modal, .confirm-popup'
+      '.deck-image-modal, .distribution-modal, .zero-search-modal, .confirm-popup'
     );
   };
 
@@ -1030,10 +1030,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const PRELOAD_AHEAD_COUNT = 24;
   const INITIAL_LAZYLOAD_COUNT = 40;
   const options = {
-  root: null,
-  rootMargin: '1000px 0px',
-  threshold: 0.01
-};
+    root: null,
+    rootMargin: '1000px 0px',
+    threshold: 0.01
+  };
 
   // ObserverをグローバルObserverとして初期化（全デバイス共通）
   if (!observer) {
@@ -1083,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setupLazyLoading = () => {
     if (isObserverSetup) return; // 重複セットアップを防ぐ
-    
+
     const images = document.querySelectorAll('.card img:not(.loaded)');
     images.forEach((img, index) => {
       if (!img.classList.contains('loaded')) {
@@ -1133,7 +1133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 80);
     },
     false
-  );  
+  );
 
   // フィルターや並び替え後に再セットアップ
   const resetLazyLoading = () => {
@@ -2169,7 +2169,7 @@ const openModal = (filterId) => {
   if (headerContent) {
     headerContent.style.paddingRight = `${scrollbarWidth}px`;
   }
-  
+
   // スクロールバーの表示を更新
   updateScrollbarVisibility();
 };
@@ -2245,7 +2245,7 @@ function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName) {
   if (!series && !limit) { seriesEl.innerHTML = ''; }
   else if (!limit) { seriesEl.textContent = series; }
   else {
-    const escaped = series.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    const escaped = series.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
     seriesEl.innerHTML = escaped + (series ? '<br>' : '') + '<span style="color:#ff9800;font-size:12px">' + limit + '</span>';
   }
 
@@ -2276,12 +2276,12 @@ function getSeriesInfo(cardName) {
   if (seriesInfoCache.has(cardName)) {
     return seriesInfoCache.get(cardName);
   }
-  
+
   // キャッシュにない場合のみ検索
   const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
   const allSeriesSet = new Set();
   const seriesInfoSet = new Set();
-  
+
   allCardsWithSameName.forEach(card => {
     if (card.dataset.seriesInfo) {
       seriesInfoSet.add(card.dataset.seriesInfo);
@@ -2291,12 +2291,12 @@ function getSeriesInfo(cardName) {
       seriesList.forEach(series => allSeriesSet.add(series));
     }
   });
-  
+
   const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
   const extraInfoText = seriesInfoSet.size > 0 ? Array.from(seriesInfoSet).join('\n') : '';
   const combinedText = [seriesText, extraInfoText].filter(Boolean).join('\n');
   const formattedText = normalizeSeriesInfoText(combinedText);
-  
+
   // キャッシュに保存
   seriesInfoCache.set(cardName, formattedText);
   return formattedText;
@@ -2346,9 +2346,9 @@ const openImageModal = (src) => {
   // 現在の表示状態に応じてカードリストを取得（軽量化版）
   visibleCards = isDeckModalVisible
     ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
-    : Array.from(document.querySelectorAll('.card')).filter((card) => 
-        card.style.display !== 'none' && !card.classList.contains('hidden')
-      ); // getComputedStyleを避けた軽量版
+    : Array.from(document.querySelectorAll('.card')).filter((card) =>
+      card.style.display !== 'none' && !card.classList.contains('hidden')
+    ); // getComputedStyleを避けた軽量版
 
   // クリックされた画像のインデックスを取得
   currentImageIndex = visibleCards.findIndex((card) => {
@@ -2364,7 +2364,7 @@ const openImageModal = (src) => {
   // 収録情報とコントロールのコンテナを作成（安全な方法）
   const container = document.createElement('div');
   container.className = 'image-container';
-  
+
   const seriesInfo = document.createElement('div');
   seriesInfo.className = 'card-series-info';
 
@@ -2435,37 +2435,37 @@ const openImageModal = (src) => {
   let touchStartX = 0;
   let touchStartY = 0;
   let swiping = false;
-  
+
   modalImage.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     swiping = false;
   }, { passive: true });
-  
+
   modalImage.addEventListener('touchmove', (e) => {
     const diffX = Math.abs(e.touches[0].clientX - touchStartX);
     if (diffX > 20) {
       swiping = true;
     }
   }, { passive: true });
-  
+
   modalImage.addEventListener('touchend', (e) => {
     if (!swiping) return;
-    
+
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
     const diffX = touchStartX - touchEndX;
     const diffY = touchStartY - touchEndY;
-    
+
     // 横方向のスワイプが縦方向より大きい場合のみ反応
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
       if (diffX > 0) {
         showNextImage();
       } else {
         showPreviousImage();
-      }      
+      }
     }
-    
+
     swiping = false;
   }, { passive: true });
 
@@ -2623,7 +2623,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.classList.remove('no-scroll');
     }
   });
-  
+
   // アコーディオンメニューの開閉
   document.querySelectorAll('.nav-accordion-toggle').forEach(function (toggle) {
     toggle.addEventListener('click', function () {
@@ -2969,9 +2969,9 @@ const showNextImage = () => {
 
   // 次のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
   while (nextIndex < visibleCards.length && (
-    visibleCards[nextIndex].hasAttribute('data-empty') || 
-    (visibleCards[nextIndex].dataset.name === currentCard.dataset.name && 
-     visibleCards[nextIndex].dataset.number === currentCard.dataset.number)
+    visibleCards[nextIndex].hasAttribute('data-empty') ||
+    (visibleCards[nextIndex].dataset.name === currentCard.dataset.name &&
+      visibleCards[nextIndex].dataset.number === currentCard.dataset.number)
   )) {
     nextIndex++;
   }
@@ -3037,9 +3037,9 @@ const showPreviousImage = () => {
 
   // 前のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
   while (prevIndex >= 0 && (
-    visibleCards[prevIndex].hasAttribute('data-empty') || 
-    (visibleCards[prevIndex].dataset.name === currentCard.dataset.name && 
-     visibleCards[prevIndex].dataset.number === currentCard.dataset.number)
+    visibleCards[prevIndex].hasAttribute('data-empty') ||
+    (visibleCards[prevIndex].dataset.name === currentCard.dataset.name &&
+      visibleCards[prevIndex].dataset.number === currentCard.dataset.number)
   )) {
     prevIndex--;
   }
@@ -3087,7 +3087,7 @@ const showPreviousImage = () => {
 
       // 新しいボタンにイベントリスナーを設定
       setupModalButtonListeners(modalControls);
-      
+
       updateModalButtonStates(modalControls, cardName);
     }
 
@@ -3133,7 +3133,7 @@ const deckBuilder = {
   deck: [],
   maxCards: 4,
   restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '肥川の大蛇（ひのかわのおろち）', "消さなきゃ（けさなきゃ）", "暗躍者(あんやくしゃ)", "仮想世界の外(かそうせかいのそと)", "最恐札の地図（とれかのちず）", "あなただけがいない場所（あなただけがいないばしょ）", "大災害（だいさいがい）"]),
-  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）","つちのこ", "新府城（しんぶじょう）", "札絵れあ（ふだえれあ）", "血の視線（ちのしせん）", "死神の蝋燭（しにがみのろうそく）", "失われた海域(うしなわれたかいいき)", "赤津川（あかつがわ）", "いっしょにあそぼ・・・"]),
+  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）", "つちのこ", "新府城（しんぶじょう）", "札絵れあ（ふだえれあ）", "血の視線（ちのしせん）", "死神の蝋燭（しにがみのろうそく）", "失われた海域(うしなわれたかいいき)", "赤津川（あかつがわ）", "いっしょにあそぼ・・・"]),
   sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
   tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
   infiniteCardLimit: new Set(['複製体(くろーん)']), // 無限枚数制限カード
@@ -3839,7 +3839,7 @@ const deckBuilder = {
     typeContent.appendChild(typeRows);
     return typeContent;
   },
-  
+
   // 属性分布の作成
   createAttributeDistribution() {
     const attributeContent = document.createElement('div');
@@ -4029,6 +4029,11 @@ function _renderZeroModal(message, actionLabel) {
 
   const content = `
     <div class="zero-search-content">
+      <div class="zero-search-header">
+        <p class="zero-search-title">零探し</p>
+        <p class="zero-search-subtitle">カードを選択してキープ可能。</p>
+        <p class="zero-search-subtitle">デッキ底に送られたカードは再登場しません。（2回周期）</p>
+      </div>
       <div class="zero-search-result">
         ${displayCards.map((card, index) => `
           <div class="deck-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
@@ -4095,7 +4100,7 @@ function performZeroSearch() {
 
 // 「引き直し」ボタン：キープしてドロー（デッキをシャッフルしない）
 function performZeroRedraw() {
-  const keptCards    = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected === 'true');
+  const keptCards = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected === 'true');
   const droppedCards = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected !== 'true');
   const x = keptCards.length;
   const y = droppedCards.length; // 8 - x
@@ -4622,11 +4627,11 @@ const deckManager = {
       Array.isArray(this.deckOrder) && this.deckOrder.length
         ? this.deckOrder
         : items
-            .map((item) => {
-              const button = item.querySelector('.deck-select-button');
-              return button ? parseInt(button.dataset.deckId, 10) : NaN;
-            })
-            .filter((id) => Number.isFinite(id));
+          .map((item) => {
+            const button = item.querySelector('.deck-select-button');
+            return button ? parseInt(button.dataset.deckId, 10) : NaN;
+          })
+          .filter((id) => Number.isFinite(id));
 
     const orderedItems = [];
     desiredOrder.forEach((id) => {
@@ -5512,7 +5517,7 @@ let currentModalCardName = null;
 function setupModalButtonListeners(controls) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
-  
+
   if (addButton) {
     addButton.onclick = (e) => {
       e.stopPropagation();
@@ -5521,7 +5526,7 @@ function setupModalButtonListeners(controls) {
       }
     };
   }
-  
+
   if (removeButton) {
     removeButton.onclick = (e) => {
       e.stopPropagation();
@@ -5549,14 +5554,14 @@ function setupModalCardControlsOnce(controls, card, cardName) {
         handleModalAddCard();
       }
     };
-    
+
     removeButton.onclick = (e) => {
       e.stopPropagation();
       if (!removeButton.disabled && currentModalCardName) {
         handleModalRemoveCard();
       }
     };
-    
+
     modalControlsInitialized = true;
   }
 
@@ -5567,7 +5572,7 @@ function setupModalCardControlsOnce(controls, card, cardName) {
 // モーダルでのカード追加処理
 function handleModalAddCard() {
   const cardName = currentModalCardName;
-  
+
   // カードの上限枚数を取得
   let maxAllowed = 4;
   if (deckBuilder.infiniteCardLimit.has(cardName)) {
@@ -5732,13 +5737,13 @@ function resetSpecificDeck(deckId, confirmed) {
 function updateCardCount() {
   const cards = document.querySelectorAll('.card');
   let visibleCount = 0;
-  
+
   cards.forEach((card) => {
     if (card.style.display !== 'none' && !card.hasAttribute('data-empty')) {
       visibleCount++;
     }
   });
-  
+
   const countElement = document.getElementById('search-result-count');
   if (countElement) {
     countElement.innerHTML = `検索結果：<span class="count-number">${visibleCount}</span>枚`;
@@ -5752,7 +5757,7 @@ function updateFilterDetails() {
   const seriesDetailsElement = document.getElementById('series-details');
   const rareDetailsElement = document.getElementById('rare-details');
   const containerElement = document.getElementById('filter-details');
-  
+
   if (!keywordDetailsElement || !roleDetailsElement || !seriesDetailsElement || !rareDetailsElement || !containerElement) {
     return;
   }
@@ -5899,39 +5904,39 @@ async function codeToMap(code) {
     const raw0 = normalizeWholeCode(code);
 
     // v6: 5|checksum|base64url(VARINT binary)
-    if(/^5\|/.test(raw0)){
+    if (/^5\|/.test(raw0)) {
       const firstBar = raw0.indexOf('|');
       const rest = raw0.slice(firstBar + 1);
       const sep = rest.indexOf('|');
       if (sep < 0) throw new Error('Bad format');
-      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi,'').toLowerCase();
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
       const payload = rest.slice(sep + 1);
       const expect = (await sha256Hex(payload)).slice(0, 10);
       if (checksum !== expect) throw new Error('Invalid code');
       const bytes = v6_binToBytes(b64urlDecode(payload));
-      let i=0, prev=0; const map={};
-      while(i < bytes.length){
-        const d=v6_varintDecode(bytes,i); if(d.value===null) break; i=d.next;
-        const c=v6_varintDecode(bytes,i); if(c.value===null) break; i=c.next;
+      let i = 0, prev = 0; const map = {};
+      while (i < bytes.length) {
+        const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
+        const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
         const id = prev + d.value; prev = id;
-        if (c.value>0) map[String(id)] = (map[String(id)]||0) + c.value;
+        if (c.value > 0) map[String(id)] = (map[String(id)] || 0) + c.value;
       }
       return map;
     }
     // legacy v5: v5|checksum|base64url(JSON[[id,count],...])
-    if(/^v5\|/i.test(raw0)){
+    if (/^v5\|/i.test(raw0)) {
       const firstBar = raw0.indexOf('|');
       const rest = raw0.slice(firstBar + 1);
       const sep = rest.indexOf('|');
       if (sep < 0) throw new Error('Bad format');
-      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi,'').toLowerCase();
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
       const payload = rest.slice(sep + 1);
       const expect = (await sha256Hex(payload)).slice(0, 10);
       if (checksum !== expect) throw new Error('Invalid code');
       const pairs = JSON.parse(b64urlDecode(payload));
       const map = {};
       if (Array.isArray(pairs)) {
-        pairs.forEach(([id,c]) => { const n=Number(c)||0; if(id&&n>0) map[String(id)] = (map[String(id)]||0)+n; });
+        pairs.forEach(([id, c]) => { const n = Number(c) || 0; if (id && n > 0) map[String(id)] = (map[String(id)] || 0) + n; });
       }
       return map;
     }
@@ -5969,7 +5974,7 @@ async function codeToMap(code) {
     throw new Error("無効なコードです");
   }
 }
-  function replaceDeckWithMap(map) {
+function replaceDeckWithMap(map) {
   // 先に全IDの存在確認（1枚でも欠けたら適用を中止）
   const missing = [];
   Object.entries(map).forEach(([id]) => {
@@ -6115,7 +6120,7 @@ function openDeckShareModal() {
     if (codeDisplay) {
       codeDisplay.addEventListener('click', async () => {
         const code = codeDisplay.textContent?.trim() || '';
-        try { await navigator.clipboard.writeText(code); } catch (_) {}
+        try { await navigator.clipboard.writeText(code); } catch (_) { }
       });
     }
 
@@ -6201,7 +6206,7 @@ function openDeckShareModal() {
     try {
       const map = currentDeckToMap();
       const prefer = localStorage.getItem('deckCodeVersion') || 'v6';
-      const code = (prefer.toLowerCase()==='v6'||prefer==='5') ? await deckToCodeV6(map) : (prefer.toLowerCase()==='v5' ? await deckToCodeV5(map) : await deckToCodeFromMap(map));
+      const code = (prefer.toLowerCase() === 'v6' || prefer === '5') ? await deckToCodeV6(map) : (prefer.toLowerCase() === 'v5' ? await deckToCodeV5(map) : await deckToCodeFromMap(map));
       const display = modal.querySelector('#deck-code-display');
       if (display) display.textContent = code;
     } catch (e) {
