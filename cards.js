@@ -13072,6 +13072,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2336"
+  data-name="黒い太陽(くろいたいよう)"
+  data-cost="3"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="灯火"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_15_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2343"
   data-name="花面の耳打ち(かめんのみみうち)"
   data-cost="0"
