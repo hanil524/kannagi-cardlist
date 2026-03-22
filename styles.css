@@ -2133,7 +2133,7 @@ body.modal-open {
 /* 4枚制限などのメッセージ表示 */
 .deck-message {
   position: fixed;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
@@ -2142,6 +2142,9 @@ body.modal-open {
   border-radius: 8px;
   z-index: 3000;
   font-weight: bold;
+  white-space: pre;
+  text-align: center;
+  pointer-events: none;
   animation: fadeOut 1.5s forwards;
 }
 

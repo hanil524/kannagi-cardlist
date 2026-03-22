@@ -863,7 +863,40 @@ window.addEventListener('orientationchange', resetFontSize);
 window.addEventListener('resize', resetFontSize);
 
 // ★ページロード後にDOMの初期化設定を行う
+// コスト・力フィルターボタンをカードデータから自動生成
+function buildNumericFilterButtons() {
+  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const costValues = new Set();
+  const powerValues = new Set();
+
+  cards.forEach((card) => {
+    const c = card.dataset.cost;
+    const p = card.dataset.power;
+    if (c !== undefined && c !== '') costValues.add(Number(c));
+    if (p !== undefined && p !== '') powerValues.add(Number(p));
+  });
+
+  const inject = (containerId, attr, values) => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    // ヘッダー以外の既存ボタンを削除（再生成時のリセット用）
+    container.querySelectorAll(':scope > button').forEach((b) => b.remove());
+    [...values].sort((a, b) => a - b).forEach((val) => {
+      const btn = document.createElement('button');
+      btn.textContent = String(val);
+      btn.onclick = () => toggleFilterCard(attr, String(val));
+      container.appendChild(btn);
+    });
+  };
+
+  inject('cost', 'cost', costValues);
+  inject('power', 'power', powerValues);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // コスト・力フィルターボタンを自動生成
+  buildNumericFilterButtons();
+
   // モバイルでのプルトゥリフレッシュを防止
   document.body.style.overscrollBehavior = 'none';
   document.documentElement.style.overscrollBehavior = 'none';
@@ -983,8 +1016,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof deckBuilder?.showMessage === 'function') {
         deckBuilder.showMessage(
           limitEnabled
-            ? '枚数制限のあるカードが4枚まで使用可能になりました。'
-            : '枚数制限が再度適用されました。'
+            ? '枚数制限のあるカードが\n4枚まで使用可能に\nなりました。'
+            : '枚数制限が\n再度適用されました。'
         );
       }
       // 画像モーダルを開いている場合、表示・ボタン状態を更新
