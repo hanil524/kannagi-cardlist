@@ -282,7 +282,7 @@ main {
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  margin: 10px;
+  margin: 7px;
   border: 1px solid rgba(100, 100, 100, 0.5);
   /* 境界線を追加 */
 }
@@ -2020,6 +2020,19 @@ body.modal-open {
   justify-content: center;
   line-height: 1;
   box-sizing: border-box;
+  position: relative;
+}
+
+.deck-counter::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
 }
 
 /* デッキ枚数39以下の場合の赤色表示 */
@@ -3697,9 +3710,8 @@ body.modal-open {
 /* 季節・札種類の擬似要素(共有グリッドのセルとして配置) */
 .season-text::before,
 .type-text::before {
-  content: attr(data-name);
+  content: attr(data-name) "：";
   text-align: right;
-  margin-right: 4px;
   font-size: 14px;
   color: white;
   white-space: nowrap;
@@ -3711,7 +3723,6 @@ body.modal-open {
 .type-text::after {
   content: attr(data-count);
   text-align: left;
-  margin-left: 1px;
   font-size: 14px;
   color: white;
   white-space: nowrap;

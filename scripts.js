@@ -927,11 +927,13 @@ document.addEventListener('DOMContentLoaded', () => {
     filterCardsByName({ target: searchBox });
     updateClearButtonVisibility('search-box', 'clear-button-desktop');
   });
+  searchBox.addEventListener('focus', () => { searchBox.select(); });
 
   mobileSearchBox.addEventListener('input', () => {
     filterCardsByName({ target: mobileSearchBox });
     updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
   });
+  mobileSearchBox.addEventListener('focus', () => { mobileSearchBox.select(); });
 
   // Enter/確定キーでキーボードを閉じる（スマホ対応）
   searchBox.addEventListener('keydown', (e) => {
@@ -3832,7 +3834,7 @@ const deckBuilder = {
         const seasonText = document.createElement('div');
         seasonText.className = 'season-text';
         seasonText.setAttribute('data-name', season);
-        seasonText.setAttribute('data-count', `：${seasonCounts[season]}枚`);
+        seasonText.setAttribute('data-count', `${seasonCounts[season]}枚`);
         seasonRows.appendChild(seasonText);
       }
     });
@@ -3864,7 +3866,7 @@ const deckBuilder = {
         const typeText = document.createElement('div');
         typeText.className = 'type-text';
         typeText.setAttribute('data-name', type);
-        typeText.setAttribute('data-count', `：${typeCounts[type]}枚`);
+        typeText.setAttribute('data-count', `${typeCounts[type]}枚`);
         typeRows.appendChild(typeText);
       }
     });
