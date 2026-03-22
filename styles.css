@@ -2559,11 +2559,11 @@ body.modal-open {
 /* PC用のデッキ作成画面 画像 */
 @media (min-width: 768px) {
   .deck-card img {
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
   .deck-card {
-    border-radius: 12px;
+    border-radius: 10px;
   }
 }
 
@@ -4368,6 +4368,17 @@ body.modal-open {
 
 .zero-search-modal .deck-card:hover {
   transform: translateY(-5px);
+}
+
+/* 零探しカード固有スタイル（deck-card から独立して調整可能） */
+@media (min-width: 768px) {
+  .zero-search-card img {
+    border-radius: 12px;
+  }
+
+  .zero-search-card {
+    border-radius: 12px;
+  }
 }
 
 /* 選択マークのスタイル */

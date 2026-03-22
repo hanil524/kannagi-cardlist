@@ -4069,7 +4069,7 @@ function _renderZeroModal(message, actionLabel) {
       </div>
       <div class="zero-search-result">
         ${displayCards.map((card, index) => `
-          <div class="deck-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
+          <div class="deck-card zero-search-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
                data-number="${card.dataset.number}"
                data-name="${card.dataset.name}"
                data-index="${index}">
@@ -5424,10 +5424,14 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOSの判定（新しい方式）
+    // iOS判定
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    // <a download> が動かないWebView系ブラウザ判定（Twitter・Line・Instagram等）
+    const isWebView = /Twitter|Instagram|Line|FBAN|FBAV|GSA|MicroMessenger/.test(navigator.userAgent)
+      || (typeof window.Android !== 'undefined')
+      || (/Android/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent));
 
-    if (isIOS) {
+    if (isIOS || isWebView) {
       try {
         // DataURLを生成（エラーハンドリング付き）
         const dataUrl = await new Promise((resolve, reject) => {
@@ -6131,7 +6135,6 @@ function openDeckShareModal() {
       }
     });
 
-    // コピー
     // コピー
     content.querySelector('#copy-deck-code')?.addEventListener('click', async () => {
       const code = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
