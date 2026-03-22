@@ -13184,6 +13184,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2374"
+  data-name="花瓶(かびん)"
+  data-cost="9"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="牢獄"
+  data-keyword=""
+  data-role="ロック"
+>
+  <img data-src="images/card_15_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2377"
   data-name="灰被り(はいかぶり)"
   data-cost="3"
