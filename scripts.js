@@ -943,7 +943,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); mobileSearchBox.blur(); }
   });
 
-  // 初期状態を設定
   updateClearButtonVisibility('search-box', 'clear-button-desktop');
   updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
 
@@ -961,7 +960,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   resetFontSize(); // 初期化時にも実行
 
-  // PCかどうかを判別
   const isPC = !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isPC) {
@@ -986,7 +984,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
   }
 
-  // フィルターボタンにクリックイベントを追加
   const filterButtons = document.querySelectorAll('.filter-buttons button');
   filterButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
@@ -996,7 +993,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // モーダルボタンにクリックイベントを追加
   const modalButtons = document.querySelectorAll('.filter-group button');
   modalButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
@@ -1009,7 +1005,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 制限解禁トグルのイベント
   const limitToggle = document.getElementById('limit-release-toggle');
   if (limitToggle) {
     limitToggle.addEventListener('change', (e) => {
@@ -1223,18 +1218,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // イベントリスナーの設定
-  // ローカルストレージからデッキを読み込む
   deckBuilder.loadFromLocalStorage();
 
-  // モーダル背景クリックで閉じる処理を追加
   document.getElementById('deck-modal').addEventListener('mousedown', (e) => {
     if (e.target.className === 'deck-modal active') {
       deckBuilder.close();
     }
   });
 
-  // PCのデッキボタンのイベントリスナー
   const deckButton = document.getElementById('deckButton');
   if (deckButton) {
     deckButton.addEventListener('click', openDeckBuilder);
@@ -1247,7 +1238,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // スマホのヘッダーアイコンにもデッキ枚数表示を追加
   const headerIcon = document.querySelector('.header-icon');
   if (headerIcon) {
     const badge = document.createElement('span');
@@ -1256,7 +1246,6 @@ document.addEventListener('DOMContentLoaded', () => {
     headerIcon.parentElement.appendChild(badge);
   }
 
-  // デッキ一覧のクリックイベント
   document.getElementById('card-list').addEventListener('click', (e) => {
     const card = e.target.closest('.card');
     if (!card) return;
@@ -1423,7 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zeroCheckButton.addEventListener('click', performZeroSearch);
   }
 
-  // 共有ボタン（切替と零探しの間に挿入）
+  // 共有ボタン
   const deckMenuEl = document.querySelector('.deck-menu');
   if (deckMenuEl && !document.getElementById('deck-share')) {
     const shareBtn = document.createElement('button');
@@ -1439,13 +1428,11 @@ document.addEventListener('DOMContentLoaded', () => {
     shareBtn.addEventListener('click', openDeckShareModal);
   }
 
-  // リセットボタン
   const resetButton = document.getElementById('deck-reset');
   if (resetButton) {
     resetButton.addEventListener('click', confirmReset);
   }
 
-  // デッキ画面を閉じる
   document.getElementById('back-to-gallery').addEventListener('click', () => {
     deckBuilder.close();
   });
@@ -1454,7 +1441,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.card');
   cards.forEach(addCardButtons);
 
-  // ヘルプボタンの機能を追加
+  // ヘルプボタン
   const helpButton = document.querySelector('.deck-help-button');
   const helpPopup = document.querySelector('.deck-help-popup');
   const helpOverlay = document.querySelector('.deck-help-overlay');
@@ -1532,9 +1519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 初期表示時にカード数を更新
   updateCardCount();
-  // 初期表示時にフィルター詳細を更新
   updateFilterDetails();
   ensureScrollUnlocked();
   setupAndroidScrollAssist();
