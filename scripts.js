@@ -2543,8 +2543,11 @@ const closeImageModal = () => {
 
   // デッキ作成画面が開いているかチェック
   if (deckModal && deckModal.style.display === 'block') {
-    // デッキ作成画面が開いている場合はスクロール禁止を維持
+    // デッキ作成画面が開いている場合はスクロール禁止を維持（position/topは必ずリセット）
     document.body.style.overflow = 'hidden';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
   } else {
     // デッキ作成画面が開いていない場合は通常通りスクロール可能に
     document.body.style.overflow = '';

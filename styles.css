@@ -33,6 +33,8 @@ header {
   top: 0;
   z-index: 1000;
   transition: padding-right 0.3s ease;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .header-content {
@@ -70,6 +72,8 @@ header a {
   top: 0;
   z-index: 1000;
   box-sizing: border-box;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 @supports (-webkit-touch-callout: none) {
