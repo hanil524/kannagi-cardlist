@@ -5368,12 +5368,12 @@ const deckManager = {
 // デッキ画像の保存機能（Canvas直描画 / 外部ライブラリ不要）
 async function captureDeck() {
   // ---- 設定（変更する場合はここだけ編集） ----
-  const SCALE  = 5;        // 解像度倍率（4 or 8 など）
+  const SCALE = 4;        // 解像度倍率（4 or 8 など）
   const CARD_W = 180;      // カード基準幅 (px)
   const CARD_H = Math.round(CARD_W * 1041 / 745); // アスペクト比 745:1041 ≈ 251px
-  const GAP    = 2;        // カード間隔 (px)
-  const PAD    = 10;       // 外側余白 (px)
-  const BG     = '#2b2b2b'; // 背景色
+  const GAP = 2;        // カード間隔 (px)
+  const PAD = 10;       // 外側余白 (px)
+  const BG = '#2b2b2b'; // 背景色
   const RADIUS = 10;       // 角丸半径 (px)
   // ------------------------------------------
 
