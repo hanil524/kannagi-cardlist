@@ -5424,14 +5424,12 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOS判定
+    // iOS・Android は全員モーダル（長押し保存）、PC のみ直接ダウンロード
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-    // <a download> が動かないWebView系ブラウザ判定（Twitter・Line・Instagram等）
-    const isWebView = /Twitter|Instagram|Line|FBAN|FBAV|GSA|MicroMessenger/.test(navigator.userAgent)
-      || (typeof window.Android !== 'undefined')
-      || (/Android/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent));
+    const isAndroid = /Android/.test(navigator.userAgent);
+    const useModal = isIOS || isAndroid;
 
-    if (isIOS || isWebView) {
+    if (useModal) {
       try {
         // DataURLを生成（エラーハンドリング付き）
         const dataUrl = await new Promise((resolve, reject) => {
