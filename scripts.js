@@ -5365,103 +5365,66 @@ const deckManager = {
   }
 };
 
-// デッキ画像の保存機能（Canvas直描画 / 外部ライブラリ不要）
-async function captureDeck() {
-  // ---- 設定（変更する場合はここだけ編集） ----
-  const SCALE = 4;        // 解像度倍率（4 or 8 など）
-  const CARD_W = 180;      // カード基準幅 (px)
-  const CARD_H = Math.round(CARD_W * 1041 / 745); // アスペクト比 745:1041 ≈ 251px
-  const GAP = 2;        // カード間隔 (px)
-  const PAD = 10;       // 外側余白 (px)
-  const BG = '#2b2b2b'; // 背景色
-  const RADIUS = 10;       // 角丸半径 (px)
-  // ------------------------------------------
+// html2canvasライブラリを動的に読み込む
+function loadHtml2Canvas() {
+  return new Promise((resolve, reject) => {
+    if (window.html2canvas) {
+      resolve(window.html2canvas);
+      return;
+    }
 
+    const script = document.createElement('script');
+    script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    script.onload = () => resolve(window.html2canvas);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// デッキ画像の保存機能
+async function captureDeck() {
+  // 保存中メッセージを表示（最初に表示）
   const messageDiv = document.createElement('div');
   messageDiv.className = 'saving-message';
   messageDiv.textContent = '画像を作成中...';
   document.body.appendChild(messageDiv);
 
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  // 確実にメッセージが表示されるよう少し待機
+  await new Promise((resolve) => setTimeout(resolve, 100));
 
   try {
-    // デッキカード取得（空スロット除外）
+    // html2canvasの読み込み
+    const html2canvas = await loadHtml2Canvas();
+
+    // デッキ表示エリアの取得
     const deckDisplay = document.getElementById('deck-display');
+    const modalContent = document.querySelector('.deck-modal-content');
 
-    // 現在画面に表示されている列数を取得（スマホ縦=5列、PC/横=8列）
-    const COLS = window.getComputedStyle(deckDisplay)
-      .gridTemplateColumns.trim().split(/\s+/).length;
-    const deckCards = Array.from(
-      deckDisplay.querySelectorAll('.deck-card:not([data-empty="true"])')
-    );
-    if (deckCards.length === 0) {
-      alert('デッキにカードがありません。');
-      return;
-    }
+    // キャプチャ用のクラスを追加
+    deckDisplay.classList.add('capturing');
+    modalContent.classList.add('capturing-deck');
 
-    const rows = Math.ceil(deckCards.length / COLS);
-
-    // Canvas 作成
-    const canvas = document.createElement('canvas');
-    canvas.width = (PAD * 2 + CARD_W * COLS + GAP * (COLS - 1)) * SCALE;
-    canvas.height = (PAD * 2 + CARD_H * rows + GAP * (rows - 1)) * SCALE;
-    const ctx = canvas.getContext('2d');
-
-    // 背景塗り
-    ctx.fillStyle = BG;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // 角丸クリップして drawImage するヘルパー
-    const drawRounded = (img, x, y, w, h, r) => {
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.arcTo(x + w, y, x + w, y + r, r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-      ctx.lineTo(x + r, y + h);
-      ctx.arcTo(x, y + h, x, y + h - r, r);
-      ctx.lineTo(x, y + r);
-      ctx.arcTo(x, y, x + r, y, r);
-      ctx.closePath();
-      ctx.clip();
-      ctx.drawImage(img, x, y, w, h);
-      ctx.restore();
-    };
-
-    // 全カードを並列で描画
-    await Promise.all(deckCards.map((card, i) => new Promise((resolve) => {
-      const srcImg = card.querySelector('img');
-      if (!srcImg) { resolve(); return; }
-
-      const col = i % COLS;
-      const row = Math.floor(i / COLS);
-      const x = (PAD + col * (CARD_W + GAP)) * SCALE;
-      const y = (PAD + row * (CARD_H + GAP)) * SCALE;
-      const w = CARD_W * SCALE;
-      const h = CARD_H * SCALE;
-      const r = RADIUS * SCALE;
-
-      const draw = (imgEl) => { drawRounded(imgEl, x, y, w, h, r); resolve(); };
-
-      // ブラウザキャッシュに既にある場合は再リクエストなしで即描画
-      if (srcImg.complete && srcImg.naturalWidth > 0) {
-        draw(srcImg);
-      } else {
-        const img = new Image();
-        img.onload = () => draw(img);
-        img.onerror = resolve;
-        img.src = srcImg.src || srcImg.dataset.src || '';
-      }
-    })));
-
-    // デッキ名を取得
+    // 現在のデッキ名を取得
     const currentDeckId = deckManager.currentDeckId;
     const deckButton = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
     const deckName = deckButton ? deckButton.textContent : `デッキ${currentDeckId}`;
 
-    // iOSの判定
+    // html2canvasでキャプチャ
+    const canvas = await html2canvas(deckDisplay, {
+      backgroundColor: '#2a2a2a',
+      scale: 4,
+      logging: false,
+      allowTaint: true,
+      useCORS: true,
+      imageTimeout: 0, // タイムアウトを無効化して処理を高速化
+      removeContainer: true
+    });
+
+    // キャプチャ用クラスを削除
+    deckDisplay.classList.remove('capturing');
+    modalContent.classList.remove('capturing-deck');
+
+    // iOSの判定（新しい方式）
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
 
     if (isIOS) {
