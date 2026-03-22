@@ -3755,14 +3755,16 @@ body.modal-open {
 /* コスト分布グラフの調整 */
 .cost-distribution {
   height: 150px;
-  padding: 10px 5px;
+  padding: 10px 3px 0;
   box-sizing: border-box;
+  justify-content: flex-end;
 }
 
 .cost-graph-container {
   display: flex;
   justify-content: space-between;
-  height: calc(100% - 24px);
+  flex: 1;
+  min-height: 0;
   width: 100%;
   box-sizing: border-box;
   padding: 0 10px;
@@ -3777,7 +3779,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 100%;
+  align-self: stretch;
   align-items: center;
   position: relative;
 }
@@ -3793,10 +3795,8 @@ body.modal-open {
   position: absolute;
   bottom: 0;
   background: rgba(255, 255, 255, 0.1);
-  /* 灰色の背景 */
   border-radius: 4px 4px 0 0;
   z-index: 1;
-  /* 赤いバーの後ろに配置 */
 }
 
 .cost-bar {
@@ -3804,14 +3804,11 @@ body.modal-open {
   transition: height 0.3s ease;
   border-radius: 4px 4px 0 0;
   position: relative;
-  /* 枚数表示のため */
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 1px;
-  /* 0枚でも1pxは表示 */
   z-index: 2;
-  /* 背景バーの前面に配置 */
 }
 
 .cost-bar-count {
@@ -4132,7 +4129,7 @@ body.modal-open {
   /* コストグラフを小さく */
   .cost-distribution {
     height: 150px;
-    padding: 10px 5px 0;
+    padding: 10px 0px 0;
     /* 上部のパディングを調整 */
   }
 
@@ -4148,12 +4145,12 @@ body.modal-open {
   /* 帯除外エリアで対称に中央寄せ(高さが狭い場合) */
   .season-distribution,
   .type-distribution {
-    padding: 10px 4px 10px 36px;
+    padding: 10px 8px 10px 36px;
     /* left(36) - right(4) = 32 = 帯幅 */
   }
 
   .attribute-distribution {
-    padding: 10px 4px 10px 36px;
+    padding: 10px 8px 10px 36px;
   }
 
   /* フォントサイズを少し小さく */
