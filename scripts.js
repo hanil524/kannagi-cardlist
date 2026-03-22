@@ -5441,11 +5441,14 @@ async function captureDeck() {
           }
         });
 
-        // モーダルを生成（iOSのみ）
+        // モーダルを生成
         const imageModal = document.createElement('div');
         imageModal.className = 'deck-image-modal';
 
-        // iOSはシンプルな長押し保存のみのモーダル
+        const instruction = isIOS
+          ? '共有ボタン、画像を長押しで保存。'
+          : '保存ボタンで端末に保存。共有ボタンで送信。';
+
         const modalHTML = `
           <div class="deck-image-container">
             <div class="deck-image-wrapper">
@@ -5455,14 +5458,34 @@ async function captureDeck() {
                 <span>共有</span>
               </button>
             </div>
-            <p class="save-instruction">共有ボタン、画像を長押しで保存。</p>
+            <p class="save-instruction">${instruction}</p>
+            ${isAndroid ? '<button class="deck-save-button">保存</button>' : ''}
             <button class="modal-close-button">閉じる</button>
           </div>
         `;
 
         imageModal.innerHTML = modalHTML;
 
-        // イベントリスナーを追加
+        // Android 保存ボタン（blob URL でダウンロード）
+        const saveButton = imageModal.querySelector('.deck-save-button');
+        if (saveButton) {
+          saveButton.addEventListener('click', () => {
+            canvas.toBlob((blob) => {
+              if (!blob) {
+                deckBuilder?.showMessage?.('保存に失敗しました。共有をお試しください。');
+                return;
+              }
+              const blobUrl = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = `${deckName}.png`;
+              link.click();
+              setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+            }, 'image/png');
+          });
+        }
+
+        // 共有ボタン
         const shareButton = imageModal.querySelector('.deck-share-button');
         if (shareButton) {
           shareButton.addEventListener('click', async (e) => {
@@ -5479,18 +5502,10 @@ async function captureDeck() {
                   return;
                 }
               }
-              if (typeof deckBuilder?.showMessage === 'function') {
-                deckBuilder.showMessage('共有できませんでした。画像を長押し保存してください。');
-              } else {
-                alert('共有できませんでした。画像を長押し保存してください。');
-              }
+              deckBuilder?.showMessage?.('共有できませんでした。');
             } catch (error) {
               if (error && error.name === 'AbortError') return;
-              if (typeof deckBuilder?.showMessage === 'function') {
-                deckBuilder.showMessage('共有に失敗しました。画像を長押し保存してください。');
-              } else {
-                alert('共有に失敗しました。画像を長押し保存してください。');
-              }
+              deckBuilder?.showMessage?.('共有に失敗しました。');
             } finally {
               shareButton.disabled = false;
               shareButton.classList.remove('is-loading');
