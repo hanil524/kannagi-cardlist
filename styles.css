@@ -1374,20 +1374,16 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-content {
-  background-color: rgba(44, 44, 44, 0.95);
+  background: rgba(42,42,50,0.97);
   margin: 10vh auto;
-  /* 上下中央に配置するよう変更 */
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  /* 1pxの半透明白色の境界線を追加 */
+  border: 1px solid rgba(255,255,255,0.08);
   width: calc(90% - 12px);
-  /* 左右に2pxずつ、合計4pxのすき間を作る */
   max-width: 600px;
   max-height: 60vh;
-  /* 画面の70%の高さに制限。スクロールバーを早く表示 */
   position: relative;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
   /* 縦方向に並べる */
@@ -2399,6 +2395,11 @@ body.modal-open {
   width: 90%;
   max-width: 900px;
   margin: auto;
+  background: rgba(42,42,50,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 /* 零探しヘッダー */
@@ -3080,17 +3081,16 @@ body.modal-open {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #2a2a2a;
+  background: rgba(42,42,50,0.97);
+  border: 1px solid rgba(255,255,255,0.08);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
   max-width: 400px;
   max-height: 80vh;
-  /* ビューポートの80%を最大高さに設定 */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
   display: flex;
   flex-direction: column;
-  /* ヘッダーとコンテンツを縦に配置 */
 }
 
 /* デッキ一覧のヘッダー部分の調整 */
@@ -3123,46 +3123,49 @@ body.modal-open {
   transform: translateY(-50%);
   z-index: 1;
   padding: 4px 10px;
-  background-color: #4A4A4A;
-  border: none;
+  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 6px;
   color: #e0e0e0;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
   white-space: nowrap;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   min-height: 28px;
   line-height: 1.2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .deck-backup-button:hover {
-  background-color: #4A4A4A;
+  background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
+  border-color: rgba(255,255,255,0.16);
   color: #fff;
+  transform: translateY(calc(-50% - 1px));
 }
 
 .deck-backup-button:active {
-  background-color: #4A4A4A;
+  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
 }
 
 /* 閉じるボタンの位置調整 */
 .deck-list-close {
   position: absolute;
   right: 0px;
-  /* 右端からの距離 */
   top: 50%;
   transform: translateY(-50%);
-  /* 縦方向の中央揃え */
   z-index: 1;
   width: 36px;
   height: 36px;
-  background-color: #3a3a3a;
-  border: none;
+  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 8px;
   color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
   font-size: 24px;
   cursor: pointer;
   display: flex;
@@ -3182,7 +3185,8 @@ body.modal-open {
 /* ホバー時のエフェクト（PC用） */
 @media (min-width: 769px) {
   .deck-list-close:hover {
-    background-color: #4a4a4a;
+    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
+    border-color: rgba(255,255,255,0.16);
     color: #ffffff;
   }
 }
@@ -3617,9 +3621,10 @@ body.modal-open {
 }
 
 .distribution-content {
-  background: #2a2a2a;
+  background: rgba(42,42,50,0.97);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
   padding: 20px 30px;
-  /* 左右の余白を追加 */
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
