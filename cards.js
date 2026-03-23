@@ -13008,6 +13008,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2308"
+  data-name="黒妖の訓練場(こくようのくんれんじょう)"
+  data-cost="3"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="犬族 刀"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2309"
   data-name="沼(ぬま)"
   data-cost="4"
