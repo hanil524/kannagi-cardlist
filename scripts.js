@@ -6335,71 +6335,110 @@ const updateScrollbarVisibility = () => {
 // 全デッキバックアップ機能
 // =====================
 
-// 全デッキをバックアップコードに変換
+// デッキ名をBase64URL化（日本語対応）
+function encodeDeckName(name) {
+  return b64urlEncode(unescape(encodeURIComponent(name)));
+}
+function decodeDeckName(encoded) {
+  return decodeURIComponent(escape(b64urlDecode(encoded)));
+}
+
+// 全デッキをBK2形式のバックアップコードに変換
 async function generateAllDecksBackupCode() {
-  // 現在のデッキも保存してから開始
   deckManager.saveDeck(deckManager.currentDeckId);
 
-  const backupData = {
-    decks: {},
-    deckOrder: deckManager.deckOrder,
-    currentDeckId: deckManager.currentDeckId
-  };
+  const parts = [];
+  parts.push('o:' + (deckManager.deckOrder || []).join(','));
+  parts.push('c:' + deckManager.currentDeckId);
 
-  // 各デッキのカードを {number: count} 形式に変換
   for (const [deckId, deck] of Object.entries(deckManager.decks)) {
-    if (deck && Array.isArray(deck.cards) && deck.cards.length > 0) {
-      const map = {};
+    const name = encodeDeckName(deck?.name || ('デッキ' + deckId));
+    const map = {};
+    if (deck && Array.isArray(deck.cards)) {
       deck.cards.forEach(card => {
         const num = card?.dataset?.number;
         if (num) map[num] = (map[num] || 0) + 1;
       });
-      backupData.decks[deckId] = {
-        name: deck.name || ('デッキ' + deckId),
-        cards: map
-      };
-    } else {
-      // 空デッキも名前だけ保存
-      backupData.decks[deckId] = {
-        name: deck?.name || ('デッキ' + deckId),
-        cards: {}
-      };
     }
+    // カードデータをVARINT delta符号化
+    const entries = Object.entries(map)
+      .filter(([, c]) => Number(c) > 0)
+      .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+      .sort((a, b) => a[0] - b[0]);
+    let prev = 0;
+    const bytes = [];
+    for (const [id, cnt] of entries) {
+      bytes.push(...v6_varintEncode(id - prev)); prev = id;
+      bytes.push(...v6_varintEncode(cnt));
+    }
+    const payload = bytes.length > 0 ? b64urlEncode(v6_bytesToBin(bytes)) : '';
+    parts.push(deckId + ':' + name + ':' + payload);
   }
 
-  // JSON -> UTF-8対応Base64URL化（日本語デッキ名に対応）
-  const json = JSON.stringify(backupData);
-  const utf8 = encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)));
-  const payload = b64urlEncode(utf8);
-  const checksum = (await sha256Hex(payload)).slice(0, 8);
-  return `BK1|${checksum}|${payload}`;
+  const body = parts.join('|');
+  const checksum = (await sha256Hex(body)).slice(0, 8);
+  return `BK2|${checksum}|${body}`;
 }
 
-// バックアップコードから全デッキを復元
+// バックアップコードから全デッキを復元（BK2新形式・BK1旧形式の両対応）
 async function restoreAllDecksFromBackup(code) {
   try {
     const raw = normalizeWholeCode(code);
-    if (!raw.startsWith('BK1|')) throw new Error('無効なバックアップコードです');
 
-    const firstBar = raw.indexOf('|');
-    const rest = raw.slice(firstBar + 1);
+    // BK2: 新形式
+    if (raw.startsWith('BK2|')) {
+      const rest = raw.slice(raw.indexOf('|') + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('無効なバックアップコードです');
+      const checksum = rest.slice(0, sep).replace(/[^0-9a-f]/gi, '').toLowerCase();
+      const body = rest.slice(sep + 1);
+      if ((await sha256Hex(body)).slice(0, 8) !== checksum) throw new Error('バックアップコードが壊れています');
+
+      const backupData = { decks: {}, deckOrder: [], currentDeckId: 1 };
+      for (const part of body.split('|')) {
+        if (part.startsWith('o:')) {
+          backupData.deckOrder = part.slice(2).split(',').map(Number).filter(n => !isNaN(n) && n > 0);
+        } else if (part.startsWith('c:')) {
+          backupData.currentDeckId = parseInt(part.slice(2), 10) || 1;
+        } else {
+          const c1 = part.indexOf(':');
+          if (c1 < 0) continue;
+          const c2 = part.indexOf(':', c1 + 1);
+          if (c2 < 0) continue;
+          const deckId = part.slice(0, c1);
+          const name = decodeDeckName(part.slice(c1 + 1, c2));
+          const v6payload = part.slice(c2 + 1);
+          const cards = {};
+          if (v6payload) {
+            const bytes = v6_binToBytes(b64urlDecode(v6payload));
+            let i = 0, prev = 0;
+            while (i < bytes.length) {
+              const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
+              const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
+              const id = prev + d.value; prev = id;
+              if (c.value > 0) cards[String(id)] = (cards[String(id)] || 0) + c.value;
+            }
+          }
+          backupData.decks[deckId] = { name, cards };
+        }
+      }
+      return backupData;
+    }
+
+    // BK1: 旧形式（後方互換）
+    if (!raw.startsWith('BK1|')) throw new Error('無効なバックアップコードです');
+    const rest = raw.slice(raw.indexOf('|') + 1);
     const sep = rest.indexOf('|');
     if (sep < 0) throw new Error('無効なバックアップコードです');
-
     const checksum = rest.slice(0, sep).replace(/[^0-9a-f]/gi, '').toLowerCase();
     const payload = rest.slice(sep + 1);
-    const expect = (await sha256Hex(payload)).slice(0, 8);
-    if (checksum !== expect) throw new Error('バックアップコードが壊れています');
-
+    if ((await sha256Hex(payload)).slice(0, 8) !== checksum) throw new Error('バックアップコードが壊れています');
     const decoded = b64urlDecode(payload);
     const json = decodeURIComponent(decoded.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
     const backupData = JSON.parse(json);
-
-    if (!backupData.decks || typeof backupData.decks !== 'object') {
-      throw new Error('無効なバックアップデータです');
-    }
-
+    if (!backupData.decks || typeof backupData.decks !== 'object') throw new Error('無効なバックアップデータです');
     return backupData;
+
   } catch (e) {
     throw new Error(e.message || '無効なバックアップコードです');
   }
