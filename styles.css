@@ -6,7 +6,7 @@ body {
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   margin: 0;
   padding: 0;
 
@@ -16,13 +16,14 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
 
-  /* 背景を細かいドット柄に */
   background-color: #2a2a2a;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23363636' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
 }
 
 header {
-  background: rgb(0, 0, 0);
+  background: rgba(6,6,10,0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: white;
   padding: 10px;
   display: flex;
@@ -32,6 +33,8 @@ header {
   width: 100%;
   top: 0;
   z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 4px 24px rgba(0,0,0,0.7);
   transition: padding-right 0.3s ease;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
@@ -60,7 +63,9 @@ header a {
 
 .mobile-header {
   display: none;
-  background: #1f1f1f;
+  background: rgba(8,8,14,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: white;
   padding: 6px 8px;
   height: 50px;
@@ -69,6 +74,8 @@ header a {
   top: 0;
   z-index: 1000;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
 }
@@ -263,21 +270,19 @@ main {
 .filter-group {
   color: #fff;
   display: flex;
-  /* 「シリーズ：」とそのボタンを1行で表示 */
   align-items: center;
   justify-content: center;
   font-size: 13px;
   gap: 10px;
-  /* ボタン間の隙間を調整 */
   font-weight: bold;
-  background-color: rgba(60, 60, 60, 0.9);
-  /* サイトの背景よりも少し明るく */
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07);
   margin: 7px;
-  border: 1px solid rgba(100, 100, 100, 0.5);
-  /* 境界線を追加 */
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 /* フィルターボタン */
@@ -311,12 +316,13 @@ main {
   height: 28px;
   padding: 0 12px;
   border-radius: 25px;
-  background-color: rgba(70, 70, 120, 0.9);
+  background: linear-gradient(135deg, rgba(38,40,95,0.95) 0%, rgba(62,66,148,0.95) 50%, rgba(78,82,175,0.9) 100%);
+  border: 1px solid rgba(110,115,210,0.3);
   color: #ffffff;
   font-weight: bold;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
   margin-right: 0;
 }
 
@@ -326,7 +332,8 @@ main {
 
 @media (hover: hover) and (pointer: fine) {
   .limit-release:hover {
-    background-color: rgba(90, 90, 150, 0.95);
+    background: linear-gradient(135deg, rgba(52,55,125,0.98) 0%, rgba(78,83,172,0.98) 50%, rgba(95,100,205,0.95) 100%);
+    box-shadow: 0 4px 16px rgba(75,80,200,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 }
 
@@ -1024,16 +1031,15 @@ header input::placeholder,
 
 .filter-buttons button,
 .sort-buttons button {
-  background-color: rgba(100, 100, 100, 0.9);
+  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
   color: #ffffff;
-  border: 1px solid #777777;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 5px;
   padding: 6px 8px;
   font-size: 12px;
   letter-spacing: 1.2px;
-  /* 文字と文字のスペース */
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
   font-weight: bold;
 }
 
@@ -1041,21 +1047,27 @@ header input::placeholder,
 
   .filter-buttons button:hover,
   .sort-buttons button:hover {
-    background-color: rgba(120, 120, 120, 0.9);
+    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 14px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.16);
   }
 }
 
-.filter-buttons button:active,
-.sort-buttons button:active,
-.filter-buttons button.active,
-.sort-buttons button.active {
-  background-color: rgba(140, 140, 140, 0.9);
+.filter-buttons button:active {
+  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
   color: #ffffff;
   transform: translateY(1px);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
-  border-color: #aaaaaa;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.filter-buttons button.active,
+.sort-buttons button.active {
+  background: linear-gradient(180deg, rgba(155,28,28,0.92) 0%, rgba(125,18,18,0.92) 100%);
+  color: #ffffff;
+  border-color: rgba(200,55,55,0.45);
+  box-shadow: 0 2px 10px rgba(160,25,25,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 /* ボタングループのラベル */
@@ -1069,24 +1081,22 @@ header input::placeholder,
 
 /* フィルター解除ボタン */
 button[onclick='resetFilters()'] {
-  background-color: rgba(165, 70, 70, 0.9);
-  /* より落ち着いた赤 */
+  background: linear-gradient(180deg, rgba(172,52,52,0.92) 0%, rgba(140,35,35,0.92) 100%);
   color: #ffffff;
   font-weight: bold;
   border-radius: 25px;
   padding: 6px 16px;
-  border: none;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
+  border: 1px solid rgba(210,70,70,0.3);
+  box-shadow: 0 2px 8px rgba(140,30,30,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.18s ease;
   letter-spacing: 1.2px;
-  /* 文字と文字のスペース */
 }
 
 @media (hover: hover) and (pointer: fine) {
   button[onclick='resetFilters()']:hover {
-    background-color: rgba(185, 80, 80, 0.9);
+    background: linear-gradient(180deg, rgba(195,65,65,0.95) 0%, rgba(162,45,45,0.95) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 16px rgba(160,35,35,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
   }
 }
 
@@ -1761,7 +1771,9 @@ body.modal-open {
 }
 
 .sort-buttons button.active {
-  background-color: #4a4a4a;
+  background: linear-gradient(180deg, rgba(155,28,28,0.92) 0%, rgba(125,18,18,0.92) 100%);
+  border-color: rgba(200,55,55,0.45);
+  box-shadow: 0 2px 10px rgba(160,25,25,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
   color: white;
 }
 
@@ -1935,7 +1947,11 @@ body.modal-open {
   width: 100%;
   z-index: 1000;
   padding: 3px 8px;
-  background: rgba(40, 40, 40, 0.9);
+  background: rgba(38,38,44,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.7), 0 1px 0 rgba(255,255,255,0.04);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1945,12 +1961,12 @@ body.modal-open {
 
 .deck-menu-button {
   padding: 0 10px;
-  background-color: #444;
+  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
   color: white;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.18s ease;
   text-align: center;
   font-weight: bold;
   font-size: clamp(12px, 1.9vh, 14px);
@@ -1962,6 +1978,25 @@ body.modal-open {
   line-height: 1;
   box-sizing: border-box;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .deck-menu-button:hover,
+  .deck-counter:hover {
+    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
+    border-color: rgba(255,255,255,0.16);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+  }
+}
+
+.deck-menu-button:active,
+.deck-counter:active {
+  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+  transform: translateY(0);
+  border-color: rgba(255,255,255,0.08);
 }
 
 /* スマートフォン対応 */
@@ -1988,13 +2023,16 @@ body.modal-open {
 /* デッキ画面 枚数カウンター用のスタイル */
 .deck-counter {
   padding: 0 10px;
-  background-color: #333;
+  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
   color: white;
-  border: 1px solid #666;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 4px;
   font-weight: bold;
   font-size: clamp(12px, 1.9vh, 14px);
   min-width: 36px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: all 0.18s ease;
   height: var(--deck-menu-height);
   text-align: center;
   display: inline-flex;
@@ -2182,7 +2220,7 @@ body.modal-open {
 /* 共通のホバー効果（カード一覧とデッキ画面） */
 .card:hover,
 .deck-card:hover {
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.644);
+  box-shadow: 0 0 18px rgba(255,255,255,0.28), 0 8px 28px rgba(0,0,0,0.6);
 }
 
 /* ボタンのホバー時は親要素のホバー効果を無効化 */
@@ -3898,7 +3936,7 @@ body.modal-open {
 .deck-counter-button:hover,
 .deck-header button:hover,
 .deck-header .deck-counter:hover {
-  transform: scale(1.1);
+  transform: translateY(-1px);
 }
 
 /* 警告時のスタイルは維持 */
