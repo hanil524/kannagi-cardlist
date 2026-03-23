@@ -36,8 +36,11 @@ header {
   border-bottom: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 4px 24px rgba(0,0,0,0.7);
   transition: padding-right 0.3s ease;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .header-content {
@@ -72,20 +75,26 @@ header a {
   position: fixed;
   width: 100%;
   top: 0;
+  left: 0;
   z-index: 1000;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 @supports (-webkit-touch-callout: none) {
   .mobile-header {
     left: 0;
     right: 0;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 }
 
@@ -2970,7 +2979,11 @@ body.modal-open {
 /* スマホ表示時のviewport制御 */
 @media (max-width: 768px) {
 
-  html,
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   body {
     overflow-x: hidden;
     width: 100%;
