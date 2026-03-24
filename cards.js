@@ -13040,6 +13040,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2310"
+  data-name="夫婦岩(めおといわ)"
+  data-cost="5"
+  data-power="4"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="海"
+  data-keyword=""
+  data-role="召喚時 魂加速 除外戻し"
+>
+  <img data-src="images/card_15_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2322"
   data-name="黒犬(こっけん)"
   data-cost="2"
@@ -13133,6 +13149,22 @@ data-role="ロック"
   data-role="召喚時 底送り"
 >
   <img data-src="images/card_15_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2350"
+  data-name="処刑場(しょけいじょう)"
+  data-cost="5"
+  data-power="4"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="召喚時 魂加速 除外戻し"
+>
+  <img data-src="images/card_15_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
