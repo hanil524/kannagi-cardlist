@@ -13088,6 +13088,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2330"
+  data-name="半猫半人(はんびょうはんじん)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="猫 猫面"
+  data-keyword=""
+  data-role="ヒール 直接ダメ"
+>
+  <img data-src="images/card_15_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2331"
   data-name="黄泉酒(よみき)"
   data-cost="5"
