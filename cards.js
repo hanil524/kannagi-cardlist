@@ -13200,6 +13200,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2363"
+  data-name="手癖(てぐせ)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="トップ確認"
+>
+  <img data-src="images/card_15_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2366"
   data-name="花面の神(かめんのかみ)"
   data-cost="7"
@@ -13989,6 +14005,57 @@ data-attribute="妖怪 幽霊"
   data-role="召喚時 直接ダメ"
 >
   <img data-src="images/card_15_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- プロモパック 10050番から12種類？ -->
+
+<div
+  class="card"
+  data-number="10051"
+  data-name="答えなき世界(こたえなきせかい)"
+  data-cost="7"
+  data-power="6"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="園"
+  data-keyword=""
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_15_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10055"
+  data-name="災害の魔獣(さいがいのまじゅう)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="動物"
+  data-keyword=""
+  data-role="魂加速"
+>
+  <img data-src="images/card_15_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10061"
+  data-name="動く死骸(うごくしがい)"
+  data-cost="2"
+  data-power="0"
+  data-series="プロモ"
+  data-type="道具札"
+  data-season="春"
+  data-rare=""
+  data-attribute="動物"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_15_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
