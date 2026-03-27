@@ -5759,8 +5759,7 @@ data-series="怪談師"
 data-rare="エキスパンション 封印改訂"
 data-season="混化 春冬"
 data-type="季節札"
-data-role="札除去 バフ"
-data-keyword="展開時"
+data-role="札除去 バフ 展開時"
 data-attribute="血液 渓谷"
 >
 <img data-src="images/card_7_p (18).jpg" src="placeholder.jpg" decoding="async" />
@@ -6035,8 +6034,7 @@ data-type="季節札"
 data-season="秋"
 data-rare="C"
 data-attribute="噂 糧 樹木"
-data-keyword="展開時"
-data-role="サーチ"
+data-role="サーチ 展開時"
 >
 <img data-src="images/card_9_p (26).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6179,8 +6177,7 @@ data-type="季節札"
 data-season="混化 春夏"
 data-rare="C"
 data-attribute="噂 廃校 怨霊"
-data-keyword="展開時"
-data-role="直接ダメ ヒール"
+data-role="直接ダメ ヒール 展開時"
 >
 <img data-src="images/card_9_p (12).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -9196,8 +9193,7 @@ data-type="季節札"
 data-season="夏"
 data-rare="UC"
 data-attribute="都市伝説 腐乱 病"
-data-keyword="展開時"
-data-role="サーチ 回復フェイズ 自傷ダメ 直接ダメ"
+data-role="サーチ 回復フェイズ 自傷ダメ 直接ダメ 展開時"
 >
 <img data-src="images/card_11_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10178,8 +10174,7 @@ data-role="ロック"
   data-season="春"
   data-rare="UC"
   data-attribute="七不思議 海 災害"
-  data-keyword="展開時"
-  data-role="ヒール 攻撃時"
+  data-role="ヒール 攻撃時 展開時"
 >
   <img data-src="images/card_13_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10690,8 +10685,7 @@ data-role="ロック"
   data-season="秋"
   data-rare="UC"
   data-attribute="七不思議 虹 ゴリラ"
-  data-keyword="展開時"
-  data-role="ドロー"
+  data-role="ドロー 展開時"
 >
   <img data-src="images/card_13_p (35).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11398,8 +11392,7 @@ data-role="ロック"
   data-season="春"
   data-rare="エキスパンション"
   data-attribute="血液 廃門"
-  data-keyword="展開時"
-  data-role="除外加速 サーチ"
+  data-role="除外加速 サーチ 展開時"
 >
   <img data-src="images/card_14_p (45).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12806,8 +12799,7 @@ data-role="ロック"
   data-season="無"
   data-rare="エキスパンション"
   data-attribute="墓地 噂"
-  data-keyword="展開時"
-  data-role="追加行動 除外戻し 特殊召喚"
+  data-role="追加行動 除外戻し 特殊召喚 展開時"
 >
   <img data-src="images/card_14_p (100).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12934,8 +12926,7 @@ data-role="ロック"
   data-season="混化 秋夏"
   data-rare="エキスパンション"
   data-attribute="災害"
-  data-keyword="展開時"
-  data-role="札除去 季節札除去 直接ダメ"
+  data-role="札除去 季節札除去 直接ダメ 展開時"
 >
   <img data-src="images/card_14_p (74).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12950,8 +12941,7 @@ data-role="ロック"
   data-season="混化 秋冬"
   data-rare="エキスパンション"
   data-attribute="鬼"
-  data-keyword="展開時"
-  data-role="除外加速"
+  data-role="除外加速 展開時"
 >
   <img data-src="images/card_14_p (103).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12966,8 +12956,7 @@ data-role="ロック"
   data-season="混化 春冬"
   data-rare="エキスパンション"
   data-attribute="写真 事件 虹"
-  data-keyword="展開時"
-  data-role="ヒール"
+  data-role="ヒール 展開時"
 >
   <img data-src="images/card_14_p (109).jpg" src="placeholder.jpg" decoding="async" />
 </div>
