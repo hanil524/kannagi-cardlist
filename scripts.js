@@ -3901,7 +3901,7 @@ const deckBuilder = {
     const uniqueCount = Object.keys(attributeCounts).length;
     const attrLabel = document.createElement('div');
     attrLabel.className = 'attribute-unique-label';
-    attrLabel.textContent = `採用属性：${uniqueCount}種`;
+    attrLabel.textContent = `使用属性：${uniqueCount}種`;
     attributeContent.appendChild(attrLabel);
 
     const rows = document.createElement('div');
