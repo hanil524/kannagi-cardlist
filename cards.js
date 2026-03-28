@@ -13205,6 +13205,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2354"
+  data-name="おめんやさん"
+  data-cost="9"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="仮面"
+  data-keyword=""
+  data-role="召喚時 サーチ"
+>
+  <img data-src="images/card_15_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2355"
   data-name="楽しい遊園地(たのしいゆうえんち)"
   data-cost="10"
