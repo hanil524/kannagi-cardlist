@@ -3904,31 +3904,45 @@ const deckBuilder = {
     attrLabel.textContent = `使用属性：${uniqueCount}種`;
     attributeContent.appendChild(attrLabel);
 
-    const rows = document.createElement('div');
-    rows.className = 'attribute-rows two-columns';
-
-    // 左列(上位5件)と右列(6〜10位)を別々のdivに入れる
+    // テーブルで2列表示（全ブラウザ対応）
     const half = Math.ceil(top10.length / 2);
     const leftItems = top10.slice(0, half);
     const rightItems = top10.slice(half);
 
-    [leftItems, rightItems].forEach((colItems) => {
-      const col = document.createElement('div');
-      col.className = 'attr-col';
-      colItems.forEach(([attribute, count]) => {
-        const nameSpan = document.createElement('span');
-        nameSpan.className = 'attr-name';
-        nameSpan.textContent = attribute;
-        const countSpan = document.createElement('span');
-        countSpan.className = 'attr-count';
-        countSpan.textContent = String(count);
-        col.appendChild(nameSpan);
-        col.appendChild(countSpan);
-      });
-      rows.appendChild(col);
-    });
+    const table = document.createElement('table');
+    table.className = 'attr-table';
 
-    attributeContent.appendChild(rows);
+    for (let i = 0; i < leftItems.length; i++) {
+      const tr = document.createElement('tr');
+
+      const tdLName = document.createElement('td');
+      tdLName.className = 'attr-name';
+      tdLName.textContent = leftItems[i][0];
+      tr.appendChild(tdLName);
+
+      const tdLCount = document.createElement('td');
+      tdLCount.className = 'attr-count';
+      tdLCount.textContent = String(leftItems[i][1]);
+      tr.appendChild(tdLCount);
+
+      const tdGap = document.createElement('td');
+      tdGap.className = 'attr-gap';
+      tr.appendChild(tdGap);
+
+      const tdRName = document.createElement('td');
+      tdRName.className = 'attr-name';
+      tdRName.textContent = rightItems[i] ? rightItems[i][0] : '';
+      tr.appendChild(tdRName);
+
+      const tdRCount = document.createElement('td');
+      tdRCount.className = 'attr-count';
+      tdRCount.textContent = rightItems[i] ? String(rightItems[i][1]) : '';
+      tr.appendChild(tdRCount);
+
+      table.appendChild(tr);
+    }
+
+    attributeContent.appendChild(table);
     return attributeContent;
   }
 };
