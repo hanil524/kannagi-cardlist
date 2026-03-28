@@ -6563,17 +6563,18 @@ function openDeckBackupModal() {
     const st = document.createElement('style');
     st.id = 'deck-backup-style';
     st.textContent = `
-    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4;flex:1;overflow-y:auto;overflow-x:hidden;}
+    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4;flex:1;overflow-y:auto;padding:0 3px;box-sizing:border-box;}
     .deck-backup-section-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
     .deck-backup-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;line-height:1.4;max-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch;user-select:all;-webkit-user-select:all}
     .deck-backup-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0;flex-wrap:wrap}
-    .deck-backup-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:13px;line-height:1.4}
+    .deck-backup-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:13px;line-height:1.4;outline:none}
+    .deck-backup-input:focus{box-shadow:0 0 0 2px rgba(255,255,255,.6);border-color:rgba(255,255,255,.45)}
     .deck-backup-body .deck-menu-button{font-size:13px;font-weight:600;padding:6px 10px;height:auto;min-height:32px;line-height:1.2}
     .deck-backup-separator{border:0;border-top:1px solid rgba(255,255,255,.15);margin:4px 0}
     .deck-backup-desc{color:#aaa;font-size:12px;margin:0;line-height:1.4}
     .deck-backup-warning{color:#ff9800;font-size:12px;margin:0;line-height:1.4}
     .deck-backup-body textarea,.deck-backup-body input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
-    .deck-backup-deck-summary{color:#ccc;font-size:12px;margin:2px 0 0 0;line-height:1.3}
+    .deck-backup-deck-summary{color:#ccc;font-size:12px;margin:2px 0 0 0;line-height:1.3;word-break:break-all;overflow-wrap:break-word;}
     `;
     document.head.appendChild(st);
   }
