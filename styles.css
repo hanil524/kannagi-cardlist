@@ -4752,14 +4752,7 @@ body.modal-open {
   box-sizing: border-box;
 }
 
-.attribute-rows.two-columns .attribute-text {
-  display: contents;
-  font-size: 13px;
-  color: white;
-  white-space: nowrap;
-}
-
-.attribute-rows.two-columns .attribute-text::before {
+.attribute-rows.two-columns .attr-name {
   text-align: right;
   font-size: 13px;
   color: white;
@@ -4767,12 +4760,12 @@ body.modal-open {
   padding: 1px 0;
 }
 
-/* 右列ペアの先頭（偶数番目の名前）にだけ左マージンを追加 → ペア間の隙間 */
-.attribute-rows.two-columns .attribute-text:nth-child(even)::before {
+/* 右列の名前（グリッド上で3,7,11...番目）にだけ左マージンを追加 → ペア間の隙間 */
+.attribute-rows.two-columns .attr-name:nth-child(4n+3) {
   margin-left: 24px;
 }
 
-.attribute-rows.two-columns .attribute-text::after {
+.attribute-rows.two-columns .attr-count {
   text-align: left;
   font-size: 13px;
   color: white;

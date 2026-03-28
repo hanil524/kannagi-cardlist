@@ -3914,11 +3914,14 @@ const deckBuilder = {
     const interleaved = leftCol.map((item, i) => [item, rightCol[i]]).flat().filter(Boolean);
 
     interleaved.forEach(([attribute, count]) => {
-      const item = document.createElement('div');
-      item.className = 'attribute-text';
-      item.setAttribute('data-name', attribute);
-      item.setAttribute('data-count', String(count));
-      rows.appendChild(item);
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'attr-name';
+      nameSpan.textContent = attribute;
+      const countSpan = document.createElement('span');
+      countSpan.className = 'attr-count';
+      countSpan.textContent = String(count);
+      rows.appendChild(nameSpan);
+      rows.appendChild(countSpan);
     });
 
     attributeContent.appendChild(rows);
