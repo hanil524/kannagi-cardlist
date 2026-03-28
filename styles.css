@@ -3652,6 +3652,47 @@ body.modal-open {
   /* パディングを幅に含める */
 }
 
+/* デッキ名・枚数ヘッダー */
+.distribution-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white;
+  font-size: clamp(13px, 2.5vw, 15px);
+  line-height: 1.5;
+}
+
+/* デッキ名：飛び出しデザイン（控えめ） */
+.distribution-header-name {
+  flex: 7;
+  font-weight: bold;
+  word-break: break-all;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(70,70,85,0.6);
+  box-shadow:
+    2px 2px 4px rgba(0,0,0,0.4),
+    -1px -1px 3px rgba(255,255,255,0.04);
+}
+
+/* デッキ枚数：凹みデザイン（控えめ） */
+.distribution-header-count {
+  flex: 3;
+  white-space: nowrap;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(20,20,28,0.35);
+  box-shadow:
+    inset 2px 2px 4px rgba(0,0,0,0.3),
+    inset -1px -1px 2px rgba(255,255,255,0.03);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: clamp(12px, 2vw, 13px);
+  font-weight: bold;
+}
+
 /* 各セクションの共通スタイル */
 .cost-distribution,
 .season-distribution,
@@ -3692,13 +3733,39 @@ body.modal-open {
 
 /* コンテンツラッパーを中央配置 */
 .season-content,
-.type-content,
-.attribute-content {
+.type-content {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   flex: 1;
+}
+
+/* 属性コンテンツは縦並びで中央寄せ */
+.attribute-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+/* 採用属性種数ラベル */
+.attribute-unique-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 3px 32px;
+  border-radius: 6px;
+  background: rgba(20,20,28,0.35);
+  box-shadow:
+    inset 2px 2px 4px rgba(0,0,0,0.3),
+    inset -1px -1px 2px rgba(255,255,255,0.03);
 }
 
 /* 季節・札種類のテキスト: display:contentsで親グリッドに参加 */

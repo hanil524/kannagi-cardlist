@@ -3648,6 +3648,21 @@ const deckBuilder = {
     const content = document.createElement('div');
     content.className = 'distribution-content';
 
+    // デッキ名・枚数ヘッダー
+    const deckHeader = document.createElement('div');
+    deckHeader.className = 'distribution-header';
+    const deckId = deckManager.currentDeckId;
+    const deckNameText = (deckManager.decks[deckId] && deckManager.decks[deckId].name) || `デッキ${deckId}`;
+    const deckNameEl = document.createElement('div');
+    deckNameEl.className = 'distribution-header-name';
+    deckNameEl.textContent = deckNameText;
+    const deckCountEl = document.createElement('div');
+    deckCountEl.className = 'distribution-header-count';
+    deckCountEl.textContent = `計${deckBuilder.deck.length}枚`;
+    deckHeader.appendChild(deckNameEl);
+    deckHeader.appendChild(deckCountEl);
+    content.appendChild(deckHeader);
+
     // コスト分布エリア
     const costContent = this.createCostDistribution();
     content.appendChild(costContent);
@@ -3881,6 +3896,13 @@ const deckBuilder = {
     const top10 = Object.entries(attributeCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 10);
+
+    // 採用属性種数ラベル
+    const uniqueCount = Object.keys(attributeCounts).length;
+    const attrLabel = document.createElement('div');
+    attrLabel.className = 'attribute-unique-label';
+    attrLabel.textContent = `採用属性：${uniqueCount}種`;
+    attributeContent.appendChild(attrLabel);
 
     const rows = document.createElement('div');
     rows.className = 'attribute-rows two-columns';
