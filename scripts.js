@@ -4317,7 +4317,7 @@ function resetDeck(confirmed) {
     const currentDeckId = deckManager.currentDeckId;
     const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
     if (button) {
-      button.textContent = `デッキ${currentDeckId}`;
+      (button.querySelector('span') || button).textContent = `デッキ${currentDeckId}`;
       // デッキマネージャーのデータも更新
       if (deckManager.decks[currentDeckId]) {
         deckManager.decks[currentDeckId].name = `デッキ${currentDeckId}`;
@@ -5223,7 +5223,7 @@ const deckManager = {
         Object.entries(this.decks).forEach(([deckId, deck]) => {
           const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
           if (button && deck.name) {
-            button.textContent = deck.name;
+            (button.querySelector('span') || button).textContent = deck.name;
           }
         });
       }
@@ -5291,7 +5291,7 @@ const deckManager = {
         return;
       }
       const newName = input.value.trim() || originalName;
-      button.textContent = newName;
+      (button.querySelector('span') || button).textContent = newName;
 
       if (this.decks[deckId]) {
         this.decks[deckId].name = newName;
@@ -5789,7 +5789,7 @@ function resetSpecificDeck(deckId, confirmed) {
       // デッキ名ボタンのテキストを更新
       const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
       if (button) {
-        button.textContent = `デッキ${deckId}`;
+        (button.querySelector('span') || button).textContent = `デッキ${deckId}`;
       }
 
       // プレビュー画像を非表示
@@ -6114,7 +6114,7 @@ function replaceDeckWithMap(map) {
   // 保存と名称変更
   const currentDeckId = deckManager.currentDeckId;
   const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
-  if (button) button.textContent = 'デッキコードから作成';
+  if (button) (button.querySelector('span') || button).textContent = 'デッキコードから作成';
   if (!deckManager.decks[currentDeckId]) deckManager.decks[currentDeckId] = { name: 'デッキコードから作成', cards: [] };
   deckManager.decks[currentDeckId].name = 'デッキコードから作成';
   deckManager.saveDeck(currentDeckId);
@@ -6536,7 +6536,7 @@ function applyBackupData(backupData) {
 
     // ボタン名を更新
     const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
-    if (button) button.textContent = deckInfo.name || ('デッキ' + deckId);
+    if (button) (button.querySelector('span') || button).textContent = deckInfo.name || ('デッキ' + deckId);
   }
 
   // deckOrderがあれば復元
@@ -6563,7 +6563,7 @@ function openDeckBackupModal() {
     const st = document.createElement('style');
     st.id = 'deck-backup-style';
     st.textContent = `
-    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4}
+    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4;flex:1;overflow-y:auto;overflow-x:hidden;}
     .deck-backup-section-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
     .deck-backup-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;line-height:1.4;max-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch;user-select:all;-webkit-user-select:all}
     .deck-backup-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0;flex-wrap:wrap}
@@ -6738,12 +6738,16 @@ function openDeckBackupModal() {
       // デッキサマリー表示
       const summaryEl = modal.querySelector('#deck-backup-deck-summary');
       if (summaryEl) {
-        const deckEntries = Object.entries(deckManager.decks);
+        const order = (Array.isArray(deckManager.deckOrder) && deckManager.deckOrder.length)
+          ? deckManager.deckOrder
+          : Object.keys(deckManager.decks).map(Number);
         const lines = [];
-        deckEntries.forEach(([id, deck]) => {
+        order.forEach((id) => {
+          const deck = deckManager.decks[id];
           if (deck) {
             const cardCount = Array.isArray(deck.cards) ? deck.cards.length : 0;
-            const name = deck.name || ('デッキ' + id);
+            const fullName = deck.name || ('デッキ' + id);
+            const name = fullName.length > 10 ? fullName.slice(0, 10) + '…' : fullName;
             if (cardCount > 0) {
               lines.push(`${name}: ${cardCount}枚`);
             }

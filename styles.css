@@ -21,7 +21,7 @@ body {
 }
 
 header {
-  background: rgba(6,6,10,0.96);
+  background: rgba(6, 6, 10, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: white;
@@ -33,8 +33,8 @@ header {
   width: 100%;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 4px 24px rgba(0,0,0,0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 4px 24px rgba(0, 0, 0, 0.7);
   transition: padding-right 0.3s ease;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
@@ -66,7 +66,7 @@ header a {
 
 .mobile-header {
   display: none;
-  background: rgba(8,8,14,0.97);
+  background: rgba(8, 8, 14, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   color: white;
@@ -78,8 +78,8 @@ header a {
   left: 0;
   z-index: 1000;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
   -webkit-backface-visibility: hidden;
@@ -284,14 +284,14 @@ main {
   font-size: 13px;
   gap: 10px;
   font-weight: bold;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
   margin: 7px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* フィルターボタン */
@@ -325,13 +325,13 @@ main {
   height: 28px;
   padding: 0 12px;
   border-radius: 25px;
-  background: linear-gradient(135deg, rgba(38,40,95,0.95) 0%, rgba(62,66,148,0.95) 50%, rgba(78,82,175,0.9) 100%);
-  border: 1px solid rgba(110,115,210,0.3);
+  background: linear-gradient(135deg, rgba(38, 40, 95, 0.95) 0%, rgba(62, 66, 148, 0.95) 50%, rgba(78, 82, 175, 0.9) 100%);
+  border: 1px solid rgba(110, 115, 210, 0.3);
   color: #ffffff;
   font-weight: bold;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   margin-right: 0;
 }
 
@@ -341,8 +341,8 @@ main {
 
 @media (hover: hover) and (pointer: fine) {
   .limit-release:hover {
-    background: linear-gradient(135deg, rgba(52,55,125,0.98) 0%, rgba(78,83,172,0.98) 50%, rgba(95,100,205,0.95) 100%);
-    box-shadow: 0 4px 16px rgba(75,80,200,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    background: linear-gradient(135deg, rgba(52, 55, 125, 0.98) 0%, rgba(78, 83, 172, 0.98) 50%, rgba(95, 100, 205, 0.95) 100%);
+    box-shadow: 0 4px 16px rgba(75, 80, 200, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -1040,15 +1040,15 @@ header input::placeholder,
 
 .filter-buttons button,
 .sort-buttons button {
-  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
   color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   padding: 6px 8px;
   font-size: 12px;
   letter-spacing: 1.2px;
   transition: all 0.18s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   font-weight: bold;
 }
 
@@ -1056,27 +1056,27 @@ header input::placeholder,
 
   .filter-buttons button:hover,
   .sort-buttons button:hover {
-    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
+    background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 5px 14px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
-    border-color: rgba(255,255,255,0.16);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.16);
   }
 }
 
 .filter-buttons button:active {
-  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
+  background: linear-gradient(180deg, rgba(55, 55, 60, 0.95) 0%, rgba(42, 42, 47, 0.95) 100%);
   color: #ffffff;
   transform: translateY(1px);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
-  border-color: rgba(255,255,255,0.08);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .filter-buttons button.active,
 .sort-buttons button.active {
-  background: linear-gradient(180deg, rgba(155,28,28,0.92) 0%, rgba(125,18,18,0.92) 100%);
+  background: linear-gradient(180deg, rgba(155, 28, 28, 0.92) 0%, rgba(125, 18, 18, 0.92) 100%);
   color: #ffffff;
-  border-color: rgba(200,55,55,0.45);
-  box-shadow: 0 2px 10px rgba(160,25,25,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  border-color: rgba(200, 55, 55, 0.45);
+  box-shadow: 0 2px 10px rgba(160, 25, 25, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* ボタングループのラベル */
@@ -1090,22 +1090,22 @@ header input::placeholder,
 
 /* フィルター解除ボタン */
 button[onclick='resetFilters()'] {
-  background: linear-gradient(180deg, rgba(172,52,52,0.92) 0%, rgba(140,35,35,0.92) 100%);
+  background: linear-gradient(180deg, rgba(172, 52, 52, 0.92) 0%, rgba(140, 35, 35, 0.92) 100%);
   color: #ffffff;
   font-weight: bold;
   border-radius: 25px;
   padding: 6px 16px;
-  border: 1px solid rgba(210,70,70,0.3);
-  box-shadow: 0 2px 8px rgba(140,30,30,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid rgba(210, 70, 70, 0.3);
+  box-shadow: 0 2px 8px rgba(140, 30, 30, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.18s ease;
   letter-spacing: 1.2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   button[onclick='resetFilters()']:hover {
-    background: linear-gradient(180deg, rgba(195,65,65,0.95) 0%, rgba(162,45,45,0.95) 100%);
+    background: linear-gradient(180deg, rgba(195, 65, 65, 0.95) 0%, rgba(162, 45, 45, 0.95) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 5px 16px rgba(160,35,35,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+    box-shadow: 0 5px 16px rgba(160, 35, 35, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
 }
 
@@ -1383,16 +1383,16 @@ button[onclick='resetFilters()']:active {
 }
 
 .modal-content {
-  background: rgba(42,42,50,0.97);
+  background: rgba(42, 42, 50, 0.97);
   margin: 10vh auto;
   padding: 20px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   width: calc(90% - 12px);
   max-width: 600px;
   max-height: 60vh;
   position: relative;
   border-radius: 10px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
   /* 縦方向に並べる */
@@ -1776,9 +1776,9 @@ body.modal-open {
 }
 
 .sort-buttons button.active {
-  background: linear-gradient(180deg, rgba(155,28,28,0.92) 0%, rgba(125,18,18,0.92) 100%);
-  border-color: rgba(200,55,55,0.45);
-  box-shadow: 0 2px 10px rgba(160,25,25,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  background: linear-gradient(180deg, rgba(155, 28, 28, 0.92) 0%, rgba(125, 18, 18, 0.92) 100%);
+  border-color: rgba(200, 55, 55, 0.45);
+  box-shadow: 0 2px 10px rgba(160, 25, 25, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: white;
 }
 
@@ -1952,11 +1952,11 @@ body.modal-open {
   width: 100%;
   z-index: 1000;
   padding: 3px 8px;
-  background: rgba(38,38,44,0.97);
+  background: rgba(38, 38, 44, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.7), 0 1px 0 rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.04);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1966,9 +1966,9 @@ body.modal-open {
 
 .deck-menu-button {
   padding: 0 10px;
-  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
   color: white;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.18s ease;
@@ -1983,25 +1983,26 @@ body.modal-open {
   line-height: 1;
   box-sizing: border-box;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .deck-menu-button:hover,
   .deck-counter:hover {
-    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
-    border-color: rgba(255,255,255,0.16);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+    background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     transform: translateY(-1px);
   }
 }
 
 .deck-menu-button:active,
 .deck-counter:active {
-  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+  background: linear-gradient(180deg, rgba(55, 55, 60, 0.95) 0%, rgba(42, 42, 47, 0.95) 100%);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
   transform: translateY(0);
-  border-color: rgba(255,255,255,0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* スマートフォン対応 */
@@ -2028,14 +2029,14 @@ body.modal-open {
 /* デッキ画面 枚数カウンター用のスタイル */
 .deck-counter {
   padding: 0 10px;
-  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
   color: white;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   font-weight: bold;
   font-size: clamp(12px, 1.9vh, 14px);
   min-width: 36px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
   transition: all 0.18s ease;
   height: var(--deck-menu-height);
@@ -2225,7 +2226,7 @@ body.modal-open {
 /* 共通のホバー効果（カード一覧とデッキ画面） */
 .card:hover,
 .deck-card:hover {
-  box-shadow: 0 0 18px rgba(255,255,255,0.28), 0 8px 28px rgba(0,0,0,0.6);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.28), 0 8px 28px rgba(0, 0, 0, 0.6);
 }
 
 /* ボタンのホバー時は親要素のホバー効果を無効化 */
@@ -2404,11 +2405,11 @@ body.modal-open {
   width: 90%;
   max-width: 900px;
   margin: auto;
-  background: rgba(42,42,50,0.7);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(42, 42, 50, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* 零探しヘッダー */
@@ -3094,14 +3095,15 @@ body.modal-open {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(42,42,50,0.97);
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 20px;
+  background: rgba(42, 42, 50, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 10px;
   border-radius: 8px;
   width: 90%;
-  max-width: 400px;
+  max-width: min(400px, calc(100vw - 32px));
   max-height: 80vh;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+  box-sizing: border-box;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
 }
@@ -3136,11 +3138,11 @@ body.modal-open {
   transform: translateY(-50%);
   z-index: 1;
   padding: 4px 10px;
-  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   color: #e0e0e0;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s ease;
@@ -3150,19 +3152,19 @@ body.modal-open {
   appearance: none;
   min-height: 28px;
   line-height: 1.2;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .deck-backup-button:hover {
-  background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
-  border-color: rgba(255,255,255,0.16);
+  background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+  border-color: rgba(255, 255, 255, 0.16);
   color: #fff;
   transform: translateY(calc(-50% - 1px));
 }
 
 .deck-backup-button:active {
-  background: linear-gradient(180deg, rgba(55,55,60,0.95) 0%, rgba(42,42,47,0.95) 100%);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+  background: linear-gradient(180deg, rgba(55, 55, 60, 0.95) 0%, rgba(42, 42, 47, 0.95) 100%);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
 }
 
 /* 閉じるボタンの位置調整 */
@@ -3174,11 +3176,11 @@ body.modal-open {
   z-index: 1;
   width: 36px;
   height: 36px;
-  background: linear-gradient(180deg, rgba(88,88,93,0.92) 0%, rgba(68,68,73,0.92) 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: #e0e0e0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   font-size: 24px;
   cursor: pointer;
   display: flex;
@@ -3198,8 +3200,8 @@ body.modal-open {
 /* ホバー時のエフェクト（PC用） */
 @media (min-width: 769px) {
   .deck-list-close:hover {
-    background: linear-gradient(180deg, rgba(108,108,113,0.95) 0%, rgba(88,88,93,0.95) 100%);
-    border-color: rgba(255,255,255,0.16);
+    background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+    border-color: rgba(255, 255, 255, 0.16);
     color: #ffffff;
   }
 }
@@ -3207,18 +3209,21 @@ body.modal-open {
 .deck-list-items {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 4px;
   overflow-y: auto;
-  /* 縦方向のスクロールを有効化 */
   flex-grow: 1;
-  /* 残りのスペースを全て使用 */
   position: relative;
 }
 
 .deck-list-item {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   align-items: center;
+  padding: 2px 4px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-sizing: border-box;
   transition: transform 0.16s ease;
 }
 
@@ -3231,9 +3236,9 @@ body.modal-open {
 }
 
 .deck-list-item.dragging {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
-  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   background-color: rgba(58, 58, 58, 0.9);
+  border-color: rgba(255,255,255,0.12);
   border-radius: 6px;
 }
 
@@ -3269,18 +3274,27 @@ body.modal-open {
 
 .deck-select-button {
   flex-grow: 1;
-  padding: 9px 15px;
-  border: none;
-  border-radius: 4px;
-  background-color: #3a3a3a;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #464650 0%, #383842 100%);
   color: white;
   text-align: left;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-left: 4px solid transparent;
-  /* アクティブ状態との整合性のため */
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
   transition: all 0.2s ease;
+}
+
+.deck-select-button span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: normal;
 }
 
 .deck-name-input {
@@ -3303,16 +3317,15 @@ body.modal-open {
 }
 
 .deck-select-button:hover {
-  background-color: #4a4a4a;
+  background: linear-gradient(180deg, #525260 0%, #424250 100%);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 /* deck-list-modal 内の選択中デッキのスタイルを強調 */
 .deck-select-button.active {
-  background-color: #4a4a4a;
-  border-left: 4px solid #ec2f2f;
-  /* 赤いバーを追加 */
-  box-shadow: 0 0 10px rgba(236, 47, 47, 0.2);
-  /* 赤い光彩効果 */
+  background: linear-gradient(180deg, #4a3838 0%, #3a2828 100%);
+  border-color: transparent;
+  box-shadow: inset 0 0 0 2px rgba(236,47,47,0.55), 0 0 8px rgba(236,47,47,0.18), 0 2px 6px rgba(0,0,0,0.4);
   font-weight: bold;
   color: #ffffff;
 }
@@ -3321,20 +3334,18 @@ body.modal-open {
 .deck-edit-button {
   width: 36px;
   height: 36px;
-  /* デッキ名ボタンと同じ高さに */
-  border: none;
-  border-radius: 4px;
-  background-color: #3a3a3a;
-  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #464650 0%, #383842 100%);
+  color: #999;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  /* アイコンを縦方向中央に */
   justify-content: center;
-  /* アイコンを横方向中央に */
   align-self: center;
-  /* ボタン自体を親要素の中央に */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
 
 .deck-edit-button i {
@@ -3634,9 +3645,9 @@ body.modal-open {
 }
 
 .distribution-content {
-  background: rgba(42,42,50,0.97);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06);
+  background: rgba(42, 42, 50, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   padding: 20px 30px;
   border-radius: 12px;
   width: 90%;
@@ -3671,10 +3682,10 @@ body.modal-open {
   text-align: center;
   padding: 6px 10px;
   border-radius: 8px;
-  background: rgba(70,70,85,0.6);
+  background: rgba(70, 70, 85, 0.6);
   box-shadow:
-    2px 2px 4px rgba(0,0,0,0.4),
-    -1px -1px 3px rgba(255,255,255,0.04);
+    2px 2px 4px rgba(0, 0, 0, 0.4),
+    -1px -1px 3px rgba(255, 255, 255, 0.04);
 }
 
 /* デッキ枚数：凹みデザイン（控えめ） */
@@ -3684,10 +3695,10 @@ body.modal-open {
   text-align: center;
   padding: 6px 8px;
   border-radius: 8px;
-  background: rgba(20,20,28,0.35);
+  background: rgba(20, 20, 28, 0.35);
   box-shadow:
-    inset 2px 2px 4px rgba(0,0,0,0.3),
-    inset -1px -1px 2px rgba(255,255,255,0.03);
+    inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.03);
   color: rgba(255, 255, 255, 0.65);
   font-size: clamp(12px, 2vw, 13px);
   font-weight: bold;
@@ -3752,10 +3763,10 @@ body.modal-open {
   text-align: center;
   padding: 3px 32px;
   border-radius: 6px;
-  background: rgba(20,20,28,0.35);
+  background: rgba(20, 20, 28, 0.35);
   box-shadow:
-    inset 2px 2px 4px rgba(0,0,0,0.3),
-    inset -1px -1px 2px rgba(255,255,255,0.03);
+    inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.03);
   margin-bottom: 8px;
 }
 
@@ -4297,16 +4308,18 @@ body.modal-open {
 .deck-delete-button {
   width: 36px;
   height: 36px;
-  border: none;
-  border-radius: 4px;
-  background-color: #3a3a3a;
-  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #464650 0%, #383842 100%);
+  color: #999;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
 
 .deck-delete-button i {
