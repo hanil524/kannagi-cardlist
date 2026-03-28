@@ -3722,14 +3722,6 @@ body.modal-open {
   width: auto;
 }
 
-/* 属性行は従来のflexレイアウトを維持 */
-.attribute-rows {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1px;
-  width: auto;
-}
 
 /* コンテンツラッパーを中央配置 */
 .season-content,
@@ -3741,7 +3733,7 @@ body.modal-open {
   flex: 1;
 }
 
-/* 属性コンテンツは縦並びで中央寄せ */
+/* コンテンツラッパーを中央配置 */
 .attribute-content {
   display: flex;
   flex-direction: column;
@@ -3749,8 +3741,6 @@ body.modal-open {
   align-items: center;
   width: 100%;
   flex: 1;
-  gap: 8px;
-  padding: 6px 0;
 }
 
 /* 採用属性種数ラベル */
@@ -3766,6 +3756,7 @@ body.modal-open {
   box-shadow:
     inset 2px 2px 4px rgba(0,0,0,0.3),
     inset -1px -1px 2px rgba(255,255,255,0.03);
+  margin-bottom: 8px;
 }
 
 /* 季節・札種類のテキスト: display:contentsで親グリッドに参加 */
@@ -3778,18 +3769,6 @@ body.modal-open {
   line-height: 1.1;
 }
 
-/* 属性テキストは従来のグリッドを維持 */
-.attribute-text {
-  font-size: 14px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  white-space: nowrap;
-  color: white;
-  width: auto;
-  line-height: 1.1;
-  padding: 1px 0;
-}
 
 /* 季節・札種類の擬似要素(共有グリッドのセルとして配置) */
 .season-text::before,
@@ -3814,18 +3793,6 @@ body.modal-open {
   padding: 1px 0;
 }
 
-/* 属性テキストの擬似要素 */
-.attribute-text::before {
-  content: attr(data-name);
-  text-align: right;
-  margin-right: 4px;
-}
-
-.attribute-text::after {
-  content: attr(data-count);
-  text-align: left;
-  margin-left: 1px;
-}
 
 /* コスト分布エリアはタイトル不要 */
 .cost-distribution .area-title {
@@ -4157,8 +4124,7 @@ body.modal-open {
   }
 
   .season-rows,
-  .type-rows,
-  .attribute-rows {
+  .type-rows {
     width: auto;
   }
 
@@ -4179,11 +4145,6 @@ body.modal-open {
   .type-text::before,
   .type-text::after {
     font-size: 13px;
-  }
-
-  .attribute-text {
-    font-size: 13px;
-    min-width: 100px;
   }
 
   .cost-graph-container {
@@ -4281,8 +4242,7 @@ body.modal-open {
 
   /* テキスト間をさらに詰める */
   .season-rows,
-  .type-rows,
-  .attribute-rows {
+  .type-rows {
     gap: 0px;
   }
 
@@ -4294,9 +4254,6 @@ body.modal-open {
     font-size: 12px;
   }
 
-  .attribute-text {
-    font-size: 12px;
-  }
 }
 
 /* タブレット用のスタイル追加 */

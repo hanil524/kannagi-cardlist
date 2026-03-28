@@ -3885,9 +3885,10 @@ const deckBuilder = {
 
     const attributeCounts = {};
     (this.deck || []).forEach((card) => {
-      const attrs = (card && card.dataset && card.dataset.attribute) ? String(card.dataset.attribute) : '';
+      if (!card) return;
+      const attrs = card.getAttribute ? card.getAttribute('data-attribute') : (card.dataset && card.dataset.attribute);
       if (!attrs) return;
-      attrs.split(' ').forEach((attr) => {
+      String(attrs).split(' ').forEach((attr) => {
         if (!attr) return;
         attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
       });
@@ -5162,10 +5163,13 @@ const deckManager = {
       deckBuilder.deck = deck.cards.map((cardData) => {
         const card = document.createElement('div');
         card.className = 'card';
-        Object.assign(card.dataset, cardData.dataset);
+        Object.keys(cardData.dataset).forEach((key) => {
+          const attrName = 'data-' + key.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase());
+          card.setAttribute(attrName, cardData.dataset[key]);
+        });
         const img = document.createElement('img');
         img.src = cardData.src;
-        img.alt = cardData.dataset.name;
+        img.alt = cardData.dataset.name || '';
         card.appendChild(img);
         return card;
       });
