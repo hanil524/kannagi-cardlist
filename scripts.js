@@ -3907,21 +3907,25 @@ const deckBuilder = {
     const rows = document.createElement('div');
     rows.className = 'attribute-rows two-columns';
 
-    // 左列(0〜4位)と右列(5〜9位)を交互に追加 → 左列に上位5件、右列に下位5件が縦に並ぶ
+    // 左列(上位5件)と右列(6〜10位)を別々のdivに入れる
     const half = Math.ceil(top10.length / 2);
-    const leftCol = top10.slice(0, half);
-    const rightCol = top10.slice(half);
-    const interleaved = leftCol.map((item, i) => [item, rightCol[i]]).flat().filter(Boolean);
+    const leftItems = top10.slice(0, half);
+    const rightItems = top10.slice(half);
 
-    interleaved.forEach(([attribute, count]) => {
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'attr-name';
-      nameSpan.textContent = attribute;
-      const countSpan = document.createElement('span');
-      countSpan.className = 'attr-count';
-      countSpan.textContent = String(count);
-      rows.appendChild(nameSpan);
-      rows.appendChild(countSpan);
+    [leftItems, rightItems].forEach((colItems) => {
+      const col = document.createElement('div');
+      col.className = 'attr-col';
+      colItems.forEach(([attribute, count]) => {
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'attr-name';
+        nameSpan.textContent = attribute;
+        const countSpan = document.createElement('span');
+        countSpan.className = 'attr-count';
+        countSpan.textContent = String(count);
+        col.appendChild(nameSpan);
+        col.appendChild(countSpan);
+      });
+      rows.appendChild(col);
     });
 
     attributeContent.appendChild(rows);

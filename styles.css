@@ -4741,36 +4741,40 @@ body.modal-open {
 
 /* デッキの詳細 → 属性の2列表示 */
 .attribute-rows.two-columns {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  /* 名前1, 数値1, 名前2, 数値2 の4列 */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
   justify-content: center;
-  gap: 1px 4px;
-  width: auto;
-  margin: 0 auto;
-  padding: 0;
+  gap: 0 20px;
+  width: 100%;
   box-sizing: border-box;
 }
 
-.attribute-rows.two-columns .attr-name {
+.attr-col {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 6px;
+  -webkit-align-items: baseline;
+  align-items: baseline;
+  -webkit-align-content: start;
+  align-content: start;
+}
+
+.attr-name {
+  font-size: 13px;
+  color: white;
+  white-space: nowrap;
   text-align: right;
+}
+
+.attr-count {
   font-size: 13px;
   color: white;
   white-space: nowrap;
-  padding: 1px 0;
-}
-
-/* 右列の名前（グリッド上で3,7,11...番目）にだけ左マージンを追加 → ペア間の隙間 */
-.attribute-rows.two-columns .attr-name:nth-child(4n+3) {
-  margin-left: 24px;
-}
-
-.attribute-rows.two-columns .attr-count {
   text-align: left;
-  font-size: 13px;
-  color: white;
-  white-space: nowrap;
-  padding: 1px 0;
 }
 
 /* デフォルトはスクロールバー非表示 */
