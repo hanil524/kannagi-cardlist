@@ -13077,6 +13077,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2324"
+  data-name="熊(くま)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="動物 災害"
+  data-keyword=""
+  data-role="バフ ヒール"
+>
+  <img data-src="images/card_15_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2326"
   data-name="猫面の神(みょうめんのかみ)"
   data-cost="7"
