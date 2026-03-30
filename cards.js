@@ -13157,6 +13157,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2341"
+  data-name="とおりゃんせ"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="噂 不吉"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_15_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2343"
   data-name="花面の耳打ち(かめんのみみうち)"
   data-cost="0"
