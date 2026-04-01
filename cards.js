@@ -13221,6 +13221,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2349"
+  data-name="遊具のある公園(ゆうぐのあるこうえん)"
+  data-cost="4"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="園 視線"
+  data-keyword=""
+  data-role="召喚時 サーチ"
+>
+  <img data-src="images/card_15_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2350"
   data-name="処刑場(しょけいじょう)"
   data-cost="5"
@@ -13330,6 +13346,22 @@ data-role="ロック"
   data-role="直接ダメ"
 >
   <img data-src="images/card_15_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2368"
+  data-name="不気味な遊具(ぶきみなゆうぐ)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="園 視線"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_15_p (32).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
