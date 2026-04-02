@@ -13045,6 +13045,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2313"
+  data-name="凪(なぎ)"
+  data-cost="8"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="海 災害"
+  data-keyword=""
+  data-role="常時 力固定 バフ"
+>
+  <img data-src="images/card_15_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2322"
   data-name="黒犬(こっけん)"
   data-cost="2"
