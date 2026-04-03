@@ -692,7 +692,7 @@ main,
   width: 50px;
   height: 50px;
   background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-  color: #e0e0e0;
+  color: #c0392b;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -701,12 +701,12 @@ main,
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
-  font-weight: bold;
+  font-weight: 900;
   font-size: 10px;
   letter-spacing: 0.5px;
 }
@@ -729,11 +729,11 @@ main,
   content: '';
   width: 10px;
   height: 10px;
-  border-top: 3px solid #e0e0e0;
-  border-right: 3px solid #e0e0e0;
+  border-top: 3px solid #c0392b;
+  border-right: 3px solid #c0392b;
   border-radius: 2px;
   transform: rotate(-45deg);
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 @media (min-width: 768px) {
@@ -2120,7 +2120,7 @@ body.modal-open {
   width: 50px;
   height: 50px;
   background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-  color: #e0e0e0;
+  color: #c0392b;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -2129,15 +2129,14 @@ body.modal-open {
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 900;
   letter-spacing: 0.5px;
-  /* 文字間のスペース */
-  padding-left: 1.5px;
-  /* ボタン内部の文字、位置調整 */
+  text-indent: 0.5px;
+  padding: 0;
 }
 
 .deck-button:hover {
@@ -2892,7 +2891,7 @@ body.modal-open {
   width: 50px;
   height: 50px;
   background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-  color: #e0e0e0;
+  color: #c0392b;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -2901,15 +2900,14 @@ body.modal-open {
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 2001;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 900;
+  font-size: 15px;
   letter-spacing: 1.5px;
+  text-indent: 1.5px;
   padding: 0;
-  padding-left: 2.5px;
-  text-indent: 0;
   text-align: center;
 }
 
