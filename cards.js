@@ -2575,7 +2575,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="春"
 data-type="道具札"
-data-role=""
+data-role="バニラ"
 data-keyword=""
 data-attribute="動物 人形"
 >
