@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+
+# Service Workerはページではないのでクロール不要
+Disallow: /sw.js
+
 Sitemap: https://hanil524.github.io/kannagi-cardlist/sitemap.xml

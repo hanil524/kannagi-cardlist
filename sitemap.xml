@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- メインページ（カード一覧） -->
   <url>
     <loc>https://hanil524.github.io/kannagi-cardlist/</loc>
-    <lastmod>2024-07-11</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <!-- 零探しチェッカー -->
+  <url>
+    <loc>https://hanil524.github.io/kannagi-cardlist/0cost-checker/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 巫バトル -->
+  <url>
+    <loc>https://hanil524.github.io/kannagi-cardlist/kannagi_battle/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- プライバシーポリシー -->
+  <url>
+    <loc>https://hanil524.github.io/kannagi-cardlist/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- 免責事項 -->
+  <url>
+    <loc>https://hanil524.github.io/kannagi-cardlist/disclaimer.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
