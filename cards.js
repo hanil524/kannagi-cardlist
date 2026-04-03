@@ -13427,6 +13427,22 @@ data-role="ロック"
 >
   <img data-src="images/card_15_p (14).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2382"
+  data-name="画材(がざい)"
+  data-cost="0"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="写真"
+  data-keyword=""
+  data-role="バニラ 魂加速"
+>
+  <img data-src="images/card_15_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
