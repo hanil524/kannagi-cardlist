@@ -5120,9 +5120,11 @@ body.modal-open {
   transition: color 0.2s;
 }
 
-.footer-links a:hover {
-  color: #fff;
-  text-decoration: underline;
+@media (hover: hover) {
+  .footer-links a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
 }
 
 .footer-separator {
