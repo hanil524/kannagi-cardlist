@@ -11021,7 +11021,7 @@ data-role="ロック"
   data-rare="SR"
   data-attribute="七不思議"
   data-keyword=""
-  data-role=""
+  data-role="バニラ"
 >
   <img data-src="images/card_13_p (56).jpg" src="placeholder.jpg" decoding="async" />
 </div>
