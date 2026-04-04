@@ -429,7 +429,56 @@ const updateNavigationButtons = () => {
   } else {
     nextButton.classList.remove('visible');
   }
+
+  // ボタン位置を更新
+  positionNavButtons();
 };
+
+// ナビゲーションボタンを画像の左右端に配置する
+const positionNavButtons = () => {
+  const modalImage = document.getElementById('modal-image');
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+  const modal = document.getElementById('image-modal');
+
+  if (!modalImage || !prevButton || !nextButton || !modal || modal.style.display === 'none') return;
+
+  const imgRect = modalImage.getBoundingClientRect();
+
+  // 画像がまだレンダリングされていない場合はスキップ
+  if (imgRect.width === 0 || imgRect.height === 0) return;
+
+  const buttonGap = 6; // 画像端からの距離(px)
+
+  // prevボタン: 画像の左端の少し外側
+  const prevWidth = prevButton.offsetWidth || 50;
+  prevButton.style.left = (imgRect.left - prevWidth - buttonGap) + 'px';
+  prevButton.style.right = 'auto';
+  prevButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+
+  // nextボタン: 画像の右端の少し外側
+  nextButton.style.left = (imgRect.right + buttonGap) + 'px';
+  nextButton.style.right = 'auto';
+  nextButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+
+  // 画面外にはみ出す場合は画像の端に重ねる（最小限のオーバーラップ）
+  const viewportWidth = window.innerWidth;
+  if (imgRect.left - prevWidth - buttonGap < 0) {
+    prevButton.style.left = '2px';
+  }
+  if (imgRect.right + buttonGap + (nextButton.offsetWidth || 50) > viewportWidth) {
+    nextButton.style.left = 'auto';
+    nextButton.style.right = '2px';
+  }
+};
+
+// リサイズ時にボタン位置を更新
+window.addEventListener('resize', () => {
+  const modal = document.getElementById('image-modal');
+  if (modal && modal.style.display !== 'none') {
+    positionNavButtons();
+  }
+});
 
 // フィルター条件を保持するオブジェクト
 const filters = {
@@ -2500,16 +2549,19 @@ const openImageModal = (src) => {
     modalImage.style.transition = 'opacity 0.3s ease';
     modalImage.style.opacity = '1';
 
-    // 画像のロード完了後にナビゲーションボタンを表示
+    // 画像のロード完了後にナビゲーションボタンを表示・位置調整
     modalImage.onload = () => {
       updateNavigationButtons();
       preloadAdjacentImages();
+      // 画像レンダリング後にボタン位置を確定
+      requestAnimationFrame(() => positionNavButtons());
     };
 
     // 既にキャッシュされている場合のためのフォールバック
     if (modalImage.complete) {
       updateNavigationButtons();
       preloadAdjacentImages();
+      requestAnimationFrame(() => positionNavButtons());
     }
   });
 };
@@ -3008,6 +3060,7 @@ const showNextImage = () => {
 
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
+      modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
       modalImage.src = src;
     }
 
@@ -3076,6 +3129,7 @@ const showPreviousImage = () => {
 
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
+      modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
       modalImage.src = src;
     }
 

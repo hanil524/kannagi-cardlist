@@ -450,7 +450,7 @@ main,
   opacity: 1;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1540px) {
   .card {
     flex-basis: calc(25% - 10px);
   }
@@ -486,8 +486,9 @@ main,
   }
 }
 
-/* タブレット表示 */
-@media (max-width: 1024px) {
+
+/* タブレット〜中間PC表示 */
+@media (max-width: 1540px) {
   .card {
     width: calc(25% - 10px);
     /* 4列 */
@@ -1192,8 +1193,8 @@ button[onclick='resetFilters()']:active {
 
 /* モーダル内の画像設定 */
 .image-modal img {
-  max-width: 95%;
-  max-height: 90vh;
+  max-width: 80vw;
+  max-height: 80vh;
   /* Safari UI要素を考慮した高さ調整 */
   max-height: calc(100vh - env(safe-area-inset-bottom) - env(safe-area-inset-top));
   opacity: 1;
@@ -1223,8 +1224,8 @@ button[onclick='resetFilters()']:active {
 /* PC表示時の画像サイズを調整 */
 @media (min-width: 769px) {
   .image-modal img {
-    max-width: 70%;
-    max-height: 70vh;
+    max-width: 40vw;
+    max-height: 80vh;
   }
 }
 
@@ -1237,11 +1238,8 @@ button[onclick='resetFilters()']:active {
 
   .image-modal img {
     width: auto;
-    /* 幅を自動調整 */
     height: auto;
-    /* 高さを自動調整 */
-    max-width: 80%;
-    /* 最大幅を画面幅に */
+    max-width: 80vw;
   }
 }
 
@@ -1824,21 +1822,20 @@ body.modal-open {
 
 /* 画像を前後送り */
 .image-nav-button {
-  opacity: 0;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  opacity: 0;
   background: rgba(0, 0, 0, 0.5);
   color: white;
-  border: none;
-  padding: 25px 25px;
-  /* ボタンサイズを大きく */
+  border: 2px solid #ffffff28;
+  padding: 25px 18px;
   font-size: 24px;
-  /* 矢印を大きく */
   cursor: pointer;
   z-index: 2501;
   display: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, left 0.15s ease, right 0.15s ease;
+  border-radius: 10px;
 }
 
 .image-nav-button.visible {
@@ -1850,39 +1847,12 @@ body.modal-open {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.image-nav-button.prev {
-  left: 30%;
-  /* カードの横に配置 */
-  border-radius: 10px;
-}
-
-.image-nav-button.next {
-  right: 30%;
-  /* カードの横に配置 */
-  border-radius: 10px;
-}
-
 /* スマホでの配置 */
 @media (max-width: 768px) {
-  .image-nav-button.prev {
-    left: 0;
-    border-radius: 0 5px 5px 0;
-    padding: 35px 18px;
-    /* スマホでより大きく */
-  }
-
-  .image-nav-button.next {
-    right: 0;
-    border-radius: 5px 0 0 5px;
-    padding: 35px 18px;
-    /* スマホでより大きく */
-  }
-}
-
-@media (max-width: 768px) {
   .image-nav-button {
-    padding: 12px;
+    padding: 20px 10px;
     font-size: 16px;
+    border-radius: 8px;
   }
 }
 
@@ -2625,13 +2595,8 @@ body.modal-open {
 .image-container {
   position: relative;
   display: flex;
-  /* Flexboxを使用 */
   flex-direction: column;
-  /* 縦方向に並べる */
   align-items: center;
-  /* 横方向の中央揃え */
-  width: 100%;
-  /* 幅を100%に */
 }
 
 /* カード増減ボタンのスタイル */
@@ -2660,12 +2625,11 @@ body.modal-open {
 
 /* モーダル内の拡大画像設定 */
 .image-modal .image-container img {
-  max-width: 95%;
-  max-height: 90vh;
+  max-width: 80vw;
+  max-height: calc(85vh - 80px);
   opacity: 1;
   transition: opacity 0.4s ease;
   object-fit: contain;
-  margin: auto;
   border: none;
   border-radius: 18px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
@@ -2674,8 +2638,7 @@ body.modal-open {
 @media (min-width: 769px) {
   .image-modal .image-container img {
     border-radius: 28px;
-    max-width: 70%;
-    max-height: 70vh;
+    max-width: 40vw;
   }
 }
 
@@ -4267,38 +4230,9 @@ body.modal-open {
 
 /* タブレット用のスタイル追加 */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .image-modal .image-container {
-    max-width: 80%;
-    max-height: 80vh;
-  }
-
   .image-nav-button {
     padding: 20px 20px;
     font-size: 20px;
-  }
-
-  .image-nav-button.prev {
-    left: 5%;
-  }
-
-  .image-nav-button.next {
-    right: 5%;
-  }
-
-  /* タブレットでの縦向き表示時の調整 */
-  @media (orientation: portrait) {
-    .image-modal .image-container {
-      max-width: 85%;
-      max-height: 70vh;
-    }
-  }
-
-  /* タブレットでの横向き表示時の調整 */
-  @media (orientation: landscape) {
-    .image-modal .image-container {
-      max-width: 75%;
-      max-height: 85vh;
-    }
   }
 }
 
