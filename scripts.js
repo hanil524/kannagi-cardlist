@@ -2018,6 +2018,8 @@ const filterCards = () => {
         const powerNum = parseInt(entry.power, 10);
         if (isNaN(powerNum) || powerNum < rangeFilters.power.min || powerNum > rangeFilters.power.max) {
           shouldDisplay = false;
+        } else if (powerNum === 0 && entry.type !== '場所札') {
+          shouldDisplay = false;
         }
       } else if (filters.power.size > 0) {
         let powerMatch = filters.power.has(entry.power);
