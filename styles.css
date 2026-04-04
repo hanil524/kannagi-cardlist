@@ -339,6 +339,12 @@ main {
 .limit-release input,
 .and-filter-toggle input {
   margin: 0;
+  outline: none;
+}
+
+.limit-release:focus,
+.and-filter-toggle:focus {
+  outline: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
