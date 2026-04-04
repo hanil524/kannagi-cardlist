@@ -4152,18 +4152,12 @@ body.modal-open {
   cursor: pointer;
   border: 2px solid transparent;
   box-sizing: border-box;
-  transition: border-color 0.15s ease, opacity 0.15s ease;
-  opacity: 0.7;
-}
-
-.deck-thumbnail-grid img:hover {
-  opacity: 1;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .deck-thumbnail-grid img.selected {
   border-color: #ec2f2f;
-  opacity: 1;
-  box-shadow: 0 0 8px rgba(236, 47, 47, 0.4);
+  box-shadow: 0 0 10px rgba(236, 47, 47, 0.45);
 }
 
 .deck-thumbnail-footer {
