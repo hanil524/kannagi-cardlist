@@ -4814,6 +4814,17 @@ const deckManager = {
       });
     });
 
+    // プレビュー画像クリックでサムネイル選択モーダルを開く
+    modal.querySelectorAll('.deck-preview-image').forEach((img) => {
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const deckId = parseInt(img.dataset.deckId);
+        if (img.src && img.style.display !== 'none') {
+          this.openThumbnailModal(deckId);
+        }
+      });
+    });
+
     // モーダル外クリックで閉じる
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
@@ -5416,19 +5427,25 @@ const deckManager = {
         return;
       }
 
-      // コストが最も高いカードを見つける
-      const highestCostCard = deck.cards.reduce((highest, current) => {
-        const currentCost = parseInt(current.dataset.cost) || 0;
-        const highestCost = parseInt(highest.dataset.cost) || 0;
-        return currentCost > highestCost ? current : highest;
-      }, deck.cards[0]);
-
       // プレビュー画像を更新
       const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
-      if (previewImg && highestCostCard) {
-        // srcプロパティを直接参照
-        previewImg.src = highestCostCard.src || '';
-        previewImg.style.display = 'block';
+      if (previewImg) {
+        // カスタムサムネイルが設定されている場合はそれを優先
+        if (deck.thumbnail) {
+          previewImg.src = deck.thumbnail;
+          previewImg.style.display = 'block';
+        } else {
+          // コストが最も高いカードを見つける
+          const highestCostCard = deck.cards.reduce((highest, current) => {
+            const currentCost = parseInt(current.dataset.cost) || 0;
+            const highestCost = parseInt(highest.dataset.cost) || 0;
+            return currentCost > highestCost ? current : highest;
+          }, deck.cards[0]);
+          if (highestCostCard) {
+            previewImg.src = highestCostCard.src || '';
+            previewImg.style.display = 'block';
+          }
+        }
       }
     });
   },
@@ -5453,6 +5470,107 @@ const deckManager = {
         deckBuilder.updateDeckCount();
       }
     }
+  },
+
+  // デッキサムネイル選択モーダルを開く
+  openThumbnailModal(deckId) {
+    const deck = this.decks[deckId];
+    if (!deck || !deck.cards || deck.cards.length === 0) return;
+
+    const modal = document.getElementById('deck-thumbnail-modal');
+    const grid = modal.querySelector('.deck-thumbnail-grid');
+    const confirmBtn = document.getElementById('deck-thumbnail-confirm');
+
+    // グリッドをクリア
+    grid.innerHTML = '';
+
+    // 確定ボタンのイベント（一度だけ設定するためcloneで差し替え）
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    newConfirmBtn.id = 'deck-thumbnail-confirm';
+    newConfirmBtn.disabled = true;
+
+    // デッキ内のカードを重複なしで取得（名前ベースで一意に）
+    const seen = new Set();
+    const uniqueCards = [];
+    for (const card of deck.cards) {
+      const name = card.dataset.name;
+      if (!seen.has(name)) {
+        seen.add(name);
+        uniqueCards.push(card);
+      }
+    }
+
+    // 種類順（場所札→怪異札→道具札→季節札）＋コスト昇順でソート
+    const typeOrder = { '場所札': 0, '怪異札': 1, '道具札': 2, '季節札': 3 };
+    uniqueCards.sort((a, b) => {
+      const typeA = typeOrder[a.dataset.type] ?? 99;
+      const typeB = typeOrder[b.dataset.type] ?? 99;
+      if (typeA !== typeB) return typeA - typeB;
+      return (parseInt(a.dataset.cost) || 0) - (parseInt(b.dataset.cost) || 0);
+    });
+
+    // 選択状態を管理
+    let selectedSrc = null;
+
+    // カード画像を配置
+    uniqueCards.forEach(card => {
+      const img = document.createElement('img');
+      img.src = card.src || '';
+      img.alt = card.dataset.name || '';
+      img.addEventListener('click', () => {
+        // 既存の選択を解除
+        grid.querySelectorAll('img.selected').forEach(el => el.classList.remove('selected'));
+        // この画像を選択
+        img.classList.add('selected');
+        selectedSrc = img.src;
+        newConfirmBtn.disabled = false;
+      });
+      grid.appendChild(img);
+    });
+
+    newConfirmBtn.addEventListener('click', () => {
+      if (!selectedSrc) return;
+      // カスタムサムネイルを保存
+      if (!this.decks[deckId]) return;
+      this.decks[deckId].thumbnail = selectedSrc;
+      this.saveToLocalStorage();
+      // プレビュー画像を即座に更新
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.src = selectedSrc;
+        previewImg.style.display = 'block';
+      }
+      this.closeThumbnailModal();
+    });
+
+    // 閉じるボタン
+    const closeBtn = modal.querySelector('.deck-thumbnail-close');
+    const newCloseBtn = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+    newCloseBtn.addEventListener('click', () => this.closeThumbnailModal());
+
+    // 背景クリックで閉じる
+    modal._bgHandler = (e) => {
+      if (e.target === modal) this.closeThumbnailModal();
+    };
+    modal.addEventListener('click', modal._bgHandler);
+
+    // モーダルを表示
+    modal.style.display = 'block';
+    requestAnimationFrame(() => modal.classList.add('active'));
+  },
+
+  closeThumbnailModal() {
+    const modal = document.getElementById('deck-thumbnail-modal');
+    modal.classList.remove('active');
+    if (modal._bgHandler) {
+      modal.removeEventListener('click', modal._bgHandler);
+      modal._bgHandler = null;
+    }
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
   }
 };
 

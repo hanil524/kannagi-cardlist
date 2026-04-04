@@ -4033,15 +4033,168 @@ body.modal-open {
   /* 初期状態は非表示 */
 }
 
-@media (pointer: coarse) {
-  .deck-list-modal .deck-preview-image {
-    pointer-events: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
+/* プレビュー画像をクリック可能に */
+.deck-preview-image {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* デッキサムネイル選択モーダル */
+.deck-thumbnail-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 3500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.deck-thumbnail-modal.active {
+  opacity: 1;
+}
+
+.deck-thumbnail-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(42, 42, 50, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 14px 0;
+  border-radius: 8px;
+  width: 90%;
+  max-width: min(520px, calc(100vw - 32px));
+  max-height: 80vh;
+  box-sizing: border-box;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-thumbnail-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+  color: white;
+  flex-shrink: 0;
+  position: relative;
+  padding: 0 40px;
+}
+
+.deck-thumbnail-header h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+.deck-thumbnail-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.deck-thumbnail-desc {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  margin: 0 0 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.deck-thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 4px 2px;
+}
+
+@media (min-width: 769px) {
+  .deck-thumbnail-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .deck-thumbnail-content {
+    max-width: min(680px, calc(100vw - 64px));
   }
 }
 
+.deck-thumbnail-grid img {
+  width: 100%;
+  aspect-ratio: 63 / 88;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+  opacity: 0.7;
+}
+
+.deck-thumbnail-grid img:hover {
+  opacity: 1;
+}
+
+.deck-thumbnail-grid img.selected {
+  border-color: #ec2f2f;
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(236, 47, 47, 0.4);
+}
+
+.deck-thumbnail-footer {
+  flex-shrink: 0;
+  padding: 10px 0 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.deck-thumbnail-confirm {
+  padding: 10px 40px;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(180deg, #c0392b 0%, #a93226 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.deck-thumbnail-confirm:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.deck-thumbnail-confirm:not(:disabled):hover {
+  opacity: 0.85;
+}
 
 /* デッキ情報エリアのスタイル調整 */
 .deck-info {
