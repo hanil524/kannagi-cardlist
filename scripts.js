@@ -480,6 +480,9 @@ window.addEventListener('resize', () => {
   }
 });
 
+// AND絞り込みモードのフラグ
+let andFilterEnabled = false;
+
 // フィルター条件を保持するオブジェクト
 const filters = {
   series: new Set(),
@@ -1056,9 +1059,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const limitToggle = document.getElementById('limit-release-toggle');
   if (limitToggle) {
+    // localStorage から制限の状態を復元
+    const savedLimit = localStorage.getItem('limitReleaseEnabled');
+    if (savedLimit === 'true') {
+      limitToggle.checked = true;
+      deckBuilder.limitReleaseEnabled = true;
+    }
     limitToggle.addEventListener('change', (e) => {
       const limitEnabled = !!e.target.checked;
       deckBuilder.limitReleaseEnabled = limitEnabled;
+      localStorage.setItem('limitReleaseEnabled', limitEnabled);
       if (typeof deckBuilder?.showMessage === 'function') {
         deckBuilder.showMessage(
           limitEnabled
@@ -1080,6 +1090,29 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         // no-op
       }
+    });
+  }
+
+  // AND絞り込みトグル
+  const andToggle = document.getElementById('and-filter-toggle');
+  if (andToggle) {
+    // localStorage から絞り込みの状態を復元
+    const savedAnd = localStorage.getItem('andFilterEnabled');
+    if (savedAnd === 'true') {
+      andToggle.checked = true;
+      andFilterEnabled = true;
+    }
+    andToggle.addEventListener('change', (e) => {
+      andFilterEnabled = !!e.target.checked;
+      localStorage.setItem('andFilterEnabled', andFilterEnabled);
+      if (typeof deckBuilder?.showMessage === 'function') {
+        deckBuilder.showMessage(
+          andFilterEnabled
+            ? 'フィルター条件が\n全て一致するカードのみが\n表示されます。'
+            : '通常フィルターに戻りました。\n（当てはまる条件は全て表示）'
+        );
+      }
+      filterCards();
     });
   }
 
@@ -1885,61 +1918,83 @@ const filterCards = () => {
 
     // series フィルター
     if (filters.series.size > 0) {
-      if (!entry.series.some(v => filters.series.has(v))) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        if (![...filters.series].every(v => entry.series.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.series.some(v => filters.series.has(v))) shouldDisplay = false;
       }
     }
 
     // season フィルター
     if (shouldDisplay && filters.season.size > 0) {
-      if (!entry.season.some(v => filters.season.has(v))) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        if (![...filters.season].every(v => entry.season.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.season.some(v => filters.season.has(v))) shouldDisplay = false;
       }
     }
 
     // type フィルター
     if (shouldDisplay && filters.type.size > 0) {
-      if (!filters.type.has(entry.type)) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        // typeは単一値なので、複数選択時は「全て一致」は不可能 → OR維持
+        if (!filters.type.has(entry.type)) shouldDisplay = false;
+      } else {
+        if (!filters.type.has(entry.type)) shouldDisplay = false;
       }
     }
 
     // role フィルター
     if (shouldDisplay && filters.role.size > 0) {
-      if (!entry.role.some(v => filters.role.has(v))) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        if (![...filters.role].every(v => entry.role.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.role.some(v => filters.role.has(v))) shouldDisplay = false;
       }
     }
 
     // keyword フィルター
     if (shouldDisplay && filters.keyword.size > 0) {
-      if (!entry.keyword.some(v => filters.keyword.has(v))) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        if (![...filters.keyword].every(v => entry.keyword.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.keyword.some(v => filters.keyword.has(v))) shouldDisplay = false;
       }
     }
 
     // attribute フィルター（「廃」特別処理あり）
     if (shouldDisplay && filters.attribute.size > 0) {
-      let matches = false;
-      if (has廃Filter) {
-        const has廃InAttributes = entry.attribute.some(attr => attr.includes('廃'));
-        if (otherAttributeFilters.length === 0) {
-          matches = has廃InAttributes;
-        } else {
-          matches = has廃InAttributes || entry.attribute.some(attr => otherAttributeFilters.includes(attr));
-        }
+      if (andFilterEnabled) {
+        // ANDモード: 全ての選択属性がカードに含まれているか
+        const allMatch = [...filters.attribute].every(filterAttr => {
+          if (filterAttr === '廃') {
+            return entry.attribute.some(attr => attr.includes('廃'));
+          }
+          return entry.attribute.includes(filterAttr);
+        });
+        if (!allMatch) shouldDisplay = false;
       } else {
-        matches = entry.attribute.some(attr => filters.attribute.has(attr));
-      }
-      if (!matches) {
-        shouldDisplay = false;
+        let matches = false;
+        if (has廃Filter) {
+          const has廃InAttributes = entry.attribute.some(attr => attr.includes('廃'));
+          if (otherAttributeFilters.length === 0) {
+            matches = has廃InAttributes;
+          } else {
+            matches = has廃InAttributes || entry.attribute.some(attr => otherAttributeFilters.includes(attr));
+          }
+        } else {
+          matches = entry.attribute.some(attr => filters.attribute.has(attr));
+        }
+        if (!matches) shouldDisplay = false;
       }
     }
 
     // rare フィルター（スペース区切りで部分一致）
     if (shouldDisplay && filters.rare.size > 0) {
-      if (!entry.rare.some(v => filters.rare.has(v))) {
-        shouldDisplay = false;
+      if (andFilterEnabled) {
+        if (![...filters.rare].every(v => entry.rare.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.rare.some(v => filters.rare.has(v))) shouldDisplay = false;
       }
     }
 
