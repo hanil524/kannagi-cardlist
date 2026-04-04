@@ -13061,6 +13061,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2316"
+  data-name="ふれあい広場(ふれあいひろば)"
+  data-cost="11"
+  data-power="7"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="犬族 動物"
+  data-keyword=""
+  data-role="召喚時 攻撃時 魂加速 ヒール"
+>
+  <img data-src="images/card_15_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2322"
   data-name="黒犬(こっけん)"
   data-cost="2"
