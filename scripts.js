@@ -3519,6 +3519,7 @@ const deckBuilder = {
     addButton.className = 'card-add-button';
     addButton.onclick = (e) => {
       e.stopPropagation();
+      _lastShakeTarget = addButton;
       this.addCard(card.cloneNode(true));
     };
 
