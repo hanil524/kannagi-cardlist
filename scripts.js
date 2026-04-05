@@ -2454,10 +2454,12 @@ const updateModalControls = (cardName, controls) => {
   const countDisplay = controls.querySelector('.card-count');
 
   // カウント表示を更新
-  countDisplay.textContent = `${currentCount}/4`;
+  const maxAllowed = deckBuilder.getMaxAllowed(cardName);
+  const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+  countDisplay.textContent = `${currentCount}/${displayMax}`;
 
   // ボタンの有効/無効を更新
-  addButton.disabled = currentCount >= 4;
+  addButton.disabled = maxAllowed !== Infinity && currentCount >= maxAllowed;
   removeButton.disabled = currentCount <= 0;
 
   return currentCount;
@@ -2548,15 +2550,7 @@ const openImageModal = (src) => {
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
 
   // カードの上限枚数を取得
-  let maxAllowed = 4;
-  if (deckBuilder.infiniteCardLimit.has(cardName)) {
-    maxAllowed = Infinity;
-  } else if (deckBuilder.tenCardLimit.has(cardName)) {
-    maxAllowed = 10;
-  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-    maxAllowed = 7;
-  }
-
+  const maxAllowed = deckBuilder.getMaxAllowed(cardName);
   const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
 
   // 既存要素の内容のみ更新（新しい要素は作成しない）
@@ -3148,15 +3142,7 @@ const showNextImage = () => {
 
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
-      let maxAllowed = 4;
-      if (deckBuilder.infiniteCardLimit.has(cardName)) {
-        maxAllowed = Infinity;
-      } else if (deckBuilder.tenCardLimit.has(cardName)) {
-        maxAllowed = 10;
-      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-        maxAllowed = 7;
-      }
-
+      const maxAllowed = deckBuilder.getMaxAllowed(cardName);
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
@@ -3217,15 +3203,7 @@ const showPreviousImage = () => {
 
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
-      let maxAllowed = 4;
-      if (deckBuilder.infiniteCardLimit.has(cardName)) {
-        maxAllowed = Infinity;
-      } else if (deckBuilder.tenCardLimit.has(cardName)) {
-        maxAllowed = 10;
-      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-        maxAllowed = 7;
-      }
-
+      const maxAllowed = deckBuilder.getMaxAllowed(cardName);
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
@@ -4604,14 +4582,7 @@ function updateCardCountInModal(cardName) {
   const cardCountDiv = controls.querySelector('.card-count');
 
   // カードの上限枚数を取得
-  let maxAllowed = 4;
-  if (deckBuilder.infiniteCardLimit.has(cardName)) {
-    maxAllowed = Infinity;
-  } else if (deckBuilder.tenCardLimit.has(cardName)) {
-    maxAllowed = 10;
-  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-    maxAllowed = 7;
-  }
+  const maxAllowed = deckBuilder.getMaxAllowed(cardName);
   const isInfinite = maxAllowed === Infinity;
 
   // CSSで表示を制御
@@ -4676,14 +4647,7 @@ const setupCardControls = (controls, card, cardName) => {
   const removeButton = controls.querySelector('#remove-card');
 
   // カードの上限枚数を取得（初期表示時から正しい値を使用）
-  let maxAllowed = 4;
-  if (deckBuilder.infiniteCardLimit.has(cardName)) {
-    maxAllowed = Infinity;
-  } else if (deckBuilder.tenCardLimit.has(cardName)) {
-    maxAllowed = 10;
-  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-    maxAllowed = 7;
-  }
+  let maxAllowed = deckBuilder.getMaxAllowed(cardName);
 
   // 初期表示時から正しい上限枚数を表示
   const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
