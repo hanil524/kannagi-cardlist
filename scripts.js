@@ -3262,11 +3262,36 @@ function openDeckBuilder() {
 const deckBuilder = {
   deck: [],
   maxCards: 4,
-  restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '肥川の大蛇（ひのかわのおろち）', "消さなきゃ（けさなきゃ）", "暗躍者(あんやくしゃ)", "仮想世界の外(かそうせかいのそと)", "最恐札の地図（とれかのちず）", "あなただけがいない場所（あなただけがいないばしょ）", "大災害（だいさいがい）"]),
-  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）", "つちのこ", "新府城（しんぶじょう）", "札絵れあ（ふだえれあ）", "血の視線（ちのしせん）", "死神の蝋燭（しにがみのろうそく）", "失われた海域(うしなわれたかいいき)", "赤津川（あかつがわ）", "いっしょにあそぼ・・・"]),
-  sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
-  tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
-  infiniteCardLimit: new Set(['複製体(くろーん)']), // 無限枚数制限カード
+  // カードごとの上限枚数（通常4枚のカードはここに不要）
+  // 追加する場合: ['カード名', 枚数] を足すだけ。Infinity = 無制限
+  cardLimits: new Map([
+    // 1枚制限
+    ['人魚の活き血（にんぎょのいきち）',           1],
+    ['肥川の大蛇（ひのかわのおろち）',             1],
+    ['消さなきゃ（けさなきゃ）',                   1],
+    ['暗躍者(あんやくしゃ)',                       1],
+    ['仮想世界の外(かそうせかいのそと)',           1],
+    ['最恐札の地図（とれかのちず）',               1],
+    ['あなただけがいない場所（あなただけがいないばしょ）', 1],
+    ['大災害（だいさいがい）',                     1],
+    // 2枚制限
+    ['悠習の古日記（ゆうしゅうのこにっき）',       2],
+    ['本物のお化け屋敷（ほんもののおばけやしき）', 2],
+    ['つちのこ',                                   2],
+    ['新府城（しんぶじょう）',                     2],
+    ['札絵れあ（ふだえれあ）',                     2],
+    ['血の視線（ちのしせん）',                     2],
+    ['死神の蝋燭（しにがみのろうそく）',           2],
+    ['失われた海域(うしなわれたかいいき)',         2],
+    ['赤津川（あかつがわ）',                       2],
+    ['いっしょにあそぼ・・・',                     2],
+    // 7枚制限
+    ['山口：7つの家（やまぐち：ななつのいえ）',   7],
+    // 10枚制限
+    ['火の玉（ひのたま）',                         10],
+    // 無制限
+    ['複製体(くろーん)',                           Infinity],
+  ]),
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
   // デッキビルダーのopen/close関数
@@ -3344,20 +3369,18 @@ const deckBuilder = {
     _lastShakeTarget = null;
   },
 
-  showLimitMessage() {
-    this._showLimitMsg('制限カードはデッキに\n1枚まで。');
-  },
+  showLimitMessage()    { this._showLimitMsg('制限カードはデッキに\n1枚まで。'); },
+  showTwoCardMessage()  { this._showLimitMsg('準制限カードはデッキに\n2枚まで。'); },
+  showTenCardMessage()  { this._showLimitMsg('このカードはデッキに\n10枚まで。'); },
+  showSevenCardMessage(){ this._showLimitMsg('このカードはデッキに\n7枚まで。'); },
 
-  showTwoCardMessage() {
-    this._showLimitMsg('準制限カードはデッキに\n2枚まで。');
-  },
-
-  showTenCardMessage() {
-    this._showLimitMsg('このカードはデッキに\n10枚まで。');
-  },
-
-  showSevenCardMessage() {
-    this._showLimitMsg('このカードはデッキに\n7枚まで。');
+  // 上限枚数に応じたメッセージを表示（全addCard経路で共通利用）
+  _dispatchLimitMsg(maxAllowed, cardName) {
+    if (maxAllowed === 1)  return this.showLimitMessage();
+    if (maxAllowed === 2)  return this.showTwoCardMessage();
+    if (maxAllowed === 7)  return this.showSevenCardMessage();
+    if (maxAllowed === 10) return this.showTenCardMessage();
+    this._showLimitMsg(`同じカードはデッキに\n${maxAllowed}枚まで。`);
   },
 
   // カードを追加
@@ -3365,27 +3388,9 @@ const deckBuilder = {
     const cardName = card.dataset.name;
     const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
 
-    if (this.infiniteCardLimit.has(cardName)) {
-      // 無限枚数制限カードは制限なし
-    } else if (this.tenCardLimit.has(cardName)) {
-      if (sameNameCount >= 10) {
-        this.showTenCardMessage();
-        return false;
-      }
-    } else if (this.sevenCardLimit.has(cardName)) {
-      if (sameNameCount >= 7) {
-        this.showSevenCardMessage();
-        return false;
-      }
-    } else if (this.restrictedCards.has(cardName) && sameNameCount >= 1) {
-      this.showLimitMessage();
-      return false;
-    } else if (this.twoCardLimit.has(cardName) && sameNameCount >= 2) {
-      // 追加：2枚制限カードのチェック
-      this.showTwoCardMessage(); // 追加：2枚制限メッセージの表示
-      return false;
-    } else if (sameNameCount >= this.maxCards) {
-      this._showLimitMsg('同じカードはデッキに\n4枚まで。');
+    const limit = this.getBaseLimit(cardName);
+    if (limit !== Infinity && sameNameCount >= limit) {
+      this._dispatchLimitMsg(limit, cardName);
       return false;
     }
 
@@ -4086,12 +4091,8 @@ if (typeof deckBuilder.limitReleaseEnabled === 'undefined') {
 
 // 2) 基本上限（制限解禁を考慮しない）
 deckBuilder.getBaseLimit = function (cardName) {
-  if (this.infiniteCardLimit.has(cardName)) return Infinity;
-  if (this.tenCardLimit.has(cardName)) return 10;
-  if (this.sevenCardLimit.has(cardName)) return 7;
-  if (this.restrictedCards.has(cardName)) return 1;
-  if (this.twoCardLimit.has(cardName)) return 2;
-  return this.maxCards; // 通常は4
+  const limit = this.cardLimits.get(cardName);
+  return limit !== undefined ? limit : this.maxCards; // 通常は4
 };
 
 // 3) 現在設定を反映した上限（制限解禁ONなら3以下を4に）
@@ -4113,17 +4114,7 @@ deckBuilder.getMaxAllowed = function (cardName) {
     const maxAllowed = this.getMaxAllowed(cardName);
 
     if (maxAllowed !== Infinity && sameNameCount >= maxAllowed) {
-      if (maxAllowed === 10) {
-        this.showTenCardMessage();
-      } else if (maxAllowed === 7) {
-        this.showSevenCardMessage();
-      } else if (!this.limitReleaseEnabled && this.restrictedCards.has(cardName)) {
-        this.showLimitMessage();
-      } else if (!this.limitReleaseEnabled && this.twoCardLimit.has(cardName)) {
-        this.showTwoCardMessage();
-      } else {
-        this._showLimitMsg('同じカードはデッキに\n4枚まで。');
-      }
+      this._dispatchLimitMsg(maxAllowed, cardName);
       return false;
     }
 
@@ -4533,15 +4524,7 @@ document.addEventListener('keydown', (e) => {
     const cardName = visibleCards[currentImageIndex].dataset.name;
     const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
 
-    // カードの上限枚数を正しく取得
-    let maxAllowed = 4;
-    if (deckBuilder.infiniteCardLimit.has(cardName)) {
-      maxAllowed = Infinity;
-    } else if (deckBuilder.tenCardLimit.has(cardName)) {
-      maxAllowed = 10;
-    } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-      maxAllowed = 7;
-    }
+    const maxAllowed = deckBuilder.getMaxAllowed(cardName);
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -4550,14 +4533,7 @@ document.addEventListener('keydown', (e) => {
         deckBuilder.addCard(visibleCards[currentImageIndex].cloneNode(true));
         updateCardCountInModal(cardName);
       } else {
-        // 上限に達した場合のメッセージ表示
-        if (maxAllowed === 10) {
-          deckBuilder.showTenCardMessage();
-        } else if (maxAllowed === 7) {
-          deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
-        } else {
-          deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
-        }
+        deckBuilder._dispatchLimitMsg(maxAllowed, cardName);
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -4676,14 +4652,7 @@ const setupCardControls = (controls, card, cardName) => {
         removeButton.disabled = false;
         removeButton.classList.remove('disabled');
       } else {
-        // 上限メッセージ
-        if (maxAllowed === 10) {
-          deckBuilder.showTenCardMessage();
-        } else if (maxAllowed === 7) {
-          deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
-        } else {
-          deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
-        }
+        deckBuilder._dispatchLimitMsg(maxAllowed, cardName);
       }
     }
   };
@@ -5895,30 +5864,14 @@ function setupModalCardControlsOnce(controls, card, cardName) {
 function handleModalAddCard() {
   const cardName = currentModalCardName;
 
-  // カードの上限枚数を取得
-  let maxAllowed = 4;
-  if (deckBuilder.infiniteCardLimit.has(cardName)) {
-    maxAllowed = Infinity;
-  } else if (deckBuilder.tenCardLimit.has(cardName)) {
-    maxAllowed = 10;
-  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-    maxAllowed = 7;
-  }
-
+  const maxAllowed = deckBuilder.getMaxAllowed(cardName);
   const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
 
   if (maxAllowed === Infinity || currentCount < maxAllowed) {
     deckBuilder.addCard(currentModalCard.cloneNode(true));
     updateCardCountInModal(cardName);
   } else {
-    // 上限メッセージ
-    if (maxAllowed === 10) {
-      deckBuilder.showTenCardMessage();
-    } else if (maxAllowed === 7) {
-      deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
-    } else {
-      deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
-    }
+    deckBuilder._dispatchLimitMsg(maxAllowed, cardName);
   }
 }
 
@@ -5937,16 +5890,7 @@ function updateModalButtonStates(controls, cardName) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
 
-  // カードの上限枚数を取得
-  let maxAllowed = 4;
-  if (deckBuilder.infiniteCardLimit.has(cardName)) {
-    maxAllowed = Infinity;
-  } else if (deckBuilder.tenCardLimit.has(cardName)) {
-    maxAllowed = 10;
-  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
-    maxAllowed = 7;
-  }
-
+  const maxAllowed = deckBuilder.getMaxAllowed(cardName);
   const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
 
   // addボタンはdisabled属性を使わずCSSクラスのみで制御（モバイルでタップ→アラート表示のため）
