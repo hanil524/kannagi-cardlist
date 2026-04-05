@@ -1460,25 +1460,31 @@ document.addEventListener('DOMContentLoaded', () => {
       const endY = e.changedTouches[0].clientY;
       const diff = startY - endY;
 
-      // スタイルをリセット
-      currentCard.style.transition = 'all 0.3s';
-      currentCard.style.opacity = '1';
-      currentCard.style.transform = '';
-
       // 50px以上の移動で判定
       if (Math.abs(diff) > 30) {
         if (diff > 0) {
-          // 上スワイプでカード追加（フェードエフェクト付き）
+          // 上スワイプでカード追加（トランジションなしでリセット：シェイク干渉防止）
+          currentCard.style.transition = '';
+          currentCard.style.opacity = '1';
+          currentCard.style.transform = '';
           const cardData = currentCard.cloneNode(true);
           _lastShakeTarget = currentCard;
           deckBuilder.addCard(cardData);
         } else {
           // 下スワイプでカード削除
+          currentCard.style.transition = 'all 0.3s';
+          currentCard.style.opacity = '1';
+          currentCard.style.transform = '';
           const cardNumber = currentCard.getAttribute('data-number');
           if (cardNumber) {
             deckBuilder.removeCard(null, cardNumber);
           }
         }
+      } else {
+        // 移動量が足りない場合は元に戻す
+        currentCard.style.transition = 'all 0.3s';
+        currentCard.style.opacity = '1';
+        currentCard.style.transform = '';
       }
 
       // 状態をリセット
