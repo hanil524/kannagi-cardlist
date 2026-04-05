@@ -348,6 +348,7 @@ main {
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .limit-release:hover,
   .and-filter-toggle:hover {
     background: linear-gradient(135deg, rgba(52, 55, 125, 0.98) 0%, rgba(78, 83, 172, 0.98) 50%, rgba(95, 100, 205, 0.95) 100%);
@@ -364,6 +365,7 @@ main,
 }
 
 @media (max-width: 768px) {
+
   .limit-release,
   .and-filter-toggle {
     font-weight: normal;
@@ -3192,8 +3194,8 @@ body.modal-open {
   align-items: center;
   padding: 2px 4px;
   border-radius: 6px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   box-sizing: border-box;
   transition: transform 0.16s ease;
 }
@@ -3209,7 +3211,7 @@ body.modal-open {
 .deck-list-item.dragging {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   background-color: rgba(58, 58, 58, 0.9);
-  border-color: rgba(255,255,255,0.12);
+  border-color: rgba(255, 255, 255, 0.12);
   border-radius: 6px;
 }
 
@@ -3247,7 +3249,7 @@ body.modal-open {
   flex-grow: 1;
   min-width: 0;
   padding: 7px 10px;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 6px;
   background: linear-gradient(180deg, #464650 0%, #383842 100%);
   color: white;
@@ -3255,7 +3257,7 @@ body.modal-open {
   font-size: 14px;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transition: all 0.2s ease;
 }
 
@@ -3296,7 +3298,7 @@ body.modal-open {
 .deck-select-button.active {
   background: linear-gradient(180deg, #4a3838 0%, #3a2828 100%);
   border-color: transparent;
-  box-shadow: inset 0 0 0 2px rgba(236,47,47,0.55), 0 0 8px rgba(236,47,47,0.18), 0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: inset 0 0 0 2px rgba(236, 47, 47, 0.55), 0 0 8px rgba(236, 47, 47, 0.18), 0 2px 6px rgba(0, 0, 0, 0.4);
   font-weight: bold;
   color: #ffffff;
 }
@@ -4040,6 +4042,7 @@ body.modal-open {
   width: auto;
   object-fit: contain;
   display: none;
+  border-radius: 2px;
   /* 初期状態は非表示 */
 }
 
