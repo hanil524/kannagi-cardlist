@@ -3266,31 +3266,31 @@ const deckBuilder = {
   // 追加する場合: ['カード名', 枚数] を足すだけ。Infinity = 無制限
   cardLimits: new Map([
     // 1枚制限
-    ['人魚の活き血（にんぎょのいきち）',           1],
-    ['肥川の大蛇（ひのかわのおろち）',             1],
-    ['消さなきゃ（けさなきゃ）',                   1],
-    ['暗躍者(あんやくしゃ)',                       1],
-    ['仮想世界の外(かそうせかいのそと)',           1],
-    ['最恐札の地図（とれかのちず）',               1],
+    ['人魚の活き血（にんぎょのいきち）', 1],
+    ['肥川の大蛇（ひのかわのおろち）', 1],
+    ['消さなきゃ（けさなきゃ）', 1],
+    ['暗躍者(あんやくしゃ)', 1],
+    ['仮想世界の外(かそうせかいのそと)', 1],
+    ['最恐札の地図（とれかのちず）', 1],
     ['あなただけがいない場所（あなただけがいないばしょ）', 1],
-    ['大災害（だいさいがい）',                     1],
+    ['大災害（だいさいがい）', 1],
     // 2枚制限
-    ['悠習の古日記（ゆうしゅうのこにっき）',       2],
+    ['悠習の古日記（ゆうしゅうのこにっき）', 2],
     ['本物のお化け屋敷（ほんもののおばけやしき）', 2],
-    ['つちのこ',                                   2],
-    ['新府城（しんぶじょう）',                     2],
-    ['札絵れあ（ふだえれあ）',                     2],
-    ['血の視線（ちのしせん）',                     2],
-    ['死神の蝋燭（しにがみのろうそく）',           2],
-    ['失われた海域(うしなわれたかいいき)',         2],
-    ['赤津川（あかつがわ）',                       2],
-    ['いっしょにあそぼ・・・',                     2],
+    ['つちのこ', 2],
+    ['新府城（しんぶじょう）', 2],
+    ['札絵れあ（ふだえれあ）', 2],
+    ['血の視線（ちのしせん）', 2],
+    ['死神の蝋燭（しにがみのろうそく）', 2],
+    ['失われた海域(うしなわれたかいいき)', 2],
+    ['赤津川（あかつがわ）', 2],
+    ['いっしょにあそぼ・・・', 2],
     // 7枚制限
-    ['山口：7つの家（やまぐち：ななつのいえ）',   7],
+    ['山口：7つの家（やまぐち：ななつのいえ）', 7],
     // 10枚制限
-    ['火の玉（ひのたま）',                         10],
+    ['火の玉（ひのたま）', 10],
     // 無制限
-    ['複製体(くろーん)',                           Infinity],
+    ['複製体(くろーん)', Infinity],
   ]),
   savedScrollPosition: 0, // スクロール位置保存用の変数
 
@@ -3369,16 +3369,16 @@ const deckBuilder = {
     _lastShakeTarget = null;
   },
 
-  showLimitMessage()    { this._showLimitMsg('制限カードはデッキに\n1枚まで。'); },
-  showTwoCardMessage()  { this._showLimitMsg('準制限カードはデッキに\n2枚まで。'); },
-  showTenCardMessage()  { this._showLimitMsg('このカードはデッキに\n10枚まで。'); },
-  showSevenCardMessage(){ this._showLimitMsg('このカードはデッキに\n7枚まで。'); },
+  showLimitMessage() { this._showLimitMsg('制限カードはデッキに\n1枚まで。'); },
+  showTwoCardMessage() { this._showLimitMsg('準制限カードはデッキに\n2枚まで。'); },
+  showTenCardMessage() { this._showLimitMsg('このカードはデッキに\n10枚まで。'); },
+  showSevenCardMessage() { this._showLimitMsg('このカードはデッキに\n7枚まで。'); },
 
   // 上限枚数に応じたメッセージを表示（全addCard経路で共通利用）
   _dispatchLimitMsg(maxAllowed, cardName) {
-    if (maxAllowed === 1)  return this.showLimitMessage();
-    if (maxAllowed === 2)  return this.showTwoCardMessage();
-    if (maxAllowed === 7)  return this.showSevenCardMessage();
+    if (maxAllowed === 1) return this.showLimitMessage();
+    if (maxAllowed === 2) return this.showTwoCardMessage();
+    if (maxAllowed === 7) return this.showSevenCardMessage();
     if (maxAllowed === 10) return this.showTenCardMessage();
     this._showLimitMsg(`同じカードはデッキに\n${maxAllowed}枚まで。`);
   },
@@ -4312,7 +4312,7 @@ function performZeroRedraw() {
 // 「リトライ」ボタン：完全リセットして再シャッフル
 function performZeroRetry() {
   if (deckBuilder.deck.length < 8) {
-    deckBuilder.showMessage('デッキ内のカードが8枚ありません。');
+    deckBuilder.showMessage('デッキにカードが8枚ありません。');
     return;
   }
 
@@ -4383,7 +4383,7 @@ function resetZeroSelection() {
   });
 
   // 選択解除後の再抽選は行わない
-  deckBuilder.showMessage('選択をすべて解除しました');
+  deckBuilder.showMessage('選択を解除しました。');
 }
 
 // 零探し機能を閉じる関数
