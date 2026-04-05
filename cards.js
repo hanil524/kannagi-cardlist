@@ -13205,6 +13205,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2338"
+  data-name="蚊(か)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="蟲"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2341"
   data-name="とおりゃんせ"
   data-cost="0"
