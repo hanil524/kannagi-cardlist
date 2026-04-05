@@ -483,6 +483,16 @@ window.addEventListener('resize', () => {
 // AND絞り込みモードのフラグ
 let andFilterEnabled = false;
 
+// 上限時のシェイクエフェクト
+let _lastShakeTarget = null;
+function triggerShake(el) {
+  if (!el) return;
+  el.classList.remove('shake');
+  void el.offsetWidth; // アニメーションをリセット
+  el.classList.add('shake');
+  el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
+}
+
 // フィルター条件を保持するオブジェクト
 const filters = {
   series: new Set(),
@@ -1373,6 +1383,7 @@ document.addEventListener('DOMContentLoaded', () => {
       addButton.className = 'card-add-button';
       addButton.onclick = (e) => {
         e.stopPropagation(); // カードのクリックイベントを停止
+        _lastShakeTarget = addButton;
         deckBuilder.addCard(card.cloneNode(true));
       };
 
@@ -1459,6 +1470,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (diff > 0) {
           // 上スワイプでカード追加（フェードエフェクト付き）
           const cardData = currentCard.cloneNode(true);
+          _lastShakeTarget = currentCard;
           deckBuilder.addCard(cardData);
         } else {
           // 下スワイプでカード削除
@@ -2547,7 +2559,7 @@ const openImageModal = (src) => {
   modalControls.innerHTML = `
     <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
     <div class="card-count">${currentCount}/${displayMax}</div>
-    <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+    <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
   `;
 
   // 画像の表示処理
@@ -3143,7 +3155,7 @@ const showNextImage = () => {
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
         <div class="card-count">${currentCount}/${displayMax}</div>
-        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+        <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
       `;
 
       // カード情報とボタン状態を更新
@@ -3212,7 +3224,7 @@ const showPreviousImage = () => {
       modalControls.innerHTML = `
         <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
         <div class="card-count">${currentCount}/${displayMax}</div>
-        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+        <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
       `;
 
       // カード情報とボタン状態を更新
@@ -3330,22 +3342,31 @@ const deckBuilder = {
     message.textContent = text;
     document.body.appendChild(message);
     this._limitMsgTimer = setTimeout(() => message.remove(), 2000);
+
+    // シェイクエフェクト: モーダル表示中は＋ボタン、一覧ではカード要素
+    const modal = document.getElementById('image-modal');
+    if (modal && modal.style.display === 'flex') {
+      triggerShake(document.getElementById('add-card'));
+    } else if (_lastShakeTarget) {
+      triggerShake(_lastShakeTarget);
+    }
+    _lastShakeTarget = null;
   },
 
   showLimitMessage() {
-    this._showLimitMsg('制限カードはデッキに1枚まで。');
+    this._showLimitMsg('制限カードはデッキに\n1枚まで。');
   },
 
   showTwoCardMessage() {
-    this._showLimitMsg('準制限カードはデッキに2枚まで。');
+    this._showLimitMsg('準制限カードはデッキに\n2枚まで。');
   },
 
   showTenCardMessage() {
-    this._showLimitMsg('このカードはデッキに10枚まで。');
+    this._showLimitMsg('このカードはデッキに\n10枚まで。');
   },
 
   showSevenCardMessage() {
-    this._showLimitMsg('このカードはデッキに7枚まで。');
+    this._showLimitMsg('このカードはデッキに\n7枚まで。');
   },
 
   // カードを追加
@@ -3362,7 +3383,7 @@ const deckBuilder = {
       }
     } else if (this.sevenCardLimit.has(cardName)) {
       if (sameNameCount >= 7) {
-        this.showSevenCardMessage('このカードはデッキに7枚まで。');
+        this.showSevenCardMessage();
         return false;
       }
     } else if (this.restrictedCards.has(cardName) && sameNameCount >= 1) {
@@ -3373,7 +3394,7 @@ const deckBuilder = {
       this.showTwoCardMessage(); // 追加：2枚制限メッセージの表示
       return false;
     } else if (sameNameCount >= this.maxCards) {
-      this.showMessage('同じカードはデッキに4枚まで。');
+      this._showLimitMsg('同じカードはデッキに\n4枚まで。');
       return false;
     }
 
@@ -4097,13 +4118,13 @@ deckBuilder.getMaxAllowed = function (cardName) {
       if (maxAllowed === 10) {
         this.showTenCardMessage();
       } else if (maxAllowed === 7) {
-        this.showSevenCardMessage('このカードはデッキに7枚まで。');
+        this.showSevenCardMessage();
       } else if (!this.limitReleaseEnabled && this.restrictedCards.has(cardName)) {
         this.showLimitMessage();
       } else if (!this.limitReleaseEnabled && this.twoCardLimit.has(cardName)) {
         this.showTwoCardMessage();
       } else {
-        this.showMessage('同じカードはデッキに4枚まで。');
+        this._showLimitMsg('同じカードはデッキに\n4枚まで。');
       }
       return false;
     }
@@ -4475,6 +4496,7 @@ function createCardWithButtons(card, isInDeck = false) {
   addButton.className = 'card-add-button';
   addButton.onclick = (e) => {
     e.stopPropagation();
+    _lastShakeTarget = addButton;
     deckBuilder.addCard(card.cloneNode(true));
   };
 
@@ -4534,9 +4556,9 @@ document.addEventListener('keydown', (e) => {
         if (maxAllowed === 10) {
           deckBuilder.showTenCardMessage();
         } else if (maxAllowed === 7) {
-          deckBuilder.showMessage('このカードはデッキに7枚まで。');
+          deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
         } else {
-          deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+          deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
         }
       }
     } else if (e.key === 'ArrowDown') {
@@ -4587,15 +4609,13 @@ function updateCardCountInModal(cardName) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
 
-  addButton.disabled = !isInfinite && currentCount >= maxAllowed;
-  removeButton.disabled = currentCount <= 0;
-
-  // スタイルも明示的に更新（CSSの問題対策）
+  // addボタンはdisabled属性を使わずCSSクラスのみで制御（モバイルでタップ→アラート表示のため）
   if (!isInfinite && currentCount >= maxAllowed) {
     addButton.classList.add('disabled');
   } else {
     addButton.classList.remove('disabled');
   }
+  removeButton.disabled = currentCount <= 0;
 
   if (currentCount <= 0) {
     removeButton.classList.add('disabled');
@@ -4613,6 +4633,7 @@ const addCardButtons = (cardElement) => {
   addButton.className = 'card-add-button';
   addButton.onclick = (e) => {
     e.stopPropagation(); // カードのクリックイベントを停止
+    _lastShakeTarget = addButton;
     deckBuilder.addCard(cardElement.cloneNode(true));
   };
 
@@ -4654,6 +4675,7 @@ const setupCardControls = (controls, card, cardName) => {
     if (!addButton.disabled) {
       // 現在の枚数を取得
       const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+      _lastShakeTarget = addButton;
 
       if (maxAllowed === Infinity || currentCount < maxAllowed) {
         deckBuilder.addCard(card.cloneNode(true));
@@ -4674,9 +4696,9 @@ const setupCardControls = (controls, card, cardName) => {
         if (maxAllowed === 10) {
           deckBuilder.showTenCardMessage();
         } else if (maxAllowed === 7) {
-          deckBuilder.showMessage('このカードはデッキに7枚まで。');
+          deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
         } else {
-          deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+          deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
         }
       }
     }
@@ -5837,7 +5859,7 @@ function setupModalButtonListeners(controls) {
   if (addButton) {
     addButton.onclick = (e) => {
       e.stopPropagation();
-      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+      if (currentModalCard && currentModalCardName) {
         handleModalAddCard();
       }
     };
@@ -5866,7 +5888,7 @@ function setupModalCardControlsOnce(controls, card, cardName) {
   if (!modalControlsInitialized) {
     addButton.onclick = (e) => {
       e.stopPropagation();
-      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+      if (currentModalCard && currentModalCardName) {
         handleModalAddCard();
       }
     };
@@ -5909,9 +5931,9 @@ function handleModalAddCard() {
     if (maxAllowed === 10) {
       deckBuilder.showTenCardMessage();
     } else if (maxAllowed === 7) {
-      deckBuilder.showMessage('このカードはデッキに7枚まで。');
+      deckBuilder._showLimitMsg('このカードはデッキに\n7枚まで。');
     } else {
-      deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+      deckBuilder._showLimitMsg('同じカードはデッキに\n4枚まで。');
     }
   }
 }
@@ -5943,16 +5965,13 @@ function updateModalButtonStates(controls, cardName) {
 
   const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
 
-  // ボタンの無効化状態を設定
-  addButton.disabled = maxAllowed !== Infinity && currentCount >= maxAllowed;
-  removeButton.disabled = currentCount <= 0;
-
-  // スタイルも更新
+  // addボタンはdisabled属性を使わずCSSクラスのみで制御（モバイルでタップ→アラート表示のため）
   if (maxAllowed !== Infinity && currentCount >= maxAllowed) {
     addButton.classList.add('disabled');
   } else {
     addButton.classList.remove('disabled');
   }
+  removeButton.disabled = currentCount <= 0;
 
   if (currentCount <= 0) {
     removeButton.classList.add('disabled');

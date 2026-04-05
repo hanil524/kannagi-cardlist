@@ -1841,7 +1841,7 @@ body.modal-open {
   background: rgba(0, 0, 0, 0.5);
   color: white;
   border: 2px solid #ffffff28;
-  padding: 25px 18px;
+  padding: 30px 18px;
   font-size: 24px;
   cursor: pointer;
   z-index: 2501;
@@ -1862,7 +1862,7 @@ body.modal-open {
 /* スマホでの配置 */
 @media (max-width: 768px) {
   .image-nav-button {
-    padding: 20px 10px;
+    padding: 30px 10px;
     font-size: 16px;
     border-radius: 8px;
   }
@@ -2724,6 +2724,12 @@ body.modal-open {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
 }
 
+.card-control-button.disabled,
+.card-control-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .card-count {
   color: white;
   font-size: 18px;
@@ -2841,7 +2847,22 @@ body.modal-open {
   font-weight: bold;
   z-index: 3000;
   text-align: center;
+  white-space: pre;
   animation: fadeOut 1.5s forwards;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-7px); }
+  30%       { transform: translateX(7px); }
+  45%       { transform: translateX(-5px); }
+  60%       { transform: translateX(5px); }
+  75%       { transform: translateX(-3px); }
+  90%       { transform: translateX(3px); }
+}
+
+.shake {
+  animation: shake 0.4s ease;
 }
 
 @keyframes fadeOut {
