@@ -4214,11 +4214,12 @@ function _renderZeroModal(message, actionLabel) {
   });
 
   const actionFn = actionLabel === '引き直し' ? 'performZeroRedraw()' : 'performZeroRetry()';
+  const phaseTitle = _zeroPhase === 'redrawn' ? '零探し：引き直し' : '零探し：初期ドロー';
 
   const content = `
     <div class="zero-search-content">
       <div class="zero-search-header">
-        <p class="zero-search-title">零探し</p>
+        <p class="zero-search-title">${phaseTitle}</p>
         <p class="zero-search-subtitle">カードを選択してキープ可能。</p>
         <p class="zero-search-subtitle">デッキ底に送られたカードは再登場しません。（2回周期）</p>
       </div>
@@ -4236,8 +4237,8 @@ function _renderZeroModal(message, actionLabel) {
       <div class="zero-search-message">${message}</div>
       <div class="zero-search-buttons">
         <button onclick="${actionFn}">${actionLabel}</button>
-        <button onclick="closeZeroSearch()">戻る</button>
         <button onclick="resetZeroSelection()">キープ解除</button>
+        <button onclick="closeZeroSearch()">戻る</button>
       </div>
     </div>
   `;
@@ -4328,6 +4329,17 @@ function performZeroRetry() {
 // 零探し用のカード選択状態を切り替える関数
 function toggleZeroCardSelection(card, cardElement) {
   if (!card) return;
+
+  if (_zeroPhase === 'redrawn') {
+    deckBuilder.showMessage('引き直しが終わり、\n手札は確定されました。');
+    const retryBtn = document.querySelector('.zero-search-buttons button:first-child');
+    if (retryBtn) {
+      retryBtn.classList.remove('retry-glow');
+      void retryBtn.offsetWidth;
+      retryBtn.classList.add('retry-glow');
+    }
+    return;
+  }
 
   // 選択状態を切り替え
   const isSelected = card.dataset.zeroSelected === 'true';

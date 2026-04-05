@@ -4535,7 +4535,7 @@ body.modal-open {
 /* 選択されたカードのスタイル */
 .deck-card.selected-card,
 .zero-search-modal .deck-card.selected {
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.3);
   position: relative;
 }
 
@@ -4574,19 +4574,9 @@ body.modal-open {
   }
 }
 
-/* 選択マークのスタイル */
+/* 選択マークは非表示 */
 .zero-selected-mark {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  display: none;
 }
 
 .zero-selected-mark::before {
@@ -4605,6 +4595,9 @@ body.modal-open {
 }
 
 .zero-search-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 15px;
   font-size: 16px;
   background-color: #444;
@@ -4617,6 +4610,15 @@ body.modal-open {
 
 .zero-search-buttons button:hover {
   background-color: #666;
+}
+
+@keyframes retryGlow {
+  0%   { box-shadow: 0 0 0px 0px rgba(255, 220, 100, 0); }
+  40%  { box-shadow: 0 0 14px 6px rgba(255, 220, 100, 0.85); }
+  100% { box-shadow: 0 0 0px 0px rgba(255, 220, 100, 0); }
+}
+.retry-glow {
+  animation: retryGlow 0.8s ease forwards;
 }
 
 /* 収録情報のスタイル */
