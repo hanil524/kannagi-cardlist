@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!-- メタデータ -->
+
+<head>
+  <!-- Google tag (専用タグなのでGitHubから見てる人もコピー禁止) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WHEBPJYBEV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-WHEBPJYBEV');
+  </script>
+
+  <meta charset="UTF-8" />
+  <!-- Font Awesome アイコン: 使用する7種のみSVGインライン化（CDN不要） -->
+  <style>
+    .fas,
+    .fa-solid {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: -.125em;
+      fill: currentColor
+    }
+
+    .fa-layer-group {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-shopping-cart {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath d='M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath d='M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-envelope {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-pencil-alt {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-trash-alt {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-camera {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM256 370c61.9 0 112-50.1 112-112S317.9 146 256 146s-112 50.1-112 112 50.1 112 112 112zm0-192c44.2 0 80 35.8 80 80s-35.8 80-80 80-80-35.8-80-80 35.8-80 80-80z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM256 370c61.9 0 112-50.1 112-112S317.9 146 256 146s-112 50.1-112 112 50.1 112 112 112zm0-192c44.2 0 80 35.8 80 80s-35.8 80-80 80-80-35.8-80-80 35.8-80 80-80z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+
+    .fa-share {
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M503.691 189.836L327.687 37.851C312.281 24.546 288 35.347 288 56.015v80.053C127.371 137.907 0 170.1 0 322.326c0 61.441 39.581 122.309 83.333 154.132 13.653 9.931 33.111-2.533 28.077-18.631C66.066 312.814 132.917 274.316 288 272.085V360c0 20.7 24.3 31.453 39.687 18.164l176.004-152c11.071-9.562 11.086-26.753 0-36.328z'/%3E%3C/svg%3E") no-repeat center/contain;
+      background: currentColor;
+      -webkit-mask-size: contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M503.691 189.836L327.687 37.851C312.281 24.546 288 35.347 288 56.015v80.053C127.371 137.907 0 170.1 0 322.326c0 61.441 39.581 122.309 83.333 154.132 13.653 9.931 33.111-2.533 28.077-18.631C66.066 312.814 132.917 274.316 288 272.085V360c0 20.7 24.3 31.453 39.687 18.164l176.004-152c11.071-9.562 11.086-26.753 0-36.328z'/%3E%3C/svg%3E") no-repeat center/contain
+    }
+  </style>
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <title>巫カードフィルター | 巫KANNAGIカードゲーム</title>
+  <meta name="description" content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
+  <!-- Windows タイル -->
+  <meta name="msapplication-TileImage" content="images/icon.jpg" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <!-- iOS Safari（ホーム画面・ブックマーク） -->
+  <link rel="apple-touch-icon" sizes="180x180" href="images/icon.png" />
+  <!-- Android Chrome / 汎用 -->
+  <link rel="icon" type="image/png" sizes="192x192" href="images/icon.png" />
+  <script src="scripts.js"></script>
+  <script>
+    // Service Worker登録（キャッシュでリピーターの読み込みを高速化）
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js').catch(function () { });
+      });
+    }
+  </script>
+  <!-- OGP -->
+  <meta property="og:title" content="巫カードフィルター | 巫KANNAGIカードゲーム" />
+  <meta property="og:description"
+    content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
+  <meta property="og:image" content="https://hanil524.github.io/kannagi-cardlist/images/ogp.jpg" />
+  <meta property="og:url" content="https://hanil524.github.io/kannagi-cardlist/" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://hanil524.github.io/kannagi-cardlist/images/ogp.jpg" />
+</head>
+
+<body>
+  <!-- ローディングスピナー -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-overlay">
+      <div class="fingerprint-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="content">
+    <!-- PC版のヘッダー -->
+    <header id="main-header">
+      <div class="header-content">
+        <!-- メインメニュー -->
+        <div class="menu-item">
+          <a href="https://www.kannagi-cardgame.jp/home" target="_blank" rel="noreferrer" class="pc-only menu-trigger">巫
+            公式サイト</a>
+          <!-- サブメニュー -->
+          <div class="submenu">
+            <a href="https://www.kannagi-cardgame.jp/s-projects-side-by-side" target="_blank"
+              rel="noreferrer">遊び方・ルール</a>
+            <a href="https://www.kannagi-cardgame.jp/general-5" target="_blank" rel="noreferrer">よくある質問（Q&A）</a>
+            <a href="https://www.kannagi-cardgame.jp/%E3%82%AB%E3%83%BC%E3%83%89" target="_blank"
+              rel="noreferrer">商品情報・カード一覧（高画質）</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfI1PAr_6sq81Ag9A-rFYgJYmKU4JVhiPbDQ7ytYe0BjCg09Q/viewform"
+              target="_blank" rel="noreferrer">新カード募集フォーム</a>
+            <a href="https://x.com/kannagicb" target="_blank" rel="noreferrer">公式X（@kannagicb）</a>
+            <a href="https://www.youtube.com/@%E5%B7%ABKANNAGI%E3%82%AB%E3%83%BC%E3%83%89%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB"
+              target="_blank" rel="noreferrer">公式YouTubeチャンネル</a>
+          </div>
+        </div>
+
+        <!-- メインメニュー -->
+        <div class="menu-item">
+          <a href="https://kannagi.base.ec/" target="_blank" rel="noreferrer" class="pc-only menu-trigger">公式ストア</a>
+          <!-- サブメニュー -->
+          <div class="submenu">
+            <a href="https://www.happyshoten.com/categories/6255701/11" target="_blank" rel="noreferrer">シングルカード販売</a>
+            <a href="https://cardon.jp/pages/%E5%B7%ABkannagi%E3%82%AB%E3%83%BC%E3%83%89%E3%82%B2%E3%83%BC%E3%83%A0-top"
+              target="_blank" rel="noreferrer">カードン 通販</a>
+            <a href="https://eglanz.cart.fc2.com/" target="_blank" rel="noreferrer">AGITO池袋 通販</a>
+          </div>
+        </div>
+
+        <!-- メインメニュー -->
+        <div class="menu-item">
+          <a href="https://tonamel.com/organization/how1A?game=__OTHERS__" target="_blank" rel="noreferrer"
+            class="pc-only menu-trigger">公式イベント </a>
+          <!-- サブメニュー -->
+          <div class="submenu">
+            <a href="https://tonamel.com/organization/how1A?game=__OTHERS__" target="_blank"
+              rel="noreferrer">巫KANNAGI公式（Tonamel）</a>
+            <a href="https://twipla.jp/users/agito_ikebukuro" target="_blank" rel="noreferrer">AGITO池袋（TwiPla）</a>
+            <a href="https://tonamel.com/organization/ko39o?game=__OTHERS__" target="_blank"
+              rel="noreferrer">AGITO池袋（Tonamel）</a>
+            <a href="https://tonamel.com/organization/k6ftl?game=__OTHERS__" target="_blank" rel="noreferrer">TCGカフェ＆バー
+              Geek（Tonamel）</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <a href="https://wikiwiki.jp/kannagi_tcg" target="_blank" rel="noreferrer"
+            class="pc-only menu-trigger">関連サイト</a>
+          <!-- サブメニュー -->
+          <div class="submenu">
+            <a href="https://wikiwiki.jp/kannagi_tcg" target="_blank" rel="noreferrer">巫カードゲーム Wiki</a>
+            <a href="https://www.youtube.com/@liliaflows" target="_blank" rel="noreferrer">巫KANNAGI遊戯処 猫の額亭（YouTube）</a>
+            <a href="https://torecamap.co.jp/column/kannagi/" target="_blank" rel="noreferrer">トレカの地図（Webサイト）</a>
+            <a href="https://agito.zelc-promotion.com/agitopress/kannagitcg/" target="_blank"
+              rel="noreferrer">AGITO池袋（Webサイト）</a>
+          </div>
+        </div>
+
+        <!-- メインメニュー -->
+        <div class="menu-item">
+          <a href="https://x.com/hanil524" target="_blank" rel="noreferrer" class="pc-only menu-trigger">お知らせ</a>
+          <!-- サブメニュー -->
+          <div class="submenu">
+            <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">報告フォーム（アプデ履歴）</a>
+            <a href="https://hanil524.github.io/0cost-checker/" target="_blank" rel="noreferrer">零探しチェッカー（便利ツール）</a>
+            <a href="https://x.com/hanil524" target="_blank" rel="noreferrer">ツール運営者 はん（@hanil524）</a>
+            <a href="https://www.amazon.co.jp/hz/wishlist/ls/2RJU39XEURFH?ref_=list_d_wl_lfu_nav_1" target="_blank"
+              rel="noreferrer">欲しいものリスト（Amazon）</a>
+          </div>
+        </div>
+
+        <div class="search-container">
+          <input type="text" id="search-box" placeholder="カード名・属性で検索" />
+          <button id="clear-button-desktop" class="clear-button"
+            onclick="clearSearch('search-box', 'clear-button-desktop')">&times;</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- スマホ版のヘッダー -->
+    <div class="mobile-header">
+      <!-- ハンバーガーメニュー -->
+      <div class="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+        <div class="menu-text">メニュー</div>
+      </div>
+      <div class="search-container">
+        <input type="text" id="mobile-search-box" placeholder="カード名・属性で検索" />
+        <button id="clear-button-mobile" class="clear-button"
+          onclick="clearSearch('mobile-search-box', 'clear-button-mobile')">&times;</button>
+      </div>
+      <div class="deck-icon-container" onclick="openDeckBuilder()">
+        <i class="fas fa-layer-group"></i>
+        <div class="menu-text">デッキ</div>
+        <span class="deck-count-badge"></span>
+      </div>
+    </div>
+    <div class="menu-overlay"></div>
+    <!-- モバイルナビ -->
+    <nav class="mobile-nav">
+      <!-- メニュー上部ショートカットボタン -->
+      <div class="nav-header-buttons">
+        <a href="https://www.kannagi-cardgame.jp/home" target="_blank" rel="noreferrer">公式サイト</a>
+        <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">お問い合わせ</a>
+      </div>
+      <ul>
+        <!-- 巫 公式サイト -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label">巫KANNAGI公式サイト</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://www.kannagi-cardgame.jp/home" target="_blank" rel="noreferrer">巫 公式ホームページ</a></li>
+            <li><a href="https://www.kannagi-cardgame.jp/s-projects-side-by-side" target="_blank"
+                rel="noreferrer">遊び方・ルール</a></li>
+            <li><a href="https://www.kannagi-cardgame.jp/general-5" target="_blank" rel="noreferrer">よくある質問</a></li>
+            <li><a href="https://www.kannagi-cardgame.jp/%E3%82%AB%E3%83%BC%E3%83%89" target="_blank"
+                rel="noreferrer">商品情報・カード一覧（高画質）</a></li>
+            <li><a href="https://x.com/kannagicb" target="_blank" rel="noreferrer">公式X（@kannagicb）</a></li>
+            <li><a
+                href="https://www.youtube.com/@%E5%B7%ABKANNAGI%E3%82%AB%E3%83%BC%E3%83%89%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB"
+                target="_blank" rel="noreferrer">公式YouTubeチャンネル</a></li>
+            <li><a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfI1PAr_6sq81Ag9A-rFYgJYmKU4JVhiPbDQ7ytYe0BjCg09Q/viewform"
+                target="_blank" rel="noreferrer">新カード募集フォーム（公式運営）</a></li>
+          </ul>
+        </li>
+        <!-- 各種フォーム -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label">イベント・大会情報</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://tonamel.com/organization/how1A?game=__OTHERS__" target="_blank"
+                rel="noreferrer">公式主催イベント一覧（Tonamel）</a></li>
+            <li><a href="https://twipla.jp/users/agito_ikebukuro" target="_blank" rel="noreferrer">AGITO池袋（TwiPla）</a>
+            </li>
+            <li><a href="https://tonamel.com/organization/ko39o?game=__OTHERS__" target="_blank"
+                rel="noreferrer">AGITO池袋（Tonamel）</a></li>
+            <li><a href="https://tonamel.com/organization/k6ftl?game=__OTHERS__" target="_blank"
+                rel="noreferrer">TCGカフェ＆バー Geek（Tonamel）</a></li>
+          </ul>
+        </li>
+        <!-- 巫 公式ストア -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label"></i>ショッピングストア</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://kannagi.base.ec/" target="_blank" rel="noreferrer">巫 公式ストア</a></li>
+            <li><a href="https://eglanz.cart.fc2.com/" target="_blank" rel="noreferrer">AGITO池袋 通販</a></li>
+            <li><a href="https://www.happyshoten.com/categories/6255701/11" target="_blank"
+                rel="noreferrer">ハッピー商店（シングルカード販売）</a></li>
+            <li><a
+                href="https://cardon.jp/pages/%E5%B7%ABkannagi%E3%82%AB%E3%83%BC%E3%83%89%E3%82%B2%E3%83%BC%E3%83%A0-top"
+                target="_blank" rel="noreferrer">カードン 通販</a></li>
+          </ul>
+        </li>
+        <!-- 関連サイト -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label">関連サイト</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://wikiwiki.jp/kannagi_tcg" target="_blank" rel="noreferrer">巫カードゲーム Wiki（ルールの詳細）</a></li>
+            <li><a href="https://www.youtube.com/@liliaflows" target="_blank" rel="noreferrer">巫KANNAGI遊戯処
+                猫の額亭（YouTube）</a></li>
+            <li><a
+                href="https://torecamap.co.jp/column/kannagi/#%E3%80%90%E5%B7%ABKANNAGI%E3%82%AB%E3%83%BC%E3%83%89%E3%82%B2%E3%83%BC%E3%83%A0%E3%80%91%E3%81%AE%E5%88%B6%E4%BD%9C%E3%81%AB%E5%AF%BE%E3%81%99%E3%82%8B%E6%80%9D%E3%81%84"
+                target="_blank" rel="noreferrer">トレカの地図（紹介Webサイト）</a></li>
+          </ul>
+        </li>
+        <!-- ツール運営者 はん -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label">ツール運営者情報</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://x.com/hanil524" target="_blank" rel="noreferrer">ツール運営者 はん（@hanil524）</a></li>
+            <li><a href="https://lit.link/hanil524" target="_blank" rel="noreferrer">ツールまとめ（lit.link）</a></li>
+            <li><a href="https://hanil524.github.io/0cost-checker/" target="_blank" rel="noreferrer">零探しチェッカー（便利ツール）</a>
+            </li>
+            <li><a href="https://www.amazon.co.jp/hz/wishlist/ls/2RJU39XEURFH?ref_=list_d_wl_lfu_nav_1" target="_blank"
+                rel="noreferrer">欲しいものリスト（Amazon）</a></li>
+          </ul>
+        </li>
+        <!-- 不具合報告フォーム -->
+        <li class="nav-accordion">
+          <button class="nav-accordion-toggle" aria-expanded="false">
+            <span class="nav-accordion-label">お問い合わせ</span>
+            <span class="nav-accordion-icon">＋</span>
+          </button>
+          <ul class="nav-accordion-children">
+            <li><a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">不具合報告フォーム（アプデ履歴あり）</a>
+            </li>
+            <li><a href="https://x.com/hanil524" target="_blank" rel="noreferrer">DMでのお問い合わせ（@hanil524）</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- 閉じるボタンをul外・nav末尾に配置して黒空間をなくす -->
+      <a href="#" class="close-menu">メニューを閉じる</a>
+    </nav>
+
+    <main>
+      <div class="update-info">
+        <i class="fas fa-envelope"></i>
+        <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">報告フォーム</a>
+      </div>
+
+      <!-- フィルターボタン -->
+      <section id="filter-section">
+        <div id="filter-container">
+          <div class="filter-group">
+            <label>並び</label>
+            <div class="sort-buttons">
+              <button data-filter="number" onclick="sortCards('number')">No.</button>
+              <button data-filter="type" onclick="sortCards('type')">札種類</button>
+              <button data-filter="cost" onclick="sortCards('cost')">コスト</button>
+              <button data-filter="season" onclick="sortCardsBySeason()">季節</button>
+              <button data-filter="power" onclick="sortCards('power')">力</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>条件</label>
+            <div class="filter-buttons">
+              <button data-filter="series" onclick="openModal('series')">シリーズ</button>
+              <button data-filter="type" onclick="openModal('type')">札</button>
+              <button data-filter="cost" onclick="openModal('cost')">コスト</button>
+              <button data-filter="season" onclick="openModal('season')">季節</button>
+              <button data-filter="power" onclick="openModal('power')">力</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>要素</label>
+            <div class="filter-buttons">
+              <button data-filter="attribute" onclick="openModal('attribute')">属性</button>
+              <button data-filter="keyword" onclick="openModal('keyword')">キーワード</button>
+              <button data-filter="role" onclick="openModal('role')">役割</button>
+              <button data-filter="rare" onclick="openModal('rare')">レア</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <button onclick="resetFilters()">リセット</button>
+            <label class="limit-release" title="使用制限1～3枚の札を4枚まで解禁">
+              <input type="checkbox" id="limit-release-toggle" />
+              開放
+            </label>
+            <label class="and-filter-toggle" title="フィルター条件が全て一致するカードのみ表示">
+              <input type="checkbox" id="and-filter-toggle" />
+              絞り込み
+            </label>
+          </div>
+        </div>
+        <!-- 該当表示 -->
+        <div id="active-filters-pc" class="active-filters-pc" style="display: none"></div>
+        <div id="active-filters-mobile" class="active-filters-mobile" style="display: none"></div>
+      </section>
+
+      <!-- フィルター詳細表示エリアを追加 -->
+      <div id="filter-details" class="keyword-role-details" style="display: none;">
+        <div id="series-details" class="details-section"></div>
+        <div id="rare-details" class="details-section"></div>
+        <div id="keyword-details" class="details-section"></div>
+        <div id="role-details" class="details-section"></div>
+      </div>
+
+      <!-- 検索結果枚数表示 -->
+      <div id="search-result-count" class="search-result-count">検索結果 0枚</div>
+
+      <!-- カードリスト -->
+      <section id="card-list">
+        <div id="no-cards-message" style="display: none">
+          <p><strong>該当カードがありません！</strong></p>
+          <p><strong>「リセット」を押してください。</strong></p>
+        </div>
+
+        <!-- カードリストはjsに移転 -->
+        <script src="cards.js"></script>
+        <script>document.getElementById('card-list')
+            .insertAdjacentHTML('beforeend', window.__CARDS_HTML);</script>
+      </section>
+    </main>
+
+    <div id="modal" class="modal" onclick="closeModalOnClick(event)">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-buttons" class="modal-buttons"></div>
+      </div>
+    </div>
+
+    <!-- 範囲選択モーダル -->
+    <div id="range-modal-overlay" class="range-modal-overlay" style="display: none"
+      onclick="if(event.target===this)closeRangeModal()">
+      <div class="range-modal">
+        <div class="range-modal-title" id="range-modal-title">コストの範囲選択</div>
+        <div class="range-modal-display">
+          <span id="range-display-min">0</span>
+          <span class="range-tilde">～</span>
+          <span id="range-display-max">20</span>
+        </div>
+        <div class="range-modal-instruction">最低値、最高値を選択してください。</div>
+        <div class="range-pickers">
+          <div class="range-picker-wrapper">
+            <div class="range-picker-label">最低値</div>
+            <div class="range-picker" id="range-picker-min">
+              <div class="range-picker-highlight"></div>
+              <div class="range-picker-scroll" id="range-scroll-min"></div>
+            </div>
+          </div>
+          <div class="range-picker-wrapper">
+            <div class="range-picker-label">最高値</div>
+            <div class="range-picker" id="range-picker-max">
+              <div class="range-picker-highlight"></div>
+              <div class="range-picker-scroll" id="range-scroll-max"></div>
+            </div>
+          </div>
+        </div>
+        <div class="range-modal-buttons">
+          <button class="range-btn-cancel" onclick="closeRangeModal()">キャンセル</button>
+          <button class="range-btn-apply" onclick="applyRangeFilter()">適用</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- シリーズ -->
+    <div id="series" class="filter-content" style="display: none">
+      <span class="filter-category">シリーズ</span>
+      <button onclick="toggleFilterCard('series', '夏VS冬バトルセット')" class="batoruiro"
+        data-tooltip="夏冬 スタートデッキ（2023年9月22日発売）">夏VS冬バトルセット</button>
+      <button onclick="toggleFilterCard('series', '新季の到来')" class="sinkiiro"
+        data-tooltip="ブースターパック 第一弾（2024年2月29日発売）">新季の到来</button>
+      <button onclick="toggleFilterCard('series', '百鬼夜行')" class="hyakkiiro"
+        data-tooltip="ブースターパック 第二弾（2024年7月21日発売）">百鬼夜行</button>
+      <button onclick="toggleFilterCard('series', 'うつくしいせかい')" class="utukusiiro"
+        data-tooltip="夏 コンセプトデッキ（2024年8月17日発売）">うつくしいせかい</button>
+      <button onclick="toggleFilterCard('series', 'おいしゃさんごっこ')" class="oisyairo"
+        data-tooltip="冬 コンセプトデッキ（2024年8月17日発売）">おいしゃさんごっこ</button>
+      <button onclick="toggleFilterCard('series', 'さいごのうた')" class="saigoiro"
+        data-tooltip="春 コンセプトデッキ（2024年10月27日発売）">さいごのうた</button>
+      <button onclick="toggleFilterCard('series', 'あなたのよこで')" class="anatairo"
+        data-tooltip="秋 コンセプトデッキ（2024年10月27日発売）">あなたのよこで</button>
+      <button onclick="toggleFilterCard('series', 'れもんちゃんデッキ')" class="lemoniro"
+        data-tooltip="全季節 スタートデッキ（2024年11月22日発売）">れもんちゃんデッキ</button>
+      <button onclick="toggleFilterCard('series', '怪談師')" class="kaidaniro"
+        data-tooltip="ユーザーズパック 第一弾（2024年12月22日発売）">怪談師</button>
+      <button onclick="toggleFilterCard('series', '学校の怪談')" class="gakkouiro"
+        data-tooltip="「学校の怪談」ブースターパック（2025年3月28日発売）">学校の怪談</button>
+      <button onclick="toggleFilterCard('series', 'SSS47')" class="sssiro"
+        data-tooltip="『Scary Spot Sister's』 「学校の怪談」パックに同梱（2025年3月28日発売）">SSS47</button>
+      <button onclick="toggleFilterCard('series', '怪談師二章')" class="kaidaniro"
+        data-tooltip="ユーザーズパック 第二弾（2025年6月6日発売）">怪談師二章</button>
+      <button onclick="toggleFilterCard('series', '都市伝説')" class="toshiiro"
+        data-tooltip="ブースターパック 第三弾（2025年7月5日発売）">都市伝説</button>
+      <button onclick="toggleFilterCard('series', '妖怪デッキ：墓暴き')" class="youkaiiro"
+        data-tooltip="スタートデッキ（2025年9月25日発売）">妖怪デッキ：墓暴き</button>
+      <button onclick="toggleFilterCard('series', 'ナナフシギ襲来')" class="nanahushigiiro"
+        data-tooltip="ブースターパック（2025年10月17日発売）">ナナフシギ襲来</button>
+      <button onclick="toggleFilterCard('series', '怪談師三章')" class="kaidaniro"
+        data-tooltip="ユーザーズパック 第三弾（2026年1月30日発売）">怪談師三章</button>
+      <button onclick="toggleFilterCard('series', '猫花の約束')" class="byoukairo"
+        data-tooltip="ブースターパック（2026年4月29日発売）">猫花の約束</button>
+      <button onclick="toggleFilterCard('series', 'プロモ')" class="puromoiro" data-tooltip="店舗コラボ、イベント配布など">プロモ</button>
+    </div>
+    <!-- コスト -->
+    <div id="cost" class="filter-content" style="display: none">
+      <div class="filter-category-header">
+        <span class="filter-category-label">コスト</span>
+        <button class="range-select-btn" onclick="openRangeModal('cost')">範囲選択</button>
+      </div>
+    </div>
+    <!-- 力 -->
+    <div id="power" class="filter-content" style="display: none">
+      <div class="filter-category-header">
+        <span class="filter-category-label">力</span>
+        <button class="range-select-btn" onclick="openRangeModal('power')">範囲選択</button>
+      </div>
+    </div>
+    <!-- 札種類 -->
+    <div id="type" class="filter-content" style="display: none">
+      <span class="filter-category">札種類</span>
+      <button onclick="toggleFilterCard('type', '場所札')" class="basyoiro">場所札</button>
+      <button onclick="toggleFilterCard('type', '怪異札')" class="kaiiiro">怪異札</button>
+      <button onclick="toggleFilterCard('type', '道具札')" class="douguiro">道具札</button>
+      <button onclick="toggleFilterCard('type', '季節札')" class="kisetsuiro">季節札</button>
+    </div>
+    <!-- 季節 -->
+    <div id="season" class="filter-content" style="display: none">
+      <span class="filter-category">季節</span>
+      <button onclick="toggleFilterCard('season', '春')" class="haruiro">春</button>
+      <button onclick="toggleFilterCard('season', '夏')" class="natsuiro">夏</button>
+      <button onclick="toggleFilterCard('season', '秋')" class="akiiro">秋</button>
+      <button onclick="toggleFilterCard('season', '冬')" class="huyuiro">冬</button>
+      <button onclick="toggleFilterCard('season', '無')" class="muiro">無</button>
+      <span class="filter-category">混化（複合季節）</span>
+      <button onclick="toggleFilterCard('season', '混化')" class="konkairo">混化</button>
+      <button onclick="toggleFilterCard('season', '春夏')" class="harunatsuiro">春夏</button>
+      <button onclick="toggleFilterCard('season', '春冬')" class="haruhuyuiro">春冬</button>
+      <button onclick="toggleFilterCard('season', '秋夏')" class="akinatsuiro">秋夏</button>
+      <button onclick="toggleFilterCard('season', '秋冬')" class="akihuyuiro">秋冬</button>
+      <button onclick="toggleFilterCard('season', '春夏秋冬')" class="syunkasyuutoiro">春夏秋冬</button>
+    </div>
+
+    <!-- 属性 -->
+    <div id="attribute" class="filter-content" style="display: none">
+      <span class="filter-category">あ（※効果対象になった属性、五十音順）</span>
+      <button onclick="toggleFilterCard('attribute', 'WBD')">WBD</button>
+      <button onclick="toggleFilterCard('attribute', '噂')">噂</button>
+      <button onclick="toggleFilterCard('attribute', 'SSS')">SSS</button>
+      <button onclick="toggleFilterCard('attribute', '怨霊')">怨霊</button>
+      <button onclick="toggleFilterCard('attribute', '鬼')">鬼</button>
+      <span class="filter-category">か</span>
+      <button onclick="toggleFilterCard('attribute', '刀')">刀</button>
+      <button onclick="toggleFilterCard('attribute', '糧')">糧</button>
+      <button onclick="toggleFilterCard('attribute', '楽器')">楽器</button>
+      <button onclick="toggleFilterCard('attribute', '鎌')">鎌</button>
+      <button onclick="toggleFilterCard('attribute', '神')" data-tooltip="※「同名カード」の神は場に1枚まで">神</button>
+      <button onclick="toggleFilterCard('attribute', '仮面')">仮面</button>
+      <button onclick="toggleFilterCard('attribute', '血液')">血液</button>
+      <button onclick="toggleFilterCard('attribute', '犬族')">犬族</button>
+      <button onclick="toggleFilterCard('attribute', '交通事故')">交通事故</button>
+      <button onclick="toggleFilterCard('attribute', '古城')">古城</button>
+      <button onclick="toggleFilterCard('attribute', '狐面')">狐面</button>
+      <span class="filter-category">さ</span>
+      <button onclick="toggleFilterCard('attribute', '事件')">事件</button>
+      <button onclick="toggleFilterCard('attribute', '銃')">銃</button>
+      <span class="filter-category">た</span>
+      <button onclick="toggleFilterCard('attribute', '大蛇')">大蛇</button>
+      <button onclick="toggleFilterCard('attribute', '罪')">罪</button>
+      <button onclick="toggleFilterCard('attribute', '動物')">動物</button>
+      <button onclick="toggleFilterCard('attribute', '道路')">道路</button>
+      <button onclick="toggleFilterCard('attribute', '灯火')">灯火</button>
+      <button onclick="toggleFilterCard('attribute', '髑髏')">髑髏</button>
+      <button onclick="toggleFilterCard('attribute', '都市伝説')">都市伝説</button>
+      <span class="filter-category">な</span>
+      <button onclick="toggleFilterCard('attribute', '七不思議')">七不思議</button>
+      <button onclick="toggleFilterCard('attribute', '人魚')">人魚</button>
+      <button onclick="toggleFilterCard('attribute', '人形')">人形</button>
+      <span class="filter-category">は</span>
+      <button onclick="toggleFilterCard('attribute', '廃')">「廃」</button>
+      <button onclick="toggleFilterCard('attribute', '廃病院')">廃病院</button>
+      <button onclick="toggleFilterCard('attribute', '花')">花</button>
+      <button onclick="toggleFilterCard('attribute', '不吉')">不吉</button>
+      <button onclick="toggleFilterCard('attribute', '腐乱')">腐乱</button>
+      <button onclick="toggleFilterCard('attribute', '墓地')">墓地</button>
+      <span class="filter-category">ま</span>
+      <button onclick="toggleFilterCard('attribute', '蟲')">蟲</button>
+      <span class="filter-category">や</span>
+      <button onclick="toggleFilterCard('attribute', '幽霊')">幽霊</button>
+      <button onclick="toggleFilterCard('attribute', '妖怪')">妖怪</button>
+      <span class="filter-category">ら</span>
+      <button onclick="toggleFilterCard('attribute', '龍')">龍</button>
+      <button onclick="toggleFilterCard('attribute', '霊場')">霊場</button>
+      <button onclick="toggleFilterCard('attribute', '霊能者')">霊能者</button>
+      <button onclick="toggleFilterCard('attribute', '牢獄')">牢獄</button>
+    </div>
+    <!-- キーワード -->
+    <div id="keyword" class="filter-content" style="display: none">
+      <span class="filter-category">あ（※五十音順）</span>
+      <span class="filter-category">か</span>
+      <button onclick="toggleFilterCard('keyword', '学校の怪談')" data-tooltip="手札公開場の「噂」属性の枚数分、力が1上がる">学校の怪談</button>
+      <button onclick="toggleFilterCard('keyword', '合唱')"
+        data-tooltip="合唱の発動時、場の「合唱」札を好きな枚数魂に送る。その札の効果と力を得て、相手に与える">合唱</button>
+      <button onclick="toggleFilterCard('keyword', '鬼動')"
+        data-tooltip="攻撃中、憑依中以外の、自分の「起き」状態の場所札を1枚「伏せ」にすることで発動する">鬼動</button>
+      <button onclick="toggleFilterCard('keyword', '逆境')"
+        data-tooltip="ターン1回の制限なく、除外枚数が指定以上の時、「起き」状態で、手札・魂から召喚できる。攻撃後には魂ではなく除外される">逆境</button>
+      <button onclick="toggleFilterCard('keyword', '魚群')"
+        data-tooltip="攻撃して魂になる前に、この札のコスト以下の「人魚」属性札を、フェイズ関係なく魂から「起き」状態で召喚する。攻撃フェイズを1回追加で得る">魚群</button>
+      <button onclick="toggleFilterCard('keyword', '結界')" data-tooltip="自分がダメージを受ける時、この札を除外してダメージを軽減する">結界</button>
+      <button onclick="toggleFilterCard('keyword', '言霊')"
+        data-tooltip="自分の手札を1枚魂に送り、その札が「七不思議」属性の場合、効果が発動する">言霊</button>
+      <span class="filter-category">さ</span>
+      <button onclick="toggleFilterCard('keyword', '四季欲')" data-tooltip="召喚時、自分の場の季節札を魂に送り、効果を発動する">四季欲</button>
+      <button onclick="toggleFilterCard('keyword', '襲撃')" data-tooltip="相手の場所札にのみ攻撃できる。この攻撃で力が0になった札は除外される">襲撃</button>
+      <button onclick="toggleFilterCard('keyword', '正体不明')"
+        data-tooltip="デッキの1番上を裏向き、「伏せ」状態で場に召喚する。その札は季節「無」でコスト、力が指定される">正体不明</button>
+      <button onclick="toggleFilterCard('keyword', '神秘')" data-tooltip="この札が場にある時、相手札の効果を受けず、選択もされない">神秘</button>
+      <button onclick="toggleFilterCard('keyword', '潜在能力')"
+        data-tooltip="零探しの後、この札が自分の手札にある場合、召喚（展開）してもよい">潜在能力</button>
+      <button onclick="toggleFilterCard('keyword', '鮮明')" data-tooltip="この札のコスト以上の場所札に表向きで憑依する。「この札の季節」も必須">鮮明</button>
+      <button onclick="toggleFilterCard('keyword', '憎悪')"
+        data-tooltip="「この札以外」の「この札と同じ札」が魂にある状態で、魂数が指定以上の時、効果を発動する">憎悪</button>
+      <button onclick="toggleFilterCard('keyword', '速攻')" data-tooltip="この札は「起き」状態で召喚する">速攻</button>
+      <span class="filter-category">た</span>
+      <button onclick="toggleFilterCard('keyword', '追撃')" data-tooltip="相手のライフが指定以下の時、効果を発動する">追撃</button>
+      <button onclick="toggleFilterCard('keyword', '徳')" data-tooltip="デッキの1番上を裏向きで除外し、それが10枚になるとゲームに勝利する">徳</button>
+      <button onclick="toggleFilterCard('keyword', '突現')" data-tooltip="自分の手札からフェイズとコスト関係なく、この札を召喚してもよい">突現</button>
+      <span class="filter-category">な</span>
+      <button onclick="toggleFilterCard('keyword', '妬み')" data-tooltip="相手のライフが指定以上の時、効果を発動する">妬み</button>
+      <button onclick="toggleFilterCard('keyword', '呪い')" data-tooltip="自分のライフを半分にすることで使用できる。端数は切り下げる">呪い</button>
+      <span class="filter-category">は</span>
+      <button onclick="toggleFilterCard('keyword', '秘境')" data-tooltip="この札が場にある時、相手の札効果から選択されない">秘境</button>
+      <button onclick="toggleFilterCard('keyword', '不屈')" data-tooltip="この札が除外された時、効果を発動する">不屈</button>
+      <button onclick="toggleFilterCard('keyword', '↻（伏せ）')"
+        data-tooltip="場にある「起き」状態のこの札を「伏せ」にした時、効果が発動する">↻（伏せ）</button>
+      <button onclick="toggleFilterCard('keyword', '憤怒')" data-tooltip="自分のライフが指定以下の時、効果を発動する">憤怒</button>
+      <span class="filter-category">ら</span>
+      <button onclick="toggleFilterCard('keyword', '楽園')" data-tooltip="自分のライフが指定以上の時、効果を発動する">楽園</button>
+      <button onclick="toggleFilterCard('keyword', '霊視')" data-tooltip="札種類を1つ宣言し、山札の上を1枚除外。宣言通りなら効果を発動する">霊視</button>
+    </div>
+    <!-- 役割 -->
+    <div id="role" class="filter-content" style="display: none">
+      <span class="filter-category">メイン</span>
+      <button onclick="toggleFilterCard('role', '召喚時')" data-tooltip="場所札を場に出した時、効果が発動すること">召喚時</button>
+      <button onclick="toggleFilterCard('role', '展開時')" data-tooltip="季節札を場に出した時、効果が発動すること">展開時</button>
+      <button onclick="toggleFilterCard('role', '常時')" data-tooltip="カードの効果が常に発動していること">常時</button>
+      <button onclick="toggleFilterCard('role', '攻撃時')" data-tooltip="場所札の攻撃時、効果が発動すること">攻撃時</button>
+      <button onclick="toggleFilterCard('role', '「起き」')" data-tooltip="場にある札を「起き」状態にすること">「起き」</button>
+      <button onclick="toggleFilterCard('role', '「伏せ」')" data-tooltip="場にある札を「伏せ」状態にすること">「伏せ」</button>
+      <button onclick="toggleFilterCard('role', '回復フェイズ')" data-tooltip="「回復フェイズ」に影響するカード全般">回復フェイズ</button>
+      <span class="filter-category">ドロー</span>
+      <button onclick="toggleFilterCard('role', 'ドロー')" data-tooltip="山札の上からカードを引くこと">ドロー</button>
+      <button onclick="toggleFilterCard('role', '公開ドロー')" data-tooltip="山札の上から引いたカードを手札公開場に置くこと">公開ドロー</button>
+      <button onclick="toggleFilterCard('role', '底ドロー')" data-tooltip="デッキの一番下からカードを引くこと">底ドロー</button>
+      <button onclick="toggleFilterCard('role', '相手ドロー')" data-tooltip="相手のデッキからカードを引かせること">相手ドロー</button>
+      <button onclick="toggleFilterCard('role', 'サーチ')" data-tooltip="山札から対象のカードを狙って引くこと">サーチ</button>
+      <span class="filter-category">ダメージ</span>
+      <button onclick="toggleFilterCard('role', '札ダメ')" data-tooltip="場所札にダメージを与えること">札ダメ</button>
+      <button onclick="toggleFilterCard('role', '直接ダメ')" data-tooltip="相手ライフに直接ダメージを与える効果">直接ダメ</button>
+      <button onclick="toggleFilterCard('role', '自傷ダメ')" data-tooltip="自分のライフに直接ダメージを与える効果">自傷ダメ</button>
+      <button onclick="toggleFilterCard('role', '魂貫通')" data-tooltip="札のダメージを魂で防御できないこと">魂貫通</button>
+      <button onclick="toggleFilterCard('role', 'ダメ無効')" data-tooltip="相手からのダメージを無効にする効果">ダメ無効</button>
+      <span class="filter-category">除去</span>
+      <button onclick="toggleFilterCard('role', '札除去')" data-tooltip="場にあるカードを魂、除外に送ること">札除去</button>
+      <button onclick="toggleFilterCard('role', 'バウンス')" data-tooltip="場のカードを手札などに戻すこと">バウンス</button>
+      <button onclick="toggleFilterCard('role', '除去無効')" data-tooltip="場所札を除去する効果を無効にする">除去無効</button>
+      <button onclick="toggleFilterCard('role', '季節札除去')" data-tooltip="相手の場にある季節札を、別の場所へ送ること">季節札除去</button>
+      <button onclick="toggleFilterCard('role', '除外除去')" data-tooltip="相手の除外されているカードを、別の場所へ送ること">除外除去</button>
+      <button onclick="toggleFilterCard('role', '徳除去')" data-tooltip="相手の「徳」を減らすこと">徳除去</button>
+      <span class="filter-category">魂</span>
+      <button onclick="toggleFilterCard('role', '魂加速')" data-tooltip="魂をカードの効果で増やすこと">魂加速</button>
+      <button onclick="toggleFilterCard('role', '魂利用')" data-tooltip="魂にあるカードに影響がある効果">魂利用</button>
+      <button onclick="toggleFilterCard('role', '魂戻し')" data-tooltip="魂から手札にカードを戻すこと">魂戻し</button>
+      <button onclick="toggleFilterCard('role', 'コスト軽減')" data-tooltip="使用する際に必要なコストを軽減する効果">コスト軽減</button>
+      <button onclick="toggleFilterCard('role', '踏み倒し')" data-tooltip="本来のコストより、少ない魂でカードを使用すること">踏み倒し</button>
+      <span class="filter-category">除外</span>
+      <button onclick="toggleFilterCard('role', '除外加速')" data-tooltip="除外をカードの効果で増やすこと">除外加速</button>
+      <button onclick="toggleFilterCard('role', '除外戻し')" data-tooltip="除外されているカードを、手札・場・デッキなどに戻すこと">除外戻し</button>
+      <span class="filter-category">力</span>
+      <button onclick="toggleFilterCard('role', 'バフ')" data-tooltip="力を上げる効果">バフ</button>
+      <button onclick="toggleFilterCard('role', '力固定')" data-tooltip="力を一定の数値で固定する効果">力固定</button>
+      <span class="filter-category">ヒール</span>
+      <button onclick="toggleFilterCard('role', 'ヒール')" data-tooltip="ライフを回復すること">ヒール</button>
+      <button onclick="toggleFilterCard('role', '相手ヒール')" data-tooltip="相手のライフを回復すること">相手ヒール</button>
+      <button onclick="toggleFilterCard('role', 'ヒール無効')" data-tooltip="カードの効果でライフを回復できなくすること">ヒール無効</button>
+      <button onclick="toggleFilterCard('role', 'ドレイン')" data-tooltip="ダメージを与えつつ、ライフを回復すること">ドレイン</button>
+      <span class="filter-category">手札操作</span>
+      <button onclick="toggleFilterCard('role', '手札入替')" data-tooltip="手札のカードと他の場所にあるカードを入れ替えること">手札入替</button>
+      <button onclick="toggleFilterCard('role', '手札公開')" data-tooltip="手札を公開する効果">手札公開</button>
+      <button onclick="toggleFilterCard('role', '手札非公開')" data-tooltip="手札公開場にあるカードを非公開にすること">手札非公開</button>
+      <span class="filter-category">デッキ操作</span>
+      <button onclick="toggleFilterCard('role', '底送り')" data-tooltip="デッキの一番下にカードを置くこと">底送り</button>
+      <button onclick="toggleFilterCard('role', '底利用')" data-tooltip="デッキの一番下のカードを対象にすること">底利用</button>
+      <button onclick="toggleFilterCard('role', 'トップ送り')" data-tooltip="デッキの一番上にカードを置くこと">トップ送り</button>
+      <button onclick="toggleFilterCard('role', 'トップ確認')" data-tooltip="デッキの一番上を確認すること">トップ確認</button>
+      <span class="filter-category">妨害</span>
+      <button onclick="toggleFilterCard('role', 'ハンデス')" data-tooltip="相手の手札を削ること">ハンデス</button>
+      <button onclick="toggleFilterCard('role', 'ランデス')" data-tooltip="相手の魂を削ること">ランデス</button>
+      <button onclick="toggleFilterCard('role', 'デッキ破壊')" data-tooltip="LO（ライブラリー アウト）に関する札">デッキ破壊</button>
+      <button onclick="toggleFilterCard('role', 'ロック')" data-tooltip="相手の行動を制限すること">ロック</button>
+      <button onclick="toggleFilterCard('role', '札無効')" data-tooltip="カードの効果を無効化すること">札無効</button>
+      <span class="filter-category">憑依</span>
+      <button onclick="toggleFilterCard('role', '憑依加速')" data-tooltip="憑依をカードの効果で増やすこと">憑依加速</button>
+      <button onclick="toggleFilterCard('role', '憑依破壊')" data-tooltip="憑依をカードの効果で減らすこと">憑依破壊</button>
+      <span class="filter-category">属性</span>
+      <button onclick="toggleFilterCard('role', '属性追加')" data-tooltip="カードに新たな属性を付与すること">属性追加</button>
+      <button onclick="toggleFilterCard('role', '属性削除')" data-tooltip="カードの属性を削除すること">属性削除</button>
+      <button onclick="toggleFilterCard('role', '「花子」')" data-tooltip="名前に「花子」が含まれているカード">「花子」</button>
+      <span class="filter-category">無効果</span>
+      <button onclick="toggleFilterCard('role', 'バニラ')" data-tooltip="効果がないカードのこと">バニラ</button>
+      <button onclick="toggleFilterCard('role', '効果を失う')" data-tooltip="カードの効果を失うこと">効果を失う</button>
+      <span class="filter-category">無敵</span>
+      <button onclick="toggleFilterCard('role', '神秘付与')" data-tooltip="神秘や秘境などを付与する効果">神秘付与</button>
+      <span class="filter-category">特殊</span>
+      <button onclick="toggleFilterCard('role', '特殊召喚')" data-tooltip="ターン1回の制限なく、場所札を特殊に召喚すること">特殊召喚</button>
+      <button onclick="toggleFilterCard('role', '追加行動')" data-tooltip="ターン1回の制限なく、追加で行動すること">追加行動</button>
+      <button onclick="toggleFilterCard('role', '特殊勝利')" data-tooltip="特殊な勝利条件を持つカード">特殊勝利</button>
+      <button onclick="toggleFilterCard('role', '上限解放')" data-tooltip="手札の枚数上限などがなくなる効果">上限解放</button>
+      <button onclick="toggleFilterCard('role', '2種類札')" data-tooltip="1つのカードが2つの札種類を持つこと">2種類札</button>
+      <span class="filter-category">裏</span>
+      <button onclick="toggleFilterCard('role', '裏指定')" data-tooltip="正体不明などで裏向きになっている札を指定する効果">裏指定</button>
+    </div>
+    <!-- レア度 -->
+    <div id="rare" class="filter-content" style="display: none">
+      <span class="filter-category">レア度</span>
+      <button onclick="toggleFilterCard('rare', 'C')">C</button>
+      <button onclick="toggleFilterCard('rare', 'UC')">UC</button>
+      <button onclick="toggleFilterCard('rare', 'R')">R</button>
+      <button onclick="toggleFilterCard('rare', 'SR')">SR</button>
+      <button onclick="toggleFilterCard('rare', 'KR')" data-tooltip="巫レア">KR</button>
+      <button onclick="toggleFilterCard('rare', 'SSR')" data-tooltip="スペシャルシークレットレア">SSR</button>
+      <button onclick="toggleFilterCard('rare', 'エキスパンション')" data-tooltip="封入率、レアリティ固定">エキスパンション</button>
+      <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
+    </div>
+
+    <div id="image-modal" class="image-modal">
+      <div class="modal-content">
+        <div class="image-container">
+          <img id="modal-image" src="" />
+          <!-- card-controls は JavaScript で動的に追加される -->
+        </div>
+        <button id="prev-image" class="image-nav-button prev" aria-label="Previous image">&#10094;</button>
+        <button id="next-image" class="image-nav-button next" aria-label="Next image">&#10095;</button>
+      </div>
+    </div>
+
+    <!-- デッキ一覧モーダルを追加 -->
+    <div id="deck-list-modal" class="deck-list-modal">
+      <div class="deck-list-content">
+        <div class="deck-list-header">
+          <button id="deck-backup-btn" class="deck-backup-button">保存</button>
+          <h2>デッキ一覧</h2>
+          <button class="deck-list-close">&times;</button>
+        </div>
+        <div class="deck-list-items">
+          <!-- デッキ1から9まで -->
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="1" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="1"><span>デッキ1</span></button>
+                <button class="deck-edit-button" data-deck-id="1">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="1">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="2" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="2"><span>デッキ2</span></button>
+                <button class="deck-edit-button" data-deck-id="2">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="2">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="3" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="3"><span>デッキ3</span></button>
+                <button class="deck-edit-button" data-deck-id="3">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="3">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="4" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="4"><span>デッキ4</span></button>
+                <button class="deck-edit-button" data-deck-id="4">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="4">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="5" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="5"><span>デッキ5</span></button>
+                <button class="deck-edit-button" data-deck-id="5">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="5">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="6" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="6"><span>デッキ6</span></button>
+                <button class="deck-edit-button" data-deck-id="6">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="6">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="7" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="7"><span>デッキ7</span></button>
+                <button class="deck-edit-button" data-deck-id="7">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="7">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="8" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="8"><span>デッキ8</span></button>
+                <button class="deck-edit-button" data-deck-id="8">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="8">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="9" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="9"><span>デッキ9</span></button>
+                <button class="deck-edit-button" data-deck-id="9">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="9">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="10" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="10"><span>デッキ10</span></button>
+                <button class="deck-edit-button" data-deck-id="10">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="10">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="11" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="11"><span>デッキ11</span></button>
+                <button class="deck-edit-button" data-deck-id="11">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="11">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="12" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="12"><span>デッキ12</span></button>
+                <button class="deck-edit-button" data-deck-id="12">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="12">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="13" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="13"><span>デッキ13</span></button>
+                <button class="deck-edit-button" data-deck-id="13">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="13">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="14" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="14"><span>デッキ14</span></button>
+                <button class="deck-edit-button" data-deck-id="14">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="14">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="deck-list-item">
+            <div class="deck-preview">
+              <img class="deck-preview-image" src="" alt="Preview Card" data-deck-id="15" />
+              <div class="deck-info">
+                <button class="deck-select-button" data-deck-id="15"><span>デッキ15</span></button>
+                <button class="deck-edit-button" data-deck-id="15">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="deck-delete-button" data-deck-id="15">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- デッキサムネイル選択モーダル -->
+    <div id="deck-thumbnail-modal" class="deck-thumbnail-modal">
+      <div class="deck-thumbnail-content">
+        <div class="deck-thumbnail-header">
+          <h2>デッキサムネイルの変更</h2>
+          <button class="deck-thumbnail-close">&times;</button>
+        </div>
+        <p class="deck-thumbnail-desc">デッキ名の左側に表示する画像を選んでください。</p>
+        <div class="deck-thumbnail-grid"></div>
+        <div class="deck-thumbnail-footer">
+          <button id="deck-thumbnail-confirm" class="deck-thumbnail-confirm" disabled>確定する</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOPボタン -->
+    <div id="topButton" class="top-button" onclick="window.scrollToTop()"></div>
+
+    <!-- サイトフッター -->
+    <footer id="site-footer" class="site-footer">
+      <nav class="footer-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+        <span class="footer-separator">|</span>
+        <a href="disclaimer.html">免責事項</a>
+        <span class="footer-separator">|</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8f24mL69hy2xLROsW7yi5ifoMN6DwQPSr7Msj2-q-3vd2gw/viewform"
+          target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 巫カードフィルター</p>
+    </footer>
+  </div>
+
+  <!-- デッキボタンを追加 -->
+  <div id="deckButton" class="deck-button">デッキ</div>
+
+  <div id="deck-modal" class="deck-modal">
+    <div class="deck-modal-content">
+      <!-- メニューバー -->
+      <div class="deck-menu">
+        <button class="deck-help-button">切替</button>
+        <button id="zero-check" class="deck-menu-button">零探し</button>
+        <div class="deck-counter">0枚</div>
+        <button id="deck-reset" class="deck-menu-button">消去</button>
+        <button id="deck-capture" class="deck-menu-button"><i class="fas fa-camera"></i> 画像</button>
+        <button id="back-to-gallery" class="deck-menu-button">×</button>
+      </div>
+
+      <!-- ヘルプ用のポップアップとオーバーレイを追加 -->
+      <div class="deck-help-overlay"></div>
+      <div class="deck-help-popup"></div>
+
+      <!-- デッキ表示エリア -->
+      <div id="deck-display" class="deck-display">
+        <!-- カードはJSで動的に追加 -->
+      </div>
+      <!-- デッキからカード一覧に戻るボタン -->
+      <div id="deck-back-button" class="deck-back-button">戻る</div>
+    </div>
+
+    <!-- リセット確認モーダル -->
+    <div id="reset-confirm" class="confirm-modal">
+      <div class="confirm-content">
+        <p>本当にデッキ内容をリセットしていいですか？</p>
+        <div class="confirm-buttons">
+          <button id="reset-yes">はい</button>
+          <button id="reset-no">いいえ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,14258 @@
+// cards.js
+window.__CARDS_HTML = `
+<!-- 夏VS冬バトルセット -->
+<div
+class="card"
+data-number="1"
+data-name="隠された櫛の家（かくされたくしのいえ）"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃屋 人形"
+>
+<img data-src="images/card_1_ (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="2"
+data-name="霊気漂う橿木集落（れいきただようかしのきしゅうらく）"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃集落 幽霊"
+>
+<img data-src="images/card_1_ (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="3"
+data-name="神隠しの廃集落（かみかくしのはいしゅうらく）夏"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="魂加速 自傷ダメ 攻撃時"
+data-keyword=""
+data-attribute="廃集落 神隠し"
+>
+<img data-src="images/card_1_ (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="4"
+data-name="発狂人形の家（はっきょうにんぎょうのいえ）"
+data-cost="1"
+data-power="1"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ"
+data-keyword="不屈"
+data-attribute="廃屋 人形"
+>
+<img data-src="images/card_1_ (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="5"
+data-name="怨まれた別荘（うらまれたべっそう）"
+data-cost="2"
+data-power="2"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 札ダメ 攻撃時"
+data-keyword="憤怒"
+data-attribute="廃別荘"
+>
+<img data-src="images/card_1_ (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="6"
+data-name="腐乱別荘（ふらんべっそう）"
+data-cost="3"
+data-power="2"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role=""
+data-keyword="速攻"
+data-attribute="廃別荘"
+>
+<img data-src="images/card_1_ (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="7"
+data-name="放棄された怪奇現象の家（ほうきされたかいきげんしょうのいえ）"
+data-cost="4"
+data-power="3"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="バフ"
+data-keyword=""
+data-attribute="廃屋 怨霊"
+>
+<img data-src="images/card_1_ (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="8"
+data-name="獣喰らいの廃旅館（けものぐらいのはいりょかん）"
+data-rare="UC"
+data-cost="5"
+data-power="1"
+data-series="夏VS冬バトルセット"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 札ダメ 攻撃時"
+data-keyword=""
+data-attribute="廃旅館 動物"
+>
+<img data-src="images/card_1_ (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="9"
+data-name="荒れ果てた幻想病院（あれはてたげんそうびょういん）"
+data-cost="6"
+data-power="3"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="公開ドロー ドロー 攻撃時"
+data-keyword=""
+data-attribute="廃病院 蟲"
+>
+<img data-src="images/card_1_ (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10"
+data-name="炎河荘（えんかそう）"
+data-cost="8"
+data-power="5"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="「起き」"
+data-keyword="逆境"
+data-attribute="廃旅館 火事"
+>
+<img data-src="images/card_1_ (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="11"
+data-name="受刑者のアジト（じゅけいしゃのあじと）"
+data-cost="10"
+data-power="7"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role=""
+data-keyword="神秘 憤怒 速攻"
+data-attribute="廃屋 罪 呪"
+>
+<img data-src="images/card_1_ (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="12"
+data-name="辿り着けない神社（たどりつけないじんじゃ）"
+data-cost="13"
+data-power="10"
+data-series="夏VS冬バトルセット"
+data-rare="SR"
+data-season="夏"
+data-type="場所札"
+data-role=""
+data-keyword="神秘"
+data-attribute="廃神社 狐面"
+>
+<img data-src="images/card_1_ (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="13"
+data-name="病ねずみ（やまいねずみ）"
+data-cost="0"
+data-power="0"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="蟲 病"
+>
+<img data-src="images/card_1_ (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="14"
+data-name="蠢く黒い影（うごめくくろいかげ）"
+data-cost="2"
+data-power="0"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="陰 蟲"
+>
+<img data-src="images/card_1_ (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="15"
+data-name="変異した蚯蚓（へんいしたみみず）"
+data-cost="5"
+data-power="0"
+data-series="夏VS冬バトルセット うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 公開ドロー ドロー"
+data-keyword=""
+data-attribute="蟲"
+>
+<img data-src="images/card_1_ (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="16"
+data-name="巫の幽霊（かんなぎのゆうれい）"
+data-cost="6"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="幽霊"
+>
+<img data-src="images/card_1_ (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="17"
+data-name="狐面の神（こめんのかみ）"
+data-cost="7"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="SR"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 除外加速"
+data-keyword=""
+data-attribute="神 狐 狐面の神"
+>
+<img data-src="images/card_1_ (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="18"
+data-name="死を告げる黒蝶（しをつげるこくちょう）"
+data-cost="11"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 手札公開 自傷ダメ"
+data-keyword="神秘"
+data-attribute="蟲 死神 神"
+>
+<img data-src="images/card_1_ (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="19"
+data-name="草刈り鎌（くさかりがま）"
+data-cost="1"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="鎌"
+>
+<img data-src="images/card_1_ (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="20"
+data-name="ランタン（らんたん）"
+data-cost="2"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 手札公開"
+data-keyword=""
+data-attribute="灯火"
+>
+<img data-src="images/card_1_ (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="21"
+data-name="呪いの藁人形（のろいのわらにんぎょう）"
+data-cost="4"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="人形 藁人形 呪"
+>
+<img data-src="images/card_1_ (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="22"
+data-name="発狂する日本人形（はっきょうするにほんにんぎょう）"
+data-cost="5"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 手札入替 底ドロー ドロー 底利用"
+data-keyword=""
+data-attribute="人形 日本人形"
+>
+<img data-src="images/card_1_ (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="23"
+data-name="真夏の夜（まなつのよ）"
+data-cost="6"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="夏"
+data-type="季節札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="蟲 幽霊"
+>
+<img data-src="images/card_1_ (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="24"
+data-name="漆黒の建造物（しっこくのけんぞうぶつ）"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃マンション 陰"
+>
+<img data-src="images/card_1_ (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="25"
+data-name="暗予劇場（あんよげきじょう）"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃劇場 胎内"
+>
+<img data-src="images/card_1_ (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="26"
+data-name="神隠しの廃集落（かみかくしのはいしゅうらく）冬"
+data-cost="0"
+data-power="1"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="冬"
+data-type="場所札"
+data-role="ロック"
+data-keyword=""
+data-attribute="廃集落 神隠し"
+>
+<img data-src="images/card_1_ (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="27"
+data-name="血液の貯蔵庫（けつえきのちょぞうこ）"
+data-cost="1"
+data-power="1"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="魂加速"
+data-keyword="不屈"
+data-attribute="廃別荘 血液"
+>
+<img data-src="images/card_1_ (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="28"
+data-name="東洋の廃洋館（とうようのはいようかん）"
+data-cost="2"
+data-power="3"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃洋館 石像"
+>
+<img data-src="images/card_1_ (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="29"
+data-name="朧車（おぼろぐるま）"
+data-cost="4"
+data-power="2"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="札除去 2種類札 バニラ"
+data-keyword=""
+data-attribute="廃車 妖怪"
+>
+<img data-src="images/card_1_ (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="30"
+data-name="異界監禁施設（いかいかんきんしせつ）"
+data-cost="5"
+data-power="3"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="ロック"
+data-keyword=""
+data-attribute="廃施設 牢獄"
+>
+<img data-src="images/card_1_ (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="31"
+data-name="夜霧の幻宿（よむのげんしゅく）"
+data-cost="6"
+data-power="3"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="札除去 攻撃時"
+data-keyword=""
+data-attribute="廃旅館 幻"
+>
+<img data-src="images/card_1_ (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="32"
+data-name="豪幻堂（ごうげんどう）"
+data-cost="7"
+data-power="1"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="古城 幻"
+>
+<img data-src="images/card_1_ (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="33"
+data-name="鬼人村（きじんむら）"
+data-cost="9"
+data-power="6"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="「起き」"
+data-keyword="逆境"
+data-attribute="鬼 廃村"
+>
+<img data-src="images/card_1_ (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="34"
+data-name="豪血の廃病院（ごうけつのはいびょういん）"
+data-cost="9"
+data-power="5"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="R"
+data-season="冬"
+data-type="場所札"
+data-role="札除去 攻撃時"
+data-keyword="神秘"
+data-attribute="廃病院 血液"
+>
+<img data-src="images/card_1_ (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="35"
+data-name="鬼ヶ淵（おにがぶち）"
+data-cost="13"
+data-power="1"
+data-series="夏VS冬バトルセット"
+data-rare="SR"
+data-season="冬"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword="神秘"
+data-attribute="鬼 霊場"
+>
+<img data-src="images/card_1_ (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="36"
+data-name="未完の石材（みかんのせきざい）"
+data-cost="0"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="怪異札"
+data-role="サーチ"
+data-keyword=""
+data-attribute="石像"
+>
+<img data-src="images/card_1_ (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="37"
+data-name="雲外鏡（うんがいきょう）"
+data-cost="1"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="怪異札"
+data-role="ドロー 自傷ダメ"
+data-keyword=""
+data-attribute="鏡"
+>
+<img data-src="images/card_1_ (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="38"
+data-name="霊安室の鏡（れいあんしつのかがみ）"
+data-cost="5"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="鏡 怨霊"
+>
+<img data-src="images/card_1_ (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="39"
+data-name="鬼面の神（きめんのかみ）"
+data-cost="7"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="SR"
+data-season="冬"
+data-type="怪異札"
+data-role=""
+data-keyword="神秘"
+data-attribute="神 鬼 鬼面の神"
+>
+<img data-src="images/card_1_ (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="40"
+data-name="鬼門（きもん）"
+data-cost="9"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="魂利用"
+data-keyword=""
+data-attribute="鬼 廃門"
+>
+<img data-src="images/card_1_ (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="41"
+data-name="血液達磨（けつえきだるま）"
+data-cost="1"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="札除去 自傷ダメ"
+data-keyword=""
+data-attribute="血液"
+>
+<img data-src="images/card_1_ (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="42"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
+data-cost="3"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="札無効 自傷ダメ"
+data-keyword=""
+data-attribute="血液"
+>
+<img data-src="images/card_1_ (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="43"
+data-name="野営（やえい）"
+data-cost="1"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="野営"
+>
+<img data-src="images/card_1_ (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="44"
+data-name="蘇り藁人形（よみがえりわらにんぎょう）"
+data-cost="5"
+data-power="0"
+data-series="夏VS冬バトルセット おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="道具札"
+data-role="魂戻し 魂利用"
+data-keyword=""
+data-attribute="人形 藁人形 蘇生"
+>
+<img data-src="images/card_1_ (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="45"
+data-name="人魚の活き血（にんぎょのいきち）"
+data-cost="8"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R 封印改訂"
+data-season="冬"
+data-type="道具札"
+data-role="魂利用 踏み倒し"
+data-keyword=""
+data-attribute="人魚 血液"
+>
+<img data-src="images/card_1_ (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="46"
+data-name="凍てつく時間（いてつくじかん）"
+data-cost="9"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="C"
+data-season="冬"
+data-type="季節札"
+data-role="バフ"
+data-keyword=""
+data-attribute="幻 幽霊"
+>
+<img data-src="images/card_1_ (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="47"
+data-name="身投げ岬（みなげみさき）"
+data-cost="2"
+data-power="4"
+data-series="夏VS冬バトルセット"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role=""
+data-keyword=""
+data-attribute="岬"
+>
+<img data-src="images/card_1_ (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="48"
+data-name="燃ゆる茸（もゆるだけ）"
+data-cost="3"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="秋"
+data-type="怪異札"
+data-role="除外戻し"
+data-keyword="鮮明 不屈"
+data-attribute="菌"
+>
+<img data-src="images/card_1_ (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="49"
+data-name="悪習の古記（あくしゅうのこき）"
+data-cost="1"
+data-power="0"
+data-series="夏VS冬バトルセット あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="道具札"
+data-role="「起き」"
+data-keyword=""
+data-attribute="古書"
+>
+<img data-src="images/card_1_ (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="50"
+data-name="散華淵（さんげぶち）"
+data-cost="1"
+data-power="1"
+data-series="夏VS冬バトルセット さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="ヒール"
+data-keyword="不屈"
+data-attribute="渓谷"
+>
+<img data-src="images/card_1_ (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="51"
+data-name="大蛇（だいじゃ）"
+data-cost="4"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="ヒール 直接ダメ ドレイン"
+data-keyword=""
+data-attribute="大蛇"
+>
+<img data-src="images/card_1_ (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="52"
+data-name="悠習の古日記（ゆうしゅうのこにっき）"
+data-cost="3"
+data-power="0"
+data-series="夏VS冬バトルセット"
+data-rare="C 封印改訂"
+data-season="春"
+data-type="道具札"
+data-role="「伏せ」"
+data-keyword=""
+data-attribute="古書"
+>
+<img data-src="images/card_1_ (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="53"
+data-name="れもんちゃん"
+data-cost="20"
+data-power="0"
+data-series="プロモ"
+data-rare="SSR"
+data-season="混化 春夏"
+data-type="怪異札"
+data-role=""
+data-keyword=""
+data-attribute=""
+>
+<img data-src="images/card_1_ (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 新季の到来 -->
+<div
+class="card"
+data-number="101"
+data-name="体探しの園（からださがしのその）"
+data-cost="0"
+data-power="1"
+data-series="新季の到来 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="園"
+>
+<img data-src="images/card_2_ (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="102"
+data-name="神隠しの廃集落（かみかくしのはいしゅうらく）春"
+data-cost="0"
+data-power="1"
+data-series="新季の到来 さいごのうた"
+data-rare="R"
+data-season="春"
+data-type="場所札"
+data-role="魂加速 攻撃時"
+data-keyword=""
+data-attribute="廃集落 神隠し"
+>
+<img data-src="images/card_2_ (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="103"
+data-name="光の指す方へ（ひかりのさすほうへ）"
+data-cost="1"
+data-power="1"
+data-series="新季の到来"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="魂貫通 常時"
+data-keyword="楽園"
+data-attribute="廃線 解脱"
+>
+<img data-src="images/card_2_ (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="104"
+data-name="吸血妃の栖（きゅうけつきのすみか）"
+data-cost="4"
+data-power="3"
+data-series="新季の到来"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="魂加速 札除去 召喚時"
+data-keyword=""
+data-attribute="蝙蝠 血液"
+>
+<img data-src="images/card_2_ (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="105"
+data-name="終わらない夢(おわらないゆめ)"
+data-cost="3"
+data-power="3"
+data-series="新季の到来"
+data-rare="R"
+data-season="春"
+data-type="場所札"
+data-role="魂加速"
+data-keyword=""
+data-attribute="悪夢"
+>
+<img data-src="images/card_2_ (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="106"
+data-name="菴捻銀山（あんねんぎんざん）"
+data-cost="4"
+data-power="3"
+data-series="新季の到来 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="常時"
+data-keyword="楽園"
+data-attribute="廃鉱山 解脱"
+>
+<img data-src="images/card_2_ (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="107"
+data-name="殺生岩（せっしょうがん）"
+data-cost="5"
+data-power="7"
+data-series="新季の到来 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="ランデス 札ダメ 札除去"
+data-keyword="襲撃"
+data-attribute="廃鉱山 殺人"
+>
+<img data-src="images/card_2_ (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="108"
+data-name="あのころのおもいで"
+data-cost="6"
+data-power="2"
+data-series="新季の到来"
+data-rare="R"
+data-season="春"
+data-type="場所札"
+data-role="回復フェイズ 常時"
+data-keyword=""
+data-attribute="家屋"
+>
+<img data-src="images/card_2_ (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="109"
+data-name="瘴気の壁（しょうきのかべ）"
+data-cost="6"
+data-power="2"
+data-series="新季の到来"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="ダメ無効 常時"
+data-keyword=""
+data-attribute="壁"
+>
+<img data-src="images/card_2_ (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="110"
+data-name="黒妖の犬族（こくようのけんぞく）"
+data-cost="7"
+data-power="4"
+data-series="新季の到来"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="魂加速 攻撃時"
+data-keyword=""
+data-attribute="犬族"
+>
+<img data-src="images/card_2_ (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="111"
+data-name="怒りの反撃（いかりのはんげき）"
+data-cost="7"
+data-power="1"
+data-series="新季の到来 さいごのうた"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="札ダメ 直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="災害 動物"
+>
+<img data-src="images/card_2_ (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="112"
+data-name="肥川の大蛇（ひのかわのおろち）"
+data-cost="10"
+data-power="8"
+data-series="新季の到来"
+data-rare="SR 封印改訂"
+data-season="春"
+data-type="場所札"
+data-role="直接ダメ 魂利用 召喚時"
+data-keyword=""
+data-attribute="神 大蛇"
+>
+<img data-src="images/card_2_ (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="113"
+data-name="うさぎの死骸（うさぎのしがい）"
+data-cost="0"
+data-power="0"
+data-series="新季の到来 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="動物"
+>
+<img data-src="images/card_2_ (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="114"
+data-name="猿真似（さるまね）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role=""
+data-keyword=""
+data-attribute="動物 視線"
+>
+<img data-src="images/card_2_ (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="115"
+data-name="骨女（ほねおんな）"
+data-cost="2"
+data-power="0"
+data-series="新季の到来 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role=""
+data-keyword=""
+data-attribute="幽霊 髑髏"
+>
+<img data-src="images/card_2_ (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="116"
+data-name="竹林の白蛇（ちくりんのしろへび）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="春"
+data-type="怪異札"
+data-role="バフ"
+data-keyword=""
+data-attribute="大蛇 髑髏"
+>
+<img data-src="images/card_2_ (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="117"
+data-name="底無し穴の幽霊（そこなしあなのゆうれい）"
+data-cost="7"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="バフ ヒール 除外戻し"
+data-keyword=""
+data-attribute="神 動物"
+>
+<img data-src="images/card_2_ (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="118"
+data-name="屈折する万華鏡（くっせつするまんげきょう）"
+data-cost="1"
+data-power="0"
+data-series="新季の到来 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="ヒール ドロー"
+data-keyword=""
+data-attribute="鏡"
+>
+<img data-src="images/card_2_ (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="119"
+data-name="威嚇（いかく）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="バフ 回復フェイズ"
+data-keyword=""
+data-attribute="動物"
+>
+<img data-src="images/card_2_ (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="120"
+data-name="お守り藁人形（おまもりわらにんぎょう）"
+data-cost="1"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="神秘付与"
+data-keyword=""
+data-attribute="人形 藁人形 御守り"
+>
+<img data-src="images/card_2_ (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="121"
+data-name="生き人形（いきにんぎょう）"
+data-cost="8"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="春"
+data-type="道具札"
+data-role="憑依破壊"
+data-keyword=""
+data-attribute="人形"
+>
+<img data-src="images/card_2_ (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="122"
+data-name="蛇霓の橋（じゃげいのはし）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="春"
+data-type="季節札"
+data-role="魂加速 直接ダメ ヒール"
+data-keyword=""
+data-attribute="大蛇 虹"
+>
+<img data-src="images/card_2_ (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="123"
+data-name="かかし"
+data-cost="0"
+data-power="2"
+data-series="新季の到来 うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="常時"
+data-keyword="速攻"
+data-attribute="廃集落 腐乱"
+>
+<img data-src="images/card_2_ (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="124"
+data-name="くねくね"
+data-cost="0"
+data-power="7"
+data-series="新季の到来"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="回復フェイズ 「起き」 常時"
+data-keyword=""
+data-attribute="神 畑"
+>
+<img data-src="images/card_2_ (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="125"
+data-name="キジムナー（きじむなー）"
+data-cost="1"
+data-power="1"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="手札入替 攻撃時"
+data-keyword=""
+data-attribute="妖怪"
+>
+<img data-src="images/card_2_ (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="126"
+data-name="殺人村（さつじんむら）"
+data-cost="2"
+data-power="3"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="札ダメ 札除去 常時"
+data-keyword="速攻 襲撃"
+data-attribute="廃村 殺人"
+>
+<img data-src="images/card_2_ (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="127"
+data-name="影残る廃屋（かげのこるはいおく）"
+data-cost="2"
+data-power="2"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="除去無効"
+data-keyword=""
+data-attribute="廃屋"
+>
+<img data-src="images/card_2_ (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="128"
+data-name="妊婦絵(にんぷえ)"
+data-cost="2"
+data-power="2"
+data-series="新季の到来 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 札ダメ"
+data-keyword="四季欲"
+data-attribute="廃円宿"
+>
+<img data-src="images/card_2_ (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="129"
+data-name="苦痛の日々（くつうのひび）"
+data-cost="3"
+data-power="2"
+data-series="新季の到来 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="手札入替 ドロー 攻撃時"
+data-keyword=""
+data-attribute="蟲 侵蝕"
+>
+<img data-src="images/card_2_ (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="130"
+data-name="霊能力者の家（れいのうりょくしゃのいえ）"
+data-cost="3"
+data-power="3"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 札ダメ"
+data-keyword="霊視"
+data-attribute="霊能者 亡者"
+>
+<img data-src="images/card_2_ (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="131"
+data-name="死臭の家（ししゅうのいえ）"
+data-cost="5"
+data-power="4"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role=""
+data-keyword="速攻"
+data-attribute="廃屋 腐乱"
+>
+<img data-src="images/card_2_ (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="132"
+data-name="食肉村（しょくにくむら）"
+data-cost="7"
+data-power="5"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="魂加速 攻撃時"
+data-keyword="速攻"
+data-attribute="廃集落 腐乱"
+>
+<img data-src="images/card_2_ (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="133"
+data-name="盟友の守護龍：赤竜（めいゆうのしゅごりゅう せきりゅう）"
+data-cost="8"
+data-power="3"
+data-series="新季の到来"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 常時"
+data-keyword=""
+data-attribute="神 竜"
+>
+<img data-src="images/card_2_ (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="134"
+data-name="大女の祟り（おおおんなのたたり）"
+data-cost="8"
+data-power="6"
+data-series="新季の到来"
+data-rare="SR"
+data-season="夏"
+data-type="場所札"
+data-role="バフ 「起き」 攻撃時"
+data-keyword=""
+data-attribute="神 怨霊"
+>
+<img data-src="images/card_2_ (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="135"
+data-name="神隠し（かみかくし）"
+data-cost="9"
+data-power="8"
+data-series="新季の到来 うつくしいせかい"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 除外加速 攻撃時"
+data-keyword=""
+data-attribute="神 狐面"
+>
+<img data-src="images/card_2_ (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="136"
+data-name="感染（かんせん）"
+data-cost="2"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="底ドロー ドロー 公開ドロー 底利用"
+data-keyword=""
+data-attribute="視線"
+>
+<img data-src="images/card_2_ (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="137"
+data-name="交配海老（こうはいえび）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="サーチ 直接ダメ"
+data-keyword=""
+data-attribute="蟲"
+>
+<img data-src="images/card_2_ (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="138"
+data-name="蝗害（こうがい）"
+data-cost="4"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="サーチ 直接ダメ"
+data-keyword=""
+data-attribute="蟲"
+>
+<img data-src="images/card_2_ (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="139"
+data-name="屍肉と交わる蜚蠊（しにくとまじわるごきかぶり）"
+data-cost="4"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="蟲"
+>
+<img data-src="images/card_2_ (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="140"
+data-name="背赤（せあか）"
+data-cost="4"
+data-power="0"
+data-series="新季の到来 うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="公開ドロー ドロー"
+data-keyword=""
+data-attribute="蟲 侵蝕"
+>
+<img data-src="images/card_2_ (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="141"
+data-name="狐女（きつねめ）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="狐"
+>
+<img data-src="images/card_2_ (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="142"
+data-name="伝染する不吉（でんせんするふきつ）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 札ダメ 魂戻し"
+data-keyword=""
+data-attribute="病"
+>
+<img data-src="images/card_2_ (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="143"
+data-name="萬倉（よろずぐら）"
+data-cost="6"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="刀 鎌 銃"
+>
+<img data-src="images/card_2_ (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="144"
+data-name="蚊柱（かばしら）"
+data-cost="9"
+data-power="0"
+data-series="新季の到来 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 札ダメ"
+data-keyword=""
+data-attribute="蟲 幻覚"
+>
+<img data-src="images/card_2_ (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="145"
+data-name="動き出す人体模型（うごきだすじんたいもけい）"
+data-cost="10"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="夏"
+data-type="道具札"
+data-role="魂戻し"
+data-keyword=""
+data-attribute="人形 蘇生"
+>
+<img data-src="images/card_2_ (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="146"
+data-name="宵闇の焔（よいやみのほむら）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="夏"
+data-type="季節札"
+data-role="バフ"
+data-keyword=""
+data-attribute="火事 呪"
+>
+<img data-src="images/card_2_ (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="147"
+data-name="童霊堂跡（どうりょうどうあと）"
+data-cost="0"
+data-power="1"
+data-series="新季の到来 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role=""
+data-keyword=""
+data-attribute="墓地"
+>
+<img data-src="images/card_2_ (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="148"
+data-name="神隠しの廃集落（かみかくしのはいしゅうらく）秋"
+data-cost="0"
+data-power="1"
+data-series="新季の到来 あなたのよこで"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="手札入替 攻撃時"
+data-keyword=""
+data-attribute="廃集落 神隠し"
+>
+<img data-src="images/card_2_ (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="149"
+data-name="終わらない葬儀場（おわらないそうぎじょう）"
+data-cost="4"
+data-power="4"
+data-series="新季の到来"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="除外戻し 除外除去 底送り 召喚時"
+data-keyword=""
+data-attribute="廃葬儀場"
+>
+<img data-src="images/card_2_ (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="150"
+data-name="魔の急カーブ（まのきゅうかーぶ）"
+data-cost="5"
+data-power="5"
+data-series="新季の到来"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="ハンデス 攻撃時"
+data-keyword="追撃 速攻"
+data-attribute="交通事故 道路"
+>
+<img data-src="images/card_2_ (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="151"
+data-name="座敷童（ざしきわらし）"
+data-cost="5"
+data-power="1"
+data-series="新季の到来"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="ロック 常時"
+data-keyword=""
+data-attribute="神 廃屋"
+>
+<img data-src="images/card_2_ (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="152"
+data-name="霊園前電話ボックス（れいえんまえでんわぼっくす）"
+data-cost="10"
+data-power="3"
+data-series="新季の到来 あなたのよこで"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="追加行動 召喚時"
+data-keyword=""
+data-attribute="電話 怨霊"
+>
+<img data-src="images/card_2_ (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="153"
+data-name="右足のない幽霊（みぎあしのないゆうれい）"
+data-cost="0"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="秋"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="怨霊"
+>
+<img data-src="images/card_2_ (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="154"
+data-name="自業自得（じごうじとく）"
+data-cost="1"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="秋"
+data-type="怪異札"
+data-role="ハンデス"
+data-keyword=""
+data-attribute="からくり"
+>
+<img data-src="images/card_2_ (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="155"
+data-name="古椿の霊（ふるつばきのれい）"
+data-cost="8"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="秋"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="樹木"
+>
+<img data-src="images/card_2_ (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="156"
+data-name="しがみつくモノ（しがみつくもの）"
+data-cost="9"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="秋"
+data-type="怪異札"
+data-role="追加行動"
+data-keyword=""
+data-attribute="怨霊"
+>
+<img data-src="images/card_2_ (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="157"
+data-name="よく動く時計（よくうごくとけい）"
+data-cost="3"
+data-power="0"
+data-series="新季の到来 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="道具札"
+data-role="ドロー 底送り"
+data-keyword=""
+data-attribute="時計 からくり"
+>
+<img data-src="images/card_2_ (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="158"
+data-name="人毛の藁人形（じんもうのわらにんぎょう）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来 あなたのよこで"
+data-rare="UC"
+data-season="秋"
+data-type="道具札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="人形 藁人形 糧"
+>
+<img data-src="images/card_2_ (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="159"
+data-name="コトリバコ（ことりばこ）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="UC"
+data-season="秋"
+data-type="道具札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="箱"
+>
+<img data-src="images/card_2_ (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="160"
+data-name="自然分解（しぜんぶんかい）"
+data-cost="2"
+data-power="0"
+data-series="新季の到来 あなたのよこで"
+data-rare="UC"
+data-season="秋"
+data-type="季節札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="糧 髑髏"
+>
+<img data-src="images/card_2_ (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="161"
+data-name="朝焼け（あさやけ）"
+data-cost="4"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="秋"
+data-type="季節札"
+data-role="効果を失う"
+data-keyword=""
+data-attribute="不吉 廃門"
+>
+<img data-src="images/card_2_ (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="162"
+data-name="空虚の廃旅館（くうきょのはいりょかん）"
+data-cost="0"
+data-power="4"
+data-series="新季の到来 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="常時"
+data-keyword=""
+data-attribute="廃旅館"
+>
+<img data-src="images/card_2_ (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="163"
+data-name="深雪に包まれた洞窟（しんせつにつつまれたどうくつ）"
+data-cost="2"
+data-power="1"
+data-series="新季の到来"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="魂加速 攻撃時"
+data-keyword=""
+data-attribute="祈 洞窟"
+>
+<img data-src="images/card_2_ (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="164"
+data-name="きさらぎ駅（きさらぎえき）"
+data-cost="2"
+data-power="2"
+data-series="新季の到来 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="除外加速 攻撃時"
+data-keyword="不屈"
+data-attribute="廃駅"
+>
+<img data-src="images/card_2_ (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="165"
+data-name="青い鳥（あおいとり）"
+data-cost="3"
+data-power="3"
+data-series="新季の到来 おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="ランデス"
+data-keyword="四季欲"
+data-attribute="廃円宿"
+>
+<img data-src="images/card_2_ (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="166"
+data-name="抹亞鉱山（まつあこうざん）"
+data-cost="4"
+data-power="3"
+data-series="新季の到来 おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="札除去 召喚時"
+data-keyword=""
+data-attribute="廃鉱山"
+>
+<img data-src="images/card_2_ (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="167"
+data-name="非常口（ひじょうぐち）"
+data-cost="4"
+data-power="4"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="札ダメ"
+data-keyword=""
+data-attribute="廃門"
+>
+<img data-src="images/card_2_ (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="168"
+data-name="闇賭博居住群（やみとばくきょじゅうぐん）"
+data-cost="4"
+data-power="1"
+data-series="新季の到来"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="除外加速 攻撃時"
+data-keyword=""
+data-attribute="廃マンション 賭博"
+>
+<img data-src="images/card_2_ (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="169"
+data-name="高速バス（こうそくばす）"
+data-cost="6"
+data-power="5"
+data-series="新季の到来 おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="ハンデス 攻撃時"
+data-keyword="追撃 速攻"
+data-attribute="交通事故 道路"
+>
+<img data-src="images/card_2_ (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="170"
+data-name="沈黙する病院（ちんもくするびょういん）"
+data-cost="7"
+data-power="4"
+data-series="新季の到来 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="除外加速 召喚時"
+data-keyword=""
+data-attribute="廃病院 怨霊"
+>
+<img data-src="images/card_2_ (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="171"
+data-name="女王城（くいんじょう）"
+data-cost="10"
+data-power="8"
+data-series="新季の到来"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="廃円宿"
+>
+<img data-src="images/card_2_ (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="172"
+data-name="豪雪に埋もれた博物館（ごうせつにうもれたはくぶつかん）"
+data-cost="12"
+data-power="8"
+data-series="新季の到来"
+data-rare="SR"
+data-season="冬"
+data-type="場所札"
+data-role="バフ 常時"
+data-keyword=""
+data-attribute="博物館 雪崩"
+>
+<img data-src="images/card_2_ (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="173"
+data-name="狛侍（はくじ）"
+data-cost="0"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="鬼"
+>
+<img data-src="images/card_2_ (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="174"
+data-name="予言（よげん）"
+data-cost="2"
+data-power="0"
+data-series="新季の到来 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="怪異札"
+data-role="底ドロー ドロー 公開ドロー 底利用"
+data-keyword=""
+data-attribute="視線"
+>
+<img data-src="images/card_2_ (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="175"
+data-name="三番目の花子さん（さんばんめのはなこさん）"
+data-cost="6"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="冬"
+data-type="怪異札"
+data-role="公開ドロー ドロー 除外加速 「花子」 底送り"
+data-keyword=""
+data-attribute="噂"
+>
+<img data-src="images/card_2_ (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="176"
+data-name="土眼（つちめ）"
+data-cost="2"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="トップ確認 2種類札 バニラ"
+data-keyword=""
+data-attribute="視線 妖怪"
+>
+<img data-src="images/card_2_ (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="177"
+data-name="人間で造った出音機（にんげんでつくったしゅつおんき）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="除外除去 底送り"
+data-keyword=""
+data-attribute="事件 楽器"
+>
+<img data-src="images/card_2_ (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="178"
+data-name="緊縛の鎖（きんばくのくさり）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="ドロー 除外加速"
+data-keyword=""
+data-attribute="鎖"
+>
+<img data-src="images/card_2_ (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="179"
+data-name="焼き付くカメラ（やきつくかめら）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="魂利用"
+data-keyword=""
+data-attribute="写真"
+>
+<img data-src="images/card_2_ (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="180"
+data-name="音無き白（おとなきしろ）"
+data-cost="6"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="冬"
+data-type="季節札"
+data-role="魂貫通"
+data-keyword=""
+data-attribute="血液"
+>
+<img data-src="images/card_2_ (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="181"
+data-name="叫び出す無音（さけびだすむおん）"
+data-cost="6"
+data-power="6"
+data-series="新季の到来"
+data-rare="UC"
+data-season="無"
+data-type="場所札"
+data-role="魂加速 直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="怨念"
+>
+<img data-src="images/card_2_ (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="182"
+data-name="罪状（ざいじょう）"
+data-cost="0"
+data-power="0"
+data-series="新季の到来"
+data-rare="C"
+data-season="無"
+data-type="道具札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="罪"
+>
+<img data-src="images/card_2_ (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="183"
+data-name="祈りの繕い人形（いのりのつくろいにんぎょう）"
+data-cost="1"
+data-power="0"
+data-series="新季の到来 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="UC"
+data-season="無"
+data-type="道具札"
+data-role="公開ドロー ドロー"
+data-keyword=""
+data-attribute="うつしよ 人形"
+>
+<img data-src="images/card_2_ (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="184"
+data-name="祈りの巫女人形(いのりのみこにんぎょう)"
+data-cost="6"
+data-power="0"
+data-series="新季の到来"
+data-rare="SR"
+data-season="無"
+data-type="道具札"
+data-role="相手ドロー 底送り ダメ無効"
+data-keyword=""
+data-attribute="うつしよ 人形"
+>
+<img data-src="images/card_2_ (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="185"
+data-name="始まり始まり（はじまりはじまり）"
+data-cost="0"
+data-power="0"
+data-series="新季の到来 うつくしいせかい おいしゃさんごっこ さいごのうた あなたのよこで"
+data-double-for="うつくしいせかい,おいしゃさんごっこ,さいごのうた,あなたのよこで"
+data-rare="UC"
+data-season="無"
+data-type="季節札"
+data-role="バフ バニラ"
+data-keyword=""
+data-attribute="うつしよ"
+>
+<img data-src="images/card_2_ (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="186"
+data-name="濡れ女子（ぬれおなご）"
+data-cost="5"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="魂加速"
+data-keyword="呪い"
+data-attribute="動物 雨"
+>
+<img data-src="images/card_2_ (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="187"
+data-name="土豪の案内人（どごうのあんないにん）"
+data-cost="8"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="夏"
+data-type="怪異札"
+data-role=""
+data-keyword="呪い"
+data-attribute="蟲"
+>
+<img data-src="images/card_2_ (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="188"
+data-name="贈り物（おくりもの）"
+data-cost="10"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="秋"
+data-type="怪異札"
+data-role="公開ドロー ドロー"
+data-keyword="呪い"
+data-attribute="花"
+>
+<img data-src="images/card_2_ (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="189"
+data-name="紅姫（べにひめ）"
+data-cost="6"
+data-power="0"
+data-series="新季の到来"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword="呪い"
+data-attribute="怨念"
+>
+<img data-src="images/card_2_ (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="190"
+data-name="神隠しの廃集落（かみかくしのはいしゅうらく）夏"
+data-cost="0"
+data-power="1"
+data-series="新季の到来"
+data-rare="SSR"
+data-season="夏"
+data-type="場所札"
+data-role="魂加速 自傷ダメ 攻撃時"
+data-keyword=""
+data-attribute="廃集落 神隠し"
+>
+<img data-src="images/card_2_ (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 百鬼夜行 -->
+<div
+class="card"
+data-number="201"
+data-name="海坊主（うみぼうず）"
+data-cost="0"
+data-power="1"
+data-series="百鬼夜行 さいごのうた"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="神秘付与 回復フェイズ 常時"
+data-keyword="秘境"
+data-attribute="妖怪 災害 幻"
+>
+<img data-src="images/card_3_ (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="202"
+data-name="猫屋敷の廃墟（ねこやしきのはいきょ）"
+data-cost="2"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 召喚時"
+data-keyword="不屈"
+data-attribute="動物 園"
+>
+<img data-src="images/card_3_ (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="203"
+data-name="開花する災能（かいかするさいのう）"
+data-cost="5"
+data-power="3"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="魂加速 召喚時"
+data-keyword=""
+data-attribute="蝙蝠 血液 災害"
+>
+<img data-src="images/card_3_ (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="204"
+data-name="首つりの木（くびつりのき）"
+data-cost="6"
+data-power="6"
+data-series="百鬼夜行 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="ドロー 召喚時"
+data-keyword="楽園"
+data-attribute="樹木 解脱"
+>
+<img data-src="images/card_3_ (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="205"
+data-name="かべかべ"
+data-cost="7"
+data-power="3"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="ダメ無効"
+data-keyword="結界"
+data-attribute="妖怪 壁"
+>
+<img data-src="images/card_3_ (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="206"
+data-name="玉藻前（たまものまえ）"
+data-cost="13"
+data-power="13"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="春"
+data-type="場所札"
+data-role="札除去 召喚時"
+data-keyword="呪い"
+data-attribute="妖怪 動物 殺人"
+>
+<img data-src="images/card_3_ (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="207"
+data-name="牛鬼の怒号（ぎゅうきのどごう）"
+data-cost="8"
+data-power="3"
+data-series="百鬼夜行 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="回復フェイズ 召喚時"
+data-keyword=""
+data-attribute="妖怪 蟲 動物"
+>
+<img data-src="images/card_3_ (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="208"
+data-name="陰摩羅鬼（いんもらき）"
+data-cost="15"
+data-power="15"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="春"
+data-type="場所札"
+data-role=""
+data-keyword="楽園 速攻"
+data-attribute="妖怪 災害 動物"
+>
+<img data-src="images/card_3_ (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="209"
+data-name="沼御前（ぬまごぜん）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="バフ"
+data-keyword="鮮明 不屈"
+data-attribute="妖怪 大蛇"
+>
+<img data-src="images/card_3_ (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="210"
+data-name="鵺（ぬえ）"
+data-cost="1"
+data-power="0"
+data-series="百鬼夜行 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="妖怪 動物 大蛇"
+>
+<img data-src="images/card_3_ (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="211"
+data-name="てけてけ"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role="直接ダメ ヒール ドレイン"
+data-keyword=""
+data-attribute="噂 血液"
+>
+<img data-src="images/card_3_ (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="212"
+data-name="黒犬の調教師（こっけんのちょうきょうし）"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="踏み倒し"
+data-keyword=""
+data-attribute="犬族"
+>
+<img data-src="images/card_3_ (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="213"
+data-name="飛び回る眷属（とびまわるけんぞく）"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="春"
+data-type="怪異札"
+data-role="直接ダメ ヒール ドレイン"
+data-keyword="不屈"
+data-attribute="蝙蝠 血液"
+>
+<img data-src="images/card_3_ (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="214"
+data-name="猫又（ねこまた）"
+data-cost="4"
+data-power="0"
+data-series="百鬼夜行 さいごのうた"
+data-double-for="さいごのうた"
+data-rare="UC"
+data-season="春"
+data-type="怪異札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="妖怪 動物"
+>
+<img data-src="images/card_3_ (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="215"
+data-name="だいだらぼっち"
+data-cost="20"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="春"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="神 妖怪"
+>
+<img data-src="images/card_3_ (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="216"
+data-name="伝説の料理人：殺助（でんせつのりょうりにん ころすけ）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="動物 人形"
+>
+<img data-src="images/card_3_ (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="217"
+data-name="夜泣き蕎麦（よなきそば）"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="糧 野営"
+>
+<img data-src="images/card_3_ (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="218"
+data-name="蛇行剣(だこうけん)"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="春"
+data-type="道具札"
+data-role="バウンス 季節札除去"
+data-keyword=""
+data-attribute="大蛇 刀"
+>
+<img data-src="images/card_3_ (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="219"
+data-name="料理人の傑作（りょうりにんのけっさく）"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="魂加速 ヒール"
+data-keyword=""
+data-attribute="動物 糧 腐乱"
+>
+<img data-src="images/card_3_ (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="220"
+data-name="火車の春休み（かしゃのはるやすみ）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行 さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="季節札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="妖怪 動物"
+>
+<img data-src="images/card_3_ (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="221"
+data-name="次に期待（つぎにきたい）"
+data-cost="0"
+data-power="4"
+data-series="百鬼夜行 うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="自傷ダメ 攻撃時"
+data-keyword=""
+data-attribute="うつしよ 罪"
+>
+<img data-src="images/card_3_ (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="222"
+data-name="河童池（かっぱいけ）"
+data-cost="1"
+data-power="4"
+data-series="百鬼夜行 うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="常時"
+data-keyword=""
+data-attribute="妖怪"
+>
+<img data-src="images/card_3_ (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="223"
+data-name="オレンジハウス（おれんじはうす）"
+data-cost="2"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword="速攻 憤怒"
+data-attribute="廃屋 腐乱"
+>
+<img data-src="images/card_3_ (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="224"
+data-name="オオカチコチ（おおかちこち）"
+data-cost="3"
+data-power="5"
+data-series="百鬼夜行 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="サーチ 攻撃時 常時"
+data-keyword=""
+data-attribute="妖怪 蟲 廃村"
+>
+<img data-src="images/card_3_ (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="225"
+data-name="三番目のトイレ（さんばんめのといれ）"
+data-cost="3"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="バフ 踏み倒し 「花子」"
+data-keyword="速攻 学校の怪談"
+data-attribute="噂 廃校"
+>
+<img data-src="images/card_3_ (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="226"
+data-name="人形神社（にんぎょうじんじゃ）"
+data-cost="4"
+data-power="4"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="魂戻し 直接ダメ"
+data-keyword="不屈"
+data-attribute="廃神社 人形 日本人形 呪"
+>
+<img data-src="images/card_3_ (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="227"
+data-name="病鼠巣喰う廃宿（びょうそすくうはいしゅく）"
+data-cost="6"
+data-power="2"
+data-series="百鬼夜行 うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="憑依加速 常時"
+data-keyword=""
+data-attribute="蟲 病 廃旅館"
+>
+<img data-src="images/card_3_ (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="228"
+data-name="猫魈（ねこしょう）"
+data-cost="8"
+data-power="6"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="夏"
+data-type="場所札"
+data-role="踏み倒し 底送り 除外戻し"
+data-keyword="速攻"
+data-attribute="妖怪 動物 廃屋 陰"
+>
+<img data-src="images/card_3_ (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="229"
+data-name="帰りたくない家（かえりたくないいえ）"
+data-cost="8"
+data-power="4"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="攻撃時"
+data-keyword=""
+data-attribute="廃屋 怨念"
+>
+<img data-src="images/card_3_ (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="230"
+data-name="大百足の巓（おおむかでのいただき）"
+data-cost="15"
+data-power="9"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="夏"
+data-type="場所札"
+data-role="コスト軽減"
+data-keyword="憤怒 速攻"
+data-attribute="神 妖怪 蟲"
+>
+<img data-src="images/card_3_ (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="231"
+data-name="歪んだ愛情（ゆがんだあいじょう）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 底送り"
+data-keyword=""
+data-attribute="病 腐乱"
+>
+<img data-src="images/card_3_ (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="232"
+data-name="腐女子（くされおなご）"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="腐乱"
+>
+<img data-src="images/card_3_ (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="233"
+data-name="実験体（じっけんたい）"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行 うつくしいせかい"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 手札公開"
+data-keyword=""
+data-attribute="霊能者 亡者"
+>
+<img data-src="images/card_3_ (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="234"
+data-name="呪いの人形師（のろいのにんぎょうし）"
+data-cost="4"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 魂利用 ランデス"
+data-keyword=""
+data-attribute="人形 藁人形 呪"
+>
+<img data-src="images/card_3_ (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="235"
+data-name="わたしのTO（わたしのとっぷおた トップオタ）"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="夏"
+data-type="怪異札"
+data-role="踏み倒し 魂利用"
+data-keyword=""
+data-attribute="人魚"
+>
+<img data-src="images/card_3_ (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="236"
+data-name="絡新婦（じょろうぐも）"
+data-cost="8"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="夏"
+data-type="怪異札"
+data-role="公開ドロー ドロー 底送り"
+data-keyword=""
+data-attribute="妖怪 蟲"
+>
+<img data-src="images/card_3_ (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="237"
+data-name="八尺様（はっしゃくさま）"
+data-cost="8"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="夏"
+data-type="怪異札"
+data-role="魂加速"
+data-keyword=""
+data-attribute="噂 怨念"
+>
+<img data-src="images/card_3_ (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="238"
+data-name="誘拐（ゆうかい）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="夏"
+data-type="道具札"
+data-role="札ダメ 自傷ダメ"
+data-keyword=""
+data-attribute="噂"
+>
+<img data-src="images/card_3_ (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="239"
+data-name="媒介する病原体（ばいかいするびょうげんたい）"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 自傷ダメ"
+data-keyword=""
+data-attribute="病 血液"
+>
+<img data-src="images/card_3_ (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="240"
+data-name="ねずみ地獄（ねずみじごく）"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="C"
+data-season="夏"
+data-type="道具札"
+data-role="直接ダメ 底ドロー 公開ドロー ドロー 底利用"
+data-keyword=""
+data-attribute="蟲 動物"
+>
+<img data-src="images/card_3_ (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="241"
+data-name="煙天夏の鉄蟻（えんてんかのてつぎ）"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="夏"
+data-type="季節札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="妖怪 蟲 火事"
+>
+<img data-src="images/card_3_ (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="242"
+data-name="夜中の繁華街（よなかのはんかがい）"
+data-cost="0"
+data-power="1"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="トップ確認 召喚時"
+data-keyword=""
+data-attribute="妖怪 視線"
+>
+<img data-src="images/card_3_ (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="243"
+data-name="朧帷子（おぼろかたびた）"
+data-cost="0"
+data-power="2"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="神秘付与 常時"
+data-keyword=""
+data-attribute="交通事故 からくり"
+>
+<img data-src="images/card_3_ (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="244"
+data-name="寝室の枕返し（しんしつのまくらがえし）"
+data-cost="1"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="トップ確認 底送り 召喚時"
+data-keyword=""
+data-attribute="妖怪 家屋"
+>
+<img data-src="images/card_3_ (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="245"
+data-name="羅生門（らしょうもん）"
+data-cost="2"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 攻撃時 常時"
+data-keyword=""
+data-attribute="廃門 糧"
+>
+<img data-src="images/card_3_ (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="246"
+data-name="造養の火葬場（ぞうようのかそうば）"
+data-cost="3"
+data-power="1"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 召喚時"
+data-keyword=""
+data-attribute="廃葬儀場 糧"
+>
+<img data-src="images/card_3_ (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="247"
+data-name="おにごっこ"
+data-cost="4"
+data-power="5"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="動物 園"
+>
+<img data-src="images/card_3_ (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="248"
+data-name="あの世への乗り口（あのよへののりぐち）"
+data-cost="4"
+data-power="2"
+data-series="百鬼夜行 あなたのよこで"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="サーチ 公開ドロー ドロー 攻撃時"
+data-keyword="追撃 速攻"
+data-attribute="交通事故 道路"
+>
+<img data-src="images/card_3_ (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="249"
+data-name="死んでも許さない(しんでもゆるさない)"
+data-cost="4"
+data-power="2"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="直接ダメ 憑依加速 回復フェイズ 常時"
+data-keyword=""
+data-attribute="樹木 幽霊"
+>
+<img data-src="images/card_3_ (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="250"
+data-name="八翁城（はちおうじょう）"
+data-cost="6"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 底送り 召喚時"
+data-keyword=""
+data-attribute="古城 血液"
+>
+<img data-src="images/card_3_ (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="251"
+data-name="エンジン停止（えんじんていし）"
+data-cost="6"
+data-power="3"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="力固定 効果を失う 召喚時"
+data-keyword=""
+data-attribute="交通事故 道路"
+>
+<img data-src="images/card_3_ (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="252"
+data-name="フラッシュバック（ふらっしゅばっく）"
+data-cost="7"
+data-power="4"
+data-series="百鬼夜行 あなたのよこで"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="「起き」"
+data-keyword="逆境"
+data-attribute="交通事故 道路"
+>
+<img data-src="images/card_3_ (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="253"
+data-name="樹木子（じゅぼっこ）"
+data-cost="7"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 召喚時"
+data-keyword="秘境"
+data-attribute="妖怪 樹木 血液"
+>
+<img data-src="images/card_3_ (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="254"
+data-name="覇王樹（はおうじゅ）"
+data-cost="8"
+data-power="5"
+data-series="百鬼夜行 あなたのよこで"
+data-rare="R"
+data-season="秋"
+data-type="場所札"
+data-role="追加行動 召喚時"
+data-keyword=""
+data-attribute="花 樹木"
+>
+<img data-src="images/card_3_ (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="255"
+data-name="狼鳴隧道（ろうめいずいどう）"
+data-cost="10"
+data-power="7"
+data-series="百鬼夜行 あなたのよこで"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="バフ 攻撃時 攻撃時"
+data-keyword=""
+data-attribute="廃隧道 からくり"
+>
+<img data-src="images/card_3_ (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="256"
+data-name="ひきこさん"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="怪異札"
+data-role="手札入替 公開ドロー ドロー 底送り"
+data-keyword=""
+data-attribute="噂 糧"
+>
+<img data-src="images/card_3_ (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="257"
+data-name="犬面人（けんめんじん）"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行 あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="妖怪 動物 交通事故"
+>
+<img data-src="images/card_3_ (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="258"
+data-name="あかなめ"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="怪異札"
+data-role="魂加速"
+data-keyword=""
+data-attribute="妖怪 侵蝕"
+>
+<img data-src="images/card_3_ (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="259"
+data-name="ろくろ首（ろくろくび）"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="秋"
+data-type="怪異札"
+data-role="ハンデス 手札公開"
+data-keyword=""
+data-attribute="妖怪"
+>
+<img data-src="images/card_3_ (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="260"
+data-name="運気喰らいの生霊（うんきくらいのいきりょう）"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="秋"
+data-type="怪異札"
+data-role="デッキ破壊 底送り"
+data-keyword=""
+data-attribute="怨念 呪"
+>
+<img data-src="images/card_3_ (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="261"
+data-name="鴉天狗（からすてんぐ）"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="秋"
+data-type="怪異札"
+data-role="バウンス ランデス"
+data-keyword=""
+data-attribute="妖怪"
+>
+<img data-src="images/card_3_ (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="262"
+data-name="えんらえんら"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行 あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="R"
+data-season="秋"
+data-type="怪異札"
+data-role="追加行動 魂戻し"
+data-keyword=""
+data-attribute="妖怪 怨霊"
+>
+<img data-src="images/card_3_ (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="263"
+data-name="首吊〆縄（くびつりしめなわ）"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="秋"
+data-type="道具札"
+data-role="底ドロー ドロー 自傷ダメ 底利用"
+data-keyword=""
+data-attribute="廃神社 罪"
+>
+<img data-src="images/card_3_ (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="264"
+data-name="黴傘お化け（かびかさおばけ）"
+data-cost="8"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="秋"
+data-type="道具札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="妖怪 からくり 菌"
+>
+<img data-src="images/card_3_ (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="265"
+data-name="私に付きまとう男（わたしにつきまとうおとこ）"
+data-cost="0"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="召喚時"
+data-keyword=""
+data-attribute="事件"
+>
+<img data-src="images/card_3_ (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="266"
+data-name="老人展覧会（ろうじんてんらんかい）"
+data-cost="4"
+data-power="2"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="攻撃時 召喚時"
+data-keyword=""
+data-attribute="博物館 視線"
+>
+<img data-src="images/card_3_ (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="267"
+data-name="お化けマンション(おばけまんしょん)"
+data-cost="6"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="攻撃時 ドロー 相手ドロー"
+data-keyword=""
+data-attribute="廃マンション"
+>
+<img data-src="images/card_3_ (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="268"
+data-name="輪入道（わにゅうどう）"
+data-cost="6"
+data-power="2"
+data-series="百鬼夜行 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="R"
+data-season="冬"
+data-type="場所札"
+data-role="ランデス 札除去 2種類札 攻撃時"
+data-keyword=""
+data-attribute="妖怪 廃車 火事"
+>
+<img data-src="images/card_3_ (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="269"
+data-name="受胎告知の家（じゅたいこくちのいえ）"
+data-cost="7"
+data-power="4"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="魂加速 攻撃時"
+data-keyword="妬み"
+data-attribute="血液 胎内"
+>
+<img data-src="images/card_3_ (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="270"
+data-name="もくれん"
+data-cost="8"
+data-power="6"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="2種類札 札除去 トップ確認 季節札除去 召喚時"
+data-keyword=""
+data-attribute="妖怪 霊場"
+>
+<img data-src="images/card_3_ (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="271"
+data-name="悪魔ノ城（でびるじょう）"
+data-cost="12"
+data-power="8"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="ランデス"
+data-keyword="四季欲"
+data-attribute="廃円宿"
+>
+<img data-src="images/card_3_ (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="272"
+data-name="こそこそ岩（こそこそいわ）"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="サーチ"
+data-keyword=""
+data-attribute="妖怪 石像"
+>
+<img data-src="images/card_3_ (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="273"
+data-name="口裂け女（くちさけおんな）"
+data-cost="4"
+data-power="0"
+data-series="百鬼夜行 おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="除外加速"
+data-keyword=""
+data-attribute="妖怪 噂"
+>
+<img data-src="images/card_3_ (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="274"
+data-name="雪男（ゆきおとこ）"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="妖怪 災害"
+>
+<img data-src="images/card_3_ (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="275"
+data-name="餓鬼（がき）"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="冬"
+data-type="怪異札"
+data-role="魂加速"
+data-keyword=""
+data-attribute="妖怪 鬼"
+>
+<img data-src="images/card_3_ (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="276"
+data-name="鬼面の神子（きめんのかみご）"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="鬼 鬼面の神"
+>
+<img data-src="images/card_3_ (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="277"
+data-name="雪女（ゆきおんな）"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="妖怪 幽霊"
+>
+<img data-src="images/card_3_ (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="278"
+data-name="酒呑童子（しゅてんどうじ）"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="冬"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="神 妖怪 鬼"
+>
+<img data-src="images/card_3_ (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="279"
+data-name="化提灯（ばけちょうちん）"
+data-cost="1"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="ヒール無効 2種類札"
+data-keyword=""
+data-attribute="妖怪 灯火"
+>
+<img data-src="images/card_3_ (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="280"
+data-name="のっぺらぼう"
+data-cost="5"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="冬"
+data-type="道具札"
+data-role="力固定 効果を失う バフ"
+data-keyword=""
+data-attribute="妖怪 牢獄"
+>
+<img data-src="images/card_3_ (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="281"
+data-name="まふゆのだんらん"
+data-cost="3"
+data-power="0"
+data-series="百鬼夜行 おいしゃさんごっこ"
+data-rare="C"
+data-season="冬"
+data-type="季節札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="血液 家屋"
+>
+<img data-src="images/card_3_ (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="282"
+data-name="本物のお化け屋敷（ほんもののおばけやしき）"
+data-cost="0"
+data-power="2"
+data-series="百鬼夜行"
+data-rare="C 封印改訂"
+data-season="無"
+data-type="場所札"
+data-role="札ダメ 札除去 常時"
+data-keyword="速攻 襲撃"
+data-attribute="うつしよ 血液 人形 殺人"
+>
+<img data-src="images/card_3_ (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="283"
+data-name="お墓参り（おはかまいり）"
+data-cost="4"
+data-power="1"
+data-series="百鬼夜行"
+data-rare="UC"
+data-season="無"
+data-type="場所札"
+data-role="ヒール 召喚時"
+data-keyword="徳"
+data-attribute="善行 うつしよ 霊場"
+>
+<img data-src="images/card_3_ (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="284"
+data-name="アラハバキ（あらはばき）"
+data-cost="10"
+data-power="6"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="無"
+data-type="場所札"
+data-role="札除去 除外加速 攻撃時 召喚時"
+data-keyword=""
+data-attribute="うつしよ からくり"
+>
+<img data-src="images/card_3_ (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="285"
+data-name="火の玉（ひのたま）"
+data-cost="2"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="C"
+data-season="無"
+data-type="怪異札"
+data-role="サーチ"
+data-keyword=""
+data-attribute="妖怪 幽霊"
+>
+<img data-src="images/card_3_ (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="286"
+data-name="がしゃどくろ"
+data-cost="7"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SR"
+data-season="無"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="妖怪 髑髏"
+>
+<img data-src="images/card_3_ (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="287"
+data-name="かごめかごめ"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行 うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="UC"
+data-season="無"
+data-type="道具札"
+data-role="ドロー 公開ドロー"
+data-keyword=""
+data-attribute="罪 呪"
+>
+<img data-src="images/card_3_ (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="288"
+data-name="全部私が独りで（ぜんぶわたしがひとりで）"
+data-cost="12"
+data-power="8"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="混化 秋夏"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="廃屋 怨念"
+>
+<img data-src="images/card_3_ (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="289"
+data-name="絶望の姦姦陀螺（ぜつぼうのかんかんだら）"
+data-cost="6"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="混化 春夏"
+data-type="季節札"
+data-role="直接ダメ ヒール ドレイン"
+data-keyword=""
+data-attribute="腐乱 大蛇"
+>
+<img data-src="images/card_3_ (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="290"
+data-name="芽吹く無秩序（めぶくむちつじょ）"
+data-cost="12"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="R"
+data-season="混化 秋夏"
+data-type="季節札"
+data-role="ドロー 「起き」"
+data-keyword=""
+data-attribute="花"
+>
+<img data-src="images/card_3_ (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="291"
+data-name="百鬼夜行（ひゃっきやこう）"
+data-cost="5"
+data-power="3"
+data-series="百鬼夜行"
+data-rare="KR"
+data-season="無"
+data-type="場所札"
+data-role="バフ 除去無効 常時"
+data-keyword=""
+data-attribute="妖怪 神"
+>
+<img data-src="images/card_3_ (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="292"
+data-name="未完の石材（みかんのせきざい）"
+data-cost="0"
+data-power="0"
+data-series="百鬼夜行"
+data-rare="SSR"
+data-season="冬"
+data-type="怪異札"
+data-role="サーチ"
+data-keyword=""
+data-attribute="石像"
+>
+<img data-src="images/card_3_ (92).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+
+<!-- さいごのうた -->
+<div
+class="card"
+data-number="1101"
+data-name="犬族の里（けんぞくのさと）"
+data-cost="0"
+data-power="1"
+data-series="さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="犬族 家屋"
+>
+<img data-src="images/card_6_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1102"
+data-name="ねこやま"
+data-cost="0"
+data-power="1"
+data-series="さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 常時"
+data-keyword=""
+data-attribute="動物"
+>
+<img data-src="images/card_6_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1103"
+data-name="おいかけっこ"
+data-double-for="さいごのうた"
+data-cost="7"
+data-power="7"
+data-series="さいごのうた"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="妖怪 廃屋"
+>
+<img data-src="images/card_6_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1104"
+data-name="なんでにげるの"
+data-double-for="さいごのうた"
+data-cost="9"
+data-power="8"
+data-series="さいごのうた"
+data-rare="SR"
+data-season="春"
+data-type="場所札"
+data-role="「起き」"
+data-keyword="四季欲"
+data-attribute="廃円宿 胎内 血液"
+>
+<img data-src="images/card_6_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1105"
+data-name="くまぼん"
+data-cost="3"
+data-power="0"
+data-series="さいごのうた"
+data-double-for="さいごのうた"
+data-rare="C"
+data-season="春"
+data-type="道具札"
+data-role="バフ"
+data-keyword=""
+data-attribute="動物 古書 噂"
+>
+<img data-src="images/card_6_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1106"
+data-name="晩春を告る犬神（ばんしゅんをつげるいぬがみ）"
+data-cost="4"
+data-power="0"
+data-series="さいごのうた"
+data-double-for="さいごのうた"
+data-rare="SR"
+data-season="春"
+data-type="季節札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="妖怪 動物 犬族"
+>
+<img data-src="images/card_4_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- あなたのよこで -->
+<div
+class="card"
+data-number="1107"
+data-name="まだ捨てられない（まだすてられない）"
+data-cost="0"
+data-power="1"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="交通事故"
+>
+<img data-src="images/card_6_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1108"
+data-name="魔女ノ城（うぃっちじょう）"
+data-cost="2"
+data-power="2"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="古城 怨霊"
+>
+<img data-src="images/card_6_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1109"
+data-name="夜の鳥（よるのとり）"
+data-cost="5"
+data-power="4"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="手札公開 ハンデス"
+data-keyword="四季欲"
+data-attribute="廃円宿 火事"
+>
+<img data-src="images/card_6_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1110"
+data-name="あなたのよこで"
+data-cost="9"
+data-power="5"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="SR"
+data-season="秋"
+data-type="場所札"
+data-role="ランデス 常時"
+data-keyword=""
+data-attribute="神 交通事故 怨霊"
+>
+<img data-src="images/card_6_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1111"
+data-name="人間椅子（にんげんいす）"
+data-cost="2"
+data-power="0"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="C"
+data-season="秋"
+data-type="道具札"
+data-role="ハンデス"
+data-keyword=""
+data-attribute="からくり 噂"
+>
+<img data-src="images/card_6_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1112"
+data-name="傷秋鳥兜（しょうしょうとりかぶと）"
+data-cost="4"
+data-power="0"
+data-series="あなたのよこで"
+data-double-for="あなたのよこで"
+data-rare="SR"
+data-season="秋"
+data-type="季節札"
+data-role="ダメ無効 除去無効"
+data-keyword=""
+data-attribute="花 髑髏"
+>
+<img data-src="images/card_4_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- れもんちゃんデッキ -->
+<div
+class="card"
+data-number="1201"
+data-name="春のれもんちゃん（はるのれもんちゃん）"
+data-cost="0"
+data-power="1"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="春"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="猫"
+>
+<img data-src="images/card_5_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1202"
+data-name="夏のれもんちゃん（なつのれもんちゃん）"
+data-cost="0"
+data-power="1"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="夏"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="猫"
+>
+<img data-src="images/card_5_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1203"
+data-name="秋のれもんちゃん（あきのれもんちゃん）"
+data-cost="0"
+data-power="1"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="秋"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="猫"
+>
+<img data-src="images/card_5_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1204"
+data-name="冬のれもんちゃん（ふゆのれもんちゃん）"
+data-cost="0"
+data-power="1"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="冬"
+data-type="場所札"
+data-role="バニラ"
+data-keyword=""
+data-attribute="猫"
+>
+<img data-src="images/card_5_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1205"
+data-name="いちごちゃん"
+data-cost="0"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="春"
+data-type="怪異札"
+data-role="ヒール"
+data-keyword=""
+data-attribute="いちご"
+>
+<img data-src="images/card_5_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1206"
+data-name="すいかちゃん"
+data-cost="0"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="すいか"
+>
+<img data-src="images/card_5_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1207"
+data-name="かきちゃん"
+data-cost="0"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="秋"
+data-type="怪異札"
+data-role="ドロー 相手ドロー"
+data-keyword=""
+data-attribute="かき"
+>
+<img data-src="images/card_5_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1208"
+data-name="みかんさん"
+data-cost="0"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="C"
+data-season="冬"
+data-type="怪異札"
+data-role="デッキ破壊"
+data-keyword=""
+data-attribute="みかん"
+>
+<img data-src="images/card_5_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1209"
+data-name="お花畑のれもんちゃん（おはなばたけのれもんちゃん）"
+data-cost="4"
+data-power="4"
+data-series="れもんちゃんデッキ"
+data-rare="UC"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 攻撃時"
+data-keyword=""
+data-attribute="猫 園"
+>
+<img data-src="images/card_5_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1210"
+data-name="磯のれもんちゃん（いそのれもんちゃん）"
+data-cost="4"
+data-power="3"
+data-series="れもんちゃんデッキ"
+data-rare="UC"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 召喚時"
+data-keyword=""
+data-attribute="猫 園"
+>
+<img data-src="images/card_5_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1211"
+data-name="よく食べるれもんちゃん（よくたべるれもんちゃん）"
+data-cost="4"
+data-power="3"
+data-series="れもんちゃんデッキ"
+data-rare="UC"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 攻撃時"
+data-keyword=""
+data-attribute="猫 糧"
+>
+<img data-src="images/card_5_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1212"
+data-name="お化けはっけん（おばけはっけん）"
+data-cost="4"
+data-power="3"
+data-series="れもんちゃんデッキ"
+data-rare="UC"
+data-season="冬"
+data-type="場所札"
+data-role="ランデス 攻撃時"
+data-keyword=""
+data-attribute="猫 幽霊"
+>
+<img data-src="images/card_5_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1213"
+data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
+data-cost="6"
+data-power="3"
+data-series="れもんちゃんデッキ"
+data-rare="R"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 召喚時"
+data-keyword=""
+data-attribute="猫 災害"
+>
+<img data-src="images/card_5_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1214"
+data-name="怪異のれもんちゃん（かいいのれもんちゃん）"
+data-cost="6"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="R"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="猫 怨霊"
+>
+<img data-src="images/card_5_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1215"
+data-name="季節のれもんちゃん（きせつのれもんちゃん）"
+data-cost="6"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="R"
+data-season="秋"
+data-type="季節札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="猫 花"
+>
+<img data-src="images/card_5_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1216"
+data-name="道具のれもんちゃん（どうぐのれもんちゃん）"
+data-cost="6"
+data-power="0"
+data-series="れもんちゃんデッキ"
+data-rare="R"
+data-season="冬"
+data-type="道具札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="猫 鏡"
+>
+<img data-src="images/card_5_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1217"
+data-name="わんちゃんかわいい"
+data-cost="8"
+data-power="8"
+data-series="れもんちゃんデッキ"
+data-rare="SR"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 攻撃時"
+data-keyword=""
+data-attribute="猫 犬族"
+>
+<img data-src="images/card_5_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1218"
+data-name="エビ来た！（えびきた！）"
+data-cost="8"
+data-power="8"
+data-series="れもんちゃんデッキ"
+data-rare="SR"
+data-season="夏"
+data-type="場所札"
+data-role="直接ダメ 攻撃時"
+data-keyword=""
+data-attribute="猫 蟲"
+>
+<img data-src="images/card_5_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1219"
+data-name="とけいこわい"
+data-cost="8"
+data-power="7"
+data-series="れもんちゃんデッキ"
+data-rare="SR"
+data-season="秋"
+data-type="場所札"
+data-role="ドロー 攻撃時"
+data-keyword=""
+data-attribute="猫 からくり"
+>
+<img data-src="images/card_5_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1220"
+data-name="あたたかいだす"
+data-cost="8"
+data-power="7"
+data-series="れもんちゃんデッキ"
+data-rare="SR"
+data-season="冬"
+data-type="場所札"
+data-role="ランデス 攻撃時"
+data-keyword=""
+data-attribute="猫 妖怪"
+>
+<img data-src="images/card_5_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- ユーザーズパック -->
+<div
+class="card"
+data-number="1301"
+data-name="螺旋階段の悪夢（らせんかいだんのあくむ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="春"
+data-type="場所札"
+data-attribute="悪夢"
+data-keyword=""
+data-role="魂加速 魂戻し 常時"
+>
+<img data-src="images/card_7_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1302"
+data-name="竜宮城（りゅうぐうじょう）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="人魚 古城 刀"
+data-keyword="不屈"
+data-role="魂加速"
+>
+<img data-src="images/card_7_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1303"
+data-name="怪異の旅館受付（かいいのりょかんうけつけ）"
+data-cost="2"
+data-power="3"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="春"
+data-type="場所札"
+data-attribute="廃旅館 人形 怨霊 幽霊 動物 妖怪 鬼 蟲"
+data-keyword=""
+data-role="バニラ"
+>
+<img data-src="images/card_7_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1304"
+data-name="暗黒沼（あんこくぬま）"
+data-cost="2"
+data-power="2"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="妖怪 大蛇"
+data-keyword=""
+data-role="回復フェイズ 常時"
+>
+<img data-src="images/card_7_p (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1305"
+data-name="荒れ果てた訓練場（あれはてたくんれんじょう）"
+data-cost="2"
+data-power="2"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="家屋 刀"
+data-keyword=""
+data-role="バフ 力固定 常時"
+>
+<img data-src="images/card_7_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1306"
+data-name="繰り返す漉餡（くりかえすこしあん）"
+data-cost="3"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="妖怪 大蛇"
+data-keyword=""
+data-role="自傷ダメ 常時"
+>
+<img data-src="images/card_7_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1307"
+data-name="カードピア（かーどぴあ）"
+data-cost="5"
+data-power="3"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="春"
+data-type="場所札"
+data-role="ヒール ドロー 除外加速 召喚時"
+data-keyword="楽園"
+data-attribute="血液 園"
+>
+<img data-src="images/card_7_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1308"
+data-name="道化の上水（どうけのじょうすい）"
+data-cost="6"
+data-power="6"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="解脱 事件"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1309"
+data-name="2F娘さんの部屋（にえふむすめさんのへや）"
+data-cost="9"
+data-power="7"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="家屋 怨念"
+data-keyword=""
+data-role="ランデス 攻撃時"
+>
+<img data-src="images/card_7_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1310"
+data-name="大災害（だいさいがい）"
+data-cost="12"
+data-power="10"
+data-series="怪談師"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション 封印改訂"
+data-attribute="動物 災害"
+data-keyword="不屈"
+data-role="札除去 踏み倒し 攻撃時"
+>
+<img data-src="images/card_7_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1311"
+data-name="カモの３姉妹（かものさんしまい）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="雨"
+data-keyword=""
+data-role=""
+>
+<img data-src="images/card_7_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1312"
+data-name="目にぃうさぎ（めにぃうさぎ）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物 廃校"
+data-keyword=""
+data-role="ヒール 除外加速"
+>
+<img data-src="images/card_7_p (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1313"
+data-name="鎌いたち（かまいたち）"
+data-cost="3"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="妖怪 動物 鎌"
+data-keyword=""
+data-role="バフ 追加行動 憑依加速"
+>
+<img data-src="images/card_7_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1314"
+data-name="鳥人間（とりにんげん）"
+data-cost="6"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="神 動物"
+data-keyword="楽園"
+data-role="ヒール 直接ダメ ドレイン"
+>
+<img data-src="images/card_7_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1315"
+data-name="パナウェイブ（ぱなうぇいぶ）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="事件 道路"
+data-keyword=""
+data-role="自傷ダメ バフ 力固定"
+>
+<img data-src="images/card_7_p (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1316"
+data-name="作戦会議（さくせんかいぎ）"
+data-cost="8"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物 陰"
+data-keyword=""
+data-role="除外加速"
+>
+<img data-src="images/card_7_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1317"
+data-name="いっしょにあそぼ・・・"
+data-cost="2"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション 封印改訂"
+data-season="春"
+data-type="道具札"
+data-role="サーチ 除外加速 ヒール"
+data-keyword=""
+data-attribute="動物 陰"
+>
+<img data-src="images/card_7_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1318"
+data-name="小熊猫（れっさーぱんだ）"
+data-cost="2"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物"
+data-keyword=""
+data-role="ランデス"
+>
+<img data-src="images/card_7_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1319"
+data-name="すねこすり"
+data-cost="5"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="春"
+data-type="道具札"
+data-role="直接ダメ ヒール 札無効"
+data-keyword=""
+data-attribute="動物 妖怪"
+>
+<img data-src="images/card_7_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1320"
+data-name="幸せの福子さん（しあわせのふくこさん）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="季節札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="廃屋 人形"
+data-keyword=""
+data-role="バフ"
+>
+<img data-src="images/card_7_p (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1321"
+data-name="お迎え（おむかえ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="場所札"
+data-role="サーチ 攻撃時"
+data-keyword=""
+data-attribute="蟲 腐乱"
+>
+<img data-src="images/card_7_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1322"
+data-name="細手長手（ほそてながて）"
+data-cost="0"
+data-power="5"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="神 妖怪"
+data-keyword=""
+data-role="「起き」 魂貫通 常時"
+>
+<img data-src="images/card_7_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1323"
+data-name="朝蜘蛛の逸話（あさくものいつわ）"
+data-cost="1"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲 蜘蛛"
+data-keyword=""
+data-role="直接ダメ ヒール 攻撃時"
+>
+<img data-src="images/card_7_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1324"
+data-name="さっちゃんはね"
+data-cost="1"
+data-power="2"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="場所札"
+data-attribute="噂 鎌 殺人"
+data-keyword="襲撃 逆境"
+data-role="札ダメ 札除去"
+>
+<img data-src="images/card_7_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1325"
+data-name="梅林のその中で（ばいりんのそのなかで）"
+data-cost="3"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="噂 視線"
+data-keyword=""
+data-role="札ダメ 攻撃時"
+>
+<img data-src="images/card_7_p (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1326"
+data-name="首転坂（くびころざか）"
+data-cost="4"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="腐乱 道路 廃葬儀場"
+data-keyword="速攻"
+data-role=""
+>
+<img data-src="images/card_7_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1327"
+data-name="病死体発見の家（びょうしたいはっけんのいえ）"
+data-cost="6"
+data-power="6"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="廃屋 腐乱"
+data-keyword="速攻 憎悪"
+data-role="バフ 常時"
+>
+<img data-src="images/card_7_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1328"
+data-name="妖怪行脚（ようかいあんぎゃ）"
+data-cost="6"
+data-power="4"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="妖怪 幽霊 動物"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1329"
+data-name="Dホテル 赤い傘（でぃーほてる あかいかさ）"
+data-cost="6"
+data-power="4"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="場所札"
+data-attribute="廃旅館 幽霊"
+data-keyword="速攻"
+data-role="除外戻し 攻撃時"
+>
+<img data-src="images/card_7_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1330"
+data-name="川辺の金髪少女（かわべのきんぱつしょうじょ）"
+data-cost="7"
+data-power="6"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="事件 怨念"
+data-keyword=""
+data-role="札除去 自傷ダメ 攻撃時"
+>
+<img data-src="images/card_7_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1331"
+data-name="水冥（すいめい）"
+data-cost="9"
+data-power="6"
+data-series="怪談師"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="人魚"
+data-keyword=""
+data-role="追加行動 「起き」 魂加速 攻撃時 常時"
+>
+<img data-src="images/card_7_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1332"
+data-name="だから言ったのに（だからいったのに）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="怪異札"
+data-attribute="呪 幽霊"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_7_p (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1333"
+data-name="失敗した兄ちゃん（しっぱいしたにいちゃん）"
+data-cost="8"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="怪異札"
+data-attribute="胎内 罪 病"
+data-keyword=""
+data-role="自傷ダメ 直接ダメ"
+>
+<img data-src="images/card_7_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1334"
+data-name="虫取り網（むしとりあみ）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲"
+data-keyword=""
+data-role="サーチ 除外加速 自傷ダメ"
+>
+<img data-src="images/card_7_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1335"
+data-name="血飢えの小刀（ちうえのこがたな）"
+data-cost="3"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲 刀"
+data-keyword="不屈"
+data-role="直接ダメ サーチ 魂加速"
+>
+<img data-src="images/card_7_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1336"
+data-name="『アレ』ガ居ル場所（あれがいるばしょ）"
+data-cost="4"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲 都市伝説 UMA"
+data-keyword=""
+data-role="2種類札 回復フェイズ デッキ破壊 "
+>
+<img data-src="images/card_7_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1337"
+data-name="火炎旋風（かえんせんぷう）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="夏"
+data-type="季節札"
+data-attribute="火事 灯火"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_7_p (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1338"
+data-name="鬼哭線 獄門坂駅（きこくせん ごくもんざかえき）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃駅 廃線"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1339"
+data-name="開店準備（かいてんじゅんび）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="糧 家屋"
+data-keyword=""
+data-role="ロック 常時"
+>
+<img data-src="images/card_7_p (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1340"
+data-name="竪坑櫓（たてこうやぐら）"
+data-cost="1"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃鉱山"
+data-keyword=""
+data-role="ドロー 常時"
+>
+<img data-src="images/card_7_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1341"
+data-name="二人だけで話そう（ふたりだけではなそう）"
+data-cost="3"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="髑髏 廃鉱山"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1342"
+data-name="消さなきゃ（けさなきゃ）"
+data-cost="3"
+data-power="2"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション 封印改訂"
+data-attribute="糧 灯火"
+data-keyword=""
+data-role="ロック 除外加速 回復フェイズ 常時"
+>
+<img data-src="images/card_7_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1343"
+data-name="嗤う城（わらうしろ）"
+data-cost="5"
+data-power="2"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="古城 妖怪"
+data-keyword="憎悪"
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1344"
+data-name="散楽小屋一座（さんがくごやいちざ）"
+data-cost="5"
+data-power="3"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="秋"
+data-type="場所札"
+data-role="ハンデス 手札公開 攻撃時"
+data-keyword=""
+data-attribute="視線 からくり 罪"
+>
+<img data-src="images/card_7_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1345"
+data-name="古の毛羽毛現（いにしえのけうけげん）"
+data-cost="5"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="神 妖怪"
+data-keyword="秘境"
+data-role="力固定 常時"
+>
+<img data-src="images/card_7_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1346"
+data-name="天への道(てんへのみち)"
+data-cost="6"
+data-power="7"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃隧道 道路 交通事故"
+data-keyword=""
+data-role="力固定 バフ"
+>
+<img data-src="images/card_7_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1347"
+data-name="UFOライン（ゆーふぉーらいん）"
+data-cost="8"
+data-power="5"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="交通事故 道路"
+data-keyword="追撃 速攻"
+data-role="ハンデス 攻撃時 常時"
+>
+<img data-src="images/card_7_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1348"
+data-name="赤富士（あかふじ）"
+data-cost="10"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="神 幽霊 霊場"
+data-keyword="神秘"
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1349"
+data-name="鳴ル神（なるかみ）"
+data-cost="5"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="神"
+data-keyword=""
+data-role="ドロー ハンデス"
+>
+<img data-src="images/card_7_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1350"
+data-name="検問（けんもん）"
+data-cost="5"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="視線"
+data-keyword=""
+data-role="除外加速 ドロー 直接ダメ"
+>
+<img data-src="images/card_7_p (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1351"
+data-name="首なし地蔵（くびなしじぞう）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="墓地 霊場 石像"
+data-keyword=""
+data-role="バフ 回復フェイズ"
+>
+<img data-src="images/card_7_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1352"
+data-name="火除地酒（ひよけちしゅ）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="秋"
+data-type="道具札"
+data-role="ドロー ハンデス 相手ドロー"
+data-keyword=""
+data-attribute="糧 家屋"
+>
+<img data-src="images/card_7_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1353"
+data-name="欲張りな商人（よくばりなしょうにん）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="秋"
+data-type="道具札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="糧 樹木 花"
+>
+<img data-src="images/card_7_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1354"
+data-name="憎悪の狭間（ぞうおのはざま）"
+data-cost="6"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="秋"
+data-type="季節札"
+data-role="バフ 魂利用 トップ送り"
+data-keyword="神秘"
+data-attribute="神 花 花面の神"
+>
+<img data-src="images/card_7_p (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1355"
+data-name="監視する病室（かんしするびょうしつ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃病院 視線"
+data-keyword=""
+data-role="除外加速 攻撃時"
+>
+<img data-src="images/card_7_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1356"
+data-name="スキマの視線（すきまのしせん）"
+data-cost="1"
+data-power="2"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="冬"
+data-type="場所札"
+data-role="ロック 常時"
+data-keyword=""
+data-attribute="牢獄 視線"
+>
+<img data-src="images/card_7_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1357"
+data-name="耳無し芳一（みみなしほういち）"
+data-cost="2"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="怨霊 楽器 血液"
+data-keyword="不屈"
+data-role="ドロー 除外加速"
+>
+<img data-src="images/card_7_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1358"
+data-name="魂の保管場所（たましいのほかんばしょ）"
+data-cost="3"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="妖怪 糧"
+data-keyword="不屈"
+data-role="除外戻し 魂加速 除外加速 攻撃時"
+>
+<img data-src="images/card_7_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1359"
+data-name="あなただけがいない場所（あなただけがいないばしょ）"
+data-cost="6"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション 封印改訂"
+data-attribute="廃校 都市伝説"
+data-keyword=""
+data-role="ランデス 除外加速 ロック 常時"
+>
+<img data-src="images/card_7_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1360"
+data-name="パパ活（ぱぱかつ）"
+data-cost="7"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃円宿 血液"
+data-keyword=""
+data-role="自傷ダメ ランデス 攻撃時"
+>
+<img data-src="images/card_7_p (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1361"
+data-name="AGITO（あじと）"
+data-cost="8"
+data-power="7"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃マンション"
+data-keyword=""
+data-role="除外加速 ドロー 攻撃時"
+>
+<img data-src="images/card_7_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1362"
+data-name="氷冥（ひょうめい）"
+data-cost="9"
+data-power="7"
+data-series="怪談師"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="妖怪 幽霊 災害"
+data-keyword="神秘"
+data-role="神秘付与 バフ 攻撃時 常時"
+>
+<img data-src="images/card_7_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1363"
+data-name="イエスタデイ（いえすたでい）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="怨霊 罪"
+data-keyword=""
+data-role="除外加速"
+>
+<img data-src="images/card_7_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1364"
+data-name="歩く二宮金治郎像（あるくにのみやきんじろうぞう）"
+data-cost="4"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="石像 廃校 古書 噂"
+data-keyword="速攻"
+data-role="2種類札 サーチ"
+>
+<img data-src="images/card_7_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1365"
+data-name="迷子の迷子の子猫（まいごのまいごのこねこ）"
+data-cost="5"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="猫 童謡"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_7_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1366"
+data-name="般若（はんにゃ）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="妖怪 鬼"
+data-keyword="妬み"
+data-role="ランデス 札除去"
+>
+<img data-src="images/card_7_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1367"
+data-name="忍び寄る翁の手（しのびよるおきなのて）"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="怨霊"
+data-keyword=""
+data-role="ドロー 公開ドロー 除外加速"
+>
+<img data-src="images/card_7_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1368"
+data-name="御喋りな箱（おしゃべりなはこ）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="箱 牢獄 石像"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_7_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1369"
+data-name="呪告の手引き（じゅこくのてびき）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-type="季節札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="噂 事件"
+data-keyword="呪い"
+data-role="ダメ無効"
+>
+<img data-src="images/card_7_p (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1370"
+data-name="巫の看板娘（かんなぎのかんばんむすめ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="無"
+data-type="場所札"
+data-role="追加行動 特殊召喚 召喚時"
+data-keyword=""
+data-attribute="うつしよ 家屋"
+>
+<img data-src="images/card_7_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1371"
+data-name="鉄の風（てつのかぜ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="戦 からくり"
+data-keyword=""
+data-role="除去無効"
+>
+<img data-src="images/card_7_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1372"
+data-name="未確認飛行物体（みかくにんひこうぶったい）"
+data-cost="3"
+data-power="3"
+data-series="怪談師"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="都市伝説 からくり"
+data-keyword="正体不明"
+data-role="攻撃時"
+>
+<img data-src="images/card_7_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1373"
+data-name="あぎょうさん"
+data-cost="3"
+data-power="2"
+data-series="怪談師"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="妖怪 噂 廃校"
+data-keyword=""
+data-role="2種類札 バニラ ヒール無効 直接ダメ"
+>
+<img data-src="images/card_7_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1374"
+data-name="七人ミサキ（しちにんみさき）"
+data-cost="7"
+data-power="7"
+data-series="怪談師"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="怨霊 妖怪"
+data-keyword="呪い"
+data-role="召喚時"
+>
+<img data-src="images/card_7_p (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1375"
+data-name="無縁佛（むえんぼとけ）"
+data-cost="10"
+data-power="1"
+data-series="怪談師"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="怨霊 霊場 墓地"
+data-keyword="徳"
+data-role="直接ダメ 攻撃時"
+>
+<img data-src="images/card_7_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1376"
+data-name="お家においでよ（おうちにおいでよ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="動物 うつしよ"
+data-keyword=""
+data-role="除外戻し 除外除去 底送り"
+>
+<img data-src="images/card_7_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1377"
+data-name="ベビーキョンシー！（べびーきょんしー！）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="幽霊"
+data-keyword=""
+data-role="バニラ"
+>
+<img data-src="images/card_7_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1378"
+data-name="むちゅーなけむり"
+data-cost="1"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="うつしよ 火事"
+data-keyword=""
+data-role="魂利用"
+>
+<img data-src="images/card_7_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1379"
+data-name="来来（らいらい）"
+data-cost="2"
+data-power="0"
+data-series="怪談師"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="妖怪 からくり"
+data-keyword=""
+data-role="公開ドロー 直接ダメ"
+>
+<img data-src="images/card_7_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1380"
+data-name="解体作業車（かいたいさぎょうしゃ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="からくり"
+data-keyword=""
+data-role="ランデス"
+>
+<img data-src="images/card_7_p (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1381"
+data-name="罪咎（ざいきゅう）"
+data-cost="0"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="罪"
+data-keyword=""
+data-role="ヒール"
+>
+<img data-src="images/card_7_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1382"
+data-name="お願いごと（おねがいごと）"
+data-cost="4"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="善行 うつしよ 霊場"
+data-keyword="徳"
+data-role="魂利用"
+>
+<img data-src="images/card_7_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1383"
+data-name="誰かが生きた証（だれかがいきたあかし）"
+data-cost="5"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="写真 事件"
+data-keyword="結界 不屈"
+data-role="ドロー"
+>
+<img data-src="images/card_7_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1384"
+data-name="隠蔽（いんぺい）"
+data-cost="6"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="陰 視線"
+data-keyword=""
+data-role="除外加速 除外戻し 回復フェイズ"
+>
+<img data-src="images/card_7_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1385"
+data-name="ありがとう、またね。"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="うつしよ 陰"
+data-keyword=""
+data-role="札除去 相手ドロー 季節札除去"
+>
+<img data-src="images/card_7_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1386"
+data-name="五色沼オンネトー（ごしょくぬまおんねとー）"
+data-cost="5"
+data-power="5"
+data-series="怪談師"
+data-type="場所札"
+data-season="混化 春夏"
+data-rare="エキスパンション"
+data-attribute="渓谷 怨霊"
+data-keyword="神秘 速攻"
+data-role="常時"
+>
+<img data-src="images/card_7_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1387"
+data-name="見えざるものが見えたもの（みえざるものがみえたもの）"
+data-cost="10"
+data-power="8"
+data-series="怪談師"
+data-type="場所札"
+data-season="混化 秋夏"
+data-rare="エキスパンション"
+data-attribute="霊能者 亡者"
+data-keyword=""
+data-role="踏み倒し 魂利用 攻撃時"
+>
+<img data-src="images/card_7_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1388"
+data-name="雪溶け（ゆきどけ）"
+data-cost="7"
+data-power="3"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="混化 春冬"
+data-type="場所札"
+data-role="除外加速 直接ダメ 攻撃時 召喚時"
+data-keyword=""
+data-attribute="蝙蝠 血液 災害"
+>
+<img data-src="images/card_7_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1389"
+data-name="赤津川（あかつがわ）"
+data-cost="7"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション 封印改訂"
+data-season="混化 春冬"
+data-type="季節札"
+data-role="札除去 バフ 展開時"
+data-attribute="血液 渓谷"
+>
+<img data-src="images/card_7_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1390"
+data-name="半修羅 生成(はんしゅら なまなり)"
+data-cost="10"
+data-power="0"
+data-series="怪談師"
+data-rare="エキスパンション"
+data-season="混化 秋冬"
+data-type="季節札"
+data-role="ドロー ランデス"
+data-keyword=""
+data-attribute="花 鬼"
+>
+<img data-src="images/card_7_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 学校の怪談 -->
+
+<div
+class="card"
+data-number="1401"
+data-name="散らぬ桜（ちらぬさくら）"
+data-cost="0"
+data-power="1"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="春 夏 秋 冬 無"
+data-rare="C"
+data-attribute="噂 廃校 樹木 花"
+data-keyword=""
+data-role="常時"
+>
+<img data-src="images/card_9_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1402"
+data-name="家庭科室の暴君（かいてかしつのぼうくん）"
+data-cost="3"
+data-power="4"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="春"
+data-rare="C"
+data-attribute="噂 廃校 糧 動物"
+data-keyword="学校の怪談"
+data-role=""
+>
+<img data-src="images/card_9_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1403"
+data-name="一番目の花子さん（いちばんめのはなこさん）"
+data-cost="0"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="春"
+data-rare="R"
+data-attribute="噂 幽霊"
+data-keyword=""
+data-role="サーチ 除外加速 「花子」"
+>
+<img data-src="images/card_9_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1404"
+data-name="四番目の花子さん（よんばんめのはなこさん）"
+data-cost="4"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="春"
+data-rare="SR"
+data-attribute="噂 幽霊"
+data-keyword=""
+data-role="バフ 「花子」"
+>
+<img data-src="images/card_9_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1405"
+data-name="残飯小僧（ざんぱんこぞう）"
+data-cost="1"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="春"
+data-rare="C"
+data-attribute="噂 糧"
+data-keyword=""
+data-role="ヒール"
+>
+<img data-src="images/card_9_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1406"
+data-name="溶けた飼育委員（とけたしいくいいん）"
+data-cost="4"
+data-power="2"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="夏"
+data-rare="C"
+data-attribute="噂 廃校 腐乱"
+data-keyword="速攻 学校の怪談"
+data-role="攻撃時"
+>
+<img data-src="images/card_9_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1407"
+data-name="生活指導（せいかつしどう）"
+data-cost="0"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="夏"
+data-rare="UC"
+data-attribute="噂 廃校 怨念"
+data-keyword="憤怒"
+data-role="札ダメ"
+>
+<img data-src="images/card_9_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1408"
+data-name="ミイラ先生（みいらせんせい）"
+data-cost="3"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="夏"
+data-rare="R"
+data-attribute="噂 人形"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_9_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1409"
+data-name="二番目の花子さん（にばんめのはなこさん）"
+data-cost="8"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="夏"
+data-rare="C"
+data-attribute="噂 怨霊"
+data-keyword=""
+data-role="直接ダメ 「花子」"
+>
+<img data-src="images/card_9_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1410"
+data-name="踊り場の大鏡（おどりばのおおかがみ）"
+data-cost="1"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="夏"
+data-rare="C"
+data-attribute="噂 鏡"
+data-keyword=""
+data-role="手札公開"
+>
+<img data-src="images/card_9_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1411"
+data-name="ヤバいクラス（やばいくらす）"
+data-cost="5"
+data-power="1"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="秋"
+data-rare="UC"
+data-attribute="噂 廃校 不吉"
+data-keyword=""
+data-role="効果を失う 直接ダメ ヒール ドロー ハンデス ランデス 常時 ドレイン"
+>
+<img data-src="images/card_9_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1412"
+data-name="オカルト研究部（おかるとけんきゅうぶ）"
+data-cost="7"
+data-power="4"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="秋"
+data-rare="R"
+data-attribute="噂 廃校 狐面 都市伝説"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_9_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1413"
+data-name="赤い紙、青い紙（あかいかみ、あおいかみ）"
+data-cost="12"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="秋"
+data-rare="KR"
+data-attribute="神 花面の神"
+data-keyword="不屈"
+data-role="ランデス ハンデス"
+>
+<img data-src="images/card_9_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1414"
+data-name="睨む肖像画（にらむしょうぞうが）"
+data-cost="4"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="秋"
+data-rare="C"
+data-attribute="噂 写真 楽器 視線"
+data-keyword=""
+data-role="公開ドロー ドロー 手札公開"
+>
+<img data-src="images/card_9_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1415"
+data-name="副流煙（ふくりゅうえん）"
+data-cost="6"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="秋"
+data-rare="UC"
+data-attribute="噂 灯火"
+data-keyword=""
+data-role=""
+>
+<img data-src="images/card_9_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1416"
+data-name="収穫祭（しゅうかくさい）"
+data-cost="2"
+data-power="0"
+data-series="学校の怪談"
+data-type="季節札"
+data-season="秋"
+data-rare="C"
+data-attribute="噂 糧 樹木"
+data-role="サーチ 展開時"
+>
+<img data-src="images/card_9_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1417"
+data-name="視力の糸（しりょくのいと）"
+data-cost="2"
+data-power="2"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="冬"
+data-rare="C"
+data-attribute="噂 廃校 廃施設"
+data-keyword=""
+data-role="2種類札 手札非公開 バニラ"
+>
+<img data-src="images/card_9_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1418"
+data-name="無限階段（むげんかいだん）"
+data-cost="6"
+data-power="6"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="冬"
+data-rare="C"
+data-attribute="噂 廃校 牢獄"
+data-keyword="学校の怪談"
+data-role="常時"
+>
+<img data-src="images/card_9_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1419"
+data-name="深夜の放送部員（しんやのほうそうぶいん）"
+data-cost="3"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="冬"
+data-rare="C"
+data-attribute="噂 楽器 写真 電話"
+data-keyword=""
+data-role="ランデス"
+>
+<img data-src="images/card_9_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1420"
+data-name="生臭い模型（なまぐさいもけい）"
+data-cost="6"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="冬"
+data-rare="R"
+data-attribute="噂 人形 腐乱 蘇生"
+data-keyword=""
+data-role="2種類札 魂戻し"
+>
+<img data-src="images/card_9_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1421"
+data-name="絵の具になった友達（えのぐになったともだち）"
+data-cost="5"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="冬"
+data-rare="UC"
+data-attribute="噂 血液"
+data-keyword=""
+data-role="除外加速 札除去"
+>
+<img data-src="images/card_9_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1422"
+data-name="旋律の犠牲者（せんりつのぎせいしゃ）"
+data-cost="7"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="冬"
+data-rare="C"
+data-attribute="噂 楽器 からくり"
+data-keyword=""
+data-role="2種類札 直接ダメ 除外戻し"
+>
+<img data-src="images/card_9_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1423"
+data-name="旧校舎（きゅうこうしゃ）"
+data-cost="0"
+data-power="1"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="無"
+data-rare="UC"
+data-attribute="噂 廃校"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_9_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1424"
+data-name="混化した生徒（こんかしたせいと）"
+data-cost="4"
+data-power="9"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="混化 春夏"
+data-rare="UC"
+data-attribute="噂 廃校 怨霊"
+data-keyword="学校の怪談"
+data-role=""
+>
+<img data-src="images/card_9_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1425"
+data-name="混化した校舎（こんかしたこうしゃ）"
+data-cost="4"
+data-power="0"
+data-series="学校の怪談"
+data-type="季節札"
+data-season="混化 春夏"
+data-rare="C"
+data-attribute="噂 廃校 怨霊"
+data-role="直接ダメ ヒール 展開時"
+>
+<img data-src="images/card_9_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1426"
+data-name="燃ゆる茸（もゆるだけ）"
+data-cost="3"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="秋"
+data-rare="SSR"
+data-attribute="菌"
+data-keyword="鮮明 不屈"
+data-role="除外戻し"
+>
+<img data-src="images/card_9_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1427"
+data-name="底無し穴の幽霊（そこなしあなのゆうれい）"
+data-cost="7"
+data-power="0"
+data-series="学校の怪談"
+data-type="怪異札"
+data-season="春"
+data-rare="R"
+data-attribute="神 動物"
+data-keyword=""
+data-role="ヒール バフ 除外除去"
+>
+<img data-src="images/card_9_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1428"
+data-name="大女の祟り（おおおんなのたたり）"
+data-cost="8"
+data-power="6"
+data-series="学校の怪談"
+data-type="場所札"
+data-season="夏"
+data-rare="R"
+data-attribute="神 怨霊"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_9_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1429"
+data-name="人毛の藁人形（じんもうのわらにんぎょう）"
+data-cost="5"
+data-power="0"
+data-series="学校の怪談"
+data-type="道具札"
+data-season="秋"
+data-rare="R"
+data-attribute="人形 藁人形 糧"
+data-keyword=""
+data-role="ドロー"
+>
+<img data-src="images/card_9_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1430"
+data-name="三番目の花子さん（さんばんめのはなこさん）"
+data-cost="6"
+data-power="0"
+data-series="学校の怪談"
+data-rare="R"
+data-season="冬"
+data-type="怪異札"
+data-role="公開ドロー ドロー 除外加速 「花子」 底送り"
+data-keyword=""
+data-attribute="噂"
+>
+<img data-src="images/card_9_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- SSS47 -->
+
+<div
+class="card"
+data-number="1501"
+data-name="山梨：花魁淵（やまなし：おいらんぶち）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 渓谷 血液"
+data-keyword="合唱"
+data-role="ヒール 攻撃時"
+>
+<img data-src="images/card_8_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1502"
+data-name="大分：湯布院マンション（おおいた：ゆふいんまんしょん）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 廃マンション"
+data-keyword="合唱"
+data-role="魂加速 トップ確認 攻撃時"
+>
+<img data-src="images/card_8_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1503"
+data-name="鳥取：プレイランド（とっとり：ぷれいらんど）"
+data-cost="4"
+data-power="2"
+data-series="SSS47"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 園"
+data-keyword="合唱"
+data-role="バフ 攻撃時"
+>
+<img data-src="images/card_8_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1504"
+data-name="福井：深谷霊園（ふくい：ふかやれいえん）"
+data-cost="6"
+data-power="6"
+data-series="SSS47"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 墓地 霊場"
+data-keyword="合唱"
+data-role="攻撃時"
+>
+<img data-src="images/card_8_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1505"
+data-name="岡山：ラ・レインボー（おかやま：ら・れいんぼー）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 虹 蟲"
+data-keyword=""
+data-role="直接ダメ ヒール ドレイン"
+>
+<img data-src="images/card_8_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1506"
+data-name="石川：牛首隧道（いしかわ：うしくびずいどう）"
+data-cost="3"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 廃隧道 動物"
+data-keyword=""
+data-role="バフ"
+>
+<img data-src="images/card_8_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1507"
+data-name="滋賀：死骸の森（しが：しがいのもり）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 髑髏 花"
+data-keyword="合唱"
+data-role=""
+>
+<img data-src="images/card_8_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1508"
+data-name="熊本：金峰山（くまもと：きんぽうざん）"
+data-cost="2"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 道路 災害"
+data-keyword=""
+data-role="サーチ 除外加速"
+>
+<img data-src="images/card_8_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1509"
+data-name="山形：滝不動（やまがた：たきふどう）"
+data-cost="7"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 刀 血液"
+data-keyword=""
+data-role="ハンデス 直接ダメ"
+>
+<img data-src="images/card_8_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1510"
+data-name="静岡：樹海（しずおか：じゅかい）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="季節札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="SSS 災害 龍"
+data-keyword=""
+data-role="魂加速"
+>
+<img data-src="images/card_8_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1511"
+data-name="沖縄：大山貝塚（おきなわ：だいさんかいづか ※おおやまかいづか）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 霊場"
+data-keyword="合唱"
+data-role="直接ダメ 攻撃時"
+>
+<img data-src="images/card_8_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1512"
+data-name="山口：7つの家（やまぐち：ななつのいえ）"
+data-cost="0"
+data-power="2"
+data-series="SSS47"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 廃屋"
+data-keyword="合唱"
+data-role="攻撃時"
+>
+<img data-src="images/card_8_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1513"
+data-name="群馬：金比羅橋（ぐんま：かねひらばし）"
+data-cost="2"
+data-power="3"
+data-series="SSS47"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 罪"
+data-keyword="合唱"
+data-role="攻撃時 常時"
+>
+<img data-src="images/card_8_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1514"
+data-name="佐賀：いのちゃん山荘（さが：いのちゃんさんそう）"
+data-cost="5"
+data-power="2"
+data-series="SSS47"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 腐乱 廃別荘"
+data-keyword="速攻 合唱"
+data-role="直接ダメ 攻撃時"
+>
+<img data-src="images/card_8_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1515"
+data-name="愛媛：死入道峠（えひめ：しにゅうどうとうげ）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 腐乱 蟲"
+data-keyword=""
+data-role="直接ダメ 除外加速"
+>
+<img data-src="images/card_8_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1516"
+data-name="三重：女鬼隧道（みえ：めきずいどう）"
+data-cost="4"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 廃隧道 鬼"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_8_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1517"
+data-name="埼玉：岳集落（さいたま：たけしゅうらく）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 廃集落 火事"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_8_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1518"
+data-name="長野：人肉館（ながの：じんにくかん）"
+data-cost="6"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 糧 腐乱 廃村"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_8_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1519"
+data-name="茨城：小川脳病院（いばらき：おがわのうびょういん）"
+data-cost="3"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 廃病院 蟲"
+data-keyword=""
+data-role="直接ダメ ドロー 公開ドロー"
+>
+<img data-src="images/card_8_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1520"
+data-name="新潟：ホワイトハウス（にいがた：ほわいとはうす）"
+data-cost="1"
+data-power="0"
+data-series="SSS47"
+data-type="季節札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="SSS 牢獄 罪"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_8_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1521"
+data-name="徳島：童学寺隧道（とくしま：どうがくじずいどう）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃隧道"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_8_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1522"
+data-name="島根：深谷大橋（しまね：ふかやおおはし）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃隧道"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_8_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1523"
+data-name="富山：坪ノ鉱泉（とやま：つぼのこうせん）"
+data-cost="4"
+data-power="3"
+data-series="SSS47"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃旅館"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_8_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1524"
+data-name="高知：皇帝（こうち：こうてい）"
+data-cost="7"
+data-power="6"
+data-series="SSS47"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃円宿"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_8_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1525"
+data-name="岩手：松終鉱山（いわて：まつおこうざん）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃鉱山"
+data-keyword=""
+data-role="バウンス 季節札除去"
+>
+<img data-src="images/card_8_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1526"
+data-name="鹿児島：ぺこちゃん（かごしま：ぺこちゃん）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃屋 怨霊"
+data-keyword=""
+data-role="札除去 底利用"
+>
+<img data-src="images/card_8_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1527"
+data-name="香川：喝破道場（かがわ：かっぱどうじょう）"
+data-cost="3"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 家屋 刀"
+data-keyword=""
+data-role="バフ ランデス"
+>
+<img data-src="images/card_8_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1528"
+data-name="福島：幽霊ペンション（ふくしま：ゆうれいぺんしょん）"
+data-cost="1"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 糧 血液"
+data-keyword=""
+data-role="魂加速 トップ送り"
+>
+<img data-src="images/card_8_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1529"
+data-name="岐阜：UUC喫茶（ぎふ：ゆーゆーしーきっさ）"
+data-cost="4"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 糧 廃円宿"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_8_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1530"
+data-name="千葉：活魚（ちば：かつぎょ）"
+data-cost="4"
+data-power="0"
+data-series="SSS47"
+data-type="季節札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="SSS 廃円宿 怨霊"
+data-keyword=""
+data-role="ドロー 追加行動"
+>
+<img data-src="images/card_8_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1531"
+data-name="青森：恐山（あおもり：おそれやま）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 霊場"
+data-keyword="合唱"
+data-role="ハンデス 攻撃時"
+>
+<img data-src="images/card_8_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1532"
+data-name="秋田：鹿男プリンスホテル（あきた：がおぷりんすほてる）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 廃旅館"
+data-keyword="合唱"
+data-role="ランデス 攻撃時"
+>
+<img data-src="images/card_8_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1533"
+data-name="広島：魔女の館（ひろしま：まじょのやかた）"
+data-cost="2"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 廃旅館"
+data-keyword="合唱"
+data-role="踏み倒し 攻撃時"
+>
+<img data-src="images/card_8_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1534"
+data-name="兵庫：魔夜観光ホテル（ひょうご：まやかんこうほてる）"
+data-cost="3"
+data-power="3"
+data-series="SSS47"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="神 SSS 廃旅館"
+data-keyword="合唱"
+data-role="ロック 攻撃時 常時"
+>
+<img data-src="images/card_8_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1535"
+data-name="栃木：野木病院（とちぎ：のぎびょういん）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 廃病院 幽霊"
+data-keyword=""
+data-role="除外加速"
+>
+<img data-src="images/card_8_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1536"
+data-name="和歌山：ブラックビル（わかやま：ぶらっくびる）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 廃マンション 人魚"
+data-keyword=""
+data-role="追加行動 踏み倒し 特殊召喚"
+>
+<img data-src="images/card_8_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1537"
+data-name="京都：首塚大明神（きょうと：くびづかだいみょうじん）"
+data-cost="7"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 廃神社 鬼 妖怪"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_8_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1538"
+data-name="宮崎：紘田病院（みやざき：こうだびょういん）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 都市伝説 廃病院"
+data-keyword="正体不明"
+data-role="除外加速"
+>
+<img data-src="images/card_8_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1539"
+data-name="長崎：軍艦島（ながさき：ぐんかんじま）"
+data-cost="8"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 銃 災害"
+data-keyword=""
+data-role="2種類札 ランデス 除外加速 直接ダメ 札ダメ 魂加速"
+>
+<img data-src="images/card_8_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1540"
+data-name="奈良：白高大神（なら：はっこうおおかみ）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="季節札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="SSS 龍 廃神社"
+data-keyword=""
+data-role="2種類札 魂利用 上限解放"
+>
+<img data-src="images/card_8_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1541"
+data-name="東京：小峰トンネル（とうきょう：こみねとんねる）"
+data-cost="0"
+data-power="1"
+data-series="SSS47"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 廃隧道"
+data-keyword="合唱 不屈"
+data-role="ドロー 攻撃時"
+>
+<img data-src="images/card_8_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1542"
+data-name="宮城：化女沼ランド（みやぎ：けじょぬまらんど）"
+data-cost="5"
+data-power="4"
+data-series="SSS47"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 園 大蛇"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_8_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1543"
+data-name="大阪：ほととぎす（おおさか：ほととぎす）"
+data-cost="7"
+data-power="3"
+data-series="SSS47"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 廃旅館 動物"
+data-keyword="合唱"
+data-role="直接ダメ 攻撃時 常時"
+>
+<img data-src="images/card_8_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1544"
+data-name="福岡：犬鳴隧道（ふくおか：けんめいずいどう）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 動物 廃隧道 犬族"
+data-keyword="鮮明"
+data-role="自傷ダメ 神秘付与"
+>
+<img data-src="images/card_8_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1545"
+data-name="愛知：千歳楼（あいち：ちとせろう）"
+data-cost="5"
+data-power="0"
+data-series="SSS47"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 腐乱 廃旅館"
+data-keyword=""
+data-role="追加行動 踏み倒し 特殊召喚"
+>
+<img data-src="images/card_8_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1546"
+data-name="神奈川：ジェイソン村（かながわ：じぇいそんむら）"
+data-cost="4"
+data-power="0"
+data-series="SSS47"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 血液 刀 からくり"
+data-keyword=""
+data-role="直接ダメ 魂加速"
+>
+<img data-src="images/card_8_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1547"
+data-name="北海道：円形校舎（ほっかいどう：えんけいこうしゃ）"
+data-cost="0"
+data-power="0"
+data-series="SSS47"
+data-type="季節札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="SSS 廃校 噂"
+data-keyword="学校の怪談"
+data-role=""
+>
+<img data-src="images/card_8_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 怪談師二章（かいだんし2） -->
+
+<div
+class="card"
+data-number="1601"
+data-name="0831(おばんざい)"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="糧 家屋"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1602"
+data-name="紹介された部屋（しょうかいされたへや）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="家屋 視線 幽霊"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1603"
+data-name="さくらのせい"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="花 樹木 妖怪"
+data-keyword=""
+data-role="常時"
+>
+<img data-src="images/card_10_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1604"
+data-name="白猫の恩知らず（しろねこのおんしらず）"
+data-cost="1"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="猫 動物"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (108).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1605"
+data-name="海女の神様（あまのかみさま）"
+data-cost="3"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="神 人魚"
+data-keyword=""
+data-role="バフ 常時"
+>
+<img data-src="images/card_10_p (97).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1606"
+data-name="365×3（さんろくごかけるさん）"
+data-cost="5"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="糧 家屋"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1607"
+data-name="黒き稲妻（くろきいなづま）"
+data-cost="5"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="犬族 動物 災害"
+data-keyword="憎悪"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1608"
+data-name="福島進一（ふくしましんいち）"
+data-cost="7"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物 事件"
+data-keyword=""
+data-role="バフ 常時"
+>
+<img data-src="images/card_10_p (104).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1609"
+data-name="新府城（しんぶじょう）"
+data-cost="8"
+data-power="8"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション 封印改訂"
+data-attribute="古城 怨念 戦"
+data-keyword=""
+data-role="除去無効 常時"
+>
+<img data-src="images/card_10_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>       
+<div
+class="card"
+data-number="1610"
+data-name="月夜桜 すねこすり（つきよざくらすねこすり）"
+data-cost="9"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="妖怪 動物"
+data-keyword="秘境 速攻 突現"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1611"
+data-name="36524（さんろくごによん）"
+data-cost="10"
+data-power="8"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="糧 家屋"
+data-keyword=""
+data-role="除外加速 バフ 攻撃時"
+>
+<img data-src="images/card_10_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1612"
+data-name="猫屋敷の悪魔（ねこやしきのあくま）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="猫 動物 悪魔"
+data-keyword=""
+data-role="ヒール 自傷ダメ"
+>
+<img data-src="images/card_10_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1613"
+data-name="コロポックル（ころぽっくる）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="神 妖怪"
+data-keyword=""
+data-role="魂加速"
+>
+<img data-src="images/card_10_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1614"
+data-name="白い小熊猫（しろいれっさーぱんだ）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物"
+data-keyword=""
+data-role="除外加速 札除去 ヒール"
+>
+<img data-src="images/card_10_p (110).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1615"
+data-name="枝垂れ桜の祟り（しだれさくらのたたり）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="花 幽霊 樹木"
+data-keyword=""
+data-role="バフ ヒール 除外加速 踏み倒し 追加行動 魂利用 特殊召喚"
+>
+<img data-src="images/card_10_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1616"
+data-name="ターボババア（たーぼばばあ）"
+data-cost="6"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="妖怪 道路"
+data-keyword=""
+data-role="バフ 札除去"
+>
+<img data-src="images/card_10_p (92).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1617"
+data-name="赤津小の会談（あかづしょうのかいだん）"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="血液 噂"
+data-keyword=""
+data-role="直接ダメ ヒール ドレイン"
+>
+<img data-src="images/card_10_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1618"
+data-name="はと"
+data-cost="8"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="動物"
+data-keyword=""
+data-role="ヒール"
+>
+<img data-src="images/card_10_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1619"
+data-name="鬼は外、福は内（おにはそとふくはうち）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="糧"
+data-keyword=""
+data-role="ランデス ヒール"
+>
+<img data-src="images/card_10_p (106).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1620"
+data-name="一日千秋（いちじつせんしゅう）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="犬族"
+data-keyword=""
+data-role="サーチ 底送り"
+>
+<img data-src="images/card_10_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>          
+<div
+class="card"
+data-number="1621"
+data-name="闇罪憑蕎麦（やみつきそば）"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="糧"
+data-keyword=""
+data-role="追加行動 ヒール 魂加速"
+>
+<img data-src="images/card_10_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>          
+<div
+class="card"
+data-number="1622"
+data-name="悪神の力：春（あしんのちから はる）"
+data-cost="12"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="災害 猫面の神"
+data-keyword="潜在能力"
+data-role="バフ"
+>
+<img data-src="images/card_10_p (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1623"
+data-name="押入れのチャーリー人形（おしいれのちゃーりーにんぎょう）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="人形 牢獄"
+data-keyword="憤怒"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (121).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1624"
+data-name="水際のカード屋さん（みずぎわのかーどやさん）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="陰"
+data-keyword="合唱"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1625"
+data-name="廃墟の地下金庫（はいきょのちかきんこ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="廃屋 廃集落 牢獄"
+data-keyword="突現"
+data-role="攻撃時"
+>
+<img data-src="images/card_10_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1626"
+data-name="かちかち山（かちかちやま）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="灯火 罪 動物"
+data-keyword=""
+data-role="自傷ダメ 直接ダメ 常時"
+>
+<img data-src="images/card_10_p (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1627"
+data-name="なないろ"
+data-cost="1"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="糧 家屋"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1628"
+data-name="きのこ栽培79さい(きのこさいばいななじゅうきゅうさい)"
+data-cost="1"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲 菌"
+data-keyword=""
+data-role="直接ダメ 攻撃時"
+>
+<img data-src="images/card_10_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1629"
+data-name="そこにいた何か(そこにいたなにか)"
+data-cost="1"
+data-power="4"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="墓地 陰 災害"
+data-keyword=""
+data-role="回復フェイズ 除外加速 常時"
+>
+<img data-src="images/card_10_p (113).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1630"
+data-name="黒猫の恩返し（くろねこのおんがえし）"
+data-cost="2"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="猫 動物"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1631"
+data-name="天空龍：霊念熾天使（てんくうりゅう：あすとらるせらふぃーど）"
+data-cost="3"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="龍 噂"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>          
+<div
+class="card"
+data-number="1632"
+data-name="霊能力者開発施設（れいのうりょくしゃかいはつしせつ）"
+data-cost="5"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="霊能者 亡者 廃施設"
+data-keyword="霊視"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1633"
+data-name="統率する猛火：超龍（とうそつするもうか：ちょうりゅう）"
+data-cost="7"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="SR"
+data-attribute="神 龍 火事"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1634"
+data-name="頭の無い少女（あたまのないしょうじょ）"
+data-cost="5"
+data-power="4"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="家屋 幻 幽霊"
+data-keyword=""
+data-role="直接ダメ 常時"
+>
+<img data-src="images/card_10_p (94).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1635"
+data-name="鬼狩り（おにがり）"
+data-cost="6"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="刀 怨念"
+data-keyword=""
+data-role="追加行動 「起き」 常時 特殊召喚"
+>
+<img data-src="images/card_10_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1636"
+data-name="樹海の廃村（じゅかいのはいそん）"
+data-cost="20"
+data-power="10"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="廃村 灰集落 廃屋 「廃」"
+data-keyword=""
+data-role="コスト軽減 直接ダメ 攻撃時"
+>
+<img data-src="images/card_10_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1637"
+data-name="すずめの道（すずめのみち）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="交通事故 動物"
+data-keyword="鮮明"
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (100).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1638"
+data-name="封印の尻尾（ふういんのしっぽ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="猫 封印"
+data-keyword="鮮明"
+data-role="ロック"
+>
+<img data-src="images/card_10_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1639"
+data-name="カードン（かーどん）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="龍 灯火"
+data-keyword=""
+data-role="コスト軽減"
+>
+<img data-src="images/card_10_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1640"
+data-name="人面魚（じんめんぎょ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="人魚 幽霊 都市伝説"
+data-keyword=""
+data-role="自傷ダメ 直接ダメ"
+>
+<img data-src="images/card_10_p (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1641"
+data-name="牛の首（うしのくび）"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="噂 幽霊"
+data-keyword="正体不明"
+data-role=""
+>
+<img data-src="images/card_10_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1642"
+data-name="齋藤友晴（さいとうともはる）"
+data-cost="4"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="神 怨霊"
+data-keyword=""
+data-role="直接ダメ 魂加速"
+>
+<img data-src="images/card_10_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1643"
+data-name="りさちゃん"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="噂 都市伝説"
+data-keyword=""
+data-role="直接ダメ 札ダメ"
+>
+<img data-src="images/card_10_p (117).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1644"
+data-name="狐面の神子（こめんのかみご）"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="狐 狐面の神"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1645"
+data-name="魔神仔の蟲宴（まじんこのちゅうえん）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲 腐乱"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1646"
+data-name="痣通洲架橋、星堕慧児(あざとおすらせん、せだけじ)"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="神 蟲 都市伝説 UMA"
+data-keyword="正体不明"
+data-role="2種類札 回復フェイズ デッキ破壊 サーチ 魂利用"
+>
+<img data-src="images/card_10_p (128).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1647"
+data-name="金蜂の巣（きんばちのす）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="蟲"
+data-keyword=""
+data-role="「起き」 自傷ダメ"
+>
+<img data-src="images/card_10_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1648"
+data-name="迷い狐（まよいきつね）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="動物 狐"
+data-keyword="不屈"
+data-role="魂加速"
+>
+<img data-src="images/card_10_p (124).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1649"
+data-name="家族旅行（かぞくりょこう）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="不吉 写真"
+data-keyword="正体不明"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1650"
+data-name="君を待つ目々（きみをまつめめ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="視線 罪"
+data-keyword=""
+data-role="ドロー 常時 「起き」"
+>
+<img data-src="images/card_10_p (116).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1651"
+data-name="黒猫道中記（くろねこどうちゅうき）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="猫 墓地 墓場"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (107).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1652"
+data-name="足摺岬（あしずりみさき）"
+data-cost="2"
+data-power="8"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="岬"
+data-keyword=""
+data-role="常時"
+>
+<img data-src="images/card_10_p (122).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1653"
+data-name="二口女（ふたくちおんな）"
+data-cost="3"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="髑髏 妖怪 廃校"
+data-keyword=""
+data-role="除外加速 直接ダメ ハンデス 攻撃時"
+>
+<img data-src="images/card_10_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1654"
+data-name="鬼哭線（きこくせん）"
+data-cost="4"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃駅 廃線"
+data-keyword=""
+data-role="相手ドロー 常時"
+>
+<img data-src="images/card_10_p (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1655"
+data-name="札絵れあ（ふだえれあ）"
+data-cost="4"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション 封印改訂"
+data-attribute="幻 花"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1656"
+data-name="平四郎蟲（へいしろうむし）"
+data-cost="5"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="交通事故 蟲 妖怪 畑"
+data-keyword="追撃"
+data-role="ハンデス 攻撃時"
+>
+<img data-src="images/card_10_p (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1657"
+data-name="九龍城砦（くーろんじょうさい）"
+data-cost="9"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃マンション からくり"
+data-keyword=""
+data-role="バフ 常時"
+>
+<img data-src="images/card_10_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1658"
+data-name="夜見の烏（せみのからす）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="動物 烏 花面の神"
+data-keyword=""
+data-role="サーチ 除外加速"
+>
+<img data-src="images/card_10_p (123).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1659"
+data-name="交換ババ（こうかんばば）"
+data-cost="2"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="道路 罪 妖怪"
+data-keyword=""
+data-role="手札公開 盗品 果汁 ドロー ヒール"
+>
+<img data-src="images/card_10_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1660"
+data-name="トラウマ（とらうま）"
+data-cost="4"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="交通事故 噂"
+data-keyword=""
+data-role="札除去 季節札除去"
+>
+<img data-src="images/card_10_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1661"
+data-name="血液と灯火（ぶらっどらんぷ）"
+data-cost="6"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="血液 灯火"
+data-keyword=""
+data-role="手札公開 直接ダメ 札除去 ドロー"
+>
+<img data-src="images/card_10_p (111).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1662"
+data-name="天国の扉（てんごくのとびら）"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="神 古書 幽霊"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1663"
+data-name="件（くだん）"
+data-cost="8"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="動物 妖怪"
+data-keyword=""
+data-role="ロック トップ送り"
+>
+<img data-src="images/card_10_p (96).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1664"
+data-name="小さな呪い（ちいさなのろい）"
+data-cost="2"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="怨霊 人形"
+data-keyword=""
+data-role="除外加速 ドロー 底利用"
+>
+<img data-src="images/card_10_p (95).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1665"
+data-name="デジャブ（でじゃぶ）"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="都市伝説 噂 狐面"
+data-keyword=""
+data-role="ドロー トップ送り"
+>
+<img data-src="images/card_10_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1666"
+data-name="逆さまの怨念（さかさまのおんねん）"
+data-cost="4"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="怨念 廃屋"
+data-keyword=""
+data-role="踏み倒し"
+>
+<img data-src="images/card_10_p (98).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1667"
+data-name="佐藤一徳（さとういっとく）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="善行 うつしよ"
+data-keyword="徳"
+data-role=""
+>
+<img data-src="images/card_10_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1668"
+data-name="そうぶんぜ"
+data-cost="10"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="廃校 不吉"
+data-keyword=""
+data-role="ダメ無効"
+>
+<img data-src="images/card_10_p (115).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1669"
+data-name="赤い月（あかいつき）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="月 廃人 花"
+data-keyword=""
+data-role="ドロー 自傷ダメ"
+>
+<img data-src="images/card_10_p (93).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1670"
+data-name="目が覚めて最初に見るもの（めがさめてさいしょにみるもの）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="幽霊 悪夢"
+data-keyword=""
+data-role="札無効"
+>
+<img data-src="images/card_10_p (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1671"
+data-name="駐車禁止（ちゅうしゃきんし）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="交通事故 事件 霊場"
+data-keyword=""
+data-role="サーチ ドロー"
+>
+<img data-src="images/card_10_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1672"
+data-name="血の視線（ちのしせん）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション 封印改訂"
+data-attribute="廃病院 血液 視線"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1673"
+data-name="シロ（しろ）"
+data-cost="4"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="家屋 怨霊"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1674"
+data-name="生贄の会（いけにえのかい）"
+data-cost="4"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="博物館 血液"
+data-keyword=""
+data-role="除外加速 追加行動 攻撃時 特殊召喚"
+>
+<img data-src="images/card_10_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1675"
+data-name="海底鉱山（かいてこうざん）"
+data-cost="4"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃鉱山 海 灯火 怨霊"
+data-keyword=""
+data-role="札除去 攻撃時"
+>
+<img data-src="images/card_10_p (112).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1676"
+data-name="銅波魔物（どーばーでーもん）"
+data-cost="4"
+data-power="4"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="都市伝説 悪魔 UMA からくり"
+data-keyword=""
+data-role="直接ダメ ヒール ドレイン 常時"
+>
+<img data-src="images/card_10_p (118).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1677"
+data-name="テイ（てい）"
+data-cost="4"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="家屋 怨霊"
+data-keyword="合唱"
+data-role="バウンス 底送り 攻撃時"
+>
+<img data-src="images/card_10_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1678"
+data-name="ホテル活魚（ほてるかつぎょ）"
+data-cost="5"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃円宿 事件"
+data-keyword="四季欲"
+data-role="ランデス ドロー 攻撃時"
+>
+<img data-src="images/card_10_p (120).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1679"
+data-name="霧隠れの境界(みすてりあ)"
+data-cost="5"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃集落 動物 牢獄"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1680"
+data-name="なんでも屋（なんでもや）"
+data-cost="6"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="楽屋 楽器 写真 事件 刀 鎌 銃"
+data-keyword="憎悪"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1681"
+data-name="統率する冷血：シヴサン（とうそつするれいけつ：しぶさん）"
+data-cost="7"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="SR"
+data-attribute="神 龍 血液"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1682"
+data-name="死神の蝋燭（しにがみのろうそく）"
+data-cost="8"
+data-power="10"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション 封印改訂"
+data-attribute="髑髏 灯火 怨霊"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1683"
+data-name="首無しライダー（くびなしらいだー）"
+data-cost="9"
+data-power="7"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="交通事故 道路 幽霊"
+data-keyword="妬み"
+data-role="「起き」 ハンデス 常時"
+>
+<img data-src="images/card_10_p (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1684"
+data-name="凍てつく赤身（いてつくあかみ）"
+data-cost="9"
+data-power="6"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="人魚 海"
+data-keyword="魚群"
+data-role="「起き」 追加行動 特殊召喚"
+>
+<img data-src="images/card_10_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1685"
+data-name="邪死魔王（じゃーじーでびる）"
+data-cost="10"
+data-power="5"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="都市伝説 悪魔 UMA"
+data-keyword="↻（伏せ）"
+data-role="魂貫通 常時"
+>
+<img data-src="images/card_10_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1686"
+data-name="鬼鏡（ききょう）"
+data-cost="20"
+data-power="7"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="鬼 鏡"
+data-keyword="逆境"
+data-role="直接ダメ 攻撃時"
+>
+<img data-src="images/card_10_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1688"
+data-name="半魚人（はんぎょじん）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="海 人魚 妖怪"
+data-keyword="魚群"
+data-role="「起き」 追加行動 特殊召喚"
+>
+<img data-src="images/card_10_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1689"
+data-name="岩砕鬼（いわくだき）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="鬼 石像 妖怪"
+data-keyword="妬み"
+data-role="サーチ"
+>
+<img data-src="images/card_10_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1689"
+data-name="影法師（かげぼうし）"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="陰 妖怪 噂"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1690"
+data-name="鬼面の巫女（きめんのみこ）"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="鬼 鬼面の神"
+data-keyword=""
+data-role="追加行動 踏み倒し"
+>
+<img data-src="images/card_10_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1691"
+data-name="Dr.Sidow(どくたーしどー)"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃病院 視線 古書"
+data-keyword=""
+data-role="デッキ破壊 底送り"
+>
+<img data-src="images/card_10_p (105).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1692"
+data-name="unknown(しらぬもの)"
+data-cost="8"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="幽霊"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (114).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1693"
+data-name="破れた絆創膏（やぶれたばんそうこう）"
+data-cost="4"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="血液"
+data-keyword=""
+data-role="除外加速 ロック 回復フェイズ"
+>
+<img data-src="images/card_10_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1694"
+data-name="一人足りない（ひとりたりない）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="不吉 野営"
+data-keyword=""
+data-role="除外加速 ランデス"
+>
+<img data-src="images/card_10_p (125).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1695"
+data-name="うみつづけ"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="海 人魚 血液"
+data-keyword="魚群"
+data-role="追加行動"
+>
+<img data-src="images/card_10_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1696"
+data-name="語部（かたりべ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="うつしよ"
+data-keyword=""
+data-role="2種類札 サーチ バニラ"
+>
+<img data-src="images/card_10_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div> 
+<div
+class="card"
+data-number="1697"
+data-name="妖巣の裂目（ようそうのさけめ）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="妖怪 災害"
+data-keyword="秘境"
+data-role="追加行動 踏み倒し 「起き」 常時 特殊召喚"
+>
+<img data-src="images/card_10_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1698"
+data-name="八咫烏（やたがらす）"
+data-cost="0"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="神 烏 都市伝説"
+data-keyword=""
+data-role="除外加速 ヒール 直接ダメ 追加行動 ランデス 常時"
+>
+<img data-src="images/card_10_p (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1699"
+data-name="ウワサの小道（うわさのこみち）"
+data-cost="1"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="噂 道路"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1700"
+data-name="私、どう見えてますか？（わたし、どうみえてますか？）"
+data-cost="2"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="幽霊 交通事故"
+data-keyword=""
+data-role="召喚時 底利用"
+>
+<img data-src="images/card_10_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1700"
+data-name="合戦場（がっせんば）"
+data-cost="3"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="戦 刀 鎌 銃"
+data-keyword=""
+data-role="魂加速"
+>
+<img data-src="images/card_10_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1702"
+data-name="僵屍時空（きょんしーたいむ）"
+data-cost="3"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無 夏"
+data-rare="エキスパンション"
+data-attribute="妖怪 腐乱 幽霊"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1703"
+data-name="善行に努める家（ぜんこうにつとめるいえ）"
+data-cost="7"
+data-power="2"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="善行 うつしよ"
+data-keyword="徳"
+data-role="回復フェイズ 常時"
+>
+<img data-src="images/card_10_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1704"
+data-name="ありがとう、の、代わり、に（ありがとうのかわりに）"
+data-cost="10"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="神 動物 妖怪 鬼 からくり 視線"
+data-keyword=""
+data-role="除外加速 ランデス 攻撃時 常時"
+>
+<img data-src="images/card_10_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1705"
+data-name="伝播（でんぱ）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="不吉"
+data-keyword=""
+data-role="バニラ 力固定"
+>
+<img data-src="images/card_10_p (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1706"
+data-name="友だちの友だち（ともだちのともだち）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="噂 都市伝説"
+data-keyword=""
+data-role="バニラ バフ サーチ"
+>
+<img data-src="images/card_10_p (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1707"
+data-name="瑕疵物件検索板（かしぶっけんけんさくいた）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="写真 電話"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_10_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1708"
+data-name="最恐札の地図（とれかのちず）"
+data-cost="1"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション 封印改訂"
+data-attribute="古書 うつしよ"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_10_p (103).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1709"
+data-name="だまし絵（だましえ）"
+data-cost="3"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="からくり"
+data-keyword="不屈"
+data-role="直接ダメ シャッフル"
+>
+<img data-src="images/card_10_p (109).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1710"
+data-name="悪徳業者（あくとくぎょうしゃ）"
+data-cost="4"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="罪 都市伝説"
+data-keyword="徳"
+data-role="徳除去"
+>
+<img data-src="images/card_10_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1711"
+data-name="狐狗狸さん（こっくりさん）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="道具札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="神 噂 呪"
+data-keyword=""
+data-role="サーチ 自傷ダメ"
+>
+<img data-src="images/card_10_p (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1712"
+data-name="闇神ちゃん（やみがみちゃん）"
+data-cost="2"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="無"
+data-rare="エキスパンション"
+data-attribute="神 光 闇"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_10_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1713"
+data-name="埴輪たちの逆襲（はにわたちのぎゃくしゅう）"
+data-cost="5"
+data-power="7"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="混化 春夏"
+data-rare="エキスパンション"
+data-attribute="動物 人形"
+data-keyword=""
+data-role="直接ダメ ヒール 攻撃時"
+>
+<img data-src="images/card_10_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1714"
+data-name="絶飢果樹の森（ぜっきかじゅのもり）"
+data-cost="5"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="混化 春夏"
+data-rare="エキスパンション"
+data-attribute="樹木 糧 怨霊"
+data-keyword=""
+data-role="サーチ 魂加速"
+>
+<img data-src="images/card_10_p (101).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1715"
+data-name="霊視の水晶（れいしのすいしょう）"
+data-cost="7"
+data-power="0"
+data-series="怪談師二章"
+data-type="季節札"
+data-season="混化 秋夏"
+data-rare="エキスパンション"
+data-attribute="霊能者"
+data-keyword=""
+data-role="トップ送り 除外戻し"
+>
+<img data-src="images/card_10_p (102).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1716"
+data-name="狂い裂く庭（くるいさくにわ）"
+data-cost="12"
+data-power="10"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="混化 秋冬"
+data-rare="エキスパンション"
+data-attribute="花 鬼 神"
+data-keyword="逆境"
+data-role="ドロー 除外加速 直接ダメ 攻撃時"
+>
+<img data-src="images/card_10_p (99).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1717"
+data-name="異界監禁施設（いかいかんきんしせつ）"
+data-cost="5"
+data-power="3"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="廃施設 牢獄"
+data-keyword=""
+data-role="ロック 常時"
+>
+<img data-src="images/card_10_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1718"
+data-name="しがみつくモノ（しがみつくもの）"
+data-cost="9"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="秋"
+data-rare="エキスパンション"
+data-attribute="怨霊"
+data-keyword=""
+data-role="追加行動"
+>
+<img data-src="images/card_10_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1719"
+data-name="獣喰らいの廃旅館（けものぐらいのはいりょかん）"
+data-cost="5"
+data-power="1"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="夏"
+data-rare="エキスパンション"
+data-attribute="廃旅館 動物"
+data-keyword=""
+data-role="札ダメ 直接ダメ 攻撃時"
+>
+<img data-src="images/card_10_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1720"
+data-name="黒妖の犬族（こくようのけんぞく）"
+data-cost="7"
+data-power="4"
+data-series="怪談師二章"
+data-type="場所札"
+data-season="春"
+data-rare="エキスパンション"
+data-attribute="犬族"
+data-keyword=""
+data-role="魂加速 攻撃時"
+>
+<img data-src="images/card_10_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 都市伝説ブースターパック -->
+
+<div
+class="card"
+data-number="1801"
+data-name="謎の円(みすてりーさーくる)"
+data-cost="0"
+data-power="1"
+data-series="都市伝説"
+data-type="場所札"
+data-season="春"
+data-rare="C"
+data-attribute="都市伝説 園 花"
+data-keyword=""
+data-role="バフ 常時"
+>
+<img data-src="images/card_11_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1802"
+data-name="黒妖軍（こくようぐん）"
+data-cost="6"
+data-power="4"
+data-series="都市伝説"
+data-type="場所札"
+data-season="春"
+data-rare="R"
+data-attribute="都市伝説 犬族 UMA"
+data-keyword="正体不明"
+data-role="ヒール 常時"
+>
+<img data-src="images/card_11_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1803"
+data-name="山羊吸鬼(ちゅぱかぶら)"
+data-cost="8"
+data-power="6"
+data-series="都市伝説"
+data-type="場所札"
+data-season="春"
+data-rare="SR"
+data-attribute="都市伝説 血液 動物"
+data-keyword="鬼動"
+data-role="直接ダメ ヒール 攻撃時 ドレイン"
+>
+<img data-src="images/card_11_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1804"
+data-name="人形島(にんぎょうじま)"
+data-cost="10"
+data-power="7"
+data-series="都市伝説"
+data-type="場所札"
+data-season="春"
+data-rare="UC"
+data-attribute="都市伝説 人形 廃村"
+data-keyword="逆境"
+data-role=""
+>
+<img data-src="images/card_11_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1805"
+data-name="つちのこ"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="春"
+data-rare="UC 封印改訂"
+data-attribute="都市伝説 大蛇"
+data-keyword="徳"
+data-role="ヒール 魂加速"
+>
+<img data-src="images/card_11_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1806"
+data-name="下水の巨大鰐(げすいのきょだいわに)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="春"
+data-rare="C"
+data-attribute="都市伝説 動物"
+data-keyword="鬼動"
+data-role="バフ"
+>
+<img data-src="images/card_11_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1807"
+data-name="首都直下型(しゅとちょっかがた)"
+data-cost="5"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="春"
+data-rare="C"
+data-attribute="都市伝説 災害"
+data-keyword=""
+data-role="札除去 底送り"
+>
+<img data-src="images/card_11_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1808"
+data-name="赤い雨(あかいあめ)"
+data-cost="4"
+data-power="0"
+data-series="都市伝説"
+data-type="季節札"
+data-season="春"
+data-rare="UC"
+data-attribute="都市伝説 災害 不吉"
+data-keyword=""
+data-role="力固定"
+>
+<img data-src="images/card_11_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1809"
+data-name="燃えていいとも(もえていいとも)"
+data-cost="0"
+data-power="7"
+data-series="都市伝説"
+data-type="場所札"
+data-season="夏"
+data-rare="C"
+data-attribute="都市伝説 火事"
+data-keyword=""
+data-role="自傷ダメ 常時"
+>
+<img data-src="images/card_11_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1810"
+data-name="ニンゲン（にんげん）"
+data-cost="6"
+data-power="7"
+data-series="都市伝説"
+data-type="場所札"
+data-season="夏"
+data-rare="R"
+data-attribute="都市伝説 海 UMA"
+data-keyword=""
+data-role="除外加速 直接ダメ 攻撃時"
+>
+<img data-src="images/card_11_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1811"
+data-name="二千二十五年七月五日（にせんにじゅうごねんしちがついつか）"
+data-cost="10"
+data-power="8"
+data-series="都市伝説"
+data-type="場所札"
+data-season="夏"
+data-rare="KR"
+data-attribute="都市伝説"
+data-keyword="速攻 不屈 鬼動"
+data-role="召喚時"
+>
+<img data-src="images/card_11_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1812"
+data-name="メリーさん(めりーさん)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="夏"
+data-rare="C"
+data-attribute="都市伝説 人形 電話"
+data-keyword=""
+data-role="直接ダメ 魂加速"
+>
+<img data-src="images/card_11_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1813"
+data-name="暗黒物質(だーくまたー)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="夏"
+data-rare="C"
+data-attribute="都市伝説 不吉"
+data-keyword="鬼動"
+data-role="直接ダメ"
+>
+<img data-src="images/card_11_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1814"
+data-name="予言の札(よげんのふだ)"
+data-cost="2"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="夏"
+data-rare="UC"
+data-attribute="都市伝説"
+data-keyword=""
+data-role="除外加速 追加行動"
+>
+<img data-src="images/card_11_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1815"
+data-name="赤ちゃん人形(あかちゃんにんぎょう)"
+data-cost="1"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="夏"
+data-rare="C"
+data-attribute="都市伝説 人形 刀"
+data-keyword=""
+data-role="除外加速 ランデス 直接ダメ"
+>
+<img data-src="images/card_11_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1816"
+data-name="感染拡大(ぱんでみっく)"
+data-cost="1"
+data-power="0"
+data-series="都市伝説"
+data-type="季節札"
+data-season="夏"
+data-rare="UC"
+data-attribute="都市伝説 腐乱 病"
+data-role="サーチ 回復フェイズ 自傷ダメ 直接ダメ 展開時"
+>
+<img data-src="images/card_11_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1817"
+data-name="複製体(くろーん)"
+data-cost="0"
+data-power="1"
+data-series="都市伝説"
+data-type="場所札"
+data-season="秋"
+data-rare="C"
+data-attribute="都市伝説 罪 不吉"
+data-keyword=""
+data-role="バフ 常時"
+>
+<img data-src="images/card_11_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1818"
+data-name="異世界へ(いせかいへ)"
+data-cost="5"
+data-power="4"
+data-series="都市伝説"
+data-type="場所札"
+data-season="秋"
+data-rare="C"
+data-attribute="都市伝説 からくり"
+data-keyword="正体不明"
+data-role="「伏せ」 「起き」 常時"
+>
+<img data-src="images/card_11_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1819"
+data-name="暗躍者(あんやくしゃ)"
+data-cost="6"
+data-power="1"
+data-series="都市伝説"
+data-type="場所札"
+data-season="秋"
+data-rare="C 封印改訂"
+data-attribute="都市伝説 怨念 罪"
+data-keyword="潜在能力"
+data-role="常時"
+>
+<img data-src="images/card_11_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1820"
+data-name="時空旅行者(たいむとらべらー)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="秋"
+data-rare="C"
+data-attribute="都市伝説 時計"
+data-keyword="鬼動"
+data-role="ドロー"
+>
+<img data-src="images/card_11_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1821"
+data-name="片輪車(かたわぐるま)"
+data-cost="1"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="秋"
+data-rare="UC"
+data-attribute="都市伝説 交通事故 妖怪"
+data-keyword=""
+data-role="札除去 トップ送り"
+>
+<img data-src="images/card_11_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1822"
+data-name="小さいおじさん(ちいさいおじさん)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="秋"
+data-rare="R"
+data-attribute="都市伝説 糧 おじさん"
+data-keyword=""
+data-role="サーチ"
+>
+<img data-src="images/card_11_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1823"
+data-name="埋蔵金(まいぞうきん)"
+data-cost="10"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="秋"
+data-rare="C"
+data-attribute="都市伝説 怨念"
+data-keyword="正体不明"
+data-role="ドロー"
+>
+<img data-src="images/card_11_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1824"
+data-name="鎮魂歌(れくいえむ)"
+data-cost="4"
+data-power="0"
+data-series="都市伝説"
+data-type="季節札"
+data-season="秋"
+data-rare="SR"
+data-attribute="都市伝説 UMA 蟲"
+data-keyword="正体不明"
+data-role="除外加速"
+>
+<img data-src="images/card_11_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1825"
+data-name="失われた海域(うしなわれたかいいき)"
+data-cost="0"
+data-power="1"
+data-series="都市伝説"
+data-type="場所札"
+data-season="冬"
+data-rare="C 封印改訂"
+data-attribute="都市伝説 海 災害"
+data-keyword=""
+data-role="札除去 常時"
+>
+<img data-src="images/card_11_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1826"
+data-name="3億円事件(さんおくえんじけん)"
+data-cost="3"
+data-power="1"
+data-series="都市伝説"
+data-type="場所札"
+data-season="冬"
+data-rare="UC"
+data-attribute="都市伝説 事件 道路"
+data-keyword="2種類札 正体不明"
+data-role="召喚時"
+>
+<img data-src="images/card_11_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1827"
+data-name="暴れものの神(あばれもののかみ)"
+data-cost="15"
+data-power="20"
+data-series="都市伝説"
+data-type="場所札"
+data-season="冬"
+data-rare="SR"
+data-attribute="神 都市伝説 鬼"
+data-keyword="神秘 鬼動"
+data-role="ランデス 攻撃時 常時"
+>
+<img data-src="images/card_11_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>         
+<div
+class="card"
+data-number="1828"
+data-name="くっしー"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="冬"
+data-rare="C"
+data-attribute="都市伝説 龍 UMA"
+data-keyword="鬼動"
+data-role="札除去"
+>
+<img data-src="images/card_11_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1829"
+data-name="大足(びっくふっと)"
+data-cost="3"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="冬"
+data-rare="UC"
+data-attribute="都市伝説 UMA 動物"
+data-keyword=""
+data-role="札除去 「起き」"
+>
+<img data-src="images/card_11_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1830"
+data-name="霊界テレビ(れいかいてれび)"
+data-cost="7"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="冬"
+data-rare="C"
+data-attribute="都市伝説 からくり 牢獄"
+data-keyword="正体不明"
+data-role="2種類札 サーチ トップ送り"
+>
+<img data-src="images/card_11_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1831"
+data-name="霊獣一目連(れいじゅういちもくれん)"
+data-cost="8"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="冬"
+data-rare="R"
+data-attribute="都市伝説 龍 妖怪"
+data-keyword=""
+data-role="除外加速 底利用"
+>
+<img data-src="images/card_11_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1832"
+data-name="あかいへや"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="季節札"
+data-season="冬"
+data-rare="C"
+data-attribute="都市伝説 視線 家屋"
+data-keyword="正体不明"
+data-role="デッキ破壊"
+>
+<img data-src="images/card_11_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1833"
+data-name="仮想世界の外(かそうせかいのそと)"
+data-cost="7"
+data-power="4"
+data-series="都市伝説"
+data-type="場所札"
+data-season="無"
+data-rare="封印改訂"
+data-attribute="都市伝説 からくり"
+data-keyword="潜在能力"
+data-role=""
+>
+<img data-src="images/card_11_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1834"
+data-name="霊質(れいしつ)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="怪異札"
+data-season="無"
+data-rare="C"
+data-attribute="都市伝説 幽霊"
+data-keyword="正体不明"
+data-role=""
+>
+<img data-src="images/card_11_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1835"
+data-name="人工知能(じんこうちのう)"
+data-cost="0"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="無"
+data-rare="C"
+data-attribute="都市伝説 からくり"
+data-keyword=""
+data-role="裏指定 バフ"
+>
+<img data-src="images/card_11_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1836"
+data-name="未来予知(みらいよち)"
+data-cost="5"
+data-power="0"
+data-series="都市伝説"
+data-type="道具札"
+data-season="無"
+data-rare="UC"
+data-attribute="都市伝説 古書"
+data-keyword=""
+data-role="裏指定 踏み倒し 魂加速"
+>
+<img data-src="images/card_11_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1837"
+data-name="夢の男(ゆめのおとこ)"
+data-cost="6"
+data-power="0"
+data-series="都市伝説"
+data-type="季節札"
+data-season="混化 春夏秋冬"
+data-rare="C"
+data-attribute="都市伝説 悪夢"
+data-keyword="秘境"
+data-role=""
+>
+<img data-src="images/card_11_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1838"
+data-name="朝焼け（あさやけ）"
+data-cost="4"
+data-power="0"
+data-series="都市伝説"
+data-rare="R"
+data-season="秋"
+data-type="季節札"
+data-role="効果を失う"
+data-keyword=""
+data-attribute="不吉 廃門"
+>
+<img data-src="images/card_11_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1839"
+data-name="土眼（つちめ）"
+data-cost="2"
+data-power="0"
+data-series="都市伝説"
+data-rare="R"
+data-season="冬"
+data-type="道具札"
+data-role="トップ確認 2種類札 バニラ"
+data-keyword=""
+data-attribute="視線 妖怪"
+>
+<img data-src="images/card_11_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1840"
+data-name="狐面の神（こめんのかみ）"
+data-cost="7"
+data-power="0"
+data-series="都市伝説"
+data-rare="SSR"
+data-season="夏"
+data-type="怪異札"
+data-role="直接ダメ 除外加速"
+data-keyword=""
+data-attribute="神 狐 狐面の神"
+>
+<img data-src="images/card_11_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 妖怪デッキ -->
+
+<div
+class="card"
+data-number="1901"
+data-name="先祖代々之墓(せんぞだいだいのはか)"
+data-cost="0"
+data-power="1"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="夏"
+data-rare="C"
+data-attribute="墓地 妖怪"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_12_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1902"
+data-name="妖蟲の墓(ようちゅうのはか)"
+data-cost="0"
+data-power="1"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="夏"
+data-rare="C"
+data-attribute="墓地 妖怪 蟲"
+data-keyword=""
+data-role="除外加速 直接ダメ 攻撃時"
+>
+<img data-src="images/card_12_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1903"
+data-name="まよい火(まよいび)"
+data-cost="3"
+data-power="3"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="夏"
+data-rare="UC"
+data-attribute="墓地 妖怪"
+data-keyword=""
+data-role="除外加速 直接ダメ 札ダメ 攻撃時"
+>
+<img data-src="images/card_12_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1904"
+data-name="赤えい(あかえい)"
+data-cost="5"
+data-power="5"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="夏"
+data-rare="R"
+data-attribute="墓地 妖怪 海"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_12_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1905"
+data-name="のづち"
+data-cost="7"
+data-power="7"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="夏"
+data-rare="SR"
+data-attribute="妖怪 蟲 腐乱"
+data-keyword="速攻"
+data-role=""
+>
+<img data-src="images/card_12_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1906"
+data-name="ねこ娘(ねこむすめ)"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-type="怪異札"
+data-season="夏"
+data-rare="C"
+data-attribute="墓地 妖怪 動物"
+data-keyword=""
+data-role="除外加速 直接ダメ"
+>
+<img data-src="images/card_12_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1907"
+  data-name="かに坊主(かにぼうず)"
+  data-cost="5"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 蟲"
+  data-keyword=""
+  data-role="除外戻し 直接ダメ"
+>
+  <img data-src="images/card_12_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1908"
+  data-name="蟲憑(むしつき)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="墓地 妖怪 蟲"
+  data-keyword=""
+  data-role="除外加速 直接ダメ"
+>
+  <img data-src="images/card_12_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1909"
+  data-name="私の墓(わたしのはか)"
+  data-cost="1"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="墓地"
+  data-keyword=""
+  data-role="除外戻し 直接ダメ"
+>
+  <img data-src="images/card_12_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1910"
+  data-name="沈めてあげる(しずめてあげる)"
+  data-cost="9"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 海"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_12_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1911"
+data-name="霊道(れいどう)"
+data-cost="0"
+data-power="1"
+data-series="妖怪デッキ：墓暴き"
+data-type="場所札"
+data-season="秋"
+data-rare="C"
+data-attribute="墓地 妖怪 幽霊"
+data-keyword=""
+data-role="除外戻し ドロー 攻撃時"
+>
+<img data-src="images/card_12_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1912"
+  data-name="木霊の森(こだまのもり)"
+  data-cost="1"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="墓地 妖怪 樹木"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_12_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1913"
+  data-name="砂の竹林(すなのちくりん)"
+  data-cost="4"
+  data-power="3"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 樹木"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_12_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1914"
+  data-name="べとべと"
+  data-cost="2"
+  data-power="2"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="攻撃時 除外除去"
+>
+  <img data-src="images/card_12_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1915"
+  data-name="うぶめ"
+  data-cost="8"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_12_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1916"
+data-name="あずき洗い(あずきあらい)"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-type="怪異札"
+data-season="秋"
+data-rare="SR"
+data-attribute="墓地 妖怪"
+data-keyword=""
+data-role="サーチ 除外加速"
+>
+<img data-src="images/card_12_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1917"
+data-name="さとり"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-type="怪異札"
+data-season="秋"
+data-rare="C"
+data-attribute="墓地 妖怪"
+data-keyword=""
+data-role="除外戻し ドロー"
+>
+<img data-src="images/card_12_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1918"
+  data-name="山姥(やまんば)"
+  data-cost="4"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="除外加速 ハンデス"
+>
+  <img data-src="images/card_12_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1919"
+  data-name="唐笠おばけ(からかさおばけ)"
+  data-cost="0"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="墓地 妖怪 からくり"
+  data-keyword=""
+  data-role="除外戻し ドロー"
+>
+  <img data-src="images/card_12_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1920"
+  data-name="こなきじじい"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="墓地 妖怪 おじさん"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_12_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1921"
+  data-name="夜刀神(やとのかみ)"
+  data-cost="4"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="神 大蛇 妖怪 月"
+  data-keyword="神秘"
+  data-role="召喚時"
+>
+  <img data-src="images/card_12_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1922"
+data-name="沼御前（ぬまごぜん）"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-rare=""
+data-season="春"
+data-type="怪異札"
+data-role="バフ"
+data-keyword="鮮明 不屈"
+data-attribute="妖怪 大蛇"
+>
+<img data-src="images/card_12_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1923"
+  data-name="ヨモツモノ(よもつもの)"
+  data-cost="6"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪 からくり"
+  data-keyword=""
+  data-role="2種類札 札除去 バニラ"
+>
+  <img data-src="images/card_12_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1924"
+  data-name="いったん木綿(いったんもめん)"
+  data-cost="0"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="季節札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_12_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1925"
+data-name="屈服の刻印(くっぷくのこくいん)"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き"
+data-type="道具札"
+data-season="無"
+data-rare=""
+data-attribute="墓地"
+data-keyword=""
+data-role="ロック"
+>
+<img data-src="images/card_12_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1926"
+  data-name="鈴鳴り(すずなり)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="御守り 髑髏"
+  data-keyword=""
+  data-role="魂戻し 追加行動"
+>
+  <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- ナナフシギ襲来 -->
+
+<div
+  class="card"
+  data-number="2000"
+  data-name="葛見神社(くずみじんじゃ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 廃神社"
+  data-keyword="言霊"
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_13_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2001"
+  data-name="lulu(るる)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 WBD 幽霊"
+  data-keyword=""
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_13_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2002"
+  data-name="パシンペロンはやぶさ(ぱしんぺろんはやぶさ)"
+  data-cost="2"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 動物 視線"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2003"
+  data-name="かいんどりー"
+  data-cost="4"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 WBD 視線"
+  data-keyword=""
+  data-role="「起き」 「伏せ」 ヒール 常時"
+>
+  <img data-src="images/card_13_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2004"
+  data-name="十二月田護朗(しわすだごろー)"
+  data-cost="6"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 事件 怨念"
+  data-keyword=""
+  data-role="ヒール 常時"
+>
+  <img data-src="images/card_13_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2005"
+  data-name="吉田猛々(よしだもうもう)"
+  data-cost="8"
+  data-power="8"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="攻撃時 バフ"
+>
+  <img data-src="images/card_13_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2006"
+  data-name="つばさねこ"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 都市伝説 UMA 猫"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_13_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2007"
+  data-name="吉田猛々猫の姿(よしだもうもうねこのすがた)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_13_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2008"
+  data-name="サヤカスター(さやかすたー)"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 楽器 幽霊"
+  data-keyword="言霊"
+  data-role="追加行動"
+>
+  <img data-src="images/card_13_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2009"
+  data-name="猛々の嫁メリケンサック(もうもうのよめめりけんさっく)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="札ダメ 直接ダメ"
+>
+  <img data-src="images/card_13_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2010"
+  data-name="築地の健吾(つきじのけんご)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="七不思議 海 災害"
+  data-role="ヒール 攻撃時 展開時"
+>
+  <img data-src="images/card_13_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2011"
+  data-name="JBK(じこぶっけんかいぎしつ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 廃マンション"
+  data-keyword=""
+  data-role="攻撃時 除外加速"
+>
+  <img data-src="images/card_13_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2012"
+  data-name="GKM(がーりっく・まねー・かも～)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 神隠し"
+  data-keyword="言霊"
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2014"
+  data-name="同心(どうしん)"
+  data-cost="2"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 WBD 楽器"
+  data-keyword=""
+  data-role="直接ダメ 常時"
+>
+  <img data-src="images/card_13_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2015"
+  data-name="hamaTime(はまたいむ)"
+  data-cost="3"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 WBD 幽霊"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2016"
+  data-name="うえまつそう"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 神 石像"
+  data-keyword="言霊"
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2017"
+  data-name="社員寮(しゃいんりょう)"
+  data-cost="4"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 廃屋"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2018"
+  data-name="呪怨家(じゅおんけ)"
+  data-cost="6"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 廃屋 怨霊"
+  data-keyword=""
+  data-role="攻撃時 除外加速 直接ダメ"
+>
+  <img data-src="images/card_13_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2019"
+  data-name="夏目太一朗(なつめたいちろう)"
+  data-cost="6"
+  data-power="4"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 妖怪 鬼 幽霊"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2020"
+  data-name="関口ケント(せきぐちけんと)"
+  data-cost="11"
+  data-power="10"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="七不思議 WBD 怨念"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2021"
+  data-name="大赤見ノヴ(おおあかみのゔ)"
+  data-cost="12"
+  data-power="10"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="七不思議 神"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2022"
+  data-name="オオパパミ(おおぱぱみ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SSR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2023"
+  data-name="かつらナナ(かつらなな)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 幽霊"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2024"
+  data-name="おごぽご"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 UMA 龍"
+  data-keyword="不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2025"
+  data-name="ドラゴンハンマー(どらごんはんまー)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 龍 WBD"
+  data-keyword=""
+  data-role="除外加速 直接ダメ"
+>
+  <img data-src="images/card_13_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2026"
+  data-name="引児(ひきじ)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 海 腐乱"
+  data-keyword=""
+  data-role="直接ダメ サーチ"
+>
+  <img data-src="images/card_13_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2027"
+  data-name="牛抱せん夏(うしだきせんか)"
+  data-cost="8"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 幻"
+  data-keyword="言霊"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2028"
+  data-name="呪怨家の呪い(じゅおんけののろい)"
+  data-cost="15"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 呪 廃屋"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2029"
+  data-name="ゴリ神様(ごりがみさま)"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 人形"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_13_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2030"
+  data-name="怪談ショーの椅子(かいだんしょーのいす)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 噂"
+  data-keyword="言霊"
+  data-role="直接ダメ 公開ドロー ドロー"
+>
+  <img data-src="images/card_13_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2031"
+  data-name="マーシーの張り紙(まーしーのはりがみ)"
+  data-cost="10"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="七不思議 浸食"
+  data-keyword=""
+  data-role="札ダメ"
+>
+  <img data-src="images/card_13_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2032"
+  data-name="さあやりましょう"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="WBD"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2033"
+  data-name="A4コピー用紙(えーよんこぴーようし)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 樹木"
+  data-keyword="言霊"
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_13_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2034"
+  data-name="ズズズのトンネル(ずずずのとんねる)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 廃隧道 怨霊"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_13_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2035"
+  data-name="ミミズーク(みみずーく)"
+  data-cost="2"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 動物"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2036"
+  data-name="のりまき"
+  data-cost="4"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 WBD 不吉"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2037"
+  data-name="半身の男(はんみのおとこ)"
+  data-cost="6"
+  data-power="6"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 血液 廃マンション"
+  data-keyword=""
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_13_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2038"
+  data-name="ちぇるちぇりうむ"
+  data-cost="6"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 WBD 烏 怨霊"
+  data-keyword="秘境"
+  data-role="直接ダメ 常時"
+>
+  <img data-src="images/card_13_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2039"
+  data-name="無垢な願い(むくなねがい)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 怨霊"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_13_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2040"
+  data-name="にしお"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 廃隧道"
+  data-keyword=""
+  data-role="ドロー バウンス 季節札除去"
+>
+  <img data-src="images/card_13_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2041"
+  data-name="あかうぼ"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 海 胎内"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_13_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2042"
+  data-name="ノヴ神ライター(のゔがみらいたー)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 浸食 灯火"
+  data-keyword=""
+  data-role="ドロー 札除去"
+>
+  <img data-src="images/card_13_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2043"
+  data-name="DDD(でぃーぷ・でぃーぱー・でぃーぺすと)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 虹 ゴリラ"
+  data-role="ドロー 展開時"
+>
+  <img data-src="images/card_13_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2044"
+  data-name="海辺の公衆トイレ(うみべのこうしゅうといれ)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 海 鏡"
+  data-keyword="言霊"
+  data-role="攻撃時 デッキ破壊"
+>
+  <img data-src="images/card_13_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2045"
+  data-name="がん"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 鬼"
+  data-keyword=""
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_13_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2046"
+  data-name="ハニトラ梅木(はにとらうめき)"
+  data-cost="1"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 墓地"
+  data-keyword="言霊"
+  data-role="攻撃時 ランデス"
+>
+  <img data-src="images/card_13_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2047"
+  data-name="カチモード児玉(かちもーどこだま)"
+  data-cost="3"
+  data-power="2"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 事件 家屋"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2048"
+  data-name="ブッシュ(ぶっしゅ)"
+  data-cost="5"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 WBD からくり"
+  data-keyword=""
+  data-role="攻撃時 札除去 「起き」 「伏せ」"
+>
+  <img data-src="images/card_13_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2049"
+  data-name="夜馬裕(やまゆう)"
+  data-cost="8"
+  data-power="7"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 髑髏 幽霊"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2050"
+  data-name="お魚怪談(おさかなかいだん)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 人魚"
+  data-keyword=""
+  data-role="札除去"
+>
+  <img data-src="images/card_13_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2051"
+  data-name="ポル子(ぽるこ)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 WBD 血液"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_13_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2052"
+  data-name="みつけて"
+  data-cost="7"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="UC"
+  data-attribute="七不思議 視線 鏡"
+  data-keyword=""
+  data-role="デッキ破壊"
+>
+  <img data-src="images/card_13_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2053"
+  data-name="鏡と石(かがみといし)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 鏡 石像"
+  data-keyword=""
+  data-role="回復フェイズ"
+>
+  <img data-src="images/card_13_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2054"
+  data-name="おろげずるーむ"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="UC"
+  data-attribute="七不思議 家屋 電話"
+  data-keyword=""
+  data-role="札無効"
+>
+  <img data-src="images/card_13_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2055"
+  data-name="儀式邸(ぎしきてい)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 家屋"
+  data-keyword=""
+  data-role="自傷ダメ 「起き」 常時"
+>
+  <img data-src="images/card_13_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2056"
+  data-name="猛々の子供部屋(もうもうのこどもべや)"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 家屋 猫"
+  data-keyword=""
+  data-role="攻撃時 魂戻し"
+>
+  <img data-src="images/card_13_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2057"
+  data-name="呪われたカイエン(のろわれたかいえん)"
+  data-cost="8"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 交通事故 呪 廃車"
+  data-keyword=""
+  data-role="踏み倒し 常時"
+>
+  <img data-src="images/card_13_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2058"
+  data-name="響洋平(ひびきようへい)"
+  data-cost="7"
+  data-power="5"
+  data-series="ナナフシギ襲来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="R"
+  data-attribute="七不思議 楽器"
+  data-keyword="言霊"
+  data-role="召喚時"
+>
+  <img data-src="images/card_13_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2059"
+  data-name="真実を語る黒子(しんじつをかたるくろこ)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 灯火 噂"
+  data-keyword="言霊"
+  data-role="手札公開"
+>
+  <img data-src="images/card_13_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2060"
+  data-name="黒い子宮(くろいしきゅう)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 胎内 罪"
+  data-keyword=""
+  data-role="直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_13_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2061"
+  data-name="生首ヘアゴム(なまくびへあごむ)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_13_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2062"
+  data-name="ねこポーチ(ねこぽーち)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="猫"
+  data-keyword=""
+  data-role="属性追加"
+>
+  <img data-src="images/card_13_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2063"
+  data-name="きよめたまえ"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_13_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2064"
+  data-name="GMK BLACK CARD(じーえむけーぶらっくかーど)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ襲来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="SR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_13_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2065"
+  data-name="恐怖(きょうふ)"
+  data-cost="0"
+  data-power=""
+  data-series="ナナフシギ襲来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="KR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="魂貫通 ヒール無効"
+>
+  <img data-src="images/card_13_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 怪談師三章 -->
+
+<div
+  class="card"
+  data-number="2101"
+  data-name="ないしょばなし"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="大蛇 噂"
+  data-keyword=""
+  data-role="攻撃時 サーチ 除外加速"
+>
+  <img data-src="images/card_14_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2102"
+  data-name="妖怪美容室(ようかいびようしつ)"
+  data-cost="1"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 園"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2103"
+  data-name="桜花雨(さくられいん)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="花 墓地"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2104"
+  data-name="世見鬼(せみき)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 鬼 烏"
+  data-keyword="不屈"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2105"
+  data-name="歩き巫女(あるきみこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="刀"
+  data-keyword=""
+  data-role="攻撃時 ヒール ドロー"
+>
+  <img data-src="images/card_14_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2106"
+  data-name="牌塔(かーどたわー)"
+  data-cost="5"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="怨霊 災害"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_14_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2107"
+  data-name="化け猫(こぴーきゃっと)"
+  data-cost="4"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="猫 墓地"
+  data-keyword=""
+  data-role="常時"
+>
+  <img data-src="images/card_14_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2108"
+  data-name="福徳正神(ふくとくせいじん)"
+  data-cost="5"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="善行"
+  data-keyword="突現 徳"
+  data-role="攻撃時 除外加速"
+>
+  <img data-src="images/card_14_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2109"
+  data-name="屋敷の最奥(やしきのさいおう)"
+  data-cost="9"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="人形 侵食"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2110"
+  data-name="猫屋敷の闇(ねこやしきのやみ)"
+  data-cost="8"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="猫 動物 陰"
+  data-keyword=""
+  data-role="攻撃時 バフ"
+>
+  <img data-src="images/card_14_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<div
+  class="card"
+  data-number="2111"
+  data-name="血の種(ちのたね)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 樹木"
+  data-keyword=""
+  data-role="魂加速 自傷ダメ"
+>
+  <img data-src="images/card_14_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2112"
+  data-name="戦武者(いくさむしゃ)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="古城 幻 戦 刀"
+  data-keyword="不屈"
+  data-role="バフ 魂加速"
+>
+  <img data-src="images/card_14_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2113"
+  data-name="吸血(きゅうけつ)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 蝙蝠"
+  data-keyword=""
+  data-role="直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_14_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2114"
+  data-name="黒い小熊猫(くろいこぐまねこ)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物"
+  data-keyword=""
+  data-role="除外戻し 直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_14_p (122).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2115"
+  data-name="私ノ愛シイ人(わたしのいとしいひと)"
+  data-cost="9"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="髑髏"
+  data-keyword=""
+  data-role="サーチ ヒール"
+>
+  <img data-src="images/card_14_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2116"
+  data-name="化狸(ばけたぬき)"
+  data-cost="12"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 妖怪"
+  data-keyword=""
+  data-role="魂利用 追加行動 特殊召喚"
+>
+  <img data-src="images/card_14_p (101).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2117"
+  data-name="陰導の大鎌(しゃどうのおおがま)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="髑髏 幽霊 鎌"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_14_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2118"
+  data-name="とまんないおばんざい"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="糧"
+  data-keyword="不屈"
+  data-role="ヒール"
+>
+  <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2119"
+  data-name="蛇行剣(だこうけん)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="大蛇 刀"
+  data-keyword=""
+  data-role="バウンス 季節札除去"
+>
+  <img data-src="images/card_14_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2120"
+  data-name="白月(はくげつ)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="廃墟 月"
+  data-keyword=""
+  data-role="相手ドロー ドロー"
+>
+  <img data-src="images/card_14_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2121"
+  data-name="咎人の刀(とがびとのかたな)"
+  data-cost="15"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="刀 呪"
+  data-keyword="呪い"
+  data-role="札除去"
+>
+  <img data-src="images/card_14_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2122"
+  data-name="血の祭儀(ちのさいぎ)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="血液 廃門"
+  data-role="除外加速 サーチ 展開時"
+>
+  <img data-src="images/card_14_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2123"
+  data-name="蚕様三女の惨劇(さんようさんじょのさんげき)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="噂"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (107).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2124"
+  data-name="腐っても鯛(くさってもたい)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人魚 腐乱"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2125"
+  data-name="触らぬ神に祟り無し(ふらぬかみにたたりなし)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 不吉"
+  data-keyword=""
+  data-role="常時 札除去"
+>
+  <img data-src="images/card_14_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2126"
+  data-name="お空のかげ(おそらのかげ)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃神社 龍"
+  data-keyword=""
+  data-role="攻撃時 サーチ 公開ドロー ドロー 底送り"
+>
+  <img data-src="images/card_14_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2127"
+  data-name="アイリスラーメン(あいりすらーめん)"
+  data-cost="1"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="怨霊 糧"
+  data-keyword="憤怒"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (114).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2128"
+  data-name="妊婦絵(にんぷえ)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="廃円宿"
+  data-keyword="四季欲"
+  data-role="直接ダメ 札ダメ"
+>
+  <img data-src="images/card_14_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2129"
+  data-name="世見猫(せみねこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="動物 猫 烏"
+  data-keyword="不屈"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2130"
+  data-name="歯のある魚群(はのあるぎょぐん)"
+  data-cost="3"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人魚 血液"
+  data-keyword="魚群"
+  data-role="自傷ダメ 直接ダメ 札ダメ"
+>
+  <img data-src="images/card_14_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2131"
+  data-name="華炎花火(かえんはなび)"
+  data-cost="4"
+  data-power="4"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="火事 花"
+  data-keyword="四季欲"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (102).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2132"
+  data-name="魔神仔モシナ(まじんこもしな)"
+  data-cost="4"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 妖怪 都市伝説"
+  data-keyword="速攻"
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_14_p (112).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2133"
+  data-name="奈落(ならく)"
+  data-cost="12"
+  data-power="10"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="奈落"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2134"
+  data-name="神蟲(じんちゅう)"
+  data-cost="20"
+  data-power="20"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 蟲 妖怪"
+  data-keyword="突現"
+  data-role="除外加速 常時"
+>
+  <img data-src="images/card_14_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2135"
+  data-name="気配(けはい)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="幽霊"
+  data-keyword="不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (115).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2136"
+  data-name="怨念の憎(おんねんのぞう)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="腐乱 蟲"
+  data-keyword="憎悪"
+  data-role="直接ダメ 攻撃時"
+>
+  <img data-src="images/card_14_p (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2137"
+  data-name="巡り合い(めぐりあい)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="猫 月"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2138"
+  data-name="寄生支配(ぱらさいとじゃっく)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 からくり"
+  data-keyword=""
+  data-role="属性追加"
+>
+  <img data-src="images/card_14_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2139"
+  data-name="狐面の巫女(こめんのみこ)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="狐面 狐面の神"
+  data-keyword=""
+  data-role="踏み倒し"
+>
+  <img data-src="images/card_14_p (96).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2140"
+  data-name="ダブッダマンズ(だぶっだまんず)"
+  data-cost="10"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="UMA 幽霊"
+  data-keyword=""
+  data-role="直接ダメ 特殊勝利"
+>
+  <img data-src="images/card_14_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2141"
+  data-name="トモカヅキ(ともかづき)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="海 妖怪"
+  data-keyword=""
+  data-role="札除去 直接ダメ"
+>
+  <img data-src="images/card_14_p (123).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2142"
+  data-name="気づいて(きづいて)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="墓地 災害 幻"
+  data-keyword=""
+  data-role="「起き」"
+>
+  <img data-src="images/card_14_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2143"
+  data-name="痣通洲架橋、堕螺児(あざとおすらせん、だらつじ)"
+  data-cost="7"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 蟲 都市伝説 UMA"
+  data-keyword="正体不明"
+  data-role="2種類札 デッキ破壊 直接ダメ"
+>
+  <img data-src="images/card_14_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2144"
+  data-name="ムクロギヒメ(むくろぎひめ)"
+  data-cost="9"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="髑髏 妖怪"
+  data-keyword=""
+  data-role="魂加速 直接ダメ"
+>
+  <img data-src="images/card_14_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2145"
+  data-name="人形屋敷(どーるはうす)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人形 廃屋"
+  data-keyword="不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2146"
+  data-name="龍窟(りゅうくつ)"
+  data-cost="10"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="龍 廃神社"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_14_p (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2147"
+  data-name="陰峰トンネル(かげみねとんねる)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃隧道 陰"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2148"
+  data-name="百貨店(ひゃっかてん)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="人形"
+  data-keyword="正体不明"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2149"
+  data-name="うわん"
+  data-cost="1"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 妖怪"
+  data-keyword="秘境"
+  data-role=""
+>
+  <img data-src="images/card_14_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2150"
+  data-name="世見狐(せみこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="動物 狐 烏"
+  data-keyword="不屈"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2151"
+  data-name="死んでも許さない(しんでもゆるさない)"
+  data-cost="4"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="樹木 幽霊"
+  data-keyword=""
+  data-role="直接ダメ 憑依加速 回復フェイズ 常時"
+>
+  <img data-src="images/card_14_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2152"
+  data-name="忘れないで(わすれないで)"
+  data-cost="6"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="家屋 廃屋"
+  data-keyword=""
+  data-role="常時 攻撃時 除外加速 デッキ破壊"
+>
+  <img data-src="images/card_14_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2153"
+  data-name="ワラウキミ(わらうきみ)"
+  data-cost="8"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="罪 視線"
+  data-keyword=""
+  data-role="常時 追加行動 特殊召喚"
+>
+  <img data-src="images/card_14_p (98).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2154"
+  data-name="IBC(あいびーしー)"
+  data-cost="9"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="善行 廃病院"
+  data-keyword="徳"
+  data-role="常時"
+>
+  <img data-src="images/card_14_p (99).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2155"
+  data-name="レア枠(れあわく)"
+  data-cost="10"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="幻 花"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2156"
+  data-name="黄泉平坂(よもつひらさか)"
+  data-cost="13"
+  data-power="7"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="道路 不吉"
+  data-keyword=""
+  data-role="常時 魂貫通 力固定"
+>
+  <img data-src="images/card_14_p (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2157"
+  data-name="栄えある能力(はえあるのうりょく)"
+  data-cost="14"
+  data-power="4"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="霊能者 亡者"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (94).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2158"
+  data-name="ヤマノケ(やまのけ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="正体不明"
+  data-role=""
+>
+  <img data-src="images/card_14_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2159"
+  data-name="深い愛情(ふかいあいじょう)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="罪 視線"
+  data-keyword=""
+  data-role="底送り ドロー"
+>
+  <img data-src="images/card_14_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2160"
+  data-name="ジャンピングババア(じゃんぴんぐばばあ)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2161"
+  data-name="泥田坊(どろたぼう)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 妖怪"
+  data-keyword=""
+  data-role="季節札除去 ドロー"
+>
+  <img data-src="images/card_14_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2162"
+  data-name="わたつみの子供(わたつみのこども)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="人魚 樹木"
+  data-keyword=""
+  data-role="追加行動"
+>
+  <img data-src="images/card_14_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2163"
+  data-name="孵らなかった7番目の子雛(かえらなかったななばんめのこひな)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 烏"
+  data-keyword=""
+  data-role="サーチ 常時 効果を失う"
+>
+  <img data-src="images/card_14_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2164"
+  data-name="福おじいちゃん(ふくおじいちゃん)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="おじいさん 善行 罪"
+  data-keyword=""
+  data-role="力固定"
+>
+  <img data-src="images/card_14_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2165"
+  data-name="唐傘の存在(からかさのそんざい)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="菌 からくり"
+  data-keyword="不屈"
+  data-role="直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_14_p (110).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2166"
+  data-name="アイスティー(あいすてぃー)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="糧 事件"
+  data-keyword=""
+  data-role="「伏せ」 直接ダメ ドロー"
+>
+  <img data-src="images/card_14_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2167"
+  data-name="妄執の果て(もうしゅうのはて)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="陰"
+  data-keyword=""
+  data-role="ドロー 魂加速"
+>
+  <img data-src="images/card_14_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2168"
+  data-name="おいしい人(おいしいひと)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="悪夢"
+  data-keyword=""
+  data-role="攻撃時 ドロー 自傷ダメ"
+>
+  <img data-src="images/card_14_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2169"
+  data-name="たま霊園(たまれいえん)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="墓地 霊場"
+  data-keyword=""
+  data-role="「起き」 自傷ダメ"
+>
+  <img data-src="images/card_14_p (117).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2170"
+  data-name="隔離室(かくりしつ)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="視線 廃病院"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2171"
+  data-name="黒音れも(くろねれも)"
+  data-cost="1"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="陰 悪魔"
+  data-keyword="合唱"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2172"
+  data-name="訪問者(ほうもんしゃ)"
+  data-cost="1"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="幻"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (121).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2173"
+  data-name="深夜の廃工場(しんやのはいこうじょう)"
+  data-cost="2"
+  data-power="2"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃施設"
+  data-keyword="妬み"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2174"
+  data-name="世見花(せみか)"
+  data-cost="3"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="動物 花 烏"
+  data-keyword="不屈"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2175"
+  data-name="王国の低音奏者(おうこくのていおんそうしゃ)"
+  data-cost="5"
+  data-power="3"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="楽器"
+  data-keyword="合唱"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2176"
+  data-name="お化けマンション(おばけまんしょん)"
+  data-cost="6"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃マンション"
+  data-keyword=""
+  data-role="攻撃時 ドロー 相手ドロー"
+>
+  <img data-src="images/card_14_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2177"
+  data-name="ゆーちゃそ王子(ゆーちゃそおうじ)"
+  data-cost="7"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="楽器"
+  data-keyword="合唱"
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2178"
+  data-name="鬼我島(おにがしま)"
+  data-cost="9"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_14_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2179"
+  data-name="番町皿屋敷(ばんちょうさらやしき)"
+  data-cost="10"
+  data-power="9"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="幽霊 廃屋"
+  data-keyword="四季欲"
+  data-role="ランデス 攻撃時 魂戻し 魂利用"
+>
+  <img data-src="images/card_14_p (108).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2180"
+  data-name="GEEK(ぎーく)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="悪夢 妖怪"
+  data-keyword=""
+  data-role="除外加速 ドロー"
+>
+  <img data-src="images/card_14_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2181"
+  data-name="ゆきんこ"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="幽霊"
+  data-keyword="正体不明"
+  data-role="ランデス"
+>
+  <img data-src="images/card_14_p (92).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2182"
+  data-name="かみつき鬼(かみつきおに)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 博物館"
+  data-keyword=""
+  data-role="自傷ダメ 相手ヒール"
+>
+  <img data-src="images/card_14_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2183"
+  data-name="尾鰭のついた噂(おひれのついたうわさ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="噂 廃校 人魚"
+  data-keyword=""
+  data-role="サーチ 底送り"
+>
+  <img data-src="images/card_14_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2184"
+  data-name="奥へ進む者(おくへすすむもの)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃隧道 怨念"
+  data-keyword=""
+  data-role="除外加速"
+>
+  <img data-src="images/card_14_p (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2185"
+  data-name="赤い女(あかいおんな)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="園 血液"
+  data-keyword="楽園"
+  data-role="ヒール ドロー"
+>
+  <img data-src="images/card_14_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2186"
+  data-name="融合体(ゆうごうたい)"
+  data-cost="7"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="UMA"
+  data-keyword=""
+  data-role="2種類札 魂戻し 魂利用 バニラ"
+>
+  <img data-src="images/card_14_p (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2187"
+  data-name="黄金体験(おうごんたいけん)"
+  data-cost="8"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="からくり"
+  data-keyword="正体不明"
+  data-role="札除去"
+>
+  <img data-src="images/card_14_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2188"
+  data-name="地下室の噂(ちかしつのうわさ)"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="噂 血液"
+  data-keyword=""
+  data-role="トップ確認 公開ドロー ドロー"
+>
+  <img data-src="images/card_14_p (118).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2189"
+  data-name="カツアゲ(かつあげ)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="野営"
+  data-keyword=""
+  data-role="ハンデス"
+>
+  <img data-src="images/card_14_p (93).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2190"
+  data-name="取替子(ちぇんじりんぐ)"
+  data-cost="10"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="海"
+  data-keyword=""
+  data-role="魂利用 魂戻し 底送り"
+>
+  <img data-src="images/card_14_p (105).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2191"
+  data-name="あっ"
+  data-cost="1"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃病院"
+  data-keyword=""
+  data-role="季節札除去 「起き」"
+>
+  <img data-src="images/card_14_p (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2192"
+  data-name="ご招待(ごしょうたい)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鏡 陰"
+  data-keyword="逆境"
+  data-role="ターン1回 除外戻し"
+>
+  <img data-src="images/card_14_p (104).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2193"
+  data-name="休憩中(きゅうけいちゅう)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="七不思議 うつしよ"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2194"
+  data-name="誰も知らない石碑(だれもしらないせきひ)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_14_p (116).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2195"
+  data-name="妙味真似(みようみまね)"
+  data-cost="0"
+  data-power="1"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="不吉"
+  data-keyword=""
+  data-role="攻撃時 属性削除"
+>
+  <img data-src="images/card_14_p (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2196"
+  data-name="HAVE A NICE CURSE!!(よいのろいを！！)"
+  data-cost="5"
+  data-power="5"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2197"
+  data-name="骨格の城(こっかくのしろ)"
+  data-cost="9"
+  data-power="8"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="牢獄 古城"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2198"
+  data-name="ここぼし"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="鬼 侵食"
+  data-keyword=""
+  data-role=""
+>
+  <img data-src="images/card_14_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2199"
+  data-name="足いるか？(あしいるか？)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="噂 呪"
+  data-keyword=""
+  data-role="ドロー 直接ダメ"
+>
+  <img data-src="images/card_14_p (124).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2200"
+  data-name="渡り歩く蟹麺(わたりあるくかにめん)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="糧 蟲"
+  data-keyword=""
+  data-role="直接ダメ 効果を失う バニラ"
+>
+  <img data-src="images/card_14_p (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2201"
+  data-name="魔境の札(まきょうのふだ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword="潜在能力"
+  data-role=""
+>
+  <img data-src="images/card_14_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2202"
+  data-name="戦いの絵(たたかいのえ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="写真"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_14_p (125).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2203"
+  data-name="線香花火(せんこうはなび)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="灯火 花"
+  data-keyword=""
+  data-role="サーチ 除外加速"
+>
+  <img data-src="images/card_14_p (95).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2204"
+  data-name="貧血(ひんけつ)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="人形"
+  data-keyword=""
+  data-role="ランデス 除外加速"
+>
+  <img data-src="images/card_14_p (97).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2205"
+  data-name="■■を探しています。(■■をさがしています。)"
+  data-cost="3"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="事件 噂"
+  data-keyword=""
+  data-role="手札公開"
+>
+  <img data-src="images/card_14_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2206"
+  data-name="四十七曲収録(よんじゅうななきょくしゅうろく)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 楽器"
+  data-keyword="合唱"
+  data-role="サーチ"
+>
+  <img data-src="images/card_14_p (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2207"
+  data-name="球苦のペンダント(たまくのぺんだんと)"
+  data-cost="4"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="御守り"
+  data-keyword=""
+  data-role="常時 除外加速 神秘付与"
+>
+  <img data-src="images/card_14_p (120).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2208"
+  data-name="祈りの巫女人形(いのりのみこにんぎょう)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ 人形"
+  data-keyword=""
+  data-role="相手ドロー 底送り ダメ無効"
+>
+  <img data-src="images/card_14_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2209"
+  data-name="呪札(じゅふ)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="呪"
+  data-keyword=""
+  data-role="憑依破壊"
+>
+  <img data-src="images/card_14_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2210"
+  data-name="肝試し(きもだめし)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="墓地 噂"
+  data-role="追加行動 除外戻し 特殊召喚 展開時"
+>
+  <img data-src="images/card_14_p (100).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2211"
+  data-name="泡沫に消える来賓(うたかたにきえるらいひん)"
+  data-cost="0"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ 火事"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_14_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2212"
+  data-name="光神ちゃん(ひかりかみちゃん)"
+  data-cost="2"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="神 光 闇"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_14_p (106).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2213"
+  data-name="屛風絵(びょうぶえ)"
+  data-cost="6"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="花"
+  data-keyword=""
+  data-role="常時 ヒール 直接ダメ ドレイン ドロー ランデス"
+>
+  <img data-src="images/card_14_p (113).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2214"
+  data-name="後藤商店(ごとうしょうてん)"
+  data-cost="4"
+  data-power="9"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="噂 家屋 糧"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2215"
+  data-name="あにめ"
+  data-cost="9"
+  data-power="4"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春冬"
+  data-rare="エキスパンション"
+  data-attribute="血液 侵食"
+  data-keyword=""
+  data-role="攻撃時 ランデス 魂加速"
+>
+  <img data-src="images/card_14_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2216"
+  data-name="五色沼の主(ごしょくぬまのあるじ)"
+  data-cost="12"
+  data-power="10"
+  data-series="怪談師三章"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="渓谷 怨霊"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2217"
+  data-name="出土する墳墓(しゅつどするふんぼ)"
+  data-cost="5"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="人形 動物 墓地"
+  data-keyword=""
+  data-role="直接ダメ ヒール ドレイン"
+>
+  <img data-src="images/card_14_p (111).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2218"
+  data-name="入道雲(にゅうどうぐも)"
+  data-cost="8"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="混化 秋夏"
+  data-rare="エキスパンション"
+  data-attribute="災害"
+  data-role="札除去 季節札除去 直接ダメ 展開時"
+>
+  <img data-src="images/card_14_p (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2219"
+  data-name="鬼人の蟲毒(きじんのこどく)"
+  data-cost="7"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="混化 秋冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼"
+  data-role="除外加速 展開時"
+>
+  <img data-src="images/card_14_p (103).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2220"
+  data-name="せかいこわれた"
+  data-cost="12"
+  data-power="0"
+  data-series="怪談師三章"
+  data-type="季節札"
+  data-season="混化 春冬"
+  data-rare="エキスパンション"
+  data-attribute="写真 事件 虹"
+  data-role="ヒール 展開時"
+>
+  <img data-src="images/card_14_p (109).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- 猫花の約束（びょうかのやくそく） -->
+
+<div
+  class="card"
+  data-number="2303"
+  data-name="猫面の耳打ち(みょうめんのみみうち)"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="仮面 猫 猫面"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2305"
+  data-name="赤い滝(あかいたき)"
+  data-cost="1"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="渓谷 血液"
+  data-keyword=""
+  data-role="攻撃時 除外戻し"
+>
+  <img data-src="images/card_15_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2308"
+  data-name="黒妖の訓練場(こくようのくんれんじょう)"
+  data-cost="3"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="犬族 刀"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2309"
+  data-name="沼(ぬま)"
+  data-cost="4"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="事件"
+  data-keyword=""
+  data-role="召喚時 ヒール"
+>
+  <img data-src="images/card_15_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2310"
+  data-name="夫婦岩(めおといわ)"
+  data-cost="5"
+  data-power="4"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="海"
+  data-keyword=""
+  data-role="召喚時 魂加速 除外戻し"
+>
+  <img data-src="images/card_15_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2313"
+  data-name="凪(なぎ)"
+  data-cost="8"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="海 災害"
+  data-keyword=""
+  data-role="常時 力固定 バフ"
+>
+  <img data-src="images/card_15_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2316"
+  data-name="ふれあい広場(ふれあいひろば)"
+  data-cost="11"
+  data-power="7"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="犬族 動物"
+  data-keyword=""
+  data-role="召喚時 攻撃時 魂加速 ヒール"
+>
+  <img data-src="images/card_15_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2322"
+  data-name="黒犬(こっけん)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="犬族 動物"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2323"
+  data-name="獣道(けものみち)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="動物 SSS"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_15_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2324"
+  data-name="熊(くま)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="動物 災害"
+  data-keyword=""
+  data-role="バフ ヒール"
+>
+  <img data-src="images/card_15_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2326"
+  data-name="猫面の神(みょうめんのかみ)"
+  data-cost="7"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="神 猫面 猫面の神"
+  data-keyword="神秘"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2328"
+  data-name="猫草(ねこくさ)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="樹木 猫"
+  data-keyword=""
+  data-role="魂加速"
+>
+  <img data-src="images/card_15_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2330"
+  data-name="半猫半人(はんびょうはんじん)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="猫 猫面"
+  data-keyword=""
+  data-role="ヒール 直接ダメ"
+>
+  <img data-src="images/card_15_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2331"
+  data-name="黄泉酒(よみき)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="糧 妖怪 動物"
+  data-keyword=""
+  data-role="ヒール ドロー 魂加速"
+>
+  <img data-src="images/card_15_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2336"
+  data-name="黒い太陽(くろいたいよう)"
+  data-cost="3"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="灯火"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_15_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2338"
+  data-name="蚊(か)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="蟲"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2341"
+  data-name="とおりゃんせ"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="噂 不吉"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_15_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2343"
+  data-name="花面の耳打ち(かめんのみみうち)"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="仮面 花 花面"
+  data-keyword=""
+  data-role="バニラ"
+>
+  <img data-src="images/card_15_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2344"
+  data-name="第13號隧道(だいじゅうさんごうずいどう)"
+  data-cost="1"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="廃隧道 廃門"
+  data-keyword=""
+  data-role="召喚時 底送り"
+>
+  <img data-src="images/card_15_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2349"
+  data-name="遊具のある公園(ゆうぐのあるこうえん)"
+  data-cost="4"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="園 視線"
+  data-keyword=""
+  data-role="召喚時 サーチ"
+>
+  <img data-src="images/card_15_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2350"
+  data-name="処刑場(しょけいじょう)"
+  data-cost="5"
+  data-power="4"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="召喚時 魂加速 除外戻し"
+>
+  <img data-src="images/card_15_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2353"
+  data-name="煽り(あおり)"
+  data-cost="8"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="交通事故 道路"
+  data-keyword=""
+  data-role="召喚時 攻撃時 ハンデス"
+>
+  <img data-src="images/card_15_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2354"
+  data-name="おめんやさん"
+  data-cost="9"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="仮面"
+  data-keyword=""
+  data-role="召喚時 サーチ"
+>
+  <img data-src="images/card_15_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2355"
+  data-name="楽しい遊園地(たのしいゆうえんち)"
+  data-cost="10"
+  data-power="9"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="園 からくり 猫"
+  data-keyword=""
+  data-role="攻撃時 魂加速"
+>
+  <img data-src="images/card_15_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2361"
+  data-name="痰壺小僧(たんつぼこぞう)"
+  data-cost="1"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="病 腐乱 罪"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_15_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2363"
+  data-name="手癖(てぐせ)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="トップ確認"
+>
+  <img data-src="images/card_15_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2366"
+  data-name="花面の神(かめんのかみ)"
+  data-cost="7"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="神 花面 花面の神"
+  data-keyword="神秘"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2368"
+  data-name="不気味な遊具(ぶきみなゆうぐ)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="園 視線"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_15_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2371"
+  data-name="カーブミラー(かーぶみらー)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="鏡 交通事故 道路"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2374"
+  data-name="花瓶(かびん)"
+  data-cost="9"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="牢獄"
+  data-keyword=""
+  data-role="ロック"
+>
+  <img data-src="images/card_15_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2377"
+  data-name="灰被り(はいかぶり)"
+  data-cost="3"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="野営"
+  data-keyword=""
+  data-role="ロック"
+>
+  <img data-src="images/card_15_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2382"
+  data-name="画材(がざい)"
+  data-cost="0"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="写真"
+  data-keyword=""
+  data-role="バニラ 魂加速"
+>
+  <img data-src="images/card_15_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- ★★ -->
+
+<!-- プロモ ぷろも -->
+<div
+class="card"
+data-number="10001"
+data-name="れもんちゃんでっ"
+data-cost="7"
+data-power="3"
+data-series="プロモ"
+data-rare="SSR"
+data-season="春"
+data-type="場所札"
+data-role="ヒール 常時"
+data-keyword=""
+data-attribute="動物 猫"
+>
+<img data-src="images/card_4_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1003"
+data-name="夏夜の天使様（なつよのてんしさま）"
+data-cost="4"
+data-power="0"
+data-series="うつくしいせかい"
+data-double-for="うつくしいせかい"
+data-rare="SR"
+data-season="夏"
+data-type="季節札"
+data-role="直接ダメ 札ダメ"
+data-keyword=""
+data-attribute="蟲 病"
+>
+<img data-src="images/card_4_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1005"
+data-name="まふゆの手術室（まふゆのしゅじゅつしつ）"
+data-cost="4"
+data-power="0"
+data-series="おいしゃさんごっこ"
+data-double-for="おいしゃさんごっこ"
+data-rare="SR"
+data-season="冬"
+data-type="季節札"
+data-role="除外加速 魂利用 "
+data-keyword=""
+data-attribute="廃病院 血液"
+>
+<img data-src="images/card_4_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10006"
+data-name="わたしのTO（わたしのとっぷおた トップオタ）"
+data-cost="5"
+data-power="0"
+data-series="プロモ"
+data-rare="SSR"
+data-season="夏"
+data-type="怪異札"
+data-role="踏み倒し 魂利用"
+data-keyword=""
+data-attribute="人魚"
+>
+<img data-src="images/card_4_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10007"
+data-name="巫であそぼ（かんなぎであそぼ）"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-rare="C"
+data-season="無"
+data-type="場所札"
+data-role="手札公開 召喚時"
+data-keyword=""
+data-attribute="うつしよ"
+>
+<img data-src="images/card_4_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10008"
+data-name="巫の看板娘（かんなぎのかんばんむすめ）"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-rare=""
+data-season="無"
+data-type="場所札"
+data-role="追加行動 特殊召喚 召喚時"
+data-keyword=""
+data-attribute="うつしよ 家屋"
+>
+<img data-src="images/card_4_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10009"
+data-name="火除地酒（ひよけちしゅ）"
+data-cost="1"
+data-power="0"
+data-series="プロモ"
+data-rare=""
+data-season="秋"
+data-type="道具札"
+data-role="ドロー ハンデス 相手ドロー"
+data-keyword=""
+data-attribute="糧 家屋"
+>
+<img data-src="images/card_4_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10010"
+data-name="鬼人村（きじんむら）"
+data-cost="9"
+data-power="6"
+data-series="プロモ"
+data-rare=""
+data-season="冬"
+data-type="場所札"
+data-role="「起き」"
+data-keyword="逆境"
+data-attribute="鬼 廃村"
+>
+<img data-src="images/card_4_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10011"
+data-name="霊園前電話ボックス（れいえんまえでんわぼっくす）"
+data-cost="10"
+data-power="3"
+data-series="プロモ"
+data-rare=""
+data-season="秋"
+data-type="場所札"
+data-role="追加行動 召喚時"
+data-keyword=""
+data-attribute="電話 怨霊"
+>
+<img data-src="images/card_4_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10012"
+data-name="カードピア（かーどぴあ）"
+data-cost="5"
+data-power="3"
+data-series="プロモ"
+data-rare=""
+data-season="春"
+data-type="場所札"
+data-role="ヒール ドロー 除外加速 召喚時"
+data-keyword="楽園"
+data-attribute="血液 園"
+>
+<img data-src="images/card_4_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10013"
+data-name="統率する猛火：超龍（とうそつするもうか：ちょうりゅう）"
+data-cost="7"
+data-power="5"
+data-series="プロモ"
+data-rare=""
+data-season="夏"
+data-type="場所札"
+data-role="「起き」 札ダメ 直接ダメ 召喚時"
+data-keyword=""
+data-attribute="神 龍 火事"
+>
+<img data-src="images/card_4_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10014"
+data-name="統率する冷血：シヴサン（とうそつするれいけつ：しぶさん）"
+data-cost="7"
+data-power="5"
+data-series="プロモ"
+data-rare=""
+data-season="冬"
+data-type="場所札"
+data-role="ランデス 「起き」 召喚時"
+data-keyword=""
+data-attribute="神 龍 血液"
+>
+<img data-src="images/card_4_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10015"
+data-name="いっしょにあそぼ・・・"
+data-cost="2"
+data-power="0"
+data-series="プロモ"
+data-rare="封印改訂"
+data-season="春"
+data-type="道具札"
+data-role="サーチ 除外加速 ヒール"
+data-keyword=""
+data-attribute="動物 陰"
+>
+<img data-src="images/card_4_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10016"
+data-name="泡沫に消える来賓(うたかたにきえるらいひん)"
+data-cost="0"
+data-power="0"
+data-series="プロモ"
+data-rare=""
+data-season="無"
+data-type="季節札"
+data-role="直接ダメ"
+data-keyword=""
+data-attribute="うつしよ 火事"
+>
+<img data-src="images/card_4_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10017"
+data-name="隠された櫛の家（かくされたくしのいえ）"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="廃屋 人形"
+data-keyword=""
+data-role="バニラ"
+>
+<img data-src="images/card_4_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10018"
+data-name="ランタン（らんたん）"
+data-cost="2"
+data-power="0"
+data-series="プロモ"
+data-type="道具札"
+data-season="夏"
+data-rare=""
+data-attribute="灯火"
+data-keyword=""
+data-role="手札公開 直接ダメ"
+>
+<img data-src="images/card_4_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10019"
+data-name="巫の幽霊（かんなぎのゆうれい）"
+data-cost="6"
+data-power="0"
+data-series="プロモ"
+data-type="怪異札"
+data-season="夏"
+data-rare=""
+data-attribute="幽霊"
+data-keyword=""
+data-role="直接ダメ"
+>
+<img data-src="images/card_4_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10020"
+data-name="朧車（おぼろぐるま）"
+data-cost="4"
+data-power="2"
+data-series="プロモ"
+data-type="場所札"
+data-season="冬"
+data-rare=""
+data-attribute="廃車 妖怪"
+data-keyword=""
+data-role="2種類札 バニラ 札除去"
+>
+<img data-src="images/card_4_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10021"
+data-name="雲外鏡（うんがいきょう）"
+data-cost="1"
+data-power="0"
+data-series="プロモ"
+data-type="怪異札"
+data-season="冬"
+data-rare=""
+data-attribute="鏡"
+data-keyword=""
+data-role="自傷ダメ ドロー"
+>
+<img data-src="images/card_4_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10022"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
+data-cost="3"
+data-power="0"
+data-series="プロモ"
+data-type="道具札"
+data-season="冬"
+data-rare=""
+data-attribute="血液"
+data-keyword=""
+data-role="自傷ダメ 札無効"
+>
+<img data-src="images/card_4_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10023"
+data-name="世見鬼(せみき)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="動物 鬼 烏"
+data-keyword="不屈"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10024"
+data-name="世見猫(せみねこ)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="動物 猫 烏"
+data-keyword="不屈"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10025"
+data-name="世見狐(せみこ)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="動物 狐 烏"
+data-keyword="不屈"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10026"
+data-name="世見花(せみか)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="冬"
+data-rare=""
+data-attribute="動物 花 烏"
+data-keyword="不屈"
+data-role="召喚時"
+>
+<img data-src="images/card_10_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10027"
+data-name="とまんないおばんざい"
+data-cost="3"
+data-power="0"
+data-series="プロモ"
+data-type="道具札"
+data-season="春"
+data-rare=""
+data-attribute="糧"
+data-keyword="不屈"
+data-role="ヒール"
+>
+<img data-src="images/card_10_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10028"
+data-name="GEEK(ぎーく)"
+data-cost="0"
+data-power="0"
+data-series="プロモ"
+data-type="怪異札"
+data-season="冬"
+data-rare=""
+data-attribute="悪夢 妖怪"
+data-keyword=""
+data-role="除外加速 ドロー"
+>
+<img data-src="images/card_10_p (126).jpg" src="placeholder.jpg" decoding="async" />
+</div>          
+<div
+class="card"
+data-number="10029"
+data-name="破壊龍(はかいりゅう)"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="龍"
+data-keyword=""
+data-role="バニラ"
+>
+<img data-src="images/card_10_p (127).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10030"
+data-name="牌塔(かーどたわー)"
+data-cost="5"
+data-power="1"
+data-series="プロモ"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="怨霊 災害"
+data-keyword=""
+data-role="ドロー 攻撃時"
+>
+<img data-src="images/card_4_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10031"
+data-name="人毛の藁人形（じんもうのわらにんぎょう）"
+data-cost="5"
+data-power="0"
+data-series="プロモ"
+data-rare=""
+data-season="秋"
+data-type="道具札"
+data-role="ドロー"
+data-keyword=""
+data-attribute="人形 藁人形 糧"
+>
+<img data-src="images/card_12_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10032"
+data-name="後藤商店(ごとうしょうてん)"
+data-cost="4"
+data-power="9"
+data-series="プロモ"
+data-type="場所札"
+data-season="混化 春夏"
+data-rare=""
+data-attribute="噂 家屋 糧"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_12_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10033"
+data-name="那須物語(なすものがたり)"
+data-cost="5"
+data-power="4"
+data-series="プロモ"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="妖怪 動物 狐"
+data-keyword="楽園"
+data-role="攻撃時 ヒール 相手ヒール"
+>
+<img data-src="images/card_12_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10034"
+data-name="死の蛆(ですわーむ)"
+data-cost="5"
+data-power="8"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="妖怪 蟲 都市伝説"
+data-keyword="憤怒 速攻"
+data-role=""
+>
+<img data-src="images/card_12_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10035"
+data-name="芍薬童子(しゃくやくどうじ)"
+data-cost="5"
+data-power="5"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="妖怪 花 噂"
+data-keyword="追撃"
+data-role="召喚時"
+>
+<img data-src="images/card_12_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10036"
+data-name="氷蜃(ひょうしん)"
+data-cost="5"
+data-power="4"
+data-series="プロモ"
+data-type="場所札"
+data-season="冬"
+data-rare=""
+data-attribute="妖怪 鬼 戦"
+data-keyword="妬み"
+data-role="攻撃時 ランデス"
+>
+<img data-src="images/card_12_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10037"
+data-name="なないろ天獄(なないろてんごく)"
+data-cost="10"
+data-power="7"
+data-series="プロモ"
+data-type="場所札"
+data-season="夏"
+data-rare=""
+data-attribute="糧 神 家屋"
+data-keyword="「起き」"
+data-role="召喚時"
+>
+<img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10038"
+data-name="休憩中(きゅうけいちゅう)"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-type="場所札"
+data-season="無"
+data-rare=""
+data-attribute="七不思議 うつしよ"
+data-keyword=""
+data-role="召喚時"
+>
+<img data-src="images/card_13_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10039"
+data-name="天への道(てんへのみち)"
+data-cost="6"
+data-power="7"
+data-series="プロモ"
+data-type="場所札"
+data-season="秋"
+data-rare=""
+data-attribute="廃隧道 道路 交通事故"
+data-keyword=""
+data-role="力固定 バフ 常時"
+>
+<img data-src="images/card_13_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10040"
+data-name="終わらない夢(おわらないゆめ)"
+data-cost="3"
+data-power="3"
+data-series="プロモ"
+data-type="場所札"
+data-season="春"
+data-rare=""
+data-attribute="悪夢"
+data-keyword=""
+data-role="魂加速 常時"
+>
+<img data-src="images/card_13_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10041"
+data-name="血を吸ったマフラー(ちをすったまふらー)"
+data-cost="3"
+data-power="0"
+data-series="プロモ"
+data-type="道具札"
+data-season="冬"
+data-rare=""
+data-attribute="血液"
+data-keyword=""
+data-role="自傷ダメ 札無効"
+>
+<img data-src="images/card_14_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10042"
+  data-name="ねこポーチ(ねこぽーち)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="猫"
+  data-keyword=""
+  data-role="属性追加"
+>
+  <img data-src="images/card_14_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10043"
+data-name="螺旋階段の悪夢（らせんかいだんのあくむ）"
+data-cost="0"
+data-power="1"
+data-series="プロモ"
+data-rare=""
+data-season="春"
+data-type="場所札"
+data-attribute="悪夢"
+data-keyword=""
+data-role="魂加速 魂戻し 常時"
+>
+<img data-src="images/card_14_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+</div>
+<div
+class="card"
+data-number="10044"
+data-name="闇(やみ)"
+data-cost="0"
+data-power="0"
+data-series="プロモ エクストラルール「闇」"
+data-series-info="【札名】闇<br>【札種類】なし 【属性】なし<br>【コスト】零 【季節】無<br><br>・この札は自札の効果を含めて、一切の効果対象にならない。<br>・あらゆる理由で魂・除外・徳にならない。<br>・零探しを含む、あらゆる場面でこの札を「視認」した時、自分の手札公開場に置く。<br>・サーチ効果の対象として選ばれるカードは、自動的にこの札になる。<br>・この札は一度公開すると「非公開手札」にできない。<br>・この札は「零探し」の対象に選べない。<br>・この札は手札として数える。<br>・この札が手札公開場にある時、この札は手札超過で選択できない。<br>・エクストラルール：参加者8名以上のトーナメント大会において『闇』を採用して対戦し、<br>上位3位以内に入った場合、あなたは「大会の招待状」ではなく「別の新たな招待状」を獲得する。"
+data-rare=""
+data-season="無"
+data-type=""
+data-attribute=""
+data-keyword=""
+data-role=""
+>
+<img data-src="images/card_14_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10045"
+  data-name="アイリスラーメンch(あいりすらーめんちゃんねる)"
+  data-cost="3"
+  data-power="3"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="怨霊 糧"
+  data-keyword=""
+  data-role="召喚時"
+>
+  <img data-src="images/card_14_p (126).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="10046"
+data-name="雪女（ゆきおんな）"
+data-cost="6"
+data-power="0"
+data-series="プロモ"
+data-rare=""
+data-season="冬"
+data-type="怪異札"
+data-role="ランデス"
+data-keyword=""
+data-attribute="妖怪 幽霊"
+>
+<img data-src="images/card_14_p (127).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10047"
+  data-name="モノフシギ(ものふしぎ)"
+  data-cost="5"
+  data-power="3"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="七不思議 家屋"
+  data-keyword=""
+  data-role="召喚時 直接ダメ"
+>
+  <img data-src="images/card_15_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+<!-- プロモパック 10050番から12種類？ -->
+
+<div
+  class="card"
+  data-number="10051"
+  data-name="答えなき世界(こたえなきせかい)"
+  data-cost="7"
+  data-power="6"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="園"
+  data-keyword=""
+  data-role="攻撃時 ヒール"
+>
+  <img data-src="images/card_15_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10055"
+  data-name="災害の魔獣(さいがいのまじゅう)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="動物"
+  data-keyword=""
+  data-role="魂加速"
+>
+  <img data-src="images/card_15_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10061"
+  data-name="動く死骸(うごくしがい)"
+  data-cost="2"
+  data-power="0"
+  data-series="プロモ"
+  data-type="道具札"
+  data-season="春"
+  data-rare=""
+  data-attribute="動物"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_15_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+
+`;

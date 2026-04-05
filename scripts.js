@@ -1,0 +1,7013 @@
+// ページ更新時に最上部にスクロール（最優先で実行）
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+  // メモリリークを防ぐためキャッシュをクリア
+  if (typeof seriesInfoCache !== 'undefined') {
+    seriesInfoCache.clear();
+  }
+};
+
+// Safari用の追加対策
+window.onpageshow = function (event) {
+  if (event.persisted) {
+    window.scrollTo(0, 0);
+  }
+};
+
+// 既存の対策を維持しつつ、より早いタイミングでも
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// バックアップとして他のタイミングでも実行
+document.addEventListener('readystatechange', function (event) {
+  if (document.readyState === 'interactive') {
+    window.scrollTo(0, 0);
+  }
+});
+
+// iOS判定関数を追加
+const isIOS = () => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
+const isAndroid = () => {
+  return /Android/i.test(navigator.userAgent);
+};
+
+const hasVisibleModal = () => {
+  const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal', 'deck-backup-modal'];
+  const modalOpen = modalIds.some((id) => {
+    const el = document.getElementById(id);
+    return el && el.style.display && el.style.display !== 'none';
+  });
+  if (modalOpen) {
+    return true;
+  }
+  if (document.querySelector('.menu-overlay.active, .mobile-nav.active')) {
+    return true;
+  }
+  return !!document.querySelector('.confirm-popup, .zero-search-modal, .distribution-modal, .deck-image-modal');
+};
+
+const ensureScrollUnlocked = () => {
+  const body = document.body;
+  const docEl = document.documentElement;
+  if (!body || hasVisibleModal()) {
+    return;
+  }
+  const bodyLocked =
+    body.classList.contains('modal-open') ||
+    body.classList.contains('no-scroll') ||
+    body.classList.contains('scroll-locked') ||
+    body.style.position === 'fixed' ||
+    body.style.overflow === 'hidden' ||
+    body.style.touchAction === 'none' ||
+    docEl.style.overflow === 'hidden' ||
+    docEl.style.position === 'fixed' ||
+    docEl.style.touchAction === 'none';
+  if (bodyLocked) {
+    body.classList.remove('modal-open', 'no-scroll', 'scroll-locked');
+    body.style.overflow = '';
+    body.style.position = '';
+    body.style.top = '';
+    body.style.width = '';
+    body.style.paddingRight = '';
+    body.style.touchAction = '';
+    docEl.style.overflow = '';
+    docEl.style.position = '';
+    docEl.style.height = '';
+    docEl.style.touchAction = '';
+  }
+};
+
+let androidScrollAssistInitialized = false;
+
+const setupAndroidScrollAssist = () => {
+  if (androidScrollAssistInitialized || !isAndroid()) {
+    return;
+  }
+  androidScrollAssistInitialized = true;
+
+  const state = {
+    touchId: null,
+    startX: 0,
+    startY: 0,
+    lastY: 0,
+    lastMoveTime: 0,
+    velocityY: 0,
+    inertiaFrame: null,
+    startScrollY: 0,
+    moveCount: 0,
+    manualScroll: false,
+    nativeScrollDetected: false
+  };
+
+  const isInteractiveTarget = (target) => {
+    return !!target.closest('button, a, input, textarea, select, label');
+  };
+
+  const isBlockedRegion = (target) => {
+    return !!target.closest(
+      '.mobile-nav, .menu-overlay, #modal, #image-modal, #deck-modal, #deck-list-modal, #deck-share-modal, #deck-backup-modal, ' +
+      '.deck-image-modal, .distribution-modal, .zero-search-modal, .confirm-popup'
+    );
+  };
+
+  const isEligibleTarget = (target) => {
+    if (!target || hasVisibleModal()) {
+      return false;
+    }
+    if (!target.closest('main')) {
+      return false;
+    }
+    if (isBlockedRegion(target) || isInteractiveTarget(target)) {
+      return false;
+    }
+    return true;
+  };
+
+  const resetState = () => {
+    state.touchId = null;
+    state.manualScroll = false;
+    state.nativeScrollDetected = false;
+    state.moveCount = 0;
+  };
+
+  const stopInertia = () => {
+    if (state.inertiaFrame) {
+      cancelAnimationFrame(state.inertiaFrame);
+      state.inertiaFrame = null;
+    }
+    state.velocityY = 0;
+  };
+
+  const startInertia = () => {
+    if (state.inertiaFrame || state.nativeScrollDetected) {
+      return;
+    }
+    const minVelocity = 0.008;
+    const friction = 0.97;
+    const velocityBoost = 1.12;
+    let lastTime = performance.now();
+
+    state.velocityY *= velocityBoost;
+
+    const step = (now) => {
+      if (hasVisibleModal()) {
+        stopInertia();
+        return;
+      }
+
+      const dt = Math.max(1, now - lastTime);
+      lastTime = now;
+      const decay = Math.pow(friction, dt / 16.67);
+      state.velocityY *= decay;
+
+      if (Math.abs(state.velocityY) < minVelocity) {
+        stopInertia();
+        return;
+      }
+
+      ensureScrollUnlocked();
+      const delta = state.velocityY * dt;
+      const before = window.pageYOffset || document.documentElement.scrollTop || 0;
+      window.scrollBy(0, delta);
+      const after = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (before === after) {
+        stopInertia();
+        return;
+      }
+
+      state.inertiaFrame = requestAnimationFrame(step);
+    };
+
+    state.inertiaFrame = requestAnimationFrame(step);
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches.length !== 1) {
+      resetState();
+      return;
+    }
+    if (!isEligibleTarget(e.target)) {
+      resetState();
+      return;
+    }
+    stopInertia();
+    ensureScrollUnlocked();
+    const touch = e.touches[0];
+    state.touchId = touch.identifier;
+    state.startX = touch.clientX;
+    state.startY = touch.clientY;
+    state.lastY = touch.clientY;
+    state.lastMoveTime = performance.now();
+    state.velocityY = 0;
+    state.startScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    state.moveCount = 0;
+    state.manualScroll = false;
+    state.nativeScrollDetected = false;
+  };
+
+  const onTouchMove = (e) => {
+    if (state.touchId === null) {
+      return;
+    }
+    const touch = Array.from(e.touches).find((t) => t.identifier === state.touchId);
+    if (!touch) {
+      return;
+    }
+
+    const dx = touch.clientX - state.startX;
+    const dy = touch.clientY - state.startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    const threshold = 6;
+
+    if (absDy < threshold) {
+      return;
+    }
+    if (absDx > absDy) {
+      resetState();
+      return;
+    }
+
+    if (!state.manualScroll && !state.nativeScrollDetected) {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (Math.abs(currentScrollY - state.startScrollY) > 1) {
+        state.nativeScrollDetected = true;
+        return;
+      }
+      // ページ最上部で下に引っ張る場合はブラウザに任せる（プルダウンリフレッシュ許可）
+      if (currentScrollY <= 0 && dy > 0) {
+        state.nativeScrollDetected = true;
+        return;
+      }
+      state.moveCount += 1;
+      if (state.moveCount < 2) {
+        return;
+      }
+      state.manualScroll = true;
+    }
+
+    if (state.nativeScrollDetected || !state.manualScroll) {
+      return;
+    }
+
+    ensureScrollUnlocked();
+    e.preventDefault();
+
+    const deltaY = state.lastY - touch.clientY;
+    const maxDelta = 120;
+    const clamped = Math.max(-maxDelta, Math.min(maxDelta, deltaY));
+    if (clamped) {
+      window.scrollBy(0, clamped);
+    }
+    state.lastY = touch.clientY;
+
+    const now = performance.now();
+    const dt = Math.max(1, now - state.lastMoveTime);
+    const instantVelocity = clamped / dt;
+    state.velocityY = state.velocityY * 0.65 + instantVelocity * 0.35;
+    state.lastMoveTime = now;
+  };
+
+  const onTouchEnd = () => {
+    if (state.manualScroll && !state.nativeScrollDetected) {
+      startInertia();
+    }
+    resetState();
+  };
+  const onTouchCancel = () => {
+    stopInertia();
+    resetState();
+  };
+
+  document.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
+  document.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+  document.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
+  document.addEventListener('touchcancel', onTouchCancel, { passive: true, capture: true });
+};
+
+// 最初にすべてのグローバル変数を定義
+window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
+let sortCriteria = null;
+let sortOrder = 'asc';
+let scrollPosition = 0;
+let isDragging = false;
+let currentCard = null;
+let startY = 0;
+
+// IntersectionObserver関連の変数をグローバルに
+let observer = null;
+let isObserverSetup = false;
+
+const MAX_CONCURRENT_IMAGE_LOADS = 15;
+const imageLoadQueue = [];
+const queuedImages = new Set();
+const loadingImages = new Set();
+let activeImageLoads = 0;
+
+const processImageQueue = () => {
+  while (activeImageLoads < MAX_CONCURRENT_IMAGE_LOADS && imageLoadQueue.length > 0) {
+    const img = imageLoadQueue.shift();
+    if (!img) {
+      continue;
+    }
+
+    queuedImages.delete(img);
+
+    if (!img.isConnected || img.classList.contains('loaded') || loadingImages.has(img)) {
+      continue;
+    }
+
+    const src = img.getAttribute('data-src');
+    if (!src || img.src === src) {
+      continue;
+    }
+
+    loadingImages.add(img);
+    activeImageLoads += 1;
+
+    const finalize = (didLoad) => {
+      if (didLoad) {
+        img.style.opacity = '1';
+      }
+      img.classList.add('loaded');
+      loadingImages.delete(img);
+      img.onload = null;
+      img.onerror = null;
+      activeImageLoads = Math.max(0, activeImageLoads - 1);
+      processImageQueue();
+    };
+
+    img.onload = () => finalize(true);
+    img.onerror = () => finalize(false);
+
+    img.removeAttribute('data-src');
+    img.src = src;
+  }
+};
+
+const queueImageForLoad = (img, priority = false) => {
+  if (!img || !img.isConnected) {
+    return;
+  }
+
+  if (img.classList.contains('loaded') || loadingImages.has(img)) {
+    return;
+  }
+
+  const src = img.getAttribute('data-src');
+  if (!src || img.src === src) {
+    return;
+  }
+
+  if (queuedImages.has(img)) {
+    if (priority) {
+      const index = imageLoadQueue.indexOf(img);
+      if (index > 0) {
+        imageLoadQueue.splice(index, 1);
+        imageLoadQueue.unshift(img);
+      }
+    }
+    return;
+  }
+
+  if (priority) {
+    imageLoadQueue.unshift(img);
+  } else {
+    imageLoadQueue.push(img);
+  }
+
+  queuedImages.add(img);
+  processImageQueue();
+};
+
+const loadImage = (img, priority = false) => {
+  queueImageForLoad(img, priority);
+};
+
+// ナビゲーションボタンの状態
+const updateNavigationButtons = () => {
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  if (!prevButton || !nextButton || !visibleCards) return;
+
+  // 前のカードの存在チェック
+  let hasPrev = false;
+  for (let i = currentImageIndex - 1; i >= 0; i--) {
+    if (!visibleCards[i].hasAttribute('data-empty')) {
+      hasPrev = true;
+      break;
+    }
+  }
+
+  // 次のカードの存在チェック
+  let hasNext = false;
+  for (let i = currentImageIndex + 1; i < visibleCards.length; i++) {
+    if (!visibleCards[i].hasAttribute('data-empty')) {
+      hasNext = true;
+      break;
+    }
+  }
+
+  // ボタンの表示制御
+  prevButton.style.display = hasPrev ? 'block' : 'none';
+  nextButton.style.display = hasNext ? 'block' : 'none';
+
+  if (hasPrev) {
+    prevButton.classList.add('visible');
+  } else {
+    prevButton.classList.remove('visible');
+  }
+
+  if (hasNext) {
+    nextButton.classList.add('visible');
+  } else {
+    nextButton.classList.remove('visible');
+  }
+
+  // ボタン位置を更新
+  positionNavButtons();
+};
+
+// ナビゲーションボタンを画像の左右端に配置する
+const positionNavButtons = () => {
+  const modalImage = document.getElementById('modal-image');
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+  const modal = document.getElementById('image-modal');
+
+  if (!modalImage || !prevButton || !nextButton || !modal || modal.style.display === 'none') return;
+
+  const imgRect = modalImage.getBoundingClientRect();
+
+  // 画像がまだレンダリングされていない場合はスキップ
+  if (imgRect.width === 0 || imgRect.height === 0) return;
+
+  const buttonGap = 6; // 画像端からの距離(px)
+
+  // prevボタン: 画像の左端の少し外側
+  const prevWidth = prevButton.offsetWidth || 50;
+  prevButton.style.left = (imgRect.left - prevWidth - buttonGap) + 'px';
+  prevButton.style.right = 'auto';
+  prevButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+
+  // nextボタン: 画像の右端の少し外側
+  nextButton.style.left = (imgRect.right + buttonGap) + 'px';
+  nextButton.style.right = 'auto';
+  nextButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+
+  // 画面外にはみ出す場合は画像の端に重ねる（最小限のオーバーラップ）
+  const viewportWidth = window.innerWidth;
+  if (imgRect.left - prevWidth - buttonGap < 0) {
+    prevButton.style.left = '2px';
+  }
+  if (imgRect.right + buttonGap + (nextButton.offsetWidth || 50) > viewportWidth) {
+    nextButton.style.left = 'auto';
+    nextButton.style.right = '2px';
+  }
+};
+
+// リサイズ時にボタン位置を更新
+window.addEventListener('resize', () => {
+  const modal = document.getElementById('image-modal');
+  if (modal && modal.style.display !== 'none') {
+    positionNavButtons();
+  }
+});
+
+// AND絞り込みモードのフラグ
+let andFilterEnabled = false;
+
+// フィルター条件を保持するオブジェクト
+const filters = {
+  series: new Set(),
+  season: new Set(),
+  type: new Set(),
+  role: new Set(),
+  keyword: new Set(),
+  attribute: new Set(),
+  rare: new Set(),
+  cost: new Set(),
+  power: new Set()
+};
+
+// === 範囲フィルター ===
+// min/max が null の場合は範囲フィルター未適用
+const rangeFilters = {
+  cost: { min: null, max: null },
+  power: { min: null, max: null }
+};
+// 範囲選択の数値リスト（変更したい場合はここを編集）
+const RANGE_VALUES = { cost: 20, power: 20 };
+// デフォルト初期値（変更したい場合はここを編集）
+const RANGE_DEFAULTS = { min: 0, max: 3 };
+let currentRangeType = null; // 'cost' or 'power'
+let rangePickerMinIndex = 0;
+let rangePickerMaxIndex = 3;
+// キャンセル後も保持する最後のピッカー値
+const _lastPickerValues = {
+  cost: { min: null, max: null },
+  power: { min: null, max: null }
+};
+
+function openRangeModal(type) {
+  currentRangeType = type;
+  const overlay = document.getElementById('range-modal-overlay');
+  const title = document.getElementById('range-modal-title');
+  const maxVal = RANGE_VALUES[type];
+  title.textContent = type === 'cost' ? 'コストの範囲選択' : '力の範囲選択';
+
+  // 優先順位: 前回ピッカーで選んだ値 > 適用済み範囲 > デフォルト
+  const last = _lastPickerValues[type];
+  const applied = rangeFilters[type];
+  if (last.min !== null && last.max !== null) {
+    rangePickerMinIndex = last.min;
+    rangePickerMaxIndex = last.max;
+  } else if (applied.min !== null && applied.max !== null) {
+    rangePickerMinIndex = applied.min;
+    rangePickerMaxIndex = applied.max;
+  } else {
+    rangePickerMinIndex = RANGE_DEFAULTS.min;
+    rangePickerMaxIndex = RANGE_DEFAULTS.max;
+  }
+  updateRangeDisplay();
+
+  // モーダルを先に表示してからピッカーを構築（高さ計算のため）
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    buildPickerItems('range-scroll-min', maxVal, rangePickerMinIndex);
+    buildPickerItems('range-scroll-max', maxVal, rangePickerMaxIndex);
+  });
+}
+
+function closeRangeModal() {
+  document.getElementById('range-modal-overlay').style.display = 'none';
+  currentRangeType = null;
+}
+
+function applyRangeFilter() {
+  const type = currentRangeType;
+  let minVal = rangePickerMinIndex;
+  let maxVal = rangePickerMaxIndex;
+  // min > max の場合は入れ替え
+  if (minVal > maxVal) { [minVal, maxVal] = [maxVal, minVal]; }
+
+  // 既存の個別選択をクリア
+  filters[type].clear();
+  rangeFilters[type] = { min: minVal, max: maxVal };
+
+  closeRangeModal();
+  // フィルターモーダルも閉じる
+  closeModal();
+  filterCards();
+  updateActiveFilters();
+  updateFilterDetails();
+  saveFiltersToLocalStorage();
+}
+
+function buildPickerItems(scrollId, maxVal, selectedIndex) {
+  const scrollEl = document.getElementById(scrollId);
+  scrollEl.innerHTML = '';
+  for (let i = 0; i <= maxVal; i++) {
+    const item = document.createElement('div');
+    item.className = 'range-picker-item' + (i === selectedIndex ? ' selected' : '');
+    item.textContent = i;
+    item.dataset.value = i;
+    item.addEventListener('click', () => {
+      onPickerItemClick(scrollId, i);
+    });
+    scrollEl.appendChild(item);
+  }
+  // ピッカーの中央位置にスクロール
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+  scrollEl.style.transform = `translateY(${centerOffset - selectedIndex * itemH}px)`;
+
+  // タッチ/マウスドラッグでスクロール
+  setupPickerDrag(scrollEl, maxVal);
+}
+
+function onPickerItemClick(scrollId, index) {
+  const scrollEl = document.getElementById(scrollId);
+  const isMin = scrollId === 'range-scroll-min';
+  if (isMin) {
+    rangePickerMinIndex = index;
+  } else {
+    rangePickerMaxIndex = index;
+  }
+  // 前回値を保存（キャンセルしても次回に引き継ぐ）
+  if (currentRangeType) {
+    _lastPickerValues[currentRangeType] = { min: rangePickerMinIndex, max: rangePickerMaxIndex };
+  }
+  // 選択状態を更新
+  scrollEl.querySelectorAll('.range-picker-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === index);
+  });
+  // スクロール位置を調整
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+  scrollEl.style.transition = 'transform 0.15s ease-out';
+  scrollEl.style.transform = `translateY(${centerOffset - index * itemH}px)`;
+  updateRangeDisplay();
+}
+
+// ピッカーのドラッグ用AbortControllerを保持
+const _pickerAbortControllers = {};
+
+function setupPickerDrag(scrollEl, maxVal) {
+  // 既存のイベントリスナーを解除
+  if (_pickerAbortControllers[scrollEl.id]) {
+    _pickerAbortControllers[scrollEl.id].abort();
+  }
+  const ac = new AbortController();
+  _pickerAbortControllers[scrollEl.id] = ac;
+  const signal = ac.signal;
+
+  const pickerEl = scrollEl.parentElement;
+  const itemH = 36;
+  let startY = 0;
+  let startTranslate = 0;
+  let isDragging = false;
+
+  function getTranslateY() {
+    const match = scrollEl.style.transform.match(/translateY\((.+?)px\)/);
+    return match ? parseFloat(match[1]) : 0;
+  }
+
+  function snapToNearest() {
+    const centerOffset = pickerEl.clientHeight / 2 - itemH / 2;
+    const currentY = getTranslateY();
+    let index = Math.round((centerOffset - currentY) / itemH);
+    index = Math.max(0, Math.min(index, maxVal));
+    const isMin = scrollEl.id === 'range-scroll-min';
+    if (isMin) {
+      rangePickerMinIndex = index;
+    } else {
+      rangePickerMaxIndex = index;
+    }
+    // 前回値を保存
+    if (currentRangeType) {
+      _lastPickerValues[currentRangeType] = { min: rangePickerMinIndex, max: rangePickerMaxIndex };
+    }
+    scrollEl.querySelectorAll('.range-picker-item').forEach((el, i) => {
+      el.classList.toggle('selected', i === index);
+    });
+    scrollEl.style.transition = 'transform 0.15s ease-out';
+    scrollEl.style.transform = `translateY(${centerOffset - index * itemH}px)`;
+    updateRangeDisplay();
+  }
+
+  // --- タッチ ---
+  function onTouchStart(e) {
+    isDragging = true;
+    startY = e.touches[0].clientY;
+    startTranslate = getTranslateY();
+    scrollEl.style.transition = 'none';
+    e.preventDefault();
+  }
+
+  function onTouchMove(e) {
+    if (!isDragging) return;
+    const diff = e.touches[0].clientY - startY;
+    scrollEl.style.transform = `translateY(${startTranslate + diff}px)`;
+  }
+
+  function onTouchEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    snapToNearest();
+  }
+
+  pickerEl.addEventListener('touchstart', onTouchStart, { passive: false, signal });
+  window.addEventListener('touchmove', onTouchMove, { passive: false, signal });
+  window.addEventListener('touchend', onTouchEnd, { signal });
+  window.addEventListener('touchcancel', onTouchEnd, { signal });
+
+  // --- マウス（Pointer Capture でブラウザ外リリースも確定）---
+  function onPointerDown(e) {
+    if (e.pointerType === 'touch') return; // タッチは上のハンドラに任せる
+    isDragging = true;
+    startY = e.clientY;
+    startTranslate = getTranslateY();
+    scrollEl.style.transition = 'none';
+    pickerEl.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging || e.pointerType === 'touch') return;
+    const diff = e.clientY - startY;
+    scrollEl.style.transform = `translateY(${startTranslate + diff}px)`;
+  }
+
+  function onPointerUp(e) {
+    if (!isDragging || e.pointerType === 'touch') return;
+    isDragging = false;
+    snapToNearest();
+  }
+
+  pickerEl.addEventListener('pointerdown', onPointerDown, { signal });
+  pickerEl.addEventListener('pointermove', onPointerMove, { signal });
+  pickerEl.addEventListener('pointerup', onPointerUp, { signal });
+  pickerEl.addEventListener('pointercancel', onPointerUp, { signal });
+
+  // マウスホイール（ピッカーエリア内のみ）
+  pickerEl.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 1 : -1;
+    const isMin = scrollEl.id === 'range-scroll-min';
+    const current = isMin ? rangePickerMinIndex : rangePickerMaxIndex;
+    const next = Math.max(0, Math.min(current + delta, maxVal));
+    onPickerItemClick(scrollEl.id, next);
+  }, { passive: false, signal });
+}
+
+function updateRangeDisplay() {
+  document.getElementById('range-display-min').textContent = rangePickerMinIndex;
+  document.getElementById('range-display-max').textContent = rangePickerMaxIndex;
+}
+
+// === フィルター高速化: 逆引きインデックス ===
+// カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
+const cardIndexCache = {
+  built: false,
+  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:'', cost:'', power:'', name:'', nameLower:'', attributeLower:'', doubleFor:''}]
+  build() {
+    if (this.built) return;
+    const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+    this.entries = [];
+    cards.forEach(card => {
+      this.entries.push({
+        el: card,
+        series: card.dataset.series ? card.dataset.series.split(' ') : [],
+        season: card.dataset.season ? card.dataset.season.split(' ') : [],
+        type: card.dataset.type || '',
+        role: card.dataset.role ? card.dataset.role.split(' ') : [],
+        keyword: card.dataset.keyword ? card.dataset.keyword.split(' ') : [],
+        attribute: card.dataset.attribute ? card.dataset.attribute.split(' ') : [],
+        rare: card.dataset.rare ? card.dataset.rare.split(' ') : [],
+        cost: card.dataset.cost || '',
+        power: card.dataset.power || '',
+        name: card.dataset.name || '',
+        nameLower: (card.dataset.name || '').toLowerCase(),
+        attributeLower: (card.dataset.attribute || '').toLowerCase(),
+        doubleFor: card.getAttribute('data-double-for') || '',
+        number: card.dataset.number || ''
+      });
+    });
+    this.built = true;
+  },
+  invalidate() {
+    this.built = false;
+    this.entries = [];
+  }
+};
+
+let seasonAutoConfig = null;
+const autoSeasonFilters = new Set();
+
+const getSeasonFilterValues = () => {
+  const seasonElement = document.getElementById('season');
+  if (!seasonElement) {
+    return [];
+  }
+  const values = Array.from(seasonElement.querySelectorAll('button'))
+    .map((button) => button.innerText.trim())
+    .filter(Boolean);
+  return Array.from(new Set(values));
+};
+
+const canSegmentSeasonValue = (value, tokens) => {
+  if (!value || tokens.length === 0) {
+    return false;
+  }
+  const dp = new Array(value.length + 1).fill(false);
+  dp[0] = true;
+  for (let i = 0; i < value.length; i++) {
+    if (!dp[i]) {
+      continue;
+    }
+    for (const token of tokens) {
+      if (!token) {
+        continue;
+      }
+      if (value.startsWith(token, i)) {
+        dp[i + token.length] = true;
+      }
+    }
+  }
+  return dp[value.length];
+};
+
+const segmentSeasonValue = (value, tokens) => {
+  if (!value || tokens.length === 0) {
+    return null;
+  }
+  const sortedTokens = tokens.slice().sort((a, b) => b.length - a.length);
+  const dp = new Array(value.length + 1).fill(false);
+  const prev = new Array(value.length + 1).fill(null);
+  dp[0] = true;
+  for (let i = 0; i < value.length; i++) {
+    if (!dp[i]) {
+      continue;
+    }
+    for (const token of sortedTokens) {
+      if (!token) {
+        continue;
+      }
+      if (value.startsWith(token, i)) {
+        const next = i + token.length;
+        if (!dp[next]) {
+          dp[next] = true;
+          prev[next] = { index: i, token };
+        }
+      }
+    }
+  }
+  if (!dp[value.length]) {
+    return null;
+  }
+  const result = [];
+  let idx = value.length;
+  while (idx > 0) {
+    const step = prev[idx];
+    if (!step) {
+      return null;
+    }
+    result.unshift(step.token);
+    idx = step.index;
+  }
+  return result;
+};
+
+const buildSeasonAutoConfig = () => {
+  const values = getSeasonFilterValues();
+  if (values.length === 0) {
+    return { base: [], compositeMap: new Map() };
+  }
+
+  const base = values.filter((value) => {
+    const tokens = values.filter((candidate) => candidate !== value);
+    return !canSegmentSeasonValue(value, tokens);
+  });
+
+  const compositeMap = new Map();
+  values.forEach((value) => {
+    if (base.includes(value)) {
+      return;
+    }
+    const parts = segmentSeasonValue(value, base);
+    if (parts && parts.length > 1) {
+      compositeMap.set(value, parts);
+    }
+  });
+
+  return { base, compositeMap };
+};
+
+const syncSeasonAutoFilters = () => {
+  if (!filters.season) {
+    return false;
+  }
+  if (!seasonAutoConfig) {
+    seasonAutoConfig = buildSeasonAutoConfig();
+  }
+  const compositeMap = seasonAutoConfig.compositeMap;
+  if (!compositeMap || compositeMap.size === 0) {
+    return false;
+  }
+
+  const previousAuto = new Set(autoSeasonFilters);
+  autoSeasonFilters.clear();
+  let changed = false;
+
+  compositeMap.forEach((parts, combo) => {
+    const shouldEnable = parts.every((part) => filters.season.has(part));
+    if (shouldEnable) {
+      autoSeasonFilters.add(combo);
+      if (!filters.season.has(combo)) {
+        filters.season.add(combo);
+        changed = true;
+      }
+    } else if (previousAuto.has(combo)) {
+      if (filters.season.delete(combo)) {
+        changed = true;
+      }
+    }
+  });
+
+  return changed;
+};
+
+// フォントサイズをリセット
+function resetFontSize() {
+  document.body.style.WebkitTextSizeAdjust = '100%';
+  document.body.style.textSizeAdjust = '100%';
+}
+window.addEventListener('orientationchange', resetFontSize);
+window.addEventListener('resize', resetFontSize);
+
+// ★ページロード後にDOMの初期化設定を行う
+// コスト・力フィルターボタンをカードデータから自動生成
+function buildNumericFilterButtons() {
+  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const costValues = new Set();
+  const powerValues = new Set();
+
+  cards.forEach((card) => {
+    const c = card.dataset.cost;
+    const p = card.dataset.power;
+    if (c !== undefined && c !== '') costValues.add(Number(c));
+    if (p !== undefined && p !== '') powerValues.add(Number(p));
+  });
+
+  const inject = (containerId, attr, values) => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    // ヘッダー以外の既存ボタンを削除（再生成時のリセット用）
+    container.querySelectorAll(':scope > button').forEach((b) => b.remove());
+    [...values].sort((a, b) => a - b).forEach((val) => {
+      const btn = document.createElement('button');
+      btn.textContent = String(val);
+      btn.onclick = () => toggleFilterCard(attr, String(val));
+      container.appendChild(btn);
+    });
+  };
+
+  inject('cost', 'cost', costValues);
+  inject('power', 'power', powerValues);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // コスト・力フィルターボタンを自動生成
+  buildNumericFilterButtons();
+
+  // モバイルでのプルトゥリフレッシュを防止
+  document.body.style.overscrollBehavior = 'none';
+  document.documentElement.style.overscrollBehavior = 'none';
+
+  // 強制的にページトップに移動
+  window.scrollTo(0, 0);
+  // ページが完全に読み込まれたときに呼び出される
+  window.addEventListener('load', () => {
+    // ローディングスピナーを非表示にし、コンテンツを表示
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    loadInitialImages();
+    setupLazyLoading();
+  });
+
+  // 検索ボックスにイベントリスナーを追加
+  const searchBox = document.getElementById('search-box');
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+  const clearButton = document.querySelector('.clear-button');
+
+  const updateClearButtonVisibility = (inputId, buttonId) => {
+    const input = document.getElementById(inputId);
+    const button = document.getElementById(buttonId);
+    button.style.display = input.value ? 'flex' : 'none';
+  };
+
+  searchBox.addEventListener('input', () => {
+    filterCardsByName({ target: searchBox });
+    updateClearButtonVisibility('search-box', 'clear-button-desktop');
+  });
+  searchBox.addEventListener('focus', () => { searchBox.select(); });
+
+  mobileSearchBox.addEventListener('input', () => {
+    filterCardsByName({ target: mobileSearchBox });
+    updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
+  });
+  mobileSearchBox.addEventListener('focus', () => { mobileSearchBox.select(); });
+
+  // Enter/確定キーでキーボードを閉じる（スマホ対応）
+  searchBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); searchBox.blur(); }
+  });
+  mobileSearchBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); mobileSearchBox.blur(); }
+  });
+
+  updateClearButtonVisibility('search-box', 'clear-button-desktop');
+  updateClearButtonVisibility('mobile-search-box', 'clear-button-mobile');
+
+  // 検索窓以外をクリックしたときに検索窓の選択状態を解除
+  document.addEventListener('click', (e) => {
+    if (e.target !== searchBox && e.target !== mobileSearchBox && !e.target.closest('.clear-button')) {
+      if (document.activeElement === searchBox) {
+        searchBox.blur();
+      }
+      if (document.activeElement === mobileSearchBox) {
+        mobileSearchBox.blur();
+      }
+    }
+  });
+
+  resetFontSize(); // 初期化時にも実行
+
+  const isPC = !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isPC) {
+    document.addEventListener('mousedown', (e) => {
+      // 入力欄は除外（TEXTAREA も含める）
+      if (
+        e.button === 0 &&
+        e.target.tagName !== 'INPUT' &&
+        e.target.tagName !== 'TEXTAREA'
+      ) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  // 複製カードにクリック判定を付与
+  const cardList = document.getElementById('card-list');
+  if (cardList) {
+    cardList.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
+  }
+  if (isAndroid()) {
+    document.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
+  }
+
+  const filterButtons = document.querySelectorAll('.filter-buttons button');
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const attribute = button.getAttribute('data-filter');
+      openModal(attribute);
+    });
+  });
+
+  const modalButtons = document.querySelectorAll('.filter-group button');
+  modalButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const match = button.getAttribute('onclick').match(/openModal\('(.+?)'\)/);
+      if (match) {
+        const filterId = match[1];
+        openModal(filterId);
+      }
+    });
+  });
+
+  const limitToggle = document.getElementById('limit-release-toggle');
+  if (limitToggle) {
+    // localStorage から制限の状態を復元
+    const savedLimit = localStorage.getItem('limitReleaseEnabled');
+    if (savedLimit === 'true') {
+      limitToggle.checked = true;
+      deckBuilder.limitReleaseEnabled = true;
+    }
+    limitToggle.addEventListener('change', (e) => {
+      const limitEnabled = !!e.target.checked;
+      deckBuilder.limitReleaseEnabled = limitEnabled;
+      localStorage.setItem('limitReleaseEnabled', limitEnabled);
+      if (typeof deckBuilder?.showMessage === 'function') {
+        deckBuilder.showMessage(
+          limitEnabled
+            ? '枚数制限のあるカードが\n4枚まで使用可能に\nなりました。'
+            : '枚数制限が\n再度適用されました。'
+        );
+      }
+      // 画像モーダルを開いている場合、表示・ボタン状態を更新
+      try {
+        const imageModal = document.getElementById('image-modal');
+        if (imageModal && imageModal.style.display === 'flex' && typeof currentModalCardName !== 'undefined' && currentModalCardName) {
+          if (typeof updateCardCountInModal === 'function') {
+            updateCardCountInModal(currentModalCardName);
+          }
+          if (typeof updateModalButtonStates === 'function' && typeof modalControls !== 'undefined' && modalControls) {
+            updateModalButtonStates(modalControls, currentModalCardName);
+          }
+        }
+      } catch (err) {
+        // no-op
+      }
+    });
+  }
+
+  // AND絞り込みトグル
+  const andToggle = document.getElementById('and-filter-toggle');
+  if (andToggle) {
+    // localStorage から絞り込みの状態を復元
+    const savedAnd = localStorage.getItem('andFilterEnabled');
+    if (savedAnd === 'true') {
+      andToggle.checked = true;
+      andFilterEnabled = true;
+    }
+    andToggle.addEventListener('change', (e) => {
+      andFilterEnabled = !!e.target.checked;
+      localStorage.setItem('andFilterEnabled', andFilterEnabled);
+      if (typeof deckBuilder?.showMessage === 'function') {
+        deckBuilder.showMessage(
+          andFilterEnabled
+            ? 'フィルター条件が\n全て一致するカードのみが\n表示されます。'
+            : '通常フィルターに戻りました。\n（当てはまる条件は全て表示）'
+        );
+      }
+      filterCards();
+    });
+  }
+
+  // 画像モーダルのイベントリスナーを追加
+  const imageModal = document.getElementById('image-modal');
+  imageModal.addEventListener('click', function (event) {
+    if (event.target === imageModal) {
+      closeImageModal();
+    }
+  });
+
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+
+  prevButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPreviousImage();
+  });
+
+  nextButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showNextImage();
+  });
+
+  // 遅延読み込みの処理
+  // 表示の先読み枚数と初期読み込み枚数を適度に増やす
+  const PRELOAD_AHEAD_COUNT = 24;
+  const INITIAL_LAZYLOAD_COUNT = 40;
+  const options = {
+    root: null,
+    rootMargin: '1000px 0px',
+    threshold: 0.01
+  };
+
+  // ObserverをグローバルObserverとして初期化（全デバイス共通）
+  if (!observer) {
+    observer = new IntersectionObserver((entries) => {
+      const intersecting = entries.filter((entry) => entry.isIntersecting);
+      if (intersecting.length === 0) {
+        return;
+      }
+
+      intersecting.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      for (let i = intersecting.length - 1; i >= 0; i--) {
+        const entry = intersecting[i];
+        loadImage(entry.target, true);
+        observer.unobserve(entry.target);
+      }
+    }, options);
+  }
+
+  // クリーンアップ イベントでタブのアクティブ状態を監視
+  document.addEventListener('visibilitychange', () => {
+    // タブがアクティブになった時
+    if (document.visibilityState === 'visible') {
+      // モーダルが開いていない時だけリセット
+      if (document.getElementById('image-modal').style.display !== 'flex') {
+        if (typeof resetLazyLoading === 'function') {
+          resetLazyLoading();
+        }
+      }
+    } else if (document.visibilityState === 'hidden') {
+      // タブが非アクティブになった時、メモリを節約
+      if (seriesInfoCache.size > 100) {
+        seriesInfoCache.clear();
+      }
+    }
+  });
+
+  const preloadNextImages = (currentIndex, count = PRELOAD_AHEAD_COUNT) => {
+    const images = document.querySelectorAll('.card img');
+    for (let i = currentIndex + 1; i < currentIndex + 1 + count && i < images.length; i++) {
+      const img = images[i];
+      if (img && !img.classList.contains('loaded')) {
+        loadImage(img);
+      }
+    }
+  };
+
+  const setupLazyLoading = () => {
+    if (isObserverSetup) return; // 重複セットアップを防ぐ
+
+    const images = document.querySelectorAll('.card img:not(.loaded)');
+    images.forEach((img, index) => {
+      if (!img.classList.contains('loaded')) {
+        img.style.opacity = '0';
+        if (observer) {
+          observer.observe(img);
+        }
+      }
+    });
+    isObserverSetup = true;
+  };
+
+  // 初期表示の画像数を制限
+  const loadInitialImages = () => {
+    const images = Array.from(document.querySelectorAll('.card img'));
+    const initialCount = Math.min(INITIAL_LAZYLOAD_COUNT, images.length);
+
+    for (let i = initialCount - 1; i >= 0; i--) {
+      loadImage(images[i], true);
+    }
+
+    if (initialCount > 0) {
+      preloadNextImages(initialCount - 1, PRELOAD_AHEAD_COUNT);
+    }
+  };
+
+  // スクロールイベントの処理
+  let lastScrollTop = 0;
+  let scrollTimeout;
+  window.addEventListener(
+    'scroll',
+    () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const st = window.pageYOffset || document.documentElement.scrollTop;
+        if (st > lastScrollTop) {
+          // 下スクロール時
+          const visibleImages = document.querySelectorAll('.card img.loaded');
+          if (visibleImages.length > 0) {
+            const lastVisibleImage = visibleImages[visibleImages.length - 1];
+            const index = Array.from(document.querySelectorAll('.card img')).indexOf(lastVisibleImage);
+            preloadNextImages(index);
+          }
+        }
+        lastScrollTop = st <= 0 ? 0 : st;
+        loadVisibleImages();
+      }, 80);
+    },
+    false
+  );
+
+  // フィルターや並び替え後に再セットアップ
+  const resetLazyLoading = () => {
+    if (observer) {
+      observer.disconnect();
+    }
+    isObserverSetup = false;
+    setupLazyLoading();
+  };
+
+  document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
+    button.addEventListener('click', () => {
+      // 全デバイス共通: 遅延読み込みをリセット
+      setTimeout(() => {
+        if (typeof resetLazyLoading === 'function') {
+          resetLazyLoading();
+        }
+      }, 100);
+    });
+  });
+
+  // PC用ヘッダーメニュー
+  const menuItem = document.querySelector('.menu-item');
+  const menuTrigger = menuItem.querySelector('.menu-trigger');
+  const submenu = menuItem.querySelector('.submenu');
+
+  const showSubmenu = () => {
+    if (window.innerWidth >= 769) {
+      submenu.style.display = 'block';
+    }
+  };
+
+  const hideSubmenu = () => {
+    submenu.style.display = 'none';
+  };
+
+  if (window.innerWidth >= 769) {
+    menuTrigger.addEventListener('mouseenter', showSubmenu);
+    menuItem.addEventListener('mouseleave', hideSubmenu);
+  }
+
+  // ウィンドウサイズが変更された場合の処理
+  window.addEventListener('resize', () => {
+    deckBuilder.resizeDisplay();
+    if (window.innerWidth >= 769) {
+      menuTrigger.addEventListener('mouseenter', showSubmenu);
+      menuItem.addEventListener('mouseleave', hideSubmenu);
+    } else {
+      menuTrigger.removeEventListener('mouseenter', showSubmenu);
+      menuItem.removeEventListener('mouseleave', hideSubmenu);
+      hideSubmenu();
+    }
+  });
+
+  deckBuilder.loadFromLocalStorage();
+
+  document.getElementById('deck-modal').addEventListener('mousedown', (e) => {
+    if (e.target.className === 'deck-modal active') {
+      deckBuilder.close();
+    }
+  });
+
+  const deckButton = document.getElementById('deckButton');
+  if (deckButton) {
+    deckButton.addEventListener('click', openDeckBuilder);
+  }
+
+  const deckBackButton = document.getElementById('deck-back-button');
+  if (deckBackButton) {
+    deckBackButton.addEventListener('click', () => {
+      deckBuilder.close();
+    });
+  }
+
+  const headerIcon = document.querySelector('.header-icon');
+  if (headerIcon) {
+    const badge = document.createElement('span');
+    badge.className = 'deck-count-badge';
+    headerIcon.parentElement.style.position = 'relative';
+    headerIcon.parentElement.appendChild(badge);
+  }
+
+  document.getElementById('card-list').addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+
+    if (e.target.closest('.card-add-button') || e.target.closest('.card-remove-button')) {
+      return;
+    } else {
+      // カードクリックは画像表示のみ
+      e.preventDefault();
+      e.stopPropagation();
+      const img = card.querySelector('img');
+      const imgSrc = img.getAttribute('data-src') || img.src;
+      openImageModal(imgSrc);
+    }
+  });
+
+  // デッキ画面でのカードクリックイベント
+  const deckDisplay = document.getElementById('deck-display');
+  if (deckDisplay) {
+    // カードの生成関数
+    const createDeckCard = (card) => {
+      const cardElement = document.createElement('div');
+      cardElement.className = 'deck-card';
+      cardElement.setAttribute('data-name', card.dataset.name);
+      cardElement.setAttribute('data-type', card.dataset.type);
+      cardElement.setAttribute('data-season', card.dataset.season);
+      cardElement.setAttribute('data-cost', card.dataset.cost);
+      cardElement.setAttribute('data-number', card.dataset.number);
+      // 主な属性の集計に必要な属性情報も引き継ぐ
+      if (card.dataset.attribute) {
+        cardElement.setAttribute('data-attribute', card.dataset.attribute);
+      }
+
+      const img = document.createElement('img');
+      img.src = card.querySelector('img').src;
+      img.alt = card.dataset.name;
+
+      // ボタングループを追加
+      const buttons = document.createElement('div');
+      buttons.className = 'card-buttons';
+
+      const addButton = document.createElement('button');
+      addButton.className = 'card-add-button';
+      addButton.onclick = (e) => {
+        e.stopPropagation(); // カードのクリックイベントを停止
+        deckBuilder.addCard(card.cloneNode(true));
+      };
+
+      const removeButton = document.createElement('button');
+      removeButton.className = 'card-remove-button';
+      removeButton.onclick = (e) => {
+        e.stopPropagation(); // カードのクリックイベントを停止
+        deckBuilder.removeCard(null, card.dataset.number);
+      };
+
+      buttons.appendChild(addButton);
+      buttons.appendChild(removeButton);
+
+      cardElement.appendChild(img);
+      cardElement.appendChild(buttons);
+
+      // カードクリックで画像表示
+      cardElement.onclick = (e) => {
+        // ボタンクリック以外の場合のみ画像表示
+        if (!e.target.closest('.card-buttons')) {
+          const deckCards = Array.from(deckDisplay.querySelectorAll('.deck-card'));
+          currentImageIndex = deckCards.indexOf(cardElement);
+          visibleCards = deckCards;
+          openDeckImageModal(img.src);
+        }
+      };
+
+      return cardElement;
+    };
+
+    deckDisplay.addEventListener(
+      'touchstart',
+      (e) => {
+        const card = e.target.closest('.deck-card');
+        if (!card) return;
+
+        isDragging = true;
+        currentCard = card;
+        startY = e.touches[0].clientY;
+
+        // カードを掴んだ状態を表現
+        currentCard.style.transition = 'opacity 0.2s';
+        currentCard.style.opacity = '0.8';
+
+        // スクロール禁止
+        document.body.style.overflow = 'hidden';
+      },
+      { passive: false }
+    );
+
+    deckDisplay.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!isDragging || !currentCard) return;
+
+        const currentY = e.touches[0].clientY;
+        const diff = startY - currentY;
+
+        // 移動距離に応じて透明度を変更
+        const opacity = Math.max(0.2, Math.min(0.5, 1 - Math.abs(diff) / 200));
+        currentCard.style.opacity = opacity.toString();
+
+        // カードを少し移動させる
+        currentCard.style.transform = `translateY(${-diff / 2}px)`;
+
+        e.preventDefault(); // スクロール防止
+      },
+      { passive: false }
+    );
+
+    deckDisplay.addEventListener('touchend', (e) => {
+      if (!isDragging || !currentCard) return;
+
+      const endY = e.changedTouches[0].clientY;
+      const diff = startY - endY;
+
+      // スタイルをリセット
+      currentCard.style.transition = 'all 0.3s';
+      currentCard.style.opacity = '1';
+      currentCard.style.transform = '';
+
+      // 50px以上の移動で判定
+      if (Math.abs(diff) > 30) {
+        if (diff > 0) {
+          // 上スワイプでカード追加（フェードエフェクト付き）
+          const cardData = currentCard.cloneNode(true);
+          deckBuilder.addCard(cardData);
+        } else {
+          // 下スワイプでカード削除
+          const cardNumber = currentCard.getAttribute('data-number');
+          if (cardNumber) {
+            deckBuilder.removeCard(null, cardNumber);
+          }
+        }
+      }
+
+      // 状態をリセット
+      isDragging = false;
+      currentCard = null;
+      document.body.style.overflow = '';
+    });
+
+    // タッチがキャンセルされた場合の処理
+    deckDisplay.addEventListener('touchcancel', () => {
+      if (currentCard) {
+        currentCard.style.transition = 'all 0.3s';
+        currentCard.style.opacity = '1';
+        currentCard.style.transform = '';
+      }
+      isDragging = false;
+      currentCard = null;
+      document.body.style.overflow = '';
+    });
+  }
+
+  // 零探しボタン
+  const zeroCheckButton = document.getElementById('zero-check');
+  if (zeroCheckButton) {
+    zeroCheckButton.addEventListener('click', performZeroSearch);
+  }
+
+  // 共有ボタン
+  const deckMenuEl = document.querySelector('.deck-menu');
+  if (deckMenuEl && !document.getElementById('deck-share')) {
+    const shareBtn = document.createElement('button');
+    shareBtn.id = 'deck-share';
+    shareBtn.className = 'deck-menu-button';
+    shareBtn.textContent = '共有';
+    const zeroBtn = document.getElementById('zero-check');
+    if (zeroBtn) {
+      deckMenuEl.insertBefore(shareBtn, zeroBtn);
+    } else {
+      deckMenuEl.appendChild(shareBtn);
+    }
+    shareBtn.addEventListener('click', openDeckShareModal);
+  }
+
+  const resetButton = document.getElementById('deck-reset');
+  if (resetButton) {
+    resetButton.addEventListener('click', confirmReset);
+  }
+
+  document.getElementById('back-to-gallery').addEventListener('click', () => {
+    deckBuilder.close();
+  });
+
+  // 既存のカードにボタンを追加
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(addCardButtons);
+
+  // ヘルプボタン
+  const helpButton = document.querySelector('.deck-help-button');
+  const helpPopup = document.querySelector('.deck-help-popup');
+  const helpOverlay = document.querySelector('.deck-help-overlay');
+
+  if (helpButton && helpPopup && helpOverlay) {
+    const showHelp = () => {
+      helpPopup.style.display = 'block';
+      helpOverlay.style.display = 'block';
+    };
+
+    const hideHelp = () => {
+      helpPopup.style.display = 'none';
+      helpOverlay.style.display = 'none';
+    };
+
+    helpButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showHelp();
+    });
+
+    // ポップアップ以外をクリックで閉じる
+    document.addEventListener('click', (e) => {
+      if (helpPopup.style.display === 'block' && !helpPopup.contains(e.target) && e.target !== helpButton) {
+        hideHelp();
+      }
+    });
+
+    // ESCキーでも閉じられるように
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && helpPopup.style.display === 'block') {
+        hideHelp();
+      }
+    });
+  }
+
+  // ツールチップのイベントを設定
+  document.querySelectorAll('[data-tooltip]').forEach((element) => {
+    element.addEventListener('mouseenter', (e) => {
+      const text = e.target.getAttribute('data-tooltip');
+      showTooltip(e.target, text);
+    });
+
+    element.addEventListener('mouseleave', () => {
+      hideTooltip();
+    });
+
+    // スマホ用長押し
+    let longPressTimer;
+    element.addEventListener('touchstart', (e) => {
+      longPressTimer = setTimeout(() => {
+        const text = e.target.getAttribute('data-tooltip');
+        showTooltip(e.target, text);
+      }, 500);
+    });
+
+    element.addEventListener('touchend', () => {
+      clearTimeout(longPressTimer);
+      hideTooltip();
+    });
+  });
+
+  const captureButton = document.getElementById('deck-capture');
+  if (captureButton) {
+    captureButton.addEventListener('click', captureDeck);
+  }
+
+  // デッキモーダルの背景クリックで閉じる機能
+  const deckModal = document.getElementById('deck-modal');
+  if (deckModal) {
+    deckModal.addEventListener('click', (e) => {
+      // クリックされた要素がモーダルコンテンツ自体である場合のみ閉じる
+      if (e.target.classList.contains('deck-modal-content')) {
+        deckBuilder.close();
+      }
+    });
+  }
+
+  updateCardCount();
+  updateFilterDetails();
+  ensureScrollUnlocked();
+  setupAndroidScrollAssist();
+});
+
+// 以下の関数は変更なし
+function clearSearch(inputId, buttonId) {
+  const input = document.getElementById(inputId);
+  input.value = '';
+  filterCardsByName({ target: input });
+  const button = document.getElementById(buttonId);
+  button.style.display = 'none';
+}
+
+const filterCardsByName = (event) => {
+  // filterCards()を使って統一的にフィルタリング（インデックスキャッシュも活用）
+  filterCards();
+};
+
+// フィルター条件のチェック関数
+const checkFilters = (card) => {
+  const has廃Filter = filters.attribute.has('廃');
+
+  // 各フィルター条件をチェック
+  const checks = {
+    series: () => {
+      if (filters.series.size === 0) return true;
+      const cardValues = card.dataset.series ? card.dataset.series.split(' ') : [];
+      return cardValues.some((v) => filters.series.has(v));
+    },
+    season: () => {
+      if (filters.season.size === 0) return true;
+      const cardValues = card.dataset.season ? card.dataset.season.split(' ') : [];
+      return cardValues.some((v) => filters.season.has(v));
+    },
+    type: () => filters.type.size === 0 || filters.type.has(card.dataset.type),
+    role: () => {
+      if (filters.role.size === 0) return true;
+      const cardRoles = card.dataset.role.split(' ');
+      return [...filters.role].some((role) => cardRoles.includes(role));
+    },
+    keyword: () => {
+      if (filters.keyword.size === 0) return true;
+      const cardValues = card.dataset.keyword ? card.dataset.keyword.split(' ') : [];
+      return cardValues.some((v) => filters.keyword.has(v));
+    },
+    attribute: () => {
+      if (filters.attribute.size === 0) return true;
+      const cardAttributes = card.dataset.attribute ? card.dataset.attribute.split(' ') : [];
+
+      if (has廃Filter) {
+        const has廃InAttributes = cardAttributes.some(attr => attr.includes('廃'));
+        const otherFilters = [...filters.attribute].filter(v => v !== '廃');
+        if (otherFilters.length === 0) {
+          return has廃InAttributes;
+        }
+        return has廃InAttributes || cardAttributes.some(attr => otherFilters.includes(attr));
+      }
+
+      return cardAttributes.some((attr) => filters.attribute.has(attr));
+    },
+    rare: () => filters.rare.size === 0 || (card.dataset.rare ? card.dataset.rare.split(' ') : []).some(v => filters.rare.has(v)),
+    cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
+    power: () => {
+      if (filters.power.size === 0) return true;
+      const powerMatch = filters.power.has(card.dataset.power);
+      if (filters.power.has('0')) {
+        return powerMatch && (card.dataset.type === '場所札');
+      }
+      return powerMatch;
+    }
+  };
+
+  // すべての条件を満たす場合のみtrue
+  return Object.values(checks).every((check) => check());
+};
+
+const sortCards = (criteria) => {
+  // 既存のソート状態をクリア（seasonは除く）
+  if (criteria !== 'season') {
+    if (sortCriteria !== criteria) {
+      sortCriteria = criteria;
+      // No.と力の場合は初期値をdescに
+      if (criteria === 'number' || criteria === 'power' || criteria === 'cost') {
+        sortOrder = 'desc';
+      } else {
+        sortOrder = 'asc';
+      }
+    } else {
+      // 同じボタンを押した場合は順序を反転
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    }
+  }
+
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+
+  cards.sort((a, b) => {
+    if (criteria === 'type') {
+      const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+      const aType = a.dataset.type;
+      const bType = b.dataset.type;
+      const aIndex = typeOrder.indexOf(aType);
+      const bIndex = typeOrder.indexOf(bType);
+      return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+    } else {
+      const aValue = parseInt(a.dataset[criteria]) || 0;
+      const bValue = parseInt(b.dataset[criteria]) || 0;
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+  });
+
+  cards.forEach((card) => cardList.appendChild(card));
+  loadVisibleImages();
+  updateSortButtonsState(criteria);
+  saveFiltersToLocalStorage();
+};
+
+const updateSortButtonsState = (activeCriteria) => {
+  const sortButtons = document.querySelectorAll('.sort-buttons button');
+  sortButtons.forEach((button) => {
+    const buttonCriteria = button.getAttribute('data-filter');
+    if (buttonCriteria === activeCriteria) {
+      button.classList.add('active');
+      button.classList.toggle('desc', sortOrder === 'desc');
+    } else {
+      button.classList.remove('active', 'desc');
+    }
+  });
+};
+
+// スムーズスクロール用の関数を最初に定義
+const smoothScrollToTop = (duration = 500) => {
+  const startPosition = window.pageYOffset;
+  const startTime = performance.now();
+
+  const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+  const animation = (currentTime) => {
+    const elapsedTime = currentTime - startTime;
+    const progress = Math.min(elapsedTime / duration, 1);
+
+    window.scrollTo(0, startPosition * (1 - easeInOutQuad(progress)));
+
+    if (progress < 1) {
+      requestAnimationFrame(animation);
+    }
+  };
+
+  requestAnimationFrame(animation);
+};
+
+// TOPボタンのクリックハンドラ
+window.scrollToTop = () => {
+  smoothScrollToTop();
+};
+
+// resetFilters関数
+const resetFilters = () => {
+  // 既存のフィルターリセット処理
+  Object.keys(filters).forEach((key) => filters[key].clear());
+  // 範囲フィルターもリセット
+  rangeFilters.cost = { min: null, max: null };
+  rangeFilters.power = { min: null, max: null };
+  autoSeasonFilters.clear();
+  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
+  const originalCards = document.querySelectorAll('.card:not([data-cloned])');
+  originalCards.forEach((card) => {
+    card.style.display = 'block';
+  });
+
+  document.getElementById('no-cards-message').style.display = 'none';
+  resetSort();
+  updateActiveFilters();
+  resetSortButtonsState();
+
+  // ソート状態のリセット
+  window.seasonSortOrder = null;
+  sortCriteria = null;
+  sortOrder = 'asc';
+
+  // ローカルストレージのクリア
+  localStorage.removeItem('cardFilters');
+  localStorage.removeItem('sortState');
+  localStorage.removeItem('rangeFilters');
+
+  // ボタンの状態をリセット
+  const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+  if (seasonSortButton) {
+    seasonSortButton.classList.remove('active', 'desc');
+  }
+  updateSortButtonsState(null);
+
+  // 検索欄のリセット処理を追加
+  const searchBox = document.getElementById('search-box');
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+
+  // input イベントを発火させて検索欄をクリア
+  if (searchBox) {
+    searchBox.value = '';
+    searchBox.dispatchEvent(new Event('input'));
+  }
+  if (mobileSearchBox) {
+    mobileSearchBox.value = '';
+    mobileSearchBox.dispatchEvent(new Event('input'));
+  }
+
+  // カスタムスムーズスクロールを実行
+  smoothScrollToTop();
+
+  // カード数を更新
+  updateCardCount();
+  // フィルター詳細をリセット
+  updateFilterDetails();
+};
+
+// キーボードイベントリスナーを更新
+document.addEventListener('keydown', function (event) {
+  // ESCキーで範囲選択モーダルを閉じる
+  if (event.key === 'Escape' && document.getElementById('range-modal-overlay').style.display === 'flex') {
+    closeRangeModal();
+    return;
+  }
+  // ESCキーが押され、モーダルが開いていない場合にフィルターをリセットしてトップにスクロール
+  if (event.key === 'Escape' && document.getElementById('modal').style.display !== 'block' && document.getElementById('image-modal').style.display !== 'flex') {
+    resetFilters();
+  }
+
+  // ↑キーが押された場合、ページトップにスクロール
+  if (event.key === 'ArrowUp' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    event.preventDefault();
+    smoothScrollToTop();
+  }
+});
+
+const resetSort = () => {
+  sortCriteria = null;
+  sortOrder = 'asc';
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+  cards.sort((a, b) => {
+    const aValue = parseInt(a.dataset.number);
+    const bValue = parseInt(b.dataset.number);
+    return aValue - bValue;
+  });
+  cards.forEach((card) => cardList.appendChild(card));
+};
+
+const resetSortButtonsState = () => {
+  const sortButtons = document.querySelectorAll('.sort-buttons button');
+  sortButtons.forEach((button) => {
+    button.classList.remove('active', 'desc');
+  });
+};
+
+const toggleFilterCard = (attribute, value) => {
+  if (!attribute || !filters[attribute]) {
+    console.error(`Attribute "${attribute}" not found in filters.`);
+    return;
+  }
+  // 個別選択時は範囲フィルターを解除
+  if (rangeFilters[attribute] && rangeFilters[attribute].min !== null) {
+    rangeFilters[attribute] = { min: null, max: null };
+  }
+  if (filters[attribute].has(value)) {
+    filters[attribute].delete(value);
+  } else {
+    filters[attribute].add(value);
+  }
+  if (attribute === 'season') {
+    syncSeasonAutoFilters();
+  }
+  filterCards();
+  updateActiveFilters();
+  updateFilterDetails(); // フィルター詳細を更新
+  saveFiltersToLocalStorage();
+
+  // モーダルを確実に閉じる
+  setTimeout(() => {
+    closeModal();
+  }, 10);
+};
+
+const filterCards = () => {
+  // インデックスキャッシュを構築（初回のみ）
+  cardIndexCache.build();
+
+  let anyVisible = false;
+  const cardList = document.getElementById('card-list');
+  const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
+  const has廃Filter = filters.attribute.has('廃');
+
+  // 「廃」フィルター用: 他の属性フィルターを事前計算
+  let otherAttributeFilters = null;
+  if (has廃Filter) {
+    otherAttributeFilters = [...filters.attribute].filter(v => v !== '廃');
+  }
+
+  // 検索欄の文字を取得
+  const searchBox = document.getElementById('search-box');
+  const mobileSearchBox = document.getElementById('mobile-search-box');
+  const query = (searchBox?.value || mobileSearchBox?.value || '').toLowerCase();
+
+  // 複製カードの削除
+  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
+
+  // インデックスキャッシュを使った高速フィルタリング
+  const entries = cardIndexCache.entries;
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const card = entry.el;
+
+    let shouldDisplay = true;
+
+    // series フィルター
+    if (filters.series.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.series].every(v => entry.series.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.series.some(v => filters.series.has(v))) shouldDisplay = false;
+      }
+    }
+
+    // season フィルター
+    if (shouldDisplay && filters.season.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.season].every(v => entry.season.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.season.some(v => filters.season.has(v))) shouldDisplay = false;
+      }
+    }
+
+    // type フィルター
+    if (shouldDisplay && filters.type.size > 0) {
+      if (andFilterEnabled) {
+        // typeは単一値なので、複数選択時は「全て一致」は不可能 → OR維持
+        if (!filters.type.has(entry.type)) shouldDisplay = false;
+      } else {
+        if (!filters.type.has(entry.type)) shouldDisplay = false;
+      }
+    }
+
+    // role フィルター
+    if (shouldDisplay && filters.role.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.role].every(v => entry.role.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.role.some(v => filters.role.has(v))) shouldDisplay = false;
+      }
+    }
+
+    // keyword フィルター
+    if (shouldDisplay && filters.keyword.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.keyword].every(v => entry.keyword.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.keyword.some(v => filters.keyword.has(v))) shouldDisplay = false;
+      }
+    }
+
+    // attribute フィルター（「廃」特別処理あり）
+    if (shouldDisplay && filters.attribute.size > 0) {
+      if (andFilterEnabled) {
+        // ANDモード: 全ての選択属性がカードに含まれているか
+        const allMatch = [...filters.attribute].every(filterAttr => {
+          if (filterAttr === '廃') {
+            return entry.attribute.some(attr => attr.includes('廃'));
+          }
+          return entry.attribute.includes(filterAttr);
+        });
+        if (!allMatch) shouldDisplay = false;
+      } else {
+        let matches = false;
+        if (has廃Filter) {
+          const has廃InAttributes = entry.attribute.some(attr => attr.includes('廃'));
+          if (otherAttributeFilters.length === 0) {
+            matches = has廃InAttributes;
+          } else {
+            matches = has廃InAttributes || entry.attribute.some(attr => otherAttributeFilters.includes(attr));
+          }
+        } else {
+          matches = entry.attribute.some(attr => filters.attribute.has(attr));
+        }
+        if (!matches) shouldDisplay = false;
+      }
+    }
+
+    // rare フィルター（スペース区切りで部分一致）
+    if (shouldDisplay && filters.rare.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.rare].every(v => entry.rare.includes(v))) shouldDisplay = false;
+      } else {
+        if (!entry.rare.some(v => filters.rare.has(v))) shouldDisplay = false;
+      }
+    }
+
+    // cost フィルター（個別選択 or 範囲）
+    if (shouldDisplay) {
+      if (rangeFilters.cost.min !== null && rangeFilters.cost.max !== null) {
+        const costNum = parseInt(entry.cost, 10);
+        if (isNaN(costNum) || costNum < rangeFilters.cost.min || costNum > rangeFilters.cost.max) {
+          shouldDisplay = false;
+        }
+      } else if (filters.cost.size > 0) {
+        if (!filters.cost.has(entry.cost)) {
+          shouldDisplay = false;
+        }
+      }
+    }
+
+    // power フィルター（個別選択 or 範囲）
+    if (shouldDisplay) {
+      if (rangeFilters.power.min !== null && rangeFilters.power.max !== null) {
+        const powerNum = parseInt(entry.power, 10);
+        if (isNaN(powerNum) || powerNum < rangeFilters.power.min || powerNum > rangeFilters.power.max) {
+          shouldDisplay = false;
+        } else if (powerNum === 0 && entry.type !== '場所札') {
+          shouldDisplay = false;
+        }
+      } else if (filters.power.size > 0) {
+        let powerMatch = filters.power.has(entry.power);
+        if (filters.power.has('0')) {
+          powerMatch = powerMatch && (entry.type === '場所札');
+        }
+        if (!powerMatch) {
+          shouldDisplay = false;
+        }
+      }
+    }
+
+    // 検索条件もチェック（キャッシュ済みの小文字値を使用）
+    if (shouldDisplay && query !== '') {
+      if (!entry.nameLower.includes(query) && !entry.attributeLower.includes(query)) {
+        shouldDisplay = false;
+      }
+    }
+
+    if (shouldDisplay) {
+      anyVisible = true;
+      card.style.display = 'block';
+
+      if (entry.doubleFor) {
+        const doubleFilters = entry.doubleFor.split(',');
+        const shouldDouble = doubleFilters.some((filter) => activeFilters.has(filter));
+
+        if (shouldDouble) {
+          const clone = card.cloneNode(true);
+          clone.setAttribute('data-cloned', 'true');
+          const cloneImg = clone.querySelector('img');
+          if (cloneImg) {
+            cloneImg.src = cloneImg.getAttribute('data-src') || cloneImg.src;
+            cloneImg.removeAttribute('data-src');
+            cloneImg.classList.add('loaded');
+            cloneImg.style.opacity = '1';
+          }
+          cardList.insertBefore(clone, card.nextSibling);
+        }
+      }
+    } else {
+      card.style.display = 'none';
+    }
+  }
+
+  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+
+  // カード数を更新
+  updateCardCount();
+};
+
+// スクロールバーの幅を取得するヘルパー関数
+const getScrollbarWidth = () => {
+  const outer = document.createElement('div');
+  outer.style.visibility = 'hidden';
+  outer.style.overflow = 'scroll';
+  outer.style.msOverflowStyle = 'scrollbar';
+  document.body.appendChild(outer);
+
+  const inner = document.createElement('div');
+  outer.appendChild(inner);
+
+  const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+  outer.parentNode.removeChild(outer);
+
+  return scrollbarWidth;
+};
+
+const attributeSortCollator =
+  typeof Intl !== 'undefined' && typeof Intl.Collator === 'function'
+    ? new Intl.Collator('ja', { usage: 'sort', sensitivity: 'base', numeric: true })
+    : null;
+
+const sortAttributes = (attributes) => {
+  const list = attributes.slice();
+  if (!attributeSortCollator) {
+    return list.sort();
+  }
+  return list.sort((a, b) => attributeSortCollator.compare(a, b));
+};
+
+const collectAllAttributes = () => {
+  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const attributes = new Set();
+  cards.forEach((card) => {
+    const value = card.dataset.attribute;
+    if (!value) {
+      return;
+    }
+    value.split(' ').forEach((attr) => {
+      if (attr) {
+        attributes.add(attr);
+      }
+    });
+  });
+  return Array.from(attributes);
+};
+
+let attributeEffectTargetOnly = true;
+
+const openModal = (filterId) => {
+  const modal = document.getElementById('modal');
+  const modalButtons = document.getElementById('modal-buttons');
+  modalButtons.innerHTML = '';
+
+  // ツールチップ要素の追加を確認
+  if (!document.querySelector('.tooltip')) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
+  }
+
+  // ツールチップ関連の関数をここで定義
+  const showTooltip = (target, text) => {
+    const tooltip = document.querySelector('.tooltip');
+    if (!tooltip) return;
+
+    tooltip.textContent = text;
+    tooltip.style.animation = 'none'; // アニメーションをリセット
+    tooltip.offsetHeight;
+    tooltip.style.animation = 'fadeOut 1.4s forwards'; // マウスオーバーで説明を表示する秒数
+
+    const rect = target.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+  };
+
+  const hideTooltip = () => {
+    const tooltip = document.querySelector('.tooltip');
+    if (!tooltip) return;
+    tooltip.style.opacity = '0';
+  };
+
+  const createModalButton = (label, className, tooltipText, valueOverride) => {
+    const newButton = document.createElement('button');
+    newButton.innerText = label;
+    if (className) {
+      newButton.className = className;
+    }
+
+    if (tooltipText) {
+      newButton.setAttribute('data-tooltip', tooltipText);
+
+      if (window.innerWidth > 768) {
+        newButton.addEventListener('mouseenter', (e) => {
+          const text = e.target.getAttribute('data-tooltip');
+          showTooltip(e.target, text);
+        });
+
+        newButton.addEventListener('mouseleave', () => {
+          hideTooltip();
+        });
+      }
+    }
+
+    newButton.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const trimmedLabel = String(label).trim();
+      const value = typeof valueOverride === 'string' ? valueOverride : trimmedLabel;
+      if (filterId === 'attribute' && trimmedLabel === '「廃」') {
+        toggleFilterCard(filterId, '廃');
+      } else {
+        toggleFilterCard(filterId, value);
+      }
+    };
+
+    return newButton;
+  };
+
+  const appendFilterElements = (elements) => {
+    elements.forEach((element) => {
+      if (element.classList.contains('filter-category')) {
+        const category = document.createElement('span');
+        category.className = 'filter-category';
+        category.textContent = element.textContent;
+        modalButtons.appendChild(category);
+        return;
+      }
+
+      if (element.classList.contains('filter-category-header')) {
+        const header = document.createElement('div');
+        header.className = 'filter-category-header';
+        const label = document.createElement('span');
+        label.className = 'filter-category-label';
+        label.textContent = element.querySelector('.filter-category-label').textContent;
+        const btn = document.createElement('button');
+        btn.className = 'range-select-btn';
+        btn.textContent = '範囲選択';
+        btn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openRangeModal(filterId);
+        };
+        header.appendChild(label);
+        header.appendChild(btn);
+        modalButtons.appendChild(header);
+        return;
+      }
+
+      const button = element;
+      const tooltipText = button.getAttribute('data-tooltip');
+      const newButton = createModalButton(button.innerText, button.className, tooltipText);
+      modalButtons.appendChild(newButton);
+    });
+  };
+
+  const filterElement = document.getElementById(filterId);
+  if (!filterElement) {
+    console.error(`Element with id ${filterId} not found`);
+    return;
+  }
+
+  const renderAttributeModal = () => {
+    modalButtons.innerHTML = '';
+
+    const allAttributes = collectAllAttributes();
+    const totalCount = allAttributes.length;
+    const header = document.createElement('div');
+    header.className = 'attribute-modal-header';
+
+    const count = document.createElement('span');
+    count.className = 'attribute-modal-count';
+    count.textContent = `全${totalCount}種類`;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'attribute-modal-toggle';
+    toggle.textContent = attributeEffectTargetOnly ? '全て表示' : '一部表示';
+    if (!attributeEffectTargetOnly) {
+      toggle.classList.add('is-off');
+    }
+    toggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      attributeEffectTargetOnly = !attributeEffectTargetOnly;
+      renderAttributeModal();
+    });
+
+    header.appendChild(count);
+    header.appendChild(toggle);
+    modalButtons.appendChild(header);
+
+    if (attributeEffectTargetOnly) {
+      const effectTargetContent = filterElement.querySelectorAll('button, .filter-category');
+      appendFilterElements(effectTargetContent);
+    } else {
+      const sortedAttributes = sortAttributes(allAttributes);
+      sortedAttributes.forEach((attribute) => {
+        const newButton = createModalButton(attribute, '');
+        modalButtons.appendChild(newButton);
+      });
+    }
+
+    updateScrollbarVisibility();
+  };
+
+  if (filterId === 'attribute') {
+    renderAttributeModal();
+  } else {
+    const filterContent = filterElement.querySelectorAll(':scope > button, :scope > .filter-category, :scope > .filter-category-header');
+    appendFilterElements(filterContent);
+  }
+
+  scrollPosition = window.pageYOffset;
+  const scrollbarWidth = getScrollbarWidth();
+
+  modal.style.display = 'block';
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+  document.body.classList.add('modal-open');
+
+  const headerContent = document.querySelector('.header-content');
+  if (headerContent) {
+    headerContent.style.paddingRight = `${scrollbarWidth}px`;
+  }
+
+  // スクロールバーの表示を更新
+  updateScrollbarVisibility();
+};
+
+const closeModal = () => {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'none';
+  document.body.classList.remove('modal-open');
+  window.scrollTo(0, scrollPosition);
+  document.body.style.top = '';
+  document.body.style.paddingRight = '';
+  document.body.style.overflow = '';
+
+  const headerContent = document.querySelector('.header-content');
+  headerContent.style.paddingRight = '';
+
+  // フィルターが適用されていない場合のみ、カードの表示をリセット
+  const hasRangeFilter = Object.values(rangeFilters).some(r => r.min !== null);
+  if (Object.values(filters).every((filter) => filter.size === 0) && !hasRangeFilter) {
+    document.getElementById('no-cards-message').style.display = 'none';
+    // ソート状態を維持したまま、カードの表示をリセット
+    filterCards();
+  }
+};
+
+const closeModalOnClick = (event) => {
+  if (event.target.id === 'modal') {
+    closeModal();
+  }
+};
+let savedScrollPosition = 0;
+
+// 現在の画像のインデックスを追跡
+let currentImageIndex = 0;
+let visibleCards = [];
+
+// 制限カード情報を取得（3枚以下の制限カードのみ表示）
+function getCardLimitText(cardName) {
+  if (typeof deckBuilder === 'undefined' || typeof deckBuilder.getBaseLimit !== 'function') return '';
+  const base = deckBuilder.getBaseLimit(cardName);
+  if (base <= 3) return `${base}枚制限カード`;
+  return '';
+}
+
+// 収録情報（data-seriesのみ）を取得
+function getSeriesOnlyText(cardName) {
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const allSeriesSet = new Set();
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.series) {
+      card.dataset.series.split(' ').forEach(s => allSeriesSet.add(s));
+    }
+  });
+  return allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+}
+
+// data-series-info（特殊演出用）を取得
+function getSeriesExtraInfo(cardName) {
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const infoSet = new Set();
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.seriesInfo) infoSet.add(card.dataset.seriesInfo);
+  });
+  return infoSet.size > 0 ? Array.from(infoSet).join('\n') : '';
+}
+
+// 収録情報 + 制限情報をseriesInfo要素に反映（画像の上、被らない）
+// data-series-infoは別要素で画像に重ねる
+function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName) {
+  // 収録 + 制限（画像の上）
+  const series = getSeriesOnlyText(cardName);
+  const limit = getCardLimitText(cardName);
+  if (!series && !limit) { seriesEl.innerHTML = ''; }
+  else if (!limit) { seriesEl.textContent = series; }
+  else {
+    const escaped = series.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    seriesEl.innerHTML = escaped + (series ? '<br>' : '') + '<span style="color:#ff9800;font-size:12px">' + limit + '</span>';
+  }
+
+  // series-info（画像に被せるオーバーレイ）
+  if (overlayEl) {
+    const extraRaw = getSeriesExtraInfo(cardName);
+    if (extraRaw) {
+      overlayEl.innerHTML = normalizeSeriesInfoText(extraRaw).replace(/\n/g, '<br>');
+      overlayEl.style.display = '';
+    } else {
+      overlayEl.innerHTML = '';
+      overlayEl.style.display = 'none';
+    }
+  }
+}
+
+// 収録情報のキャッシュ
+const seriesInfoCache = new Map();
+
+const normalizeSeriesInfoText = (text) => {
+  if (!text) return '';
+  return text.replace(/<br\s*\/?>|\\n/gi, '\n');
+};
+
+// 収録情報を効率的に取得する関数
+function getSeriesInfo(cardName) {
+  // キャッシュにある場合はそれを返す
+  if (seriesInfoCache.has(cardName)) {
+    return seriesInfoCache.get(cardName);
+  }
+
+  // キャッシュにない場合のみ検索
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  const allSeriesSet = new Set();
+  const seriesInfoSet = new Set();
+
+  allCardsWithSameName.forEach(card => {
+    if (card.dataset.seriesInfo) {
+      seriesInfoSet.add(card.dataset.seriesInfo);
+    }
+    if (card.dataset.series) {
+      const seriesList = card.dataset.series.split(' ');
+      seriesList.forEach(series => allSeriesSet.add(series));
+    }
+  });
+
+  const seriesText = allSeriesSet.size > 0 ? `収録：${Array.from(allSeriesSet).join('、')}` : '';
+  const extraInfoText = seriesInfoSet.size > 0 ? Array.from(seriesInfoSet).join('\n') : '';
+  const combinedText = [seriesText, extraInfoText].filter(Boolean).join('\n');
+  const formattedText = normalizeSeriesInfoText(combinedText);
+
+  // キャッシュに保存
+  seriesInfoCache.set(cardName, formattedText);
+  return formattedText;
+}
+
+// 画像モーダル内のボタン制御
+const updateModalControls = (cardName, controls) => {
+  const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+  const countDisplay = controls.querySelector('.card-count');
+
+  // カウント表示を更新
+  countDisplay.textContent = `${currentCount}/4`;
+
+  // ボタンの有効/無効を更新
+  addButton.disabled = currentCount >= 4;
+  removeButton.disabled = currentCount <= 0;
+
+  return currentCount;
+};
+
+// モーダル内の固定要素を一度だけ作成して再利用
+let modalContainer = null;
+let modalSeriesInfo = null;
+let modalOverlayInfo = null;
+let modalControls = null;
+let lastModalOpenTime = 0;
+
+
+const openImageModal = (src) => {
+  const now = Date.now();
+  if (now - lastModalOpenTime < 300) return;
+  lastModalOpenTime = now;
+
+  // 現在のスクロール位置を保存
+  savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+  const modal = document.getElementById('image-modal');
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+  const modalContent = modal.querySelector('.modal-content');
+
+  // デッキモーダルが表示中かどうかを確認
+  const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
+
+  // 現在の表示状態に応じてカードリストを取得（軽量化版）
+  visibleCards = isDeckModalVisible
+    ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
+    : Array.from(document.querySelectorAll('.card')).filter((card) =>
+      card.style.display !== 'none' && !card.classList.contains('hidden')
+    ); // getComputedStyleを避けた軽量版
+
+  // クリックされた画像のインデックスを取得
+  currentImageIndex = visibleCards.findIndex((card) => {
+    const cardImg = card.querySelector('img');
+    return cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src);
+  });
+
+  if (currentImageIndex === -1) return;
+
+  const currentCard = visibleCards[currentImageIndex];
+  const cardName = currentCard.dataset.name;
+
+  // 収録情報とコントロールのコンテナを作成（安全な方法）
+  const container = document.createElement('div');
+  container.className = 'image-container';
+
+  const seriesInfo = document.createElement('div');
+  seriesInfo.className = 'card-series-info';
+
+  const controls = document.createElement('div');
+  controls.className = 'card-controls';
+
+  // data-series-info用オーバーレイ（闇カード専用、画像に被せる）
+  const overlayInfo = document.createElement('div');
+  overlayInfo.className = 'card-overlay-info';
+  overlayInfo.style.display = 'none';
+
+  // 新しい画像要素を作成
+  const modalImage = document.createElement('img');
+  modalImage.id = 'modal-image';
+  modalImage.alt = 'Modal Image';
+
+  // モーダルコンテンツをクリアしてから再構築
+  modalContent.innerHTML = '';
+
+  // コンテンツを順番に追加
+  container.appendChild(seriesInfo);
+  container.appendChild(modalImage);
+  container.appendChild(overlayInfo);
+  container.appendChild(controls);
+
+  modalContent.appendChild(container);
+  modalContent.appendChild(prevButton);
+  modalContent.appendChild(nextButton);
+
+  // グローバル変数に保存（クリーンアップ用）
+  modalContainer = container;
+  modalSeriesInfo = seriesInfo;
+  modalOverlayInfo = overlayInfo;
+  modalControls = controls;
+
+  // カウント情報の取得と表示
+  let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+
+  // カードの上限枚数を取得
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+
+  const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+
+  // 既存要素の内容のみ更新（新しい要素は作成しない）
+  updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
+  modalControls.innerHTML = `
+    <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+    <div class="card-count">${currentCount}/${displayMax}</div>
+    <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+  `;
+
+  // 画像の表示処理
+  modalImage.style.opacity = '0';
+  modalImage.src = src;
+
+  // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
+  setupModalCardControlsOnce(modalControls, currentCard, cardName);
+
+  // スワイプ操作のサポート（スマホ用）
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let swiping = false;
+
+  modalImage.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    swiping = false;
+  }, { passive: true });
+
+  modalImage.addEventListener('touchmove', (e) => {
+    const diffX = Math.abs(e.touches[0].clientX - touchStartX);
+    if (diffX > 20) {
+      swiping = true;
+    }
+  }, { passive: true });
+
+  modalImage.addEventListener('touchend', (e) => {
+    if (!swiping) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    // 横方向のスワイプが縦方向より大きい場合のみ反応
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        showNextImage();
+      } else {
+        showPreviousImage();
+      }
+    }
+
+    swiping = false;
+  }, { passive: true });
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${savedScrollPosition}px`;
+  document.body.style.width = '100%';
+
+  // フェードイン効果とナビゲーションの表示を調整
+  requestAnimationFrame(() => {
+    modalImage.style.transition = 'opacity 0.3s ease';
+    modalImage.style.opacity = '1';
+
+    // 画像のロード完了後にナビゲーションボタンを表示・位置調整
+    modalImage.onload = () => {
+      updateNavigationButtons();
+      preloadAdjacentImages();
+      // 画像レンダリング後にボタン位置を確定
+      requestAnimationFrame(() => positionNavButtons());
+    };
+
+    // 既にキャッシュされている場合のためのフォールバック
+    if (modalImage.complete) {
+      updateNavigationButtons();
+      preloadAdjacentImages();
+      requestAnimationFrame(() => positionNavButtons());
+    }
+  });
+};
+
+// 画像モーダルを閉じる関数
+const closeImageModal = () => {
+  const prevButton = document.getElementById('prev-image');
+  const nextButton = document.getElementById('next-image');
+  const modal = document.getElementById('image-modal');
+  const deckModal = document.getElementById('deck-modal');
+
+  prevButton.classList.remove('visible');
+  nextButton.classList.remove('visible');
+
+  modal.style.display = 'none';
+
+  // デッキ作成画面が開いているかチェック
+  if (deckModal && deckModal.style.display === 'block') {
+    // デッキ作成画面が開いている場合はスクロール禁止を維持（position/topは必ずリセット）
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+  } else {
+    // デッキ作成画面が開いていない場合は通常通りスクロール可能に
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollPosition);
+  }
+
+  // モーダル関連の変数をリセット（重要: 状態を完全にクリア）
+  currentModalCard = null;
+  currentModalCardName = null;
+  modalControlsInitialized = false;
+
+  // 真の根本解決：作成した固定DOM要素を完全クリーンアップ（クラッシュ防止）
+  if (modalContainer && modalContainer.parentNode) {
+    modalContainer.parentNode.removeChild(modalContainer);
+  }
+  modalContainer = null;
+  modalSeriesInfo = null;
+  modalControls = null;
+
+  // メモリリーク対策（全デバイス共通）
+  if (seriesInfoCache.size > 100) {
+    seriesInfoCache.clear();
+  }
+
+  setTimeout(() => {
+    handleScroll();
+  }, 100);
+};
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// handleScroll 関数を更新
+const handleScroll = () => {
+  const topButton = document.getElementById('topButton');
+  const imageModal = document.getElementById('image-modal');
+  if (window.pageYOffset > 300 && imageModal.style.display !== 'flex') {
+    topButton.style.display = 'flex';
+    topButton.classList.add('show');
+  } else {
+    topButton.style.display = 'none';
+    topButton.classList.remove('show');
+  }
+};
+
+window.addEventListener('scroll', handleScroll);
+
+// ページ読み込み時にも実行
+document.addEventListener('DOMContentLoaded', handleScroll);
+
+// ハンバーガーメニュー関連
+document.addEventListener('DOMContentLoaded', function () {
+  const hamburgerMenu = document.querySelector('.hamburger-menu');
+  const mobileNav = document.querySelector('.mobile-nav');
+  const menuOverlay = document.querySelector('.menu-overlay');
+  const closeMenuButton = document.querySelector('.close-menu');
+
+  // 画像モーダルのイベントリスナーを追加
+  const imageModal = document.getElementById('image-modal');
+  imageModal.addEventListener('click', function (event) {
+    // 画像モーダル内のどの要素をクリックしても閉じるようにする
+    // ただし、×アイコンはポインターイベントを無効にしているので影響しない
+    closeImageModal();
+  });
+
+  // DOMContentLoaded イベントリスナー内の toggleMenu 関数
+  function toggleMenu() {
+    hamburgerMenu.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+
+    if (mobileNav.classList.contains('active')) {
+      // 現在のスクロール位置を保存
+      const scrollPosition = window.pageYOffset;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${scrollPosition}px`;
+      document.body.style.touchAction = 'none';
+    } else {
+      // スクロール位置を復元
+      const scrollPosition = Math.abs(parseInt(document.body.style.top || '0'));
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      document.body.style.touchAction = '';
+      window.scrollTo(0, scrollPosition);
+    }
+
+    resetFontSize();
+  }
+
+  hamburgerMenu.addEventListener('click', toggleMenu);
+  menuOverlay.addEventListener('click', toggleMenu);
+
+  if (closeMenuButton) {
+    closeMenuButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      toggleMenu();
+    });
+  }
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) {
+      hamburgerMenu.classList.remove('active');
+      mobileNav.classList.remove('active');
+      menuOverlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    }
+  });
+
+  // アコーディオンメニューの開閉
+  document.querySelectorAll('.nav-accordion-toggle').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      const children = this.nextElementSibling;
+      const isOpen = children.classList.contains('open');
+      children.classList.toggle('open', !isOpen);
+      this.setAttribute('aria-expanded', String(!isOpen));
+      this.querySelector('.nav-accordion-icon').textContent = isOpen ? '＋' : '－';
+    });
+  });
+
+  deckManager.initialize();
+});
+
+document.querySelectorAll('.card-image-container').forEach((container) => {
+  container.addEventListener('mouseover', () => {
+    if (!container.querySelector('.card-image-hover')) {
+      const img = container.querySelector('img');
+      const hoverImg = img.cloneNode(true);
+      hoverImg.classList.add('card-image-hover');
+      container.appendChild(hoverImg);
+    }
+  });
+});
+
+// フィルターの該当表示
+
+let activeFiltersResizeHandler = null;
+
+function updateActiveFilters() {
+  const activeFilters = [];
+  for (const [key, values] of Object.entries(filters)) {
+    if (values.size > 0) {
+      values.forEach((value) => {
+        activeFilters.push({ key, value });
+      });
+    }
+  }
+
+  // 範囲フィルターをアクティブフィルターに追加
+  for (const [key, range] of Object.entries(rangeFilters)) {
+    if (range.min !== null && range.max !== null) {
+      activeFilters.push({ key, value: `${range.min}～${range.max}`, isRange: true });
+    }
+  }
+
+  // フィルターキーと表示名のマッピング
+  const filterLabels = {
+    cost: 'コスト：',
+    power: '力：'
+  };
+
+  const filterDisplay = activeFilters.map((filter) => {
+    const label = filterLabels[filter.key] || '';
+    const displayText = label ? `${label}${filter.value}` : filter.value;
+    if (filter.isRange) {
+      return `<button class="filter-item" onclick="removeRangeFilter('${filter.key}')">${displayText}</button>`;
+    }
+    return `<button class="filter-item" onclick="removeFilter('${filter.key}', '${filter.value}')">${displayText}</button>`;
+  }).join('');
+
+  const pcElement = document.getElementById('active-filters-pc');
+  const mobileElement = document.getElementById('active-filters-mobile');
+
+  function setDisplayBasedOnScreenSize() {
+    const isMobile = window.innerWidth <= 768;
+    if (activeFilters.length > 0) {
+      pcElement.innerHTML = filterDisplay;
+      mobileElement.innerHTML = filterDisplay;
+      pcElement.style.display = isMobile ? 'none' : 'flex';
+      mobileElement.style.display = isMobile ? 'flex' : 'none';
+    } else {
+      pcElement.style.display = 'none';
+      mobileElement.style.display = 'none';
+    }
+  }
+
+  setDisplayBasedOnScreenSize();
+
+  if (activeFiltersResizeHandler) {
+    window.removeEventListener('resize', activeFiltersResizeHandler);
+  }
+  activeFiltersResizeHandler = setDisplayBasedOnScreenSize;
+  window.addEventListener('resize', activeFiltersResizeHandler);
+}
+
+function removeFilter(key, value) {
+  if (filters[key]) {
+    filters[key].delete(value);
+    if (key === 'season') {
+      syncSeasonAutoFilters();
+    }
+    filterCards();
+    updateActiveFilters();
+    updateFilterDetails();
+    saveFiltersToLocalStorage();
+  }
+}
+
+function removeRangeFilter(key) {
+  if (rangeFilters[key]) {
+    rangeFilters[key] = { min: null, max: null };
+    filterCards();
+    updateActiveFilters();
+    updateFilterDetails();
+    saveFiltersToLocalStorage();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateActiveFilters);
+
+const loadVisibleImages = () => {
+  const images = document.querySelectorAll('.card img:not(.loaded)');
+  const viewportHeight = window.innerHeight;
+  const preloadMargin = 300;
+  const visibleImages = [];
+
+  images.forEach((img) => {
+    const card = img.closest('.card');
+    if (card && (card.style.display === 'none' || card.classList.contains('hidden'))) {
+      return;
+    }
+    const rect = img.getBoundingClientRect();
+    if (rect.bottom >= -preloadMargin && rect.top <= viewportHeight + preloadMargin) {
+      visibleImages.push({ img, top: rect.top });
+    }
+  });
+
+  visibleImages.sort((a, b) => a.top - b.top);
+
+  for (let i = visibleImages.length - 1; i >= 0; i--) {
+    loadImage(visibleImages[i].img, true);
+  }
+};
+
+// 並び「季節」の実装
+const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
+
+const sortCardsBySeason = () => {
+  // 季節ボタンがクリックされたら、sortCriteriaを'season'に設定
+  sortCriteria = 'season';
+
+  // 順序を反転
+  if (window.seasonSortOrder === 'asc') {
+    window.seasonSortOrder = 'desc';
+  } else {
+    window.seasonSortOrder = 'asc';
+  }
+
+  const cardList = document.getElementById('card-list');
+  const cards = Array.from(document.querySelectorAll('.card'));
+
+  // 以下のソートロジックは同じ
+  cards.sort((a, b) => {
+    const aSeasons = a.dataset.season.split(' ');
+    const bSeasons = b.dataset.season.split(' ');
+
+    const aHasMixed = aSeasons.includes('混化');
+    const bHasMixed = bSeasons.includes('混化');
+
+    if (aHasMixed && bHasMixed) {
+      return 0;
+    } else if (aHasMixed) {
+      return window.seasonSortOrder === 'asc' ? 1 : -1;
+    } else if (bHasMixed) {
+      return window.seasonSortOrder === 'asc' ? -1 : 1;
+    } else {
+      const aSeasonIndex = seasonOrder.indexOf(aSeasons[0]);
+      const bSeasonIndex = seasonOrder.indexOf(bSeasons[0]);
+      return window.seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
+    }
+  });
+
+  cards.forEach((card) => cardList.appendChild(card));
+  loadVisibleImages();
+  updateSeasonSortButtonState();
+  saveFiltersToLocalStorage();
+};
+
+const updateSeasonSortButtonState = () => {
+  const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+  seasonSortButton.classList.toggle('active', true); // 常にアクティブ
+  seasonSortButton.classList.toggle('desc', window.seasonSortOrder === 'desc');
+};
+
+// フィルター条件をローカルストレージに保存する関数（キャッシュ機能）
+const saveFiltersToLocalStorage = () => {
+  const filtersToSave = {};
+  for (const [key, value] of Object.entries(filters)) {
+    filtersToSave[key] = Array.from(value);
+  }
+
+  // 現在のソート状態を保存
+  const sortState = {
+    seasonSortOrder: window.seasonSortOrder,
+    sortCriteria: sortCriteria,
+    sortOrder: sortOrder
+  };
+
+  localStorage.setItem('cardFilters', JSON.stringify(filtersToSave));
+  localStorage.setItem('sortState', JSON.stringify(sortState));
+  localStorage.setItem('rangeFilters', JSON.stringify(rangeFilters));
+};
+
+// ローカルストレージからフィルター条件を読み込む関数
+const loadFiltersFromLocalStorage = () => {
+  // 保存されたデータを一度に読み込み
+  const savedFilters = JSON.parse(localStorage.getItem('cardFilters'));
+  const savedSortState = JSON.parse(localStorage.getItem('sortState'));
+
+  // フィルターの適用
+  if (savedFilters) {
+    for (const [key, value] of Object.entries(savedFilters)) {
+      filters[key] = new Set(value);
+    }
+  }
+  // 範囲フィルターの復元
+  const savedRange = JSON.parse(localStorage.getItem('rangeFilters'));
+  if (savedRange) {
+    for (const [key, value] of Object.entries(savedRange)) {
+      if (rangeFilters[key]) {
+        rangeFilters[key] = value;
+      }
+    }
+  }
+  syncSeasonAutoFilters();
+
+  // ソート状態の復元
+  if (savedSortState) {
+    window.seasonSortOrder = savedSortState.seasonSortOrder;
+    sortCriteria = savedSortState.sortCriteria;
+    sortOrder = savedSortState.sortOrder;
+
+    // DOMの更新を一度にまとめる
+    requestAnimationFrame(() => {
+      const cardList = document.getElementById('card-list');
+      const cards = Array.from(document.querySelectorAll('.card'));
+
+      if (sortCriteria === 'season') {
+        // 季節ソートの場合
+        cards.sort((a, b) => {
+          const aSeasons = a.dataset.season.split(' ');
+          const bSeasons = b.dataset.season.split(' ');
+          const aHasMixed = aSeasons.includes('混化');
+          const bHasMixed = bSeasons.includes('混化');
+
+          if (aHasMixed && bHasMixed) {
+            return 0;
+          } else if (aHasMixed) {
+            return window.seasonSortOrder === 'asc' ? 1 : -1;
+          } else if (bHasMixed) {
+            return window.seasonSortOrder === 'asc' ? -1 : 1;
+          } else {
+            const aSeasonIndex = seasonOrder.indexOf(aSeasons[0]);
+            const bSeasonIndex = seasonOrder.indexOf(bSeasons[0]);
+            return window.seasonSortOrder === 'asc' ? aSeasonIndex - bSeasonIndex : bSeasonIndex - aSeasonIndex;
+          }
+        });
+
+        // 季節ボタンの状態を更新
+        const seasonSortButton = document.querySelector('.sort-buttons button[data-filter="season"]');
+        if (seasonSortButton) {
+          seasonSortButton.classList.add('active');
+          seasonSortButton.classList.toggle('desc', window.seasonSortOrder === 'desc');
+        }
+      } else if (sortCriteria) {
+        // 通常のソートの場合
+        if (sortCriteria === 'type') {
+          const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+          cards.sort((a, b) => {
+            const aType = a.dataset.type;
+            const bType = b.dataset.type;
+            const aIndex = typeOrder.indexOf(aType);
+            const bIndex = typeOrder.indexOf(bType);
+            return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+          });
+        } else {
+          cards.sort((a, b) => {
+            const aValue = parseInt(a.dataset[sortCriteria]) || 0;
+            const bValue = parseInt(b.dataset[sortCriteria]) || 0;
+            return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+          });
+        }
+
+        // ソートボタンの状態を更新
+        const sortButton = document.querySelector(`.sort-buttons button[data-filter="${sortCriteria}"]`);
+        if (sortButton) {
+          sortButton.classList.add('active');
+          sortButton.classList.toggle('desc', sortOrder === 'desc');
+        }
+      }
+
+      // パフォーマンス改善: DocumentFragment を使用
+      const fragment = document.createDocumentFragment();
+      cards.forEach((card) => fragment.appendChild(card));
+      cardList.appendChild(fragment);
+
+      // フィルターとアクティブ表示の更新
+      filterCards();
+      updateActiveFilters();
+      updateFilterDetails();
+    });
+  } else {
+    // ソート状態がない場合は単純にフィルターを適用
+    filterCards();
+    updateActiveFilters();
+    updateFilterDetails();
+  }
+};
+
+// 画像のプリロード関数を追加
+const preloadModalImage = (targetImg) => {
+  if (targetImg && targetImg.hasAttribute('data-src')) {
+    const src = targetImg.getAttribute('data-src');
+    targetImg.src = src;
+    targetImg.removeAttribute('data-src');
+    targetImg.classList.add('loaded');
+    targetImg.style.opacity = '1';
+  }
+};
+
+// 周辺画像のプリロード
+const preloadAdjacentImages = () => {
+  // 前の画像をプリロード
+  if (currentImageIndex > 0) {
+    const prevCard = visibleCards[currentImageIndex - 1];
+    preloadModalImage(prevCard.querySelector('img'));
+  }
+
+  // 次の画像をプリロード
+  if (currentImageIndex < visibleCards.length - 1) {
+    const nextCard = visibleCards[currentImageIndex + 1];
+    preloadModalImage(nextCard.querySelector('img'));
+  }
+};
+
+// showNextImage関数
+const showNextImage = () => {
+  if (currentImageIndex >= visibleCards.length - 1) return;
+
+  const currentCard = visibleCards[currentImageIndex];
+  let nextIndex = currentImageIndex + 1;
+
+  // 次のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
+  while (nextIndex < visibleCards.length && (
+    visibleCards[nextIndex].hasAttribute('data-empty') ||
+    (visibleCards[nextIndex].dataset.name === currentCard.dataset.name &&
+      visibleCards[nextIndex].dataset.number === currentCard.dataset.number)
+  )) {
+    nextIndex++;
+  }
+
+  // 次のカードが有効なカードの場合のみ切り替え
+  if (nextIndex < visibleCards.length && !visibleCards[nextIndex].hasAttribute('data-empty')) {
+    currentImageIndex = nextIndex;
+    const nextCard = visibleCards[nextIndex];
+    const img = nextCard.querySelector('img');
+    const src = img.getAttribute('data-src') || img.src;
+
+    const modalImage = document.getElementById('modal-image');
+    if (modalImage) {
+      modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
+      modalImage.src = src;
+    }
+
+    const cardName = nextCard.dataset.name;
+
+    // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
+    if (modalControls && modalSeriesInfo) {
+      // 収録情報を更新
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
+      // カウント情報を更新
+      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let maxAllowed = 4;
+      if (deckBuilder.infiniteCardLimit.has(cardName)) {
+        maxAllowed = Infinity;
+      } else if (deckBuilder.tenCardLimit.has(cardName)) {
+        maxAllowed = 10;
+      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+        maxAllowed = 7;
+      }
+
+      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+      modalControls.innerHTML = `
+        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+        <div class="card-count">${currentCount}/${displayMax}</div>
+        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+      `;
+
+      // カード情報とボタン状態を更新
+      currentModalCard = nextCard;
+      currentModalCardName = cardName;
+
+      // 新しいボタンにイベントリスナーを設定
+      setupModalButtonListeners(modalControls);
+
+      updateModalButtonStates(modalControls, cardName);
+    }
+
+    updateNavigationButtons();
+    preloadAdjacentImages();
+  }
+};
+
+// showPreviousImage関数
+const showPreviousImage = () => {
+  if (currentImageIndex <= 0) return;
+
+  const currentCard = visibleCards[currentImageIndex];
+  let prevIndex = currentImageIndex - 1;
+
+  // 前のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
+  while (prevIndex >= 0 && (
+    visibleCards[prevIndex].hasAttribute('data-empty') ||
+    (visibleCards[prevIndex].dataset.name === currentCard.dataset.name &&
+      visibleCards[prevIndex].dataset.number === currentCard.dataset.number)
+  )) {
+    prevIndex--;
+  }
+
+  // 前のカードが有効なカードの場合のみ切り替え
+  if (prevIndex >= 0 && !visibleCards[prevIndex].hasAttribute('data-empty')) {
+    currentImageIndex = prevIndex;
+    const prevCard = visibleCards[prevIndex];
+    const img = prevCard.querySelector('img');
+    const src = img.getAttribute('data-src') || img.src;
+
+    const modalImage = document.getElementById('modal-image');
+    if (modalImage) {
+      modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
+      modalImage.src = src;
+    }
+
+    const cardName = prevCard.dataset.name;
+
+    // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
+    if (modalControls && modalSeriesInfo) {
+      // 収録情報を更新
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+
+      // カウント情報を更新
+      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let maxAllowed = 4;
+      if (deckBuilder.infiniteCardLimit.has(cardName)) {
+        maxAllowed = Infinity;
+      } else if (deckBuilder.tenCardLimit.has(cardName)) {
+        maxAllowed = 10;
+      } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+        maxAllowed = 7;
+      }
+
+      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+      modalControls.innerHTML = `
+        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+        <div class="card-count">${currentCount}/${displayMax}</div>
+        <button class="card-control-button" id="add-card" ${currentCount >= maxAllowed ? 'disabled' : ''}>＋</button>
+      `;
+
+      // カード情報とボタン状態を更新
+      currentModalCard = prevCard;
+      currentModalCardName = cardName;
+
+      // 新しいボタンにイベントリスナーを設定
+      setupModalButtonListeners(modalControls);
+
+      updateModalButtonStates(modalControls, cardName);
+    }
+
+    updateNavigationButtons();
+    preloadAdjacentImages();
+  }
+};
+
+// ページ読み込み時にローカルストレージからフィルター条件を読み込む
+document.addEventListener('DOMContentLoaded', loadFiltersFromLocalStorage);
+
+// デッキの状態をローカルストレージに保存
+const saveDeckState = () => {
+  localStorage.setItem('deckState', JSON.stringify(deckState));
+};
+
+// ローカルストレージからデッキの状態を読み込み
+const loadDeckState = () => {
+  const saved = localStorage.getItem('deckState');
+  if (saved) {
+    Object.assign(deckState, JSON.parse(saved));
+  }
+};
+
+// デッキビルダーを開く関数
+function openDeckBuilder() {
+  const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || window.scrollY || 0;
+
+  const modal = document.getElementById('deck-modal');
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  // フェードイン
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+    deckBuilder.savedScrollPosition = scrollPosition;
+    deckBuilder.resizeDisplay(); // サイズを調整
+  });
+}
+
+// デッキビルダーの状態管理
+const deckBuilder = {
+  deck: [],
+  maxCards: 4,
+  restrictedCards: new Set(['人魚の活き血（にんぎょのいきち）', '肥川の大蛇（ひのかわのおろち）', "消さなきゃ（けさなきゃ）", "暗躍者(あんやくしゃ)", "仮想世界の外(かそうせかいのそと)", "最恐札の地図（とれかのちず）", "あなただけがいない場所（あなただけがいないばしょ）", "大災害（だいさいがい）"]),
+  twoCardLimit: new Set(['悠習の古日記（ゆうしゅうのこにっき）', "本物のお化け屋敷（ほんもののおばけやしき）", "つちのこ", "新府城（しんぶじょう）", "札絵れあ（ふだえれあ）", "血の視線（ちのしせん）", "死神の蝋燭（しにがみのろうそく）", "失われた海域(うしなわれたかいいき)", "赤津川（あかつがわ）", "いっしょにあそぼ・・・"]),
+  sevenCardLimit: new Set(['山口：7つの家（やまぐち：ななつのいえ）']), // 7枚制限カード
+  tenCardLimit: new Set(['火の玉（ひのたま）']), // 10枚制限カード
+  infiniteCardLimit: new Set(['複製体(くろーん)']), // 無限枚数制限カード
+  savedScrollPosition: 0, // スクロール位置保存用の変数
+
+  // デッキビルダーのopen/close関数
+  open() {
+    const modal = document.getElementById('deck-modal');
+    modal.style.display = 'block';
+
+    // スクロール位置を保存
+    this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    // body要素の固定
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = `-${this.savedScrollPosition}px`;
+
+    // フェードイン
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+      this.resizeDisplay();
+    });
+  },
+
+  close() {
+    const modal = document.getElementById('deck-modal');
+    modal.classList.remove('active');
+
+    // スクロール位置を復元
+    const scrollPosition = this.savedScrollPosition;
+
+    // body要素のスタイルを解除
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+
+    // スマホの場合の追加処理を解除
+    if (window.innerWidth <= 768) {
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.position = '';
+      document.documentElement.style.height = '';
+    }
+
+    // スクロール位置を復元
+    window.scrollTo(0, scrollPosition);
+
+    setTimeout(() => {
+      modal.style.display = 'none';
+      updateCardCountBadges();
+    }, 300);
+  },
+
+  _showLimitMsg(text) {
+    document.querySelectorAll('.deck-message, .deck-limit-message').forEach(el => el.remove());
+    clearTimeout(this._limitMsgTimer);
+    const message = document.createElement('div');
+    message.className = 'deck-limit-message';
+    message.textContent = text;
+    document.body.appendChild(message);
+    this._limitMsgTimer = setTimeout(() => message.remove(), 2000);
+  },
+
+  showLimitMessage() {
+    this._showLimitMsg('制限カードはデッキに1枚まで。');
+  },
+
+  showTwoCardMessage() {
+    this._showLimitMsg('準制限カードはデッキに2枚まで。');
+  },
+
+  showTenCardMessage() {
+    this._showLimitMsg('このカードはデッキに10枚まで。');
+  },
+
+  showSevenCardMessage() {
+    this._showLimitMsg('このカードはデッキに7枚まで。');
+  },
+
+  // カードを追加
+  addCard(card) {
+    const cardName = card.dataset.name;
+    const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
+
+    if (this.infiniteCardLimit.has(cardName)) {
+      // 無限枚数制限カードは制限なし
+    } else if (this.tenCardLimit.has(cardName)) {
+      if (sameNameCount >= 10) {
+        this.showTenCardMessage();
+        return false;
+      }
+    } else if (this.sevenCardLimit.has(cardName)) {
+      if (sameNameCount >= 7) {
+        this.showSevenCardMessage('このカードはデッキに7枚まで。');
+        return false;
+      }
+    } else if (this.restrictedCards.has(cardName) && sameNameCount >= 1) {
+      this.showLimitMessage();
+      return false;
+    } else if (this.twoCardLimit.has(cardName) && sameNameCount >= 2) {
+      // 追加：2枚制限カードのチェック
+      this.showTwoCardMessage(); // 追加：2枚制限メッセージの表示
+      return false;
+    } else if (sameNameCount >= this.maxCards) {
+      this.showMessage('同じカードはデッキに4枚まで。');
+      return false;
+    }
+
+    // カードを追加
+    this.deck.push(card);
+    this.updateDisplay();
+    this.updateDeckCount();
+
+    // 現在のデッキを自動保存
+    deckManager.saveDeck(deckManager.currentDeckId);
+    return true;
+  },
+
+  // カードを削除（番号のみで識別）
+  removeCard(cardName, cardNumber) {
+    const index = this.deck.findIndex((card) => card.dataset.number === cardNumber);
+
+    if (index !== -1) {
+      this.deck.splice(index, 1);
+      this.updateDisplay();
+      this.updateDeckCount();
+
+      // 現在のデッキを自動保存
+      deckManager.saveDeck(deckManager.currentDeckId);
+    }
+  },
+
+  // デッキビルダーのupdateDisplay関数を更新
+  updateDisplay() {
+    const display = document.getElementById('deck-display');
+    if (!display) return;
+
+    // アニメーション中のちらつきを防ぐ
+    display.style.willChange = 'contents';
+
+    // 既存の内容をクリア
+    display.innerHTML = '';
+
+    // 実カードをソートして配置
+    const sortedDeck = this.sortDeck([...this.deck]);
+    const totalCards = 40;
+    const currentCards = sortedDeck.length;
+    const emptySlots = currentCards <= 40 ? totalCards - currentCards : 0;
+
+    // まず実カードを配置
+    sortedDeck.forEach((card) => {
+      const cardElement = this.createDeckCard(card);
+      display.appendChild(cardElement);
+    });
+
+    // 40枚以下の場合、残りのスロットに透明カードを配置
+    if (currentCards <= 40) {
+      for (let i = 0; i < emptySlots; i++) {
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'deck-card';
+        emptyCard.setAttribute('data-empty', 'true');
+
+        const img = document.createElement('img');
+        img.src =
+          'data:image/svg+xml,' +
+          encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 745 1041">
+    <rect width="745" height="1041" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="2" rx="8" />
+  </svg>
+`);
+        img.alt = 'Empty Card Slot';
+
+        emptyCard.appendChild(img);
+        display.appendChild(emptyCard);
+      }
+      display.classList.add('fixed-grid');
+    } else {
+      display.classList.remove('fixed-grid');
+    }
+
+    this.resizeDisplay();
+    this.updateDeckCount();
+    updateCardCountBadges();
+
+    // デッキカウンターをボタン化
+    const deckCounter = document.querySelector('.deck-counter');
+    if (deckCounter) {
+      deckCounter.classList.add('deck-counter-button');
+      deckCounter.onclick = () => this.showDistributionModal();
+    }
+  },
+
+  // createDeckCard関数
+  createDeckCard(card) {
+    const cardElement = document.createElement('div');
+    cardElement.className = 'deck-card';
+
+    // データ属性を設定
+    Object.keys(card.dataset).forEach((key) => {
+      cardElement.dataset[key] = card.dataset[key];
+    });
+
+    // 画像要素の作成
+    const img = document.createElement('img');
+    img.src = card.querySelector('img').src;
+    img.alt = card.dataset.name;
+    img.classList.add('card-image');
+
+    // ボタングループの作成
+    const buttons = document.createElement('div');
+    buttons.className = 'card-buttons';
+
+    const addButton = document.createElement('button');
+    addButton.className = 'card-add-button';
+    addButton.onclick = (e) => {
+      e.stopPropagation();
+      this.addCard(card.cloneNode(true));
+    };
+
+    const removeButton = document.createElement('button');
+    removeButton.className = 'card-remove-button';
+    removeButton.onclick = (e) => {
+      e.stopPropagation();
+      this.removeCard(null, card.dataset.number);
+    };
+
+    buttons.appendChild(addButton);
+    buttons.appendChild(removeButton);
+
+    // 要素を組み立て
+    cardElement.appendChild(img);
+    cardElement.appendChild(buttons);
+
+    // クリックイベントの設定（画像表示用）
+    cardElement.onclick = (e) => {
+      if (!e.target.closest('.card-buttons')) {
+        const deckDisplay = document.getElementById('deck-display');
+        if (!deckDisplay) return;
+        const deckCards = Array.from(deckDisplay.querySelectorAll('.deck-card:not([data-empty="true"])'));
+        currentImageIndex = deckCards.indexOf(cardElement);
+        visibleCards = deckCards;
+        openImageModal(img.src);
+      }
+    };
+
+    return cardElement;
+  },
+
+  // resizeDisplayメソッド
+  resizeDisplay() {
+    const display = document.getElementById('deck-display');
+    if (!display) return;
+
+    const deckMenu = document.querySelector('.deck-menu');
+    const menuHeight = deckMenu ? deckMenu.offsetHeight : 0;
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+    const maxHeight = windowHeight - menuHeight - 20;
+    const container = display.closest('.deck-modal-content');
+    let availableWidth = windowWidth * 0.95;
+    if (container) {
+      const styles = window.getComputedStyle(container);
+      const paddingX =
+        (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+      const containerWidth = container.clientWidth || 0;
+      if (containerWidth > 0) {
+        availableWidth = Math.max(0, containerWidth - paddingX);
+      }
+    }
+
+    const cards = display.getElementsByClassName('deck-card');
+    if (cards.length === 0) return;
+
+    const isFixedGrid = display.classList.contains('fixed-grid');
+    const isMobile = windowWidth <= 768;
+    const isLandscape = windowWidth > windowHeight;
+
+    // グリッドの列数を決定
+    const cols = isMobile ? (isLandscape ? 8 : 5) : 8;
+    // 必要な行数を計算
+    const rows = isFixedGrid ? (isMobile ? (isLandscape ? 5 : 8) : 5) : Math.ceil(cards.length / cols);
+
+    const aspectRatio = 1041 / 745;
+
+    // 利用可能な最大幅と高さから、カードの最大サイズを計算
+    const maxCardWidth = (availableWidth - (cols - 1)) / cols;
+    const maxCardHeight = (maxHeight - (rows - 1)) / rows;
+
+    // アスペクト比を維持しながら、画面に収まる最大サイズを計算
+    let cardWidth = Math.min(maxCardWidth, maxCardHeight / aspectRatio);
+    let cardHeight = cardWidth * aspectRatio;
+
+    // グリッド全体の幅を計算（カード幅 × 列数 + 隙間）
+    const totalWidth = cardWidth * cols + (cols - 1);
+
+    // スタイルを適用
+    display.style.width = `${totalWidth}px`;
+    display.style.height = `${cardHeight * rows + (rows - 1)}px`;
+    display.style.justifyContent = 'center';
+    display.style.alignContent = 'center';
+
+    // 各カードにサイズを適用
+    Array.from(cards).forEach((card) => {
+      card.style.width = `${cardWidth}px`;
+      card.style.height = `${cardHeight}px`;
+    });
+  },
+
+  // デッキをソート
+  // sortDeck関数
+  sortDeck(cards) {
+    // cardsが配列でない場合や空の場合のチェック
+    if (!Array.isArray(cards) || cards.length === 0) {
+      return [];
+    }
+
+    const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+    const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
+
+    // カードを名前でグループ化する前に、有効なデータのチェック
+    const cardGroups = cards.reduce((groups, card) => {
+      if (card && card.dataset && card.dataset.name) {
+        const name = card.dataset.name;
+        if (!groups[name]) {
+          groups[name] = [];
+        }
+        groups[name].push(card);
+      }
+      return groups;
+    }, {});
+
+    return Object.values(cardGroups)
+      .flat()
+      .sort((a, b) => {
+        // まず札種類でソート
+        const typeA = typeOrder.indexOf(a.dataset.type);
+        const typeB = typeOrder.indexOf(b.dataset.type);
+        if (typeA !== typeB) return typeA - typeB;
+
+        // 次にコストでソート
+        const costCompare = (parseInt(a.dataset.cost) || 0) - (parseInt(b.dataset.cost) || 0);
+        if (costCompare !== 0) return costCompare;
+
+        // 次に季節でソート
+        const seasonA = seasonOrder.indexOf(a.dataset.season);
+        const seasonB = seasonOrder.indexOf(b.dataset.season);
+        if (seasonA !== seasonB) return seasonA - seasonB;
+
+        // 最後にカード名でソート
+        return a.dataset.name.localeCompare(b.dataset.name);
+      });
+  },
+
+  // デッキ枚数表示を更新
+  updateDeckCount() {
+    const deckCounter = document.querySelector('.deck-counter');
+    if (deckCounter) {
+      deckCounter.textContent = `${this.deck.length}枚`;
+      // 39枚以下の場合、warningクラスを追加
+      if (this.deck.length <= 39) {
+        deckCounter.classList.add('warning');
+      } else {
+        deckCounter.classList.remove('warning');
+      }
+
+      // ここでもクリックイベントを設定（念のため）
+      deckCounter.classList.add('deck-counter-button');
+      deckCounter.onclick = () => this.showDistributionModal();
+    }
+
+    const deckButton = document.getElementById('deckButton');
+    const headerIconBadge = document.querySelector('.deck-count-badge');
+
+    if (this.deck.length > 0) {
+      if (deckButton) {
+        deckButton.setAttribute('data-count', this.deck.length);
+      }
+      if (headerIconBadge) {
+        headerIconBadge.textContent = this.deck.length;
+        headerIconBadge.style.display = 'block';
+      }
+    } else {
+      if (deckButton) {
+        deckButton.removeAttribute('data-count');
+      }
+      if (headerIconBadge) {
+        headerIconBadge.style.display = 'none';
+      }
+    }
+  },
+
+  // メッセージを表示
+  showMessage(message) {
+    document.querySelectorAll('.deck-message, .deck-limit-message').forEach(el => el.remove());
+    clearTimeout(this._messageTimer);
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'deck-message';
+    messageDiv.textContent = message;
+    document.body.appendChild(messageDiv);
+
+    this._messageTimer = setTimeout(() => {
+      messageDiv.remove();
+    }, 2000);
+  },
+
+  // ローカルストレージに保存
+  saveToLocalStorage() {
+    const deckData = this.deck.map((card) => ({
+      name: card.dataset.name,
+      type: card.dataset.type,
+      season: card.dataset.season,
+      cost: card.dataset.cost,
+      number: card.dataset.number,
+      src: card.querySelector('img').src
+    }));
+    localStorage.setItem('kannagi-deck', JSON.stringify(deckData));
+  },
+
+  // ローカルストレージから読み込み
+  // deckBuilder オブジェクト内の loadFromLocalStorage メソッド
+  loadFromLocalStorage() {
+    const saved = localStorage.getItem('kannagi-deck');
+    if (saved) {
+      try {
+        const deckData = JSON.parse(saved);
+        this.deck = deckData
+          .map((data) => {
+            // カード一覧から対応するカードを探す
+            const originalCard = document.querySelector(`.card[data-number="${data.number}"]`);
+            if (originalCard) {
+              const card = document.createElement('div');
+              card.className = 'card';
+
+              // データ属性を設定
+              Object.assign(card.dataset, {
+                name: data.name,
+                type: data.type,
+                season: data.season,
+                cost: data.cost,
+                number: data.number
+              });
+
+              // 主な属性の集計に必要な属性も復元
+              if (originalCard.dataset.attribute) {
+                card.dataset.attribute = originalCard.dataset.attribute;
+              }
+
+              // 画像要素を作成
+              const img = document.createElement('img');
+              const originalImg = originalCard.querySelector('img');
+              img.src = originalImg.getAttribute('data-src') || originalImg.src;
+              img.alt = data.name;
+
+              // 画像のロード完了時の処理
+              img.onload = () => {
+                img.style.opacity = '1';
+                img.classList.add('loaded');
+              };
+
+              card.appendChild(img);
+              return card;
+            }
+            return null;
+          })
+          .filter((card) => card !== null); // nullを除外
+
+        this.updateDisplay();
+        this.updateDeckCount();
+      } catch (e) {
+        console.error('デッキデータの読み込みに失敗しました:', e);
+        this.deck = [];
+        this.updateDisplay();
+        this.updateDeckCount();
+      }
+    }
+  },
+
+  // カード分布モーダルを表示する関数
+  showDistributionModal() {
+    // モーダル表示時にスクロール禁止
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed'; // より確実なスクロール禁止
+    document.body.style.width = '100%';
+
+    const modal = document.createElement('div');
+    modal.className = 'distribution-modal';
+
+    const content = document.createElement('div');
+    content.className = 'distribution-content';
+
+    // デッキ名・枚数ヘッダー
+    const deckHeader = document.createElement('div');
+    deckHeader.className = 'distribution-header';
+    const deckId = deckManager.currentDeckId;
+    const deckNameText = (deckManager.decks[deckId] && deckManager.decks[deckId].name) || `デッキ${deckId}`;
+    const deckNameEl = document.createElement('div');
+    deckNameEl.className = 'distribution-header-name';
+    deckNameEl.textContent = deckNameText;
+    const deckCountEl = document.createElement('div');
+    deckCountEl.className = 'distribution-header-count';
+    deckCountEl.textContent = `計${deckBuilder.deck.length}枚`;
+    deckHeader.appendChild(deckNameEl);
+    deckHeader.appendChild(deckCountEl);
+    content.appendChild(deckHeader);
+
+    // コスト分布エリア
+    const costContent = this.createCostDistribution();
+    content.appendChild(costContent);
+
+    // 中段のコンテナを作成
+    const middleSection = document.createElement('div');
+    middleSection.className = 'middle-section';
+
+    // 季節分布（中段左）
+    const seasonContainer = document.createElement('div');
+    seasonContainer.className = 'season-distribution';
+    const seasonTitle = document.createElement('div');
+    seasonTitle.className = 'area-title';
+    seasonTitle.textContent = '季節';
+    seasonContainer.appendChild(seasonTitle);
+    const seasonContent = this.createSeasonDistribution();
+    seasonContainer.appendChild(seasonContent);
+    middleSection.appendChild(seasonContainer);
+
+    // 札種類分布（中段右）
+    const typeContainer = document.createElement('div');
+    typeContainer.className = 'type-distribution';
+    const typeTitle = document.createElement('div');
+    typeTitle.className = 'area-title';
+    typeTitle.textContent = '種類';
+    typeContainer.appendChild(typeTitle);
+    const typeContent = this.createTypeDistribution();
+    typeContainer.appendChild(typeContent);
+    middleSection.appendChild(typeContainer);
+
+    content.appendChild(middleSection);
+
+    // 属性分布（下段）
+    const attributeContainer = document.createElement('div');
+    attributeContainer.className = 'attribute-distribution';
+    const attributeTitle = document.createElement('div');
+    attributeTitle.className = 'area-title';
+    attributeTitle.textContent = '主な属性';
+    attributeContainer.appendChild(attributeTitle);
+    const attributeContent = this.createAttributeDistribution();
+    attributeContainer.appendChild(attributeContent);
+    content.appendChild(attributeContainer);
+
+    // 閉じるボタン
+    const closeButton = document.createElement('button');
+    closeButton.className = 'distribution-close';
+    closeButton.innerHTML = '×';
+    closeButton.onclick = (e) => {
+      e.stopPropagation();
+      closeModal();
+    };
+    content.appendChild(closeButton);
+
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+    });
+
+    // モーダルを閉じる処理
+    const closeModal = () => {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modal.remove();
+        // スクロール禁止を解除
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }, 300);
+    };
+
+    // ×ボタンのクリックイベント
+    closeButton.onclick = (e) => {
+      e.stopPropagation();
+      closeModal();
+    };
+
+    // モーダル外クリックイベント
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    };
+  },
+
+  // コスト分布グラフの作成
+  createCostDistribution() {
+    const costContainer = document.createElement('div');
+    costContainer.className = 'cost-distribution';
+
+    // コストごとの枚数をカウント
+    const costCounts = new Array(11).fill(0);
+    this.deck.forEach((card) => {
+      const cost = parseInt(card.dataset.cost);
+      if (cost >= 10) {
+        costCounts[10]++;
+      } else {
+        costCounts[cost]++;
+      }
+    });
+
+    // 最大枚数を取得
+    const maxCount = Math.max(...costCounts);
+
+    // グラフの作成
+    const graphContainer = document.createElement('div');
+    graphContainer.className = 'cost-graph-container';
+
+    // 背景バーの高さを計算（グラフ領域の最大高さ）
+    const graphHeight = 100; // 100%
+
+    costCounts.forEach((count, index) => {
+      const barWrapper = document.createElement('div');
+      barWrapper.className = 'cost-bar-wrapper';
+
+      // 背景バーを追加
+      const background = document.createElement('div');
+      background.className = 'cost-bar-background';
+      background.style.height = `${graphHeight}%`;
+      barWrapper.appendChild(background);
+
+      const bar = document.createElement('div');
+      bar.className = 'cost-bar';
+
+      const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
+      bar.style.height = `${height}%`;
+      bar.setAttribute('data-count', count);
+
+      // 枚数表示を追加
+      const countDisplay = document.createElement('div');
+      countDisplay.className = 'cost-bar-count';
+      countDisplay.textContent = count > 0 ? count : '';
+      bar.appendChild(countDisplay);
+
+      const label = document.createElement('div');
+      label.className = 'cost-label';
+      label.setAttribute('data-cost', index === 10 ? '10↑' : index);
+
+      barWrapper.appendChild(bar);
+      barWrapper.appendChild(label);
+
+      graphContainer.appendChild(barWrapper);
+    });
+
+    costContainer.appendChild(graphContainer);
+    return costContainer;
+  },
+
+  // 季節分布の作成
+  createSeasonDistribution() {
+    const seasonContent = document.createElement('div');
+    seasonContent.className = 'season-content';
+
+    // 季節ごとの枚数をカウント
+    const seasonCounts = {};
+    const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
+
+    this.deck.forEach((card) => {
+      const seasons = card.dataset.season.split(' ');
+      seasons.forEach((season) => {
+        seasonCounts[season] = (seasonCounts[season] || 0) + 1;
+      });
+    });
+
+    // 季節の表示
+    const seasonRows = document.createElement('div');
+    seasonRows.className = 'season-rows';
+
+    seasonOrder.forEach((season) => {
+      if (seasonCounts[season]) {
+        const seasonText = document.createElement('div');
+        seasonText.className = 'season-text';
+        seasonText.setAttribute('data-name', season);
+        seasonText.setAttribute('data-count', `${seasonCounts[season]}枚`);
+        seasonRows.appendChild(seasonText);
+      }
+    });
+
+    seasonContent.appendChild(seasonRows);
+    return seasonContent;
+  },
+
+  // 札種類分布の作成
+  createTypeDistribution() {
+    const typeContent = document.createElement('div');
+    typeContent.className = 'type-content';
+
+    // 札種類ごとの枚数をカウント
+    const typeCounts = {};
+    const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+
+    this.deck.forEach((card) => {
+      const type = card.dataset.type;
+      typeCounts[type] = (typeCounts[type] || 0) + 1;
+    });
+
+    // 札種類の表示
+    const typeRows = document.createElement('div');
+    typeRows.className = 'type-rows';
+
+    typeOrder.forEach((type) => {
+      if (typeCounts[type]) {
+        const typeText = document.createElement('div');
+        typeText.className = 'type-text';
+        typeText.setAttribute('data-name', type);
+        typeText.setAttribute('data-count', `${typeCounts[type]}枚`);
+        typeRows.appendChild(typeText);
+      }
+    });
+
+    typeContent.appendChild(typeRows);
+    return typeContent;
+  },
+
+  // 属性分布の作成
+  createAttributeDistribution() {
+    const attributeContent = document.createElement('div');
+    attributeContent.className = 'attribute-content';
+
+    const attributeCounts = {};
+    (this.deck || []).forEach((card) => {
+      if (!card) return;
+      const attrs = card.getAttribute ? card.getAttribute('data-attribute') : (card.dataset && card.dataset.attribute);
+      if (!attrs) return;
+      String(attrs).split(' ').forEach((attr) => {
+        if (!attr) return;
+        attributeCounts[attr] = (attributeCounts[attr] || 0) + 1;
+      });
+    });
+
+    const top10 = Object.entries(attributeCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 10);
+
+    // 採用属性種数ラベル
+    const uniqueCount = Object.keys(attributeCounts).length;
+    const attrLabel = document.createElement('div');
+    attrLabel.className = 'attribute-unique-label';
+    attrLabel.textContent = `使用属性：${uniqueCount}種`;
+    attributeContent.appendChild(attrLabel);
+
+    // テーブルで2列表示（全ブラウザ対応）
+    const half = Math.ceil(top10.length / 2);
+    const leftItems = top10.slice(0, half);
+    const rightItems = top10.slice(half);
+
+    const table = document.createElement('table');
+    table.className = 'attr-table';
+
+    for (let i = 0; i < leftItems.length; i++) {
+      const tr = document.createElement('tr');
+
+      const tdLName = document.createElement('td');
+      tdLName.className = 'attr-name';
+      tdLName.textContent = leftItems[i][0];
+      tr.appendChild(tdLName);
+
+      const tdLCount = document.createElement('td');
+      tdLCount.className = 'attr-count';
+      tdLCount.textContent = String(leftItems[i][1]);
+      tr.appendChild(tdLCount);
+
+      const tdGap = document.createElement('td');
+      tdGap.className = 'attr-gap';
+      tr.appendChild(tdGap);
+
+      const tdRName = document.createElement('td');
+      tdRName.className = 'attr-name';
+      tdRName.textContent = rightItems[i] ? rightItems[i][0] : '';
+      tr.appendChild(tdRName);
+
+      const tdRCount = document.createElement('td');
+      tdRCount.className = 'attr-count';
+      tdRCount.textContent = rightItems[i] ? String(rightItems[i][1]) : '';
+      tr.appendChild(tdRCount);
+
+      table.appendChild(tr);
+    }
+
+    attributeContent.appendChild(table);
+    return attributeContent;
+  }
+};
+
+// === 制限解禁対応: 追加ロジック ===
+// 1) トグル状態（デフォルトOFF）
+if (typeof deckBuilder.limitReleaseEnabled === 'undefined') {
+  deckBuilder.limitReleaseEnabled = false;
+}
+
+// 2) 基本上限（制限解禁を考慮しない）
+deckBuilder.getBaseLimit = function (cardName) {
+  if (this.infiniteCardLimit.has(cardName)) return Infinity;
+  if (this.tenCardLimit.has(cardName)) return 10;
+  if (this.sevenCardLimit.has(cardName)) return 7;
+  if (this.restrictedCards.has(cardName)) return 1;
+  if (this.twoCardLimit.has(cardName)) return 2;
+  return this.maxCards; // 通常は4
+};
+
+// 3) 現在設定を反映した上限（制限解禁ONなら3以下を4に）
+deckBuilder.getMaxAllowed = function (cardName) {
+  const base = this.getBaseLimit(cardName);
+  if (this.limitReleaseEnabled && base !== Infinity && base <= 3) {
+    return 4;
+  }
+  return base;
+};
+
+// 4) addCard の上書き（上限判定を一本化）
+(function overrideAddCard() {
+  const originalAddCard = deckBuilder.addCard;
+  deckBuilder.addCard = function (card) {
+    if (!card || !card.dataset) return false;
+    const cardName = card.dataset.name;
+    const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
+    const maxAllowed = this.getMaxAllowed(cardName);
+
+    if (maxAllowed !== Infinity && sameNameCount >= maxAllowed) {
+      if (maxAllowed === 10) {
+        this.showTenCardMessage();
+      } else if (maxAllowed === 7) {
+        this.showSevenCardMessage('このカードはデッキに7枚まで。');
+      } else if (!this.limitReleaseEnabled && this.restrictedCards.has(cardName)) {
+        this.showLimitMessage();
+      } else if (!this.limitReleaseEnabled && this.twoCardLimit.has(cardName)) {
+        this.showTwoCardMessage();
+      } else {
+        this.showMessage('同じカードはデッキに4枚まで。');
+      }
+      return false;
+    }
+
+    // 追加処理は元実装と同等
+    this.deck.push(card);
+    this.updateDisplay();
+    this.updateDeckCount();
+    deckManager.saveDeck(deckManager.currentDeckId);
+    return true;
+  };
+})();
+
+// モーダル表示処理を分離
+function showDeckModal(scrollPosition) {
+  const modal = document.getElementById('deck-modal');
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+    deckBuilder.savedScrollPosition = scrollPosition;
+    deckBuilder.resizeDisplay();
+  });
+}
+
+// カード一覧の枚数表示を更新する関数
+function updateCardCountBadges() {
+  const cardList = document.getElementById('card-list');
+  if (!cardList) return;
+
+  const cards = cardList.querySelectorAll('.card');
+
+  // 各カードの枚数バッジを一旦クリア
+  cards.forEach((card) => {
+    const existingBadge = card.querySelector('.card-count-badge');
+    if (existingBadge) {
+      existingBadge.remove();
+    }
+  });
+
+  // デッキ内の各カードの枚数をカウント
+  const cardCounts = (deckBuilder.deck || []).reduce((counts, card) => {
+    if (card && card.dataset && card.dataset.name) {
+      const name = card.dataset.name;
+      counts[name] = (counts[name] || 0) + 1;
+    }
+    return counts;
+  }, {});
+
+  // カード一覧の各カードに枚数バッジを追加
+  cards.forEach((card) => {
+    const count = cardCounts[card.dataset.name];
+    if (count) {
+      const badge = document.createElement('div');
+      badge.className = 'card-count-badge';
+      badge.textContent = count;
+      card.appendChild(badge);
+    }
+  });
+}
+
+// デッキ画面の表示状態を管理する変数
+let isDeckModalOpen = false;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Shift' && !e.repeat) {
+    // キーリピートを防止
+    if (!isDeckModalOpen) {
+      openDeckBuilder();
+      isDeckModalOpen = true;
+    } else {
+      deckBuilder.close();
+      isDeckModalOpen = false;
+    }
+  }
+});
+
+// 零探し状態管理
+let _zeroPhase = 'initial'; // 'initial' | 'redrawn' | 'retried'
+let _zeroDeckPool = [];      // 山札の残り（引ける順序）
+let _zeroCurrentHand = [];   // 現在表示中の8枚
+
+function _zeroShuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function _renderZeroModal(message, actionLabel) {
+  const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+  const displayCards = [..._zeroCurrentHand].sort((a, b) => {
+    const typeA = typeOrder.indexOf(a.dataset.type);
+    const typeB = typeOrder.indexOf(b.dataset.type);
+    if (typeA !== typeB) return typeA - typeB;
+    return parseInt(a.dataset.cost) - parseInt(b.dataset.cost);
+  });
+
+  const actionFn = actionLabel === '引き直し' ? 'performZeroRedraw()' : 'performZeroRetry()';
+
+  const content = `
+    <div class="zero-search-content">
+      <div class="zero-search-header">
+        <p class="zero-search-title">零探し</p>
+        <p class="zero-search-subtitle">カードを選択してキープ可能。</p>
+        <p class="zero-search-subtitle">デッキ底に送られたカードは再登場しません。（2回周期）</p>
+      </div>
+      <div class="zero-search-result">
+        ${displayCards.map((card, index) => `
+          <div class="deck-card zero-search-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
+               data-number="${card.dataset.number}"
+               data-name="${card.dataset.name}"
+               data-index="${index}">
+            <img src="${card.querySelector('img').src}" alt="${card.dataset.name}">
+            ${card.dataset.zeroSelected === 'true' ? '<div class="zero-selected-mark"></div>' : ''}
+          </div>
+        `).join('')}
+      </div>
+      <div class="zero-search-message">${message}</div>
+      <div class="zero-search-buttons">
+        <button onclick="${actionFn}">${actionLabel}</button>
+        <button onclick="closeZeroSearch()">戻る</button>
+        <button onclick="resetZeroSelection()">キープ解除</button>
+      </div>
+    </div>
+  `;
+
+  let modal = document.querySelector('.zero-search-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'zero-search-modal';
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = content;
+
+  // カードクリックイベント
+  modal.querySelectorAll('.zero-search-result .deck-card').forEach((cardEl) => {
+    cardEl.addEventListener('click', function () {
+      const targetCard = displayCards[this.getAttribute('data-index')];
+      if (targetCard) toggleZeroCardSelection(targetCard, this);
+    });
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target.classList.contains('zero-search-modal')) closeZeroSearch();
+  });
+
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => modal.classList.add('active'));
+}
+
+// 零探しを開く（初回ドロー）
+function performZeroSearch() {
+  if (deckBuilder.deck.length < 8) {
+    deckBuilder.showMessage('デッキ内のカードが8枚ありません。');
+    return;
+  }
+
+  // 全選択リセット
+  deckBuilder.deck.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  // シャッフルして山札を作り、上から8枚引く
+  _zeroDeckPool = [...deckBuilder.deck];
+  _zeroShuffle(_zeroDeckPool);
+  _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
+  _zeroPhase = 'initial';
+
+  _renderZeroModal('山札の上から8枚ドローしました。', '引き直し');
+}
+
+// 「引き直し」ボタン：キープしてドロー（デッキをシャッフルしない）
+function performZeroRedraw() {
+  const keptCards = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected === 'true');
+  const droppedCards = _zeroCurrentHand.filter((c) => c.dataset.zeroSelected !== 'true');
+  const x = keptCards.length;
+  const y = droppedCards.length; // 8 - x
+
+  // 非キープカードはデッキの底に送る（プールから除外済み扱い → draw対象外）
+  droppedCards.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  if (_zeroDeckPool.length < y) {
+    deckBuilder.showMessage('残り山札が不足しています。');
+    return;
+  }
+
+  const newCards = _zeroDeckPool.splice(0, y);
+  _zeroCurrentHand = [...keptCards, ...newCards];
+  _zeroPhase = 'redrawn';
+
+  _renderZeroModal(`${x}枚キープし、${y}枚ドローしました。`, 'リトライ');
+}
+
+// 「リトライ」ボタン：完全リセットして再シャッフル
+function performZeroRetry() {
+  if (deckBuilder.deck.length < 8) {
+    deckBuilder.showMessage('デッキ内のカードが8枚ありません。');
+    return;
+  }
+
+  deckBuilder.deck.forEach((c) => (c.dataset.zeroSelected = 'false'));
+
+  _zeroDeckPool = [...deckBuilder.deck];
+  _zeroShuffle(_zeroDeckPool);
+  _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
+  _zeroPhase = 'retried';
+
+  _renderZeroModal('シャッフルし、新たに8枚ドローしました。', '引き直し');
+}
+
+// 零探し用のカード選択状態を切り替える関数
+function toggleZeroCardSelection(card, cardElement) {
+  if (!card) return;
+
+  // 選択状態を切り替え
+  const isSelected = card.dataset.zeroSelected === 'true';
+
+  if (isSelected) {
+    // 選択解除の場合
+    card.dataset.zeroSelected = 'false';
+
+    if (cardElement) {
+      cardElement.classList.remove('selected');
+      const mark = cardElement.querySelector('.zero-selected-mark');
+      if (mark) mark.remove();
+    }
+  } else {
+    // 選択する場合
+    card.dataset.zeroSelected = 'true';
+
+    if (cardElement) {
+      cardElement.classList.add('selected');
+      if (!cardElement.querySelector('.zero-selected-mark')) {
+        const mark = document.createElement('div');
+        mark.className = 'zero-selected-mark';
+        cardElement.appendChild(mark);
+      }
+    }
+  }
+}
+
+// 零探しの選択をすべて解除する関数
+function resetZeroSelection() {
+  deckBuilder.deck.forEach((card) => {
+    card.dataset.zeroSelected = 'false';
+  });
+
+  // モーダル内のカードの選択状態も更新
+  const modalCards = document.querySelectorAll('.zero-search-modal .deck-card');
+  modalCards.forEach((card) => {
+    card.classList.remove('selected');
+    const mark = card.querySelector('.zero-selected-mark');
+    if (mark) mark.remove();
+  });
+
+  // 選択解除後の再抽選は行わない
+  deckBuilder.showMessage('選択をすべて解除しました');
+}
+
+// 零探し機能を閉じる関数
+function closeZeroSearch() {
+  const modal = document.querySelector('.zero-search-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+
+    // 選択状態をすべて解除
+    deckBuilder.deck.forEach((card) => {
+      card.dataset.zeroSelected = 'false';
+    });
+
+    setTimeout(() => modal.remove(), 300);
+  }
+}
+
+// deckBuilder オブジェクトの updateDisplay メソッドを拡張
+const originalUpdateDisplay = deckBuilder.updateDisplay;
+deckBuilder.updateDisplay = function () {
+  // 元のメソッドを呼び出す
+  originalUpdateDisplay.call(this);
+};
+
+function returnToDeck() {
+  deckBuilder.updateDisplay();
+  deckBuilder.updateDeckCount();
+}
+
+// デッキリセット
+function confirmReset() {
+  const confirmPopup = document.createElement('div');
+  confirmPopup.className = 'confirm-popup';
+  confirmPopup.innerHTML = `
+    <div class="confirm-content">
+      <p>デッキ内容をリセットしますか？</p>
+      <div class="confirm-buttons">
+        <button onclick="resetDeck(true)">はい</button>
+        <button onclick="resetDeck(false)">いいえ</button>
+      </div>
+    </div>
+  `;
+
+  // オーバーレイ部分のクリックで閉じる
+  confirmPopup.addEventListener('click', (e) => {
+    if (e.target === confirmPopup) {
+      resetDeck(false);
+    }
+  });
+
+  document.body.classList.add('modal-open');
+  document.body.appendChild(confirmPopup);
+}
+
+function resetDeck(confirmed) {
+  const popup = document.querySelector('.confirm-popup');
+  if (confirmed) {
+    // デッキ内容をリセット
+    deckBuilder.deck = [];
+    deckBuilder.updateDisplay();
+
+    // デッキ名をデフォルトに戻す
+    const currentDeckId = deckManager.currentDeckId;
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+    if (button) {
+      (button.querySelector('span') || button).textContent = `デッキ${currentDeckId}`;
+      // デッキマネージャーのデータも更新
+      if (deckManager.decks[currentDeckId]) {
+        deckManager.decks[currentDeckId].name = `デッキ${currentDeckId}`;
+      }
+    }
+
+    // 変更を保存
+    deckManager.saveDeck(deckManager.currentDeckId);
+    deckManager.saveToLocalStorage();
+  }
+  document.body.classList.remove('modal-open');
+  popup.remove();
+}
+
+// 前後に移動可能かチェックする関数
+function canNavigateToPrevious(currentIndex, currentName) {
+  // インデックス0の場合でも、前に同名カードがあれば移動可能
+  return currentIndex > 0;
+}
+
+function canNavigateToNext(currentIndex, currentName) {
+  // 最後のインデックスの場合でも、後ろに同名カードがあれば移動可能
+  return currentIndex < visibleCards.length - 1;
+}
+
+// カード一覧にもボタンを追加（card生成関数の作成）
+function createCardWithButtons(card, isInDeck = false) {
+  const cardElement = document.createElement('div');
+  cardElement.className = isInDeck ? 'deck-card' : 'card';
+  // データ属性の設定
+  Object.entries(card.dataset).forEach(([key, value]) => {
+    cardElement.setAttribute(`data-${key}`, value);
+  });
+
+  const img = document.createElement('img');
+  img.src = card.querySelector('img').src;
+  img.alt = card.dataset.name;
+
+  // ボタングループ
+  const buttons = document.createElement('div');
+  buttons.className = 'card-buttons';
+
+  const addButton = document.createElement('button');
+  addButton.className = 'card-add-button';
+  addButton.onclick = (e) => {
+    e.stopPropagation();
+    deckBuilder.addCard(card.cloneNode(true));
+  };
+
+  const removeButton = document.createElement('button');
+  removeButton.className = 'card-remove-button';
+  removeButton.onclick = (e) => {
+    e.stopPropagation();
+    deckBuilder.removeCard(null, card.dataset.number);
+  };
+
+  buttons.appendChild(addButton);
+  buttons.appendChild(removeButton);
+  cardElement.appendChild(img);
+  cardElement.appendChild(buttons);
+
+  return cardElement;
+}
+
+// キーボードの左右に対応
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('image-modal').style.display === 'flex') {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      showPreviousImage();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      showNextImage();
+    }
+  }
+});
+
+// キーボードイベントのリスナー
+document.addEventListener('keydown', (e) => {
+  // 画像モーダルが表示中の場合のみ
+  if (document.getElementById('image-modal').style.display === 'flex') {
+    const cardName = visibleCards[currentImageIndex].dataset.name;
+    const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+
+    // カードの上限枚数を正しく取得
+    let maxAllowed = 4;
+    if (deckBuilder.infiniteCardLimit.has(cardName)) {
+      maxAllowed = Infinity;
+    } else if (deckBuilder.tenCardLimit.has(cardName)) {
+      maxAllowed = 10;
+    } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+      maxAllowed = 7;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      // 上キーで増加（上限チェックを正しく行う）
+      if (currentCount < maxAllowed) {
+        deckBuilder.addCard(visibleCards[currentImageIndex].cloneNode(true));
+        updateCardCountInModal(cardName);
+      } else {
+        // 上限に達した場合のメッセージ表示
+        if (maxAllowed === 10) {
+          deckBuilder.showTenCardMessage();
+        } else if (maxAllowed === 7) {
+          deckBuilder.showMessage('このカードはデッキに7枚まで。');
+        } else {
+          deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+        }
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      // 下キーで減少
+      if (currentCount > 0) {
+        const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+        if (cardToRemove) {
+          deckBuilder.removeCard(null, cardToRemove.dataset.number);
+          updateCardCountInModal(cardName);
+        }
+      }
+    }
+  }
+});
+
+// モーダル内のカウント表示を更新する関数
+function updateCardCountInModal(cardName) {
+  const controls = document.querySelector('.card-controls');
+  if (!controls) return;
+
+  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const cardCountDiv = controls.querySelector('.card-count');
+
+  // カードの上限枚数を取得
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+  const isInfinite = maxAllowed === Infinity;
+
+  // CSSで表示を制御
+  if (isInfinite) {
+    cardCountDiv.classList.add('is-infinite');
+    cardCountDiv.setAttribute('data-count', currentCount);
+    cardCountDiv.textContent = ''; // 元のテキストはクリア
+  } else {
+    cardCountDiv.classList.remove('is-infinite');
+    cardCountDiv.removeAttribute('data-count');
+    cardCountDiv.textContent = `${currentCount}/${maxAllowed}`;
+  }
+
+  // ボタンの無効化状態を明示的に更新
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  addButton.disabled = !isInfinite && currentCount >= maxAllowed;
+  removeButton.disabled = currentCount <= 0;
+
+  // スタイルも明示的に更新（CSSの問題対策）
+  if (!isInfinite && currentCount >= maxAllowed) {
+    addButton.classList.add('disabled');
+  } else {
+    addButton.classList.remove('disabled');
+  }
+
+  if (currentCount <= 0) {
+    removeButton.classList.add('disabled');
+  } else {
+    removeButton.classList.remove('disabled');
+  }
+}
+
+// カード要素にボタンを追加する関数
+const addCardButtons = (cardElement) => {
+  const buttons = document.createElement('div');
+  buttons.className = 'card-buttons';
+
+  const addButton = document.createElement('button');
+  addButton.className = 'card-add-button';
+  addButton.onclick = (e) => {
+    e.stopPropagation(); // カードのクリックイベントを停止
+    deckBuilder.addCard(cardElement.cloneNode(true));
+  };
+
+  const removeButton = document.createElement('button');
+  removeButton.className = 'card-remove-button';
+  removeButton.onclick = (e) => {
+    e.stopPropagation(); // カードのクリックイベントを停止
+    // cardElementのdata-numberを使用して削除
+    deckBuilder.removeCard(null, cardElement.dataset.number);
+  };
+
+  buttons.appendChild(addButton);
+  buttons.appendChild(removeButton);
+  cardElement.appendChild(buttons);
+};
+
+// カードコントロールの設定を関数化
+const setupCardControls = (controls, card, cardName) => {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  // カードの上限枚数を取得（初期表示時から正しい値を使用）
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+
+  // 初期表示時から正しい上限枚数を表示
+  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+  controls.querySelector('.card-count').textContent = `${currentCount}/${displayMax}`;
+
+  addButton.onclick = (e) => {
+    e.stopPropagation();
+    if (!addButton.disabled) {
+      // 現在の枚数を取得
+      const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+
+      if (maxAllowed === Infinity || currentCount < maxAllowed) {
+        deckBuilder.addCard(card.cloneNode(true));
+        const newCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+        controls.querySelector('.card-count').textContent = `${newCount}/${displayMax}`;
+
+        // ボタン状態を更新
+        addButton.disabled = maxAllowed !== Infinity && newCount >= maxAllowed;
+        if (maxAllowed !== Infinity && newCount >= maxAllowed) {
+          addButton.classList.add('disabled');
+        }
+
+        removeButton.disabled = false;
+        removeButton.classList.remove('disabled');
+      } else {
+        // 上限メッセージ
+        if (maxAllowed === 10) {
+          deckBuilder.showTenCardMessage();
+        } else if (maxAllowed === 7) {
+          deckBuilder.showMessage('このカードはデッキに7枚まで。');
+        } else {
+          deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+        }
+      }
+    }
+  };
+
+  removeButton.onclick = (e) => {
+    e.stopPropagation();
+    if (!removeButton.disabled) {
+      const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+      if (cardToRemove) {
+        deckBuilder.removeCard(null, cardToRemove.dataset.number);
+        const newCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+        controls.querySelector('.card-count').textContent = `${newCount}/${displayMax}`;
+
+        // ボタン状態を更新
+        removeButton.disabled = newCount <= 0;
+        if (newCount <= 0) {
+          removeButton.classList.add('disabled');
+        }
+
+        addButton.disabled = maxAllowed !== Infinity && newCount >= maxAllowed;
+        if (maxAllowed !== Infinity && newCount >= maxAllowed) {
+          addButton.classList.add('disabled');
+        } else {
+          addButton.classList.remove('disabled');
+        }
+      }
+    }
+  };
+};
+
+// デッキ管理機能の実装
+const deckManager = {
+  currentDeckId: 1,
+  decks: {},
+  deckOrder: [],
+
+  // 初期化時にデッキデータを確実に読み込む
+  initialize() {
+    // 既存のデッキデータをロード
+    this.loadFromLocalStorage();
+    this.applyDeckOrder();
+
+    // デッキヘッダーの切り替えボタン
+    const deckMenu = document.querySelector('.deck-menu');
+    const helpButton = deckMenu.querySelector('.deck-help-button');
+    if (helpButton) {
+      const saveButton = document.createElement('button');
+      saveButton.className = 'deck-menu-button';
+      saveButton.textContent = '切替';
+      saveButton.onclick = () => this.openDeckList();
+      helpButton.parentNode.replaceChild(saveButton, helpButton);
+    }
+
+    // イベントリスナーの設定
+    this.setupEventListeners();
+
+    // 現在のデッキを読み込む
+    this.loadDeck(this.currentDeckId);
+  },
+
+  // デッキを選択
+  selectDeck(deckId) {
+    // 選択したデッキに切り替え
+    this.currentDeckId = deckId;
+    this.loadDeck(deckId);
+    this.saveToLocalStorage(); // 現在選択中のデッキIDも保存
+
+    // モーダルを閉じる
+    this.closeDeckList();
+  },
+
+  // 現在のデッキを保存
+  saveDeck(deckId) {
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+    if (button) {
+      this.decks[deckId] = {
+        name: button.textContent,
+        cards: [...deckBuilder.deck].map((card) => ({
+          dataset: { ...card.dataset },
+          src: card.querySelector('img')?.src
+        }))
+      };
+      this.saveToLocalStorage();
+    }
+  },
+
+  getDeckOrderFromDOM() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return [];
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list) {
+      return [];
+    }
+    return Array.from(list.querySelectorAll('.deck-list-item .deck-select-button'))
+      .map((button) => parseInt(button.dataset.deckId, 10))
+      .filter((id) => Number.isFinite(id));
+  },
+
+  applyDeckOrder() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return;
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list) {
+      return;
+    }
+    const items = Array.from(list.querySelectorAll('.deck-list-item'));
+    if (!items.length) {
+      return;
+    }
+    const idToItem = new Map();
+    items.forEach((item) => {
+      const button = item.querySelector('.deck-select-button');
+      const id = button ? parseInt(button.dataset.deckId, 10) : NaN;
+      if (Number.isFinite(id)) {
+        idToItem.set(id, item);
+      }
+    });
+
+    const desiredOrder =
+      Array.isArray(this.deckOrder) && this.deckOrder.length
+        ? this.deckOrder
+        : items
+          .map((item) => {
+            const button = item.querySelector('.deck-select-button');
+            return button ? parseInt(button.dataset.deckId, 10) : NaN;
+          })
+          .filter((id) => Number.isFinite(id));
+
+    const orderedItems = [];
+    desiredOrder.forEach((id) => {
+      const item = idToItem.get(id);
+      if (item) {
+        orderedItems.push(item);
+      }
+    });
+    items.forEach((item) => {
+      if (!orderedItems.includes(item)) {
+        orderedItems.push(item);
+      }
+    });
+    orderedItems.forEach((item) => list.appendChild(item));
+    this.deckOrder = orderedItems
+      .map((item) => {
+        const button = item.querySelector('.deck-select-button');
+        return button ? parseInt(button.dataset.deckId, 10) : NaN;
+      })
+      .filter((id) => Number.isFinite(id));
+  },
+
+  updateDeckOrderFromDOM() {
+    const order = this.getDeckOrderFromDOM();
+    if (order.length) {
+      this.deckOrder = order;
+    }
+  },
+
+  // setupEventListeners メソッド
+  setupEventListeners() {
+    const modal = document.getElementById('deck-list-modal');
+    const closeButton = modal.querySelector('.deck-list-close');
+
+    // 閉じるボタン
+    closeButton.addEventListener('click', () => this.closeDeckList());
+
+    // デッキ選択ボタン
+    modal.querySelectorAll('.deck-select-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        this.selectDeck(parseInt(button.dataset.deckId));
+      });
+    });
+
+    // デッキ編集ボタン
+    modal.querySelectorAll('.deck-edit-button').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.editDeckName(parseInt(button.dataset.deckId));
+      });
+    });
+
+    // デッキ削除ボタン
+    modal.querySelectorAll('.deck-delete-button').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const deckId = button.getAttribute('data-deck-id');
+        confirmDeckReset(deckId);
+      });
+    });
+
+    // プレビュー画像クリックでサムネイル選択モーダルを開く
+    modal.querySelectorAll('.deck-preview-image').forEach((img) => {
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const deckId = parseInt(img.dataset.deckId);
+        if (img.src && img.style.display !== 'none') {
+          this.openThumbnailModal(deckId);
+        }
+      });
+    });
+
+    // モーダル外クリックで閉じる
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        this.closeDeckList();
+      }
+    });
+
+    this.setupDeckListDrag();
+  },
+
+  setupDeckListDrag() {
+    const modal = document.getElementById('deck-list-modal');
+    if (!modal) {
+      return;
+    }
+    const list = modal.querySelector('.deck-list-items');
+    if (!list) {
+      return;
+    }
+    if (isAndroid() && modal.dataset.contextMenuBlocked !== 'true') {
+      modal.dataset.contextMenuBlocked = 'true';
+      modal.addEventListener('contextmenu', (e) => {
+        if (e.target && e.target.closest('.deck-preview')) {
+          e.preventDefault();
+        }
+      });
+    }
+    if (list.dataset.dragSortInitialized === 'true') {
+      return;
+    }
+    list.dataset.dragSortInitialized = 'true';
+
+    const LONG_PRESS_MS = 400;
+    const MOVE_TOLERANCE = 8;
+    const SCROLL_EDGE = 40;
+    const MAX_SCROLL_SPEED = 12;
+    const manager = this;
+    const hasCoarsePointer = window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : false;
+
+    const state = {
+      pointerId: null,
+      isPressing: false,
+      isDragging: false,
+      suppressClick: false,
+      isTouch: false,
+      startX: 0,
+      startY: 0,
+      lastX: 0,
+      lastY: 0,
+      offsetX: 0,
+      offsetY: 0,
+      itemHeight: 0,
+      currentItem: null,
+      placeholder: null,
+      longPressTimer: null,
+      touchBlockActive: false
+    };
+
+    const blockTouchScroll = (e) => {
+      if (state.isDragging) {
+        e.preventDefault();
+      }
+    };
+
+    const enableTouchScrollBlock = () => {
+      if (state.touchBlockActive) {
+        return;
+      }
+      state.touchBlockActive = true;
+      document.addEventListener('touchmove', blockTouchScroll, { passive: false });
+    };
+
+    const disableTouchScrollBlock = () => {
+      if (!state.touchBlockActive) {
+        return;
+      }
+      state.touchBlockActive = false;
+      document.removeEventListener('touchmove', blockTouchScroll);
+    };
+
+    const clearLongPress = () => {
+      if (state.longPressTimer) {
+        clearTimeout(state.longPressTimer);
+        state.longPressTimer = null;
+      }
+    };
+
+    const capturePositions = () => {
+      const positions = new Map();
+      Array.from(list.children).forEach((item) => {
+        if (item === state.currentItem || item === state.placeholder) {
+          return;
+        }
+        positions.set(item, item.getBoundingClientRect());
+      });
+      return positions;
+    };
+
+    const animateReorder = (prevPositions) => {
+      prevPositions.forEach((rect, item) => {
+        const nextRect = item.getBoundingClientRect();
+        const deltaX = rect.left - nextRect.left;
+        const deltaY = rect.top - nextRect.top;
+        if (deltaX || deltaY) {
+          item.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          item.style.transition = 'transform 0s';
+          requestAnimationFrame(() => {
+            item.style.transition = 'transform 160ms ease';
+            item.style.transform = '';
+          });
+          setTimeout(() => {
+            item.style.transition = '';
+          }, 200);
+        }
+      });
+    };
+
+    const beginDrag = () => {
+      if (!state.isPressing || state.isDragging || !state.currentItem) {
+        return;
+      }
+      clearLongPress();
+      state.isDragging = true;
+      state.suppressClick = true;
+      enableTouchScrollBlock();
+
+      const item = state.currentItem;
+      const listRect = list.getBoundingClientRect();
+      const rect = item.getBoundingClientRect();
+      const startX = state.lastX || state.startX;
+      const startY = state.lastY || state.startY;
+      state.offsetX = startX - rect.left;
+      state.offsetY = startY - rect.top;
+      state.itemHeight = rect.height;
+
+      state.placeholder = document.createElement('div');
+      state.placeholder.className = 'deck-list-placeholder';
+      state.placeholder.style.height = `${rect.height}px`;
+      state.placeholder.style.minHeight = `${rect.height}px`;
+      state.placeholder.style.flex = '0 0 auto';
+      item.parentNode.insertBefore(state.placeholder, item.nextSibling);
+
+      const initialTop = rect.top - listRect.top + list.scrollTop;
+
+      item.classList.add('dragging');
+      item.style.width = `${listRect.width}px`;
+      item.style.left = '0px';
+      item.style.top = `${initialTop}px`;
+      item.style.position = 'absolute';
+      item.style.zIndex = '5000';
+      item.style.pointerEvents = 'none';
+
+      list.classList.add('is-dragging');
+      try {
+        item.setPointerCapture(state.pointerId);
+      } catch (err) {
+        // Pointer capture is best-effort.
+      }
+
+      item.style.left = '0px';
+      item.style.top = `${initialTop}px`;
+    };
+
+    const updateDragPosition = (clientY) => {
+      if (!state.currentItem) {
+        return;
+      }
+      const listRect = list.getBoundingClientRect();
+      const maxTop = Math.max(0, list.scrollHeight - state.itemHeight);
+      const nextTop = clientY - listRect.top + list.scrollTop - state.offsetY;
+      const clampedTop = Math.max(0, Math.min(maxTop, nextTop));
+      state.currentItem.style.left = '0px';
+      state.currentItem.style.top = `${clampedTop}px`;
+    };
+
+    const updatePlaceholder = (clientY) => {
+      if (!state.placeholder) {
+        return;
+      }
+      const items = Array.from(list.querySelectorAll('.deck-list-item')).filter(
+        (item) => item !== state.currentItem
+      );
+      const target = items.find((item) => {
+        const rect = item.getBoundingClientRect();
+        return clientY < rect.top + rect.height / 2;
+      });
+
+      if (target) {
+        if (state.placeholder.nextSibling === target) {
+          return;
+        }
+        const prevPositions = capturePositions();
+        list.insertBefore(state.placeholder, target);
+        animateReorder(prevPositions);
+        return;
+      }
+
+      if (!state.placeholder.nextSibling) {
+        return;
+      }
+      const prevPositions = capturePositions();
+      list.appendChild(state.placeholder);
+      animateReorder(prevPositions);
+    };
+
+    const autoScroll = (clientY) => {
+      const rect = list.getBoundingClientRect();
+      let delta = 0;
+      if (clientY < rect.top + SCROLL_EDGE) {
+        delta = -MAX_SCROLL_SPEED * ((SCROLL_EDGE - (clientY - rect.top)) / SCROLL_EDGE);
+      } else if (clientY > rect.bottom - SCROLL_EDGE) {
+        delta = MAX_SCROLL_SPEED * ((SCROLL_EDGE - (rect.bottom - clientY)) / SCROLL_EDGE);
+      }
+      if (delta !== 0) {
+        list.scrollTop += delta;
+      }
+    };
+
+    const finishDrag = () => {
+      if (!state.currentItem) {
+        state.isDragging = false;
+        state.isPressing = false;
+        state.pointerId = null;
+        state.suppressClick = false;
+        state.isTouch = false;
+        disableTouchScrollBlock();
+        clearLongPress();
+        return;
+      }
+
+      const item = state.currentItem;
+      if (state.placeholder && state.placeholder.parentNode) {
+        state.placeholder.parentNode.insertBefore(item, state.placeholder);
+        state.placeholder.remove();
+      }
+
+      item.classList.remove('dragging');
+      item.style.position = '';
+      item.style.left = '';
+      item.style.top = '';
+      item.style.width = '';
+      item.style.zIndex = '';
+      item.style.pointerEvents = '';
+      list.classList.remove('is-dragging');
+
+      clearLongPress();
+      state.isDragging = false;
+      state.isPressing = false;
+      state.pointerId = null;
+      state.currentItem = null;
+      state.isTouch = false;
+      disableTouchScrollBlock();
+
+      manager.updateDeckOrderFromDOM();
+      manager.saveToLocalStorage();
+
+      setTimeout(() => {
+        state.suppressClick = false;
+      }, 0);
+    };
+
+    const cancelPress = () => {
+      clearLongPress();
+      state.isPressing = false;
+      state.pointerId = null;
+      state.currentItem = null;
+      state.isTouch = false;
+      disableTouchScrollBlock();
+    };
+
+    const isIgnoredTarget = (target) =>
+      target.closest('.deck-edit-button, .deck-delete-button, .deck-list-close, .deck-name-input');
+
+    list.addEventListener(
+      'click',
+      (e) => {
+        if (state.suppressClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          state.suppressClick = false;
+        }
+      },
+      true
+    );
+
+    list.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) {
+        return;
+      }
+      if (isIgnoredTarget(e.target)) {
+        return;
+      }
+      const item = e.target.closest('.deck-list-item');
+      if (!item) {
+        return;
+      }
+      state.isPressing = true;
+      state.isTouch =
+        e.pointerType === 'touch' || e.pointerType === 'pen' || (e.pointerType === 'mouse' && hasCoarsePointer);
+      state.pointerId = e.pointerId;
+      state.currentItem = item;
+      state.startX = e.clientX;
+      state.startY = e.clientY;
+      state.lastX = e.clientX;
+      state.lastY = e.clientY;
+      state.longPressTimer = setTimeout(beginDrag, LONG_PRESS_MS);
+    });
+
+    list.addEventListener(
+      'pointermove',
+      (e) => {
+        if (!state.isPressing || state.pointerId !== e.pointerId) {
+          return;
+        }
+        state.lastX = e.clientX;
+        state.lastY = e.clientY;
+        if (!state.isDragging) {
+          if (!state.isTouch) {
+            const dx = e.clientX - state.startX;
+            const dy = e.clientY - state.startY;
+            if (Math.hypot(dx, dy) > MOVE_TOLERANCE) {
+              cancelPress();
+            }
+          }
+          return;
+        }
+
+        e.preventDefault();
+        autoScroll(e.clientY);
+        updateDragPosition(e.clientY);
+        updatePlaceholder(e.clientY);
+      },
+      { passive: false }
+    );
+
+    list.addEventListener('pointerup', (e) => {
+      if (state.pointerId !== e.pointerId) {
+        return;
+      }
+      if (state.isDragging) {
+        e.preventDefault();
+        finishDrag();
+        return;
+      }
+      cancelPress();
+    });
+
+    list.addEventListener('pointercancel', (e) => {
+      if (state.pointerId !== e.pointerId) {
+        return;
+      }
+      if (state.isDragging) {
+        finishDrag();
+        return;
+      }
+      cancelPress();
+    });
+
+    list.addEventListener('scroll', () => {
+      if (state.isPressing && !state.isDragging && state.isTouch) {
+        cancelPress();
+      }
+    });
+
+    list.addEventListener('lostpointercapture', () => {
+      if (state.isDragging) {
+        finishDrag();
+      }
+    });
+  },
+
+  // デッキ一覧を開く
+  openDeckList() {
+    const modal = document.getElementById('deck-list-modal');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+    });
+    // 現在のデッキをハイライト
+    this.updateActiveButton();
+    // プレビュー画像を更新
+    this.updateDeckPreviews();
+  },
+
+  // デッキ一覧を閉じる
+  closeDeckList() {
+    const modal = document.getElementById('deck-list-modal');
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  },
+
+  // デッキを読み込み
+  loadDeck(deckId) {
+    const deck = this.decks[deckId];
+    if (deck && Array.isArray(deck.cards)) {
+      // カード要素を再構築
+      deckBuilder.deck = deck.cards.map((cardData) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        Object.keys(cardData.dataset).forEach((key) => {
+          const attrName = 'data-' + key.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase());
+          card.setAttribute(attrName, cardData.dataset[key]);
+        });
+        const img = document.createElement('img');
+        img.src = cardData.src;
+        img.alt = cardData.dataset.name || '';
+        card.appendChild(img);
+        return card;
+      });
+    } else {
+      deckBuilder.deck = [];
+      // デッキが空の場合、プレビュー画像を非表示にする
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
+    }
+    deckBuilder.updateDisplay();
+    deckBuilder.updateDeckCount();
+    this.updateActiveButton();
+  },
+
+  // ローカルストレージに保存
+  saveToLocalStorage() {
+    const saveData = {
+      currentDeckId: this.currentDeckId,
+      decks: this.decks,
+      deckOrder: this.deckOrder
+    };
+    localStorage.setItem('kannagi-deck-manager', JSON.stringify(saveData));
+  },
+
+  // deckManagerオブジェクト内
+  saveToLocalStorage() {
+    const saveData = {
+      currentDeckId: this.currentDeckId,
+      decks: this.decks,
+      deckOrder: this.deckOrder,
+      version: '2'
+    };
+    localStorage.setItem('kannagi-deck-manager-v2', JSON.stringify(saveData));
+  },
+
+  loadFromLocalStorage() {
+    try {
+      const saved = localStorage.getItem('kannagi-deck-manager-v2');
+      if (saved) {
+        const data = JSON.parse(saved);
+        this.currentDeckId = data.currentDeckId || 1;
+        this.decks = data.decks || {};
+        this.deckOrder = Array.isArray(data.deckOrder)
+          ? data.deckOrder.map((id) => parseInt(id, 10)).filter((id) => Number.isFinite(id))
+          : [];
+
+        // デッキ名を復元
+        Object.entries(this.decks).forEach(([deckId, deck]) => {
+          const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+          if (button && deck.name) {
+            (button.querySelector('span') || button).textContent = deck.name;
+          }
+        });
+      }
+    } catch (e) {
+      console.error('デッキデータの読み込みに失敗しました:', e);
+      this.currentDeckId = 1;
+      this.decks = {};
+      this.deckOrder = [];
+    }
+  },
+
+  // アクティブなデッキボタンを更新
+  updateActiveButton() {
+    document.querySelectorAll('.deck-select-button').forEach((button) => {
+      const isActive = parseInt(button.dataset.deckId) === this.currentDeckId;
+      button.classList.toggle('active', isActive);
+      // アクティブなデッキの背景色をより強調
+      if (isActive) {
+        button.style.backgroundColor = '#4a4a4a';
+      } else {
+        button.style.backgroundColor = '';
+      }
+    });
+  },
+  // デッキ名を編集
+  editDeckName(deckId) {
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+    if (!button) {
+      return;
+    }
+
+    if (this.deckNameEditing && typeof this.deckNameEditing.commit === 'function') {
+      this.deckNameEditing.commit();
+    }
+
+    const originalName = button.textContent.trim();
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'deck-name-input';
+    input.value = originalName;
+    input.setAttribute('aria-label', 'デッキ名');
+    input.setAttribute('data-deck-id', String(deckId));
+
+    button.style.display = 'none';
+    const parent = button.parentNode;
+    if (parent) {
+      parent.insertBefore(input, button.nextSibling);
+    }
+
+    let finalized = false;
+    const cleanup = () => {
+      if (finalized) {
+        return;
+      }
+      finalized = true;
+      input.remove();
+      button.style.display = '';
+      if (this.deckNameEditing && this.deckNameEditing.input === input) {
+        this.deckNameEditing = null;
+      }
+    };
+
+    const commit = () => {
+      if (finalized) {
+        return;
+      }
+      const newName = input.value.trim() || originalName;
+      (button.querySelector('span') || button).textContent = newName;
+
+      if (this.decks[deckId]) {
+        this.decks[deckId].name = newName;
+      } else {
+        this.decks[deckId] = {
+          name: newName,
+          cards: []
+        };
+      }
+
+      this.saveToLocalStorage();
+      cleanup();
+    };
+
+    const cancel = () => {
+      cleanup();
+    };
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        commit();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancel();
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      commit();
+    });
+
+    this.deckNameEditing = {
+      input,
+      button,
+      deckId,
+      commit
+    };
+
+    const focusInput = () => {
+      try {
+        input.focus({ preventScroll: true });
+      } catch (err) {
+        input.focus();
+      }
+      if (typeof input.setSelectionRange === 'function') {
+        const len = input.value.length;
+        input.setSelectionRange(0, len);
+      } else {
+        input.select();
+      }
+    };
+
+    // iOSで確実にキーボードを出すため、ユーザー操作直後に即フォーカス
+    focusInput();
+  },
+
+  // デッキのプレビュー画像を更新
+  updateDeckPreviews() {
+    Object.entries(this.decks).forEach(([deckId, deck]) => {
+      if (!deck || !deck.cards || deck.cards.length === 0) {
+        // デッキが空の場合、プレビュー画像を非表示にする
+        const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+        if (previewImg) {
+          previewImg.style.display = 'none';
+          previewImg.src = '';
+        }
+        return;
+      }
+
+      // プレビュー画像を更新
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        // カスタムサムネイルが設定されている場合はそれを優先
+        if (deck.thumbnail) {
+          previewImg.src = deck.thumbnail;
+          previewImg.style.display = 'block';
+        } else {
+          // コストが最も高いカードを見つける
+          const highestCostCard = deck.cards.reduce((highest, current) => {
+            const currentCost = parseInt(current.dataset.cost) || 0;
+            const highestCost = parseInt(highest.dataset.cost) || 0;
+            return currentCost > highestCost ? current : highest;
+          }, deck.cards[0]);
+          if (highestCostCard) {
+            previewImg.src = highestCostCard.src || '';
+            previewImg.style.display = 'block';
+          }
+        }
+      }
+    });
+  },
+
+  // デッキを消去
+  clearDeck(deckId) {
+    if (this.decks[deckId]) {
+      this.decks[deckId] = { cards: [] };
+      this.saveDeckToLocalStorage(deckId);
+
+      // プレビュー画像を即座に非表示にする
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
+
+      // 現在表示中のデッキが消去された場合は表示をクリア
+      if (this.currentDeckId === deckId) {
+        deckBuilder.deck = [];
+        deckBuilder.updateDisplay();
+        deckBuilder.updateDeckCount();
+      }
+    }
+  },
+
+  // デッキサムネイル選択モーダルを開く
+  openThumbnailModal(deckId) {
+    const deck = this.decks[deckId];
+    if (!deck || !deck.cards || deck.cards.length === 0) return;
+
+    const modal = document.getElementById('deck-thumbnail-modal');
+    const grid = modal.querySelector('.deck-thumbnail-grid');
+    const confirmBtn = document.getElementById('deck-thumbnail-confirm');
+
+    // グリッドをクリア
+    grid.innerHTML = '';
+
+    // 確定ボタンのイベント（一度だけ設定するためcloneで差し替え）
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    newConfirmBtn.id = 'deck-thumbnail-confirm';
+    newConfirmBtn.disabled = true;
+
+    // デッキ内のカードを重複なしで取得（名前ベースで一意に）
+    const seen = new Set();
+    const uniqueCards = [];
+    for (const card of deck.cards) {
+      const name = card.dataset.name;
+      if (!seen.has(name)) {
+        seen.add(name);
+        uniqueCards.push(card);
+      }
+    }
+
+    // 種類順（場所札→怪異札→道具札→季節札）＋コスト昇順でソート
+    const typeOrder = { '場所札': 0, '怪異札': 1, '道具札': 2, '季節札': 3 };
+    uniqueCards.sort((a, b) => {
+      const typeA = typeOrder[a.dataset.type] ?? 99;
+      const typeB = typeOrder[b.dataset.type] ?? 99;
+      if (typeA !== typeB) return typeA - typeB;
+      return (parseInt(a.dataset.cost) || 0) - (parseInt(b.dataset.cost) || 0);
+    });
+
+    // 選択状態を管理
+    let selectedSrc = null;
+
+    // カード画像を配置
+    uniqueCards.forEach(card => {
+      const img = document.createElement('img');
+      img.src = card.src || '';
+      img.alt = card.dataset.name || '';
+      img.addEventListener('click', () => {
+        // 既存の選択を解除
+        grid.querySelectorAll('img.selected').forEach(el => el.classList.remove('selected'));
+        // この画像を選択
+        img.classList.add('selected');
+        selectedSrc = img.src;
+        newConfirmBtn.disabled = false;
+      });
+      grid.appendChild(img);
+    });
+
+    newConfirmBtn.addEventListener('click', () => {
+      if (!selectedSrc) return;
+      // カスタムサムネイルを保存
+      if (!this.decks[deckId]) return;
+      this.decks[deckId].thumbnail = selectedSrc;
+      this.saveToLocalStorage();
+      // プレビュー画像を即座に更新
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.src = selectedSrc;
+        previewImg.style.display = 'block';
+      }
+      this.closeThumbnailModal();
+    });
+
+    // 閉じるボタン
+    const closeBtn = modal.querySelector('.deck-thumbnail-close');
+    const newCloseBtn = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+    newCloseBtn.addEventListener('click', () => this.closeThumbnailModal());
+
+    // 背景クリックで閉じる
+    modal._bgHandler = (e) => {
+      if (e.target === modal) this.closeThumbnailModal();
+    };
+    modal.addEventListener('click', modal._bgHandler);
+
+    // モーダルを表示
+    modal.style.display = 'block';
+    requestAnimationFrame(() => modal.classList.add('active'));
+  },
+
+  closeThumbnailModal() {
+    const modal = document.getElementById('deck-thumbnail-modal');
+    modal.classList.remove('active');
+    if (modal._bgHandler) {
+      modal.removeEventListener('click', modal._bgHandler);
+      modal._bgHandler = null;
+    }
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+};
+
+// html2canvasライブラリを動的に読み込む
+function loadHtml2Canvas() {
+  return new Promise((resolve, reject) => {
+    if (window.html2canvas) {
+      resolve(window.html2canvas);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    script.onload = () => resolve(window.html2canvas);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// デッキ画像の保存機能
+async function captureDeck() {
+  // 保存中メッセージを表示（最初に表示）
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'saving-message';
+  messageDiv.textContent = '画像を作成中...';
+  document.body.appendChild(messageDiv);
+
+  // 確実にメッセージが表示されるよう少し待機
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  try {
+    // html2canvasの読み込み
+    const html2canvas = await loadHtml2Canvas();
+
+    // デッキ表示エリアの取得
+    const deckDisplay = document.getElementById('deck-display');
+    const modalContent = document.querySelector('.deck-modal-content');
+
+    // キャプチャ用のクラスを追加
+    deckDisplay.classList.add('capturing');
+    modalContent.classList.add('capturing-deck');
+
+    // 現在のデッキ名を取得
+    const currentDeckId = deckManager.currentDeckId;
+    const deckButton = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+    const deckName = deckButton ? deckButton.textContent : `デッキ${currentDeckId}`;
+
+    // html2canvasでキャプチャ
+    const canvas = await html2canvas(deckDisplay, {
+      backgroundColor: '#2a2a2a',
+      scale: 4,
+      logging: false,
+      allowTaint: true,
+      useCORS: true,
+      imageTimeout: 0, // タイムアウトを無効化して処理を高速化
+      removeContainer: true
+    });
+
+    // キャプチャ用クラスを削除
+    deckDisplay.classList.remove('capturing');
+    modalContent.classList.remove('capturing-deck');
+
+    // iOS・Android は全員モーダル（長押し保存）、PC のみ直接ダウンロード
+    const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    const useModal = isIOS || isAndroid;
+
+    if (useModal) {
+      try {
+        // DataURLを生成（エラーハンドリング付き）
+        const dataUrl = await new Promise((resolve, reject) => {
+          try {
+            const url = canvas.toDataURL('image/png');
+            resolve(url);
+          } catch (e) {
+            reject(e);
+          }
+        });
+
+        // モーダルを生成
+        const imageModal = document.createElement('div');
+        imageModal.className = 'deck-image-modal';
+
+        const instruction = isIOS
+          ? '共有ボタン、画像を長押しで保存。'
+          : '保存ボタンで端末に保存。共有ボタンで送信。';
+
+        const modalHTML = `
+          <div class="deck-image-container">
+            <div class="deck-image-wrapper">
+              <img src="${dataUrl}" alt="${deckName}">
+              <button class="deck-share-button" type="button" aria-label="共有">
+                <i class="fas fa-share"></i>
+                <span>共有</span>
+              </button>
+            </div>
+            <p class="save-instruction">${instruction}</p>
+            ${isAndroid ? '<button class="deck-save-button">保存</button>' : ''}
+            <button class="modal-close-button">閉じる</button>
+          </div>
+        `;
+
+        imageModal.innerHTML = modalHTML;
+
+        // Android 保存ボタン（blob URL でダウンロード）
+        const saveButton = imageModal.querySelector('.deck-save-button');
+        if (saveButton) {
+          saveButton.addEventListener('click', () => {
+            canvas.toBlob((blob) => {
+              if (!blob) {
+                deckBuilder?.showMessage?.('保存に失敗しました。共有をお試しください。');
+                return;
+              }
+              const blobUrl = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = `${deckName}.png`;
+              link.click();
+              setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+            }, 'image/png');
+          });
+        }
+
+        // 共有ボタン
+        const shareButton = imageModal.querySelector('.deck-share-button');
+        if (shareButton) {
+          shareButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            shareButton.disabled = true;
+            shareButton.classList.add('is-loading');
+            try {
+              if (navigator.share) {
+                const blob = await (await fetch(dataUrl)).blob();
+                const file = new File([blob], `${deckName}.png`, { type: blob.type || 'image/png' });
+                const canShareFiles = !navigator.canShare || navigator.canShare({ files: [file] });
+                if (canShareFiles) {
+                  await navigator.share({ title: deckName, files: [file] });
+                  return;
+                }
+              }
+              deckBuilder?.showMessage?.('共有できませんでした。');
+            } catch (error) {
+              if (error && error.name === 'AbortError') return;
+              deckBuilder?.showMessage?.('共有に失敗しました。');
+            } finally {
+              shareButton.disabled = false;
+              shareButton.classList.remove('is-loading');
+            }
+          });
+        }
+
+        const closeButton = imageModal.querySelector('.modal-close-button');
+        if (closeButton) {
+          closeButton.addEventListener('click', () => {
+            imageModal.remove();
+            document.body.classList.remove('modal-open');
+          });
+        }
+
+        imageModal.addEventListener('click', (e) => {
+          if (e.target === imageModal) {
+            imageModal.remove();
+            document.body.classList.remove('modal-open');
+          }
+        });
+
+        // DOMに追加
+        document.body.appendChild(imageModal);
+
+        // 少し遅延してからフェードイン（Safari対策）
+        setTimeout(() => {
+          imageModal.classList.add('active');
+        }, 200);
+      } catch (error) {
+        console.error('モーダル表示エラー:', error);
+        alert('画像の表示に失敗しました。');
+      }
+    } else {
+      // PCとAndroidは直接保存
+      const link = document.createElement('a');
+      link.download = `${deckName}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+  } catch (error) {
+    console.error('デッキの画像生成に失敗しました:', error);
+    alert('デッキの画像生成に失敗しました。');
+  } finally {
+    // 保存中メッセージを削除
+    const messageDiv = document.querySelector('.saving-message');
+    if (messageDiv) {
+      messageDiv.remove();
+    }
+  }
+}
+
+// イベントリスナーの重複登録を防ぐためのフラグ
+let modalControlsInitialized = false;
+let currentModalCard = null;
+let currentModalCardName = null;
+
+// モーダルボタンにイベントリスナーを設定する関数
+function setupModalButtonListeners(controls) {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  if (addButton) {
+    addButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+        handleModalAddCard();
+      }
+    };
+  }
+
+  if (removeButton) {
+    removeButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!removeButton.disabled && currentModalCardName) {
+        handleModalRemoveCard();
+      }
+    };
+  }
+}
+
+// カード拡大表示時のコントロール設定（一度だけ実行）
+function setupModalCardControlsOnce(controls, card, cardName) {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  // 現在のカード情報を更新
+  currentModalCard = card;
+  currentModalCardName = cardName;
+
+  // イベントリスナーは一度だけ設定
+  if (!modalControlsInitialized) {
+    addButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!addButton.disabled && currentModalCard && currentModalCardName) {
+        handleModalAddCard();
+      }
+    };
+
+    removeButton.onclick = (e) => {
+      e.stopPropagation();
+      if (!removeButton.disabled && currentModalCardName) {
+        handleModalRemoveCard();
+      }
+    };
+
+    modalControlsInitialized = true;
+  }
+
+  // ボタンの状態は毎回更新
+  updateModalButtonStates(controls, cardName);
+}
+
+// モーダルでのカード追加処理
+function handleModalAddCard() {
+  const cardName = currentModalCardName;
+
+  // カードの上限枚数を取得
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+
+  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+
+  if (maxAllowed === Infinity || currentCount < maxAllowed) {
+    deckBuilder.addCard(currentModalCard.cloneNode(true));
+    updateCardCountInModal(cardName);
+  } else {
+    // 上限メッセージ
+    if (maxAllowed === 10) {
+      deckBuilder.showTenCardMessage();
+    } else if (maxAllowed === 7) {
+      deckBuilder.showMessage('このカードはデッキに7枚まで。');
+    } else {
+      deckBuilder.showMessage('同じカードはデッキに4枚まで。');
+    }
+  }
+}
+
+// モーダルでのカード削除処理
+function handleModalRemoveCard() {
+  const cardName = currentModalCardName;
+  const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+  if (cardToRemove) {
+    deckBuilder.removeCard(null, cardToRemove.dataset.number);
+    updateCardCountInModal(cardName);
+  }
+}
+
+// モーダルボタンの状態更新
+function updateModalButtonStates(controls, cardName) {
+  const addButton = controls.querySelector('#add-card');
+  const removeButton = controls.querySelector('#remove-card');
+
+  // カードの上限枚数を取得
+  let maxAllowed = 4;
+  if (deckBuilder.infiniteCardLimit.has(cardName)) {
+    maxAllowed = Infinity;
+  } else if (deckBuilder.tenCardLimit.has(cardName)) {
+    maxAllowed = 10;
+  } else if (deckBuilder.sevenCardLimit.has(cardName)) {
+    maxAllowed = 7;
+  }
+
+  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+
+  // ボタンの無効化状態を設定
+  addButton.disabled = maxAllowed !== Infinity && currentCount >= maxAllowed;
+  removeButton.disabled = currentCount <= 0;
+
+  // スタイルも更新
+  if (maxAllowed !== Infinity && currentCount >= maxAllowed) {
+    addButton.classList.add('disabled');
+  } else {
+    addButton.classList.remove('disabled');
+  }
+
+  if (currentCount <= 0) {
+    removeButton.classList.add('disabled');
+  } else {
+    removeButton.classList.remove('disabled');
+  }
+}
+
+// カード拡大表示時のコントロール設定（旧版 - 後方互換性のため残す）
+function setupModalCardControls(controls, card, cardName) {
+  // 新しい関数に転送
+  setupModalCardControlsOnce(controls, card, cardName);
+}
+
+// デッキ削除ボタンのイベントリスナーを追加
+document.querySelectorAll('.deck-delete-button').forEach((button) => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const deckId = button.getAttribute('data-deck-id');
+    confirmDeckReset(deckId);
+  });
+});
+
+// デッキリセット確認ポップアップを表示
+function confirmDeckReset(deckId) {
+  const confirmPopup = document.createElement('div');
+  confirmPopup.className = 'confirm-popup';
+  confirmPopup.innerHTML = `
+    <div class="confirm-content">
+      <p>デッキ${deckId}の内容をリセットしますか？</p>
+      <div class="confirm-buttons">
+        <button onclick="resetSpecificDeck(${deckId}, true)">はい</button>
+        <button onclick="resetSpecificDeck(${deckId}, false)">いいえ</button>
+      </div>
+    </div>
+  `;
+
+  // オーバーレイ部分のクリックで閉じる
+  confirmPopup.addEventListener('click', (e) => {
+    if (e.target === confirmPopup) {
+      resetSpecificDeck(deckId, false);
+    }
+  });
+
+  document.body.classList.add('modal-open');
+  document.body.appendChild(confirmPopup);
+}
+
+// 特定のデッキをリセットする関数
+function resetSpecificDeck(deckId, confirmed) {
+  const popup = document.querySelector('.confirm-popup');
+
+  if (confirmed) {
+    // 現在のデッキIDを保存
+    const currentDeckId = deckManager.currentDeckId;
+
+    // 指定されたデッキをリセット
+    if (deckManager.decks[deckId]) {
+      // デッキ内容をリセット
+      deckManager.decks[deckId].cards = [];
+      deckManager.decks[deckId].name = `デッキ${deckId}`;
+
+      // デッキ名ボタンのテキストを更新
+      const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+      if (button) {
+        (button.querySelector('span') || button).textContent = `デッキ${deckId}`;
+      }
+
+      // プレビュー画像を非表示
+      const previewImg = document.querySelector(`.deck-preview-image[data-deck-id="${deckId}"]`);
+      if (previewImg) {
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
+
+      // 現在表示中のデッキが削除対象の場合、デッキ内容も更新
+      if (currentDeckId == deckId) {
+        deckBuilder.deck = [];
+        deckBuilder.updateDisplay();
+        deckBuilder.updateDeckCount();
+      }
+
+      // 変更を保存
+      deckManager.saveToLocalStorage();
+
+      // 成功メッセージを表示
+      deckBuilder.showMessage(`デッキ${deckId}をリセットしました`);
+    }
+  }
+
+  document.body.classList.remove('modal-open');
+  popup.remove();
+}
+
+
+
+// 検索結果カウントを更新する関数
+function updateCardCount() {
+  const cards = document.querySelectorAll('.card');
+  let visibleCount = 0;
+
+  cards.forEach((card) => {
+    if (card.style.display !== 'none' && !card.hasAttribute('data-empty')) {
+      visibleCount++;
+    }
+  });
+
+  const countElement = document.getElementById('search-result-count');
+  if (countElement) {
+    countElement.innerHTML = `検索結果：<span class="count-number">${visibleCount}</span>枚`;
+  }
+}
+
+// フィルター詳細表示を更新する関数
+function updateFilterDetails() {
+  const keywordDetailsElement = document.getElementById('keyword-details');
+  const roleDetailsElement = document.getElementById('role-details');
+  const seriesDetailsElement = document.getElementById('series-details');
+  const rareDetailsElement = document.getElementById('rare-details');
+  const containerElement = document.getElementById('filter-details');
+
+  if (!keywordDetailsElement || !roleDetailsElement || !seriesDetailsElement || !rareDetailsElement || !containerElement) {
+    return;
+  }
+
+  // 選択されたフィルターを取得
+  const selectedKeywords = Array.from(filters.keyword || []);
+  const selectedRoles = Array.from(filters.role || []);
+  const selectedSeries = Array.from(filters.series || []);
+  const selectedRares = Array.from(filters.rare || []);
+
+  // キーワード詳細を作成
+  keywordDetailsElement.innerHTML = '';
+  selectedKeywords.forEach(keyword => {
+    const keywordButton = document.querySelector(`#keyword button[onclick*="toggleFilterCard('keyword', '${keyword}')"]`);
+    if (keywordButton) {
+      const tooltip = keywordButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${keyword}</span>：<span class="item-description">${tooltip}</span>`;
+      keywordDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // 役割詳細を作成
+  roleDetailsElement.innerHTML = '';
+  selectedRoles.forEach(role => {
+    const roleButton = document.querySelector(`#role button[onclick*="toggleFilterCard('role', '${role}')"]`);
+    if (roleButton) {
+      const tooltip = roleButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${role}</span>：<span class="item-description">${tooltip}</span>`;
+      roleDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // シリーズ詳細を作成
+  seriesDetailsElement.innerHTML = '';
+  selectedSeries.forEach(series => {
+    const seriesButton = document.querySelector(`#series button[onclick*="toggleFilterCard('series', '${series}')"]`);
+    if (seriesButton) {
+      const tooltip = seriesButton.getAttribute('data-tooltip') || '';
+      const detailItem = document.createElement('div');
+      detailItem.className = 'details-item';
+      detailItem.innerHTML = `<span class="item-name">${series}</span>：<span class="item-description">${tooltip}</span>`;
+      seriesDetailsElement.appendChild(detailItem);
+    }
+  });
+
+  // レア詳細を作成（data-tooltipがあるもののみ表示）
+  rareDetailsElement.innerHTML = '';
+  selectedRares.forEach(rare => {
+    const rareButton = document.querySelector(`#rare button[onclick*="toggleFilterCard('rare', '${rare}')"]`);
+    if (rareButton) {
+      const tooltip = rareButton.getAttribute('data-tooltip') || '';
+      if (tooltip) {
+        const detailItem = document.createElement('div');
+        detailItem.className = 'details-item';
+        detailItem.innerHTML = `<span class="item-name">${rare}</span>：<span class="item-description">${tooltip}</span>`;
+        rareDetailsElement.appendChild(detailItem);
+      }
+    }
+  });
+
+  // コンテナの表示・非表示を制御（実際に中身があるセクションのみカウント）
+  const hasContent = keywordDetailsElement.children.length > 0 || roleDetailsElement.children.length > 0 || seriesDetailsElement.children.length > 0 || rareDetailsElement.children.length > 0;
+  containerElement.style.display = hasContent ? 'block' : 'none';
+}
+
+// =====================
+// デッキコード機能
+// =====================
+
+// デッキ -> カノニカル文字列（id:count を | 連結、id昇順）
+function canonicalizeDeckMap(deckMap) {
+  return Object.entries(deckMap)
+    .filter(([_, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([id, c]) => `${id}:${c}`)
+    .join('|');
+}
+
+async function sha256Hex(text) {
+  const enc = new TextEncoder();
+  const data = enc.encode(text);
+  const cryptoObj = (window.crypto || self.crypto);
+  if (!cryptoObj || !cryptoObj.subtle) {
+    throw new Error('SHA-256が利用できません');
+  }
+  const hash = await cryptoObj.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+function b64urlEncode(str) {
+  const b64 = btoa(str);
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function b64urlDecode(s) {
+  let b64 = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (b64.length % 4) b64 += '=';
+  return atob(b64);
+}
+
+// 現在のデッキ（deckBuilder.deck）から {number: count} を作成
+function currentDeckToMap() {
+  const map = {};
+  (deckBuilder.deck || []).forEach((card) => {
+    const id = card?.dataset?.number;
+    if (!id) return;
+    map[id] = (map[id] || 0) + 1;
+  });
+  return map;
+}
+
+async function deckToCodeFromMap(map) {
+  // v3: base36本文 + プレーン表現（Base64URL非使用で短縮）
+  const entries = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .map(([id, c]) => `${parseInt(id, 10).toString(36)}:${parseInt(c, 10).toString(36)}`);
+  const body = entries.join('|');
+  const version = 'v3';
+  const normalizedBody = normalizeDeckCodeBody(body);
+  const checksum = (await sha256Hex(normalizedBody)).slice(0, 10);
+  return `${version}|${checksum}|${normalizedBody}`;
+}
+
+// v5: JSON配列をBase64URL化（短縮・堅牢）
+async function deckToCodeV5(map) {
+  const pairs = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .map(([id, c]) => [String(id), Number(c)]);
+  const payload = b64urlEncode(JSON.stringify(pairs));
+  const checksum = (await sha256Hex(payload)).slice(0, 10);
+  return `v5|${checksum}|${payload}`;
+}
+
+async function codeToMap(code) {
+  try {
+    const raw0 = normalizeWholeCode(code);
+
+    // v6: 5|checksum|base64url(VARINT binary)
+    if (/^5\|/.test(raw0)) {
+      const firstBar = raw0.indexOf('|');
+      const rest = raw0.slice(firstBar + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('Bad format');
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
+      const payload = rest.slice(sep + 1);
+      const expect = (await sha256Hex(payload)).slice(0, 10);
+      if (checksum !== expect) throw new Error('Invalid code');
+      const bytes = v6_binToBytes(b64urlDecode(payload));
+      let i = 0, prev = 0; const map = {};
+      while (i < bytes.length) {
+        const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
+        const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
+        const id = prev + d.value; prev = id;
+        if (c.value > 0) map[String(id)] = (map[String(id)] || 0) + c.value;
+      }
+      return map;
+    }
+    // legacy v5: v5|checksum|base64url(JSON[[id,count],...])
+    if (/^v5\|/i.test(raw0)) {
+      const firstBar = raw0.indexOf('|');
+      const rest = raw0.slice(firstBar + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('Bad format');
+      const checksum = String(rest.slice(0, sep) || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
+      const payload = rest.slice(sep + 1);
+      const expect = (await sha256Hex(payload)).slice(0, 10);
+      if (checksum !== expect) throw new Error('Invalid code');
+      const pairs = JSON.parse(b64urlDecode(payload));
+      const map = {};
+      if (Array.isArray(pairs)) {
+        pairs.forEach(([id, c]) => { const n = Number(c) || 0; if (id && n > 0) map[String(id)] = (map[String(id)] || 0) + n; });
+      }
+      return map;
+    }
+    const firstBar = raw0.indexOf("|");
+    if (firstBar <= 0) throw new Error("Bad format");
+    const versionRaw0 = raw0.slice(0, firstBar).toLowerCase(); const versionRaw = versionRaw0.startsWith('v') ? versionRaw0.slice(1) : versionRaw0;
+    const rest = raw0.slice(firstBar + 1);
+    const sep = rest.indexOf('|');
+    if (sep < 0) throw new Error('Bad format');
+    const checksumRaw = rest.slice(0, sep);
+    const body = rest.slice(sep + 1);
+    const checksum = String(checksumRaw || '').replace(/[^0-9a-f]/gi, '').toLowerCase();
+    const parseBody = normalizeDeckCodeBody(body);
+    const expect = (await sha256Hex(parseBody)).slice(0, 10);
+    if (checksum !== expect) throw new Error('Invalid code');
+    const map = {};
+    if (parseBody) {
+      parseBody.split("|").forEach((pair) => {
+        const [idStr0, cntStr0] = pair.split(":");
+        if (!idStr0 || !cntStr0) return;
+        let idStr; let n;
+        if (versionRaw === "v1") {
+          idStr = idStr0;
+          n = parseInt(cntStr0, 10) || 0;
+        } else {
+          idStr = parseInt(idStr0, 36).toString(10);
+          n = parseInt(cntStr0, 36) || 0;
+        }
+        n = Math.max(0, n);
+        if (idStr && n > 0) map[idStr] = (map[idStr] || 0) + n;
+      });
+    }
+    return map;
+  } catch (e) {
+    throw new Error("無効なコードです");
+  }
+}
+function replaceDeckWithMap(map) {
+  // 先に全IDの存在確認（1枚でも欠けたら適用を中止）
+  const missing = [];
+  Object.entries(map).forEach(([id]) => {
+    const exists = document.querySelector(`.card[data-number="${id}"]`);
+    if (!exists) missing.push(id);
+  });
+  if (missing.length > 0) {
+    if (typeof deckBuilder?.showMessage === 'function') {
+      deckBuilder.showMessage(`見つからない札があります: ${missing.join(',')}`);
+    }
+    return false;
+  }
+
+  const newDeck = [];
+  const addCardByNumber = (num) => {
+    const original = document.querySelector(`.card[data-number="${num}"]`);
+    if (!original) return false;
+    const card = document.createElement('div');
+    card.className = 'card';
+    Object.assign(card.dataset, {
+      name: original.dataset.name,
+      type: original.dataset.type,
+      season: original.dataset.season,
+      cost: original.dataset.cost,
+      number: original.dataset.number
+    });
+    // 主な属性の集計に必要な属性情報も付与
+    if (original.dataset.attribute) {
+      card.dataset.attribute = original.dataset.attribute;
+    }
+    const img = document.createElement('img');
+    const originalImg = original.querySelector('img');
+    img.src = originalImg.getAttribute('data-src') || originalImg.src;
+    img.alt = original.dataset.name;
+    img.onload = () => { img.classList.add('loaded'); img.style.opacity = '1'; };
+    card.appendChild(img);
+    newDeck.push(card);
+    return true;
+  };
+
+  Object.entries(map)
+    .sort(([a], [b]) => (parseInt(a, 10) - parseInt(b, 10)))
+    .forEach(([id, count]) => {
+      for (let i = 0; i < count; i++) addCardByNumber(id);
+    });
+
+  deckBuilder.deck = newDeck;
+  deckBuilder.updateDisplay();
+  deckBuilder.updateDeckCount();
+  // 保存と名称変更
+  const currentDeckId = deckManager.currentDeckId;
+  const button = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
+  if (button) (button.querySelector('span') || button).textContent = 'デッキコードから作成';
+  if (!deckManager.decks[currentDeckId]) deckManager.decks[currentDeckId] = { name: 'デッキコードから作成', cards: [] };
+  deckManager.decks[currentDeckId].name = 'デッキコードから作成';
+  deckManager.saveDeck(currentDeckId);
+}
+
+function openDeckShareModal() {
+  // スタイル注入（1回だけ）
+  if (!document.getElementById("deck-share-style")) {
+    const st = document.createElement("style");
+    st.id = "deck-share-style";
+    st.textContent = `
+    /* Deck share modal: unify typographic scale and spacing */
+    .deck-share-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4}
+    .deck-code-title,.deck-code-input-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
+    .deck-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:14px;line-height:1.4}
+    .deck-code-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0}
+    .deck-code-input-area{display:flex;flex-direction:column;gap:8px}
+    .deck-code-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:14px;line-height:1.4}
+    .deck-code-apply-row{display:flex;gap:8px;justify-content:flex-start;align-items:center}
+    /* Keep left alignment, normalize button sizing only within this modal */
+    .deck-share-body .deck-menu-button{font-size:14px;font-weight:600;padding:6px 10px;height:auto;min-height:32px;line-height:1.2}
+    \n    .deck-list-content textarea, .deck-list-content input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+    `;
+    document.head.appendChild(st);
+  }
+
+  // 既存があれば再利用
+  let modal = document.getElementById('deck-share-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'deck-share-modal';
+    modal.className = 'deck-list-modal';
+    const content = document.createElement('div');
+    content.className = 'deck-list-content';
+    content.innerHTML = `
+      <div class=\"deck-list-header\">
+        <h2>デッキ共有</h2>
+        <button class=\"deck-list-close\" id=\"deck-share-close\">&times;</button>
+      </div>
+      <div class=\"deck-share-body\">
+        <div class=\"deck-code-title\">選択中のデッキコード</div>
+        <div id=\"deck-code-display\" class=\"deck-code-display\"></div>
+        <div class=\"deck-code-buttons\">
+          <button id=\"copy-deck-code\" class=\"deck-menu-button\">デッキコードをコピー</button>
+        </div>
+        <div id=\"deck-code-input-area\" class=\"deck-code-input-area\">
+          <div class=\"deck-code-input-title\">デッキコードを入力してください。</div>
+          <textarea id=\"deck-code-input\" class=\"deck-code-input\" rows=\"3\" placeholder=\"ここに貼り付け\"></textarea>
+           <div class=\"deck-code-apply-row\">
+             <button id=\"paste-from-clipboard\" class=\"deck-menu-button\">クリップボードから貼り付け</button>
+             <button id=\"apply-deck-code\" class=\"deck-menu-button\">適用</button><button id=\"clear-deck-code\" class=\"deck-menu-button\">消去</button>
+           </div>
+        </div>
+      </div>`;
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // 閉じる
+    const closeBtn = content.querySelector('#deck-share-close');
+    closeBtn?.addEventListener('click', () => {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+      }
+    });
+
+    // コピー
+    content.querySelector('#copy-deck-code')?.addEventListener('click', async () => {
+      const code = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(code);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('デッキコードをコピーしました。');
+      } catch (_) {
+        alert('コピーに失敗しました');
+      }
+    });
+
+    // 表示コードをクリックでコピー（PCでの操作簡略化）
+    const codeDisplay = content.querySelector('#deck-code-display');
+    if (codeDisplay) {
+      codeDisplay.addEventListener('click', async () => {
+        const code = codeDisplay.textContent?.trim() || '';
+        try { await navigator.clipboard.writeText(code); } catch (_) { }
+      });
+    }
+
+    // クリップボードから貼り付け
+    const pasteBtn = content.querySelector('#paste-from-clipboard');
+    if (pasteBtn) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          const txt = await navigator.clipboard.readText();
+          const input = content.querySelector('#deck-code-input');
+          if (input) {
+            input.value = txt || '';
+            if (document.activeElement === input) input.blur();
+          }
+        } catch (err) {
+          // 取得できない環境では、上の表示コードを流用
+          const displayTxt = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
+          const input = content.querySelector('#deck-code-input');
+          if (input) {
+            input.value = displayTxt;
+            if (document.activeElement === input) input.blur();
+          }
+        }
+      });
+    }
+
+
+    // 消去
+    const clearBtn = content.querySelector('#clear-deck-code');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        const input = content.querySelector('#deck-code-input');
+        if (input) {
+          input.value = '';
+          if (document.activeElement === input) input.blur();
+        }
+      });
+    }
+
+    // 適用
+    content.querySelector('#apply-deck-code')?.addEventListener('click', async () => {
+      const input = content.querySelector('#deck-code-input');
+      const val = input?.value?.trim() || '';
+      if (!val) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('デッキコードを入力してください。');
+        return;
+      }
+      try {
+        const map = await codeToMap(val);
+        // 確認ポップアップ
+        const confirmPopup = document.createElement('div');
+        confirmPopup.className = 'confirm-popup';
+        confirmPopup.innerHTML = `
+          <div class=\"confirm-content\">
+            <p>現在のデッキに上書きしますか？</p>
+            <div class=\"confirm-buttons\">
+              <button id=\"apply-code-yes\">はい</button>
+              <button id=\"apply-code-no\">いいえ</button>
+            </div>
+          </div>`;
+        confirmPopup.addEventListener('click', (e) => {
+          if (e.target === confirmPopup) document.body.removeChild(confirmPopup);
+        });
+        document.body.appendChild(confirmPopup);
+        document.getElementById('apply-code-no')?.addEventListener('click', () => {
+          document.body.removeChild(confirmPopup);
+        });
+        document.getElementById('apply-code-yes')?.addEventListener('click', () => {
+          document.body.removeChild(confirmPopup);
+          replaceDeckWithMap(map);
+          // 閉じる
+          modal.classList.remove('active');
+          setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+        });
+      } catch (e) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('無効なコードです');
+      }
+    });
+  }
+
+  // コード生成して表示
+  (async () => {
+    try {
+      const map = currentDeckToMap();
+      const prefer = localStorage.getItem('deckCodeVersion') || 'v6';
+      const code = (prefer.toLowerCase() === 'v6' || prefer === '5') ? await deckToCodeV6(map) : (prefer.toLowerCase() === 'v5' ? await deckToCodeV5(map) : await deckToCodeFromMap(map));
+      const display = modal.querySelector('#deck-code-display');
+      if (display) display.textContent = code;
+    } catch (e) {
+      const display = modal.querySelector('#deck-code-display');
+      if (display) display.textContent = 'コード生成に失敗しました';
+    }
+  })();
+
+  // 表示
+  modal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+    // フォーカスは当てない（キーボードを出さない）
+  });
+}
+
+
+// Normalize possible full-width separators and invisible chars in code body
+function normalizeDeckCodeBody(s) {
+  if (!s) return '';
+  return s
+    .replace(/[\u00A0\u200B-\u200D\uFEFF]/g, '') // zero-width & NBSP
+    .replace(/\uFF1A/g, ':') // full-width colon
+    .replace(/\uFF5C/g, '|') // full-width pipe
+    .replace(/\s+/g, '')
+    .replace(/\|{2,}/g, '|')
+    .trim();
+}
+
+
+// 全体正規化: 全角「｜」「：」、空白/ゼロ幅を除去
+function normalizeWholeCode(s) {
+  return String(s || '')
+    .replace(/[\u00A0\u200B-\u200D\uFEFF]/g, '')
+    .replace(/\uFF5C/g, '|') // 全角｜
+    .replace(/\uFF1A/g, ':') // 全角：
+    .replace(/\s+/g, '')
+    .trim();
+}
+
+
+// ===== v6: VarInt Binary + Base64URL (short) =====
+function v6_varintEncode(n) {
+  n = Number(n) >>> 0;
+  const out = [];
+  while (n >= 0x80) { out.push((n & 0x7f) | 0x80); n >>>= 7; }
+  out.push(n);
+  return out;
+}
+function v6_varintDecode(bytes, pos) {
+  let shift = 0, res = 0, b = 0, i = pos;
+  do { if (i >= bytes.length) return { value: null, next: i }; b = bytes[i++]; res |= (b & 0x7f) << shift; shift += 7; } while (b & 0x80);
+  return { value: res >>> 0, next: i };
+}
+function v6_bytesToBin(arr) { let s = ''; for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 0xff); return s; }
+function v6_binToBytes(str) { const out = new Uint8Array(str.length); for (let i = 0; i < str.length; i++) out[i] = str.charCodeAt(i) & 0xff; return out; }
+async function deckToCodeV6(map) {
+  const entries = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+    .sort((a, b) => a[0] - b[0]);
+  let prev = 0; const bytes = [];
+  for (const [id, cnt] of entries) {
+    const d = id - prev; prev = id;
+    bytes.push(...v6_varintEncode(d));
+    bytes.push(...v6_varintEncode(cnt));
+  }
+  const payload = b64urlEncode(v6_bytesToBin(bytes));
+  const checksum = (await sha256Hex(payload)).slice(0, 10);
+  return `5|${checksum}|${payload}`;
+}
+
+// スクロール可能かチェックしてスクロールバーを表示
+const updateScrollbarVisibility = () => {
+  const modalButtons = document.querySelector('.modal-buttons');
+  if (modalButtons) {
+    if (modalButtons.scrollHeight > modalButtons.clientHeight) {
+      modalButtons.classList.add('has-scroll');
+    } else {
+      modalButtons.classList.remove('has-scroll');
+    }
+  }
+};
+
+// =====================
+// 全デッキバックアップ機能
+// =====================
+
+// デッキ名をBase64URL化（日本語対応）
+function encodeDeckName(name) {
+  return b64urlEncode(unescape(encodeURIComponent(name)));
+}
+function decodeDeckName(encoded) {
+  return decodeURIComponent(escape(b64urlDecode(encoded)));
+}
+
+// 全デッキをBK2形式のバックアップコードに変換
+async function generateAllDecksBackupCode() {
+  deckManager.saveDeck(deckManager.currentDeckId);
+
+  const parts = [];
+  parts.push('o:' + (deckManager.deckOrder || []).join(','));
+  parts.push('c:' + deckManager.currentDeckId);
+
+  for (const [deckId, deck] of Object.entries(deckManager.decks)) {
+    const name = encodeDeckName(deck?.name || ('デッキ' + deckId));
+    const map = {};
+    if (deck && Array.isArray(deck.cards)) {
+      deck.cards.forEach(card => {
+        const num = card?.dataset?.number;
+        if (num) map[num] = (map[num] || 0) + 1;
+      });
+    }
+    // カードデータをVARINT delta符号化
+    const entries = Object.entries(map)
+      .filter(([, c]) => Number(c) > 0)
+      .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+      .sort((a, b) => a[0] - b[0]);
+    let prev = 0;
+    const bytes = [];
+    for (const [id, cnt] of entries) {
+      bytes.push(...v6_varintEncode(id - prev)); prev = id;
+      bytes.push(...v6_varintEncode(cnt));
+    }
+    const payload = bytes.length > 0 ? b64urlEncode(v6_bytesToBin(bytes)) : '';
+    parts.push(deckId + ':' + name + ':' + payload);
+  }
+
+  const body = parts.join('|');
+  const checksum = (await sha256Hex(body)).slice(0, 8);
+  return `BK2|${checksum}|${body}`;
+}
+
+// バックアップコードから全デッキを復元（BK2新形式・BK1旧形式の両対応）
+async function restoreAllDecksFromBackup(code) {
+  try {
+    const raw = normalizeWholeCode(code);
+
+    // BK2: 新形式
+    if (raw.startsWith('BK2|')) {
+      const rest = raw.slice(raw.indexOf('|') + 1);
+      const sep = rest.indexOf('|');
+      if (sep < 0) throw new Error('無効なバックアップコードです');
+      const checksum = rest.slice(0, sep).replace(/[^0-9a-f]/gi, '').toLowerCase();
+      const body = rest.slice(sep + 1);
+      if ((await sha256Hex(body)).slice(0, 8) !== checksum) throw new Error('バックアップコードが壊れています');
+
+      const backupData = { decks: {}, deckOrder: [], currentDeckId: 1 };
+      for (const part of body.split('|')) {
+        if (part.startsWith('o:')) {
+          backupData.deckOrder = part.slice(2).split(',').map(Number).filter(n => !isNaN(n) && n > 0);
+        } else if (part.startsWith('c:')) {
+          backupData.currentDeckId = parseInt(part.slice(2), 10) || 1;
+        } else {
+          const c1 = part.indexOf(':');
+          if (c1 < 0) continue;
+          const c2 = part.indexOf(':', c1 + 1);
+          if (c2 < 0) continue;
+          const deckId = part.slice(0, c1);
+          const name = decodeDeckName(part.slice(c1 + 1, c2));
+          const v6payload = part.slice(c2 + 1);
+          const cards = {};
+          if (v6payload) {
+            const bytes = v6_binToBytes(b64urlDecode(v6payload));
+            let i = 0, prev = 0;
+            while (i < bytes.length) {
+              const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
+              const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
+              const id = prev + d.value; prev = id;
+              if (c.value > 0) cards[String(id)] = (cards[String(id)] || 0) + c.value;
+            }
+          }
+          backupData.decks[deckId] = { name, cards };
+        }
+      }
+      return backupData;
+    }
+
+    // BK1: 旧形式（後方互換）
+    if (!raw.startsWith('BK1|')) throw new Error('無効なバックアップコードです');
+    const rest = raw.slice(raw.indexOf('|') + 1);
+    const sep = rest.indexOf('|');
+    if (sep < 0) throw new Error('無効なバックアップコードです');
+    const checksum = rest.slice(0, sep).replace(/[^0-9a-f]/gi, '').toLowerCase();
+    const payload = rest.slice(sep + 1);
+    if ((await sha256Hex(payload)).slice(0, 8) !== checksum) throw new Error('バックアップコードが壊れています');
+    const decoded = b64urlDecode(payload);
+    const json = decodeURIComponent(decoded.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    const backupData = JSON.parse(json);
+    if (!backupData.decks || typeof backupData.decks !== 'object') throw new Error('無効なバックアップデータです');
+    return backupData;
+
+  } catch (e) {
+    throw new Error(e.message || '無効なバックアップコードです');
+  }
+}
+
+// バックアップデータを実際に適用
+function applyBackupData(backupData) {
+  // 全デッキを上書き
+  deckManager.decks = {};
+  for (const [deckId, deckInfo] of Object.entries(backupData.decks)) {
+    const cards = [];
+    if (deckInfo.cards && Object.keys(deckInfo.cards).length > 0) {
+      Object.entries(deckInfo.cards)
+        .sort(([a], [b]) => parseInt(a, 10) - parseInt(b, 10))
+        .forEach(([num, count]) => {
+          const original = document.querySelector(`.card[data-number="${num}"]`);
+          if (original) {
+            for (let i = 0; i < count; i++) {
+              const card = document.createElement('div');
+              card.className = 'card';
+              Object.assign(card.dataset, {
+                name: original.dataset.name,
+                type: original.dataset.type,
+                season: original.dataset.season,
+                cost: original.dataset.cost,
+                number: original.dataset.number
+              });
+              if (original.dataset.attribute) {
+                card.dataset.attribute = original.dataset.attribute;
+              }
+              const img = document.createElement('img');
+              const originalImg = original.querySelector('img');
+              img.src = originalImg.getAttribute('data-src') || originalImg.src;
+              img.alt = original.dataset.name;
+              card.appendChild(img);
+              cards.push(card);
+            }
+          }
+        });
+    }
+    deckManager.decks[deckId] = {
+      name: deckInfo.name || ('デッキ' + deckId),
+      cards: cards.map(card => ({
+        dataset: { ...card.dataset },
+        src: card.querySelector('img')?.src
+      }))
+    };
+
+    // ボタン名を更新
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+    if (button) (button.querySelector('span') || button).textContent = deckInfo.name || ('デッキ' + deckId);
+  }
+
+  // deckOrderがあれば復元
+  if (Array.isArray(backupData.deckOrder) && backupData.deckOrder.length > 0) {
+    deckManager.deckOrder = backupData.deckOrder.map(id => parseInt(id, 10)).filter(id => Number.isFinite(id));
+    deckManager.applyDeckOrder();
+  }
+
+  // currentDeckIdを復元
+  const targetDeckId = backupData.currentDeckId || 1;
+  deckManager.currentDeckId = targetDeckId;
+  deckManager.loadDeck(targetDeckId);
+  deckManager.saveToLocalStorage();
+
+  // デッキ一覧のUI（サムネイル・ハイライト）を即座に更新
+  deckManager.updateDeckPreviews();
+  deckManager.updateActiveButton();
+}
+
+// バックアップモーダルを開く
+function openDeckBackupModal() {
+  // スタイル注入（1回だけ）
+  if (!document.getElementById('deck-backup-style')) {
+    const st = document.createElement('style');
+    st.id = 'deck-backup-style';
+    st.textContent = `
+    .deck-backup-body{display:flex;flex-direction:column;gap:12px;color:#fff;font-size:14px;line-height:1.4;flex:1;overflow-y:auto;padding:0 3px;box-sizing:border-box;}
+    .deck-backup-section-title{color:#e0e0e0;font-weight:600;font-size:14px;margin:0}
+    .deck-backup-code-display{background:rgba(0,0,0,.4);color:#fff;padding:10px 12px;border-radius:6px;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;line-height:1.4;max-height:120px;overflow-y:auto;-webkit-overflow-scrolling:touch;user-select:all;-webkit-user-select:all}
+    .deck-backup-buttons{display:flex;gap:8px;justify-content:flex-start;align-items:center;margin:0;flex-wrap:wrap}
+    .deck-backup-input{width:100%;background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:13px;line-height:1.4;outline:none}
+    .deck-backup-input:focus{box-shadow:0 0 0 2px rgba(255,255,255,.6);border-color:rgba(255,255,255,.45)}
+    .deck-backup-body .deck-menu-button{font-size:13px;font-weight:600;padding:6px 10px;height:auto;min-height:32px;line-height:1.2}
+    .deck-backup-separator{border:0;border-top:1px solid rgba(255,255,255,.15);margin:4px 0}
+    .deck-backup-desc{color:#aaa;font-size:12px;margin:0;line-height:1.4}
+    .deck-backup-warning{color:#ff9800;font-size:12px;margin:0;line-height:1.4}
+    .deck-backup-body textarea,.deck-backup-body input{pointer-events:auto;user-select:text;-webkit-user-select:text;-moz-user-select:text}
+    .deck-backup-deck-summary{color:#ccc;font-size:12px;margin:2px 0 0 0;line-height:1.3;word-break:break-all;overflow-wrap:break-word;}
+    `;
+    document.head.appendChild(st);
+  }
+
+  let modal = document.getElementById('deck-backup-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'deck-backup-modal';
+    modal.className = 'deck-list-modal';
+    const content = document.createElement('div');
+    content.className = 'deck-list-content';
+    content.innerHTML = `
+      <div class="deck-list-header">
+        <h2>デッキバックアップ</h2>
+        <button class="deck-list-close" id="deck-backup-close">&times;</button>
+      </div>
+      <div class="deck-backup-body">
+        <p class="deck-backup-desc">全デッキのバックアップコードを生成します。<br>コードをコピーしてメモ帳などに保存しておくと、キャッシュクリアしても復元できます。</p>
+
+        <div class="deck-backup-section-title">バックアップコード</div>
+        <div id="deck-backup-code-display" class="deck-backup-code-display">生成中...</div>
+        <div id="deck-backup-deck-summary" class="deck-backup-deck-summary"></div>
+        <div class="deck-backup-buttons">
+          <button id="copy-backup-code" class="deck-menu-button">コードをコピー</button>
+        </div>
+
+        <hr class="deck-backup-separator">
+
+        <div class="deck-backup-section-title">バックアップから復元</div>
+        <textarea id="deck-backup-input" class="deck-backup-input" rows="3" placeholder="バックアップコードをここに貼り付け"></textarea>
+        <div class="deck-backup-buttons">
+          <button id="paste-backup-code" class="deck-menu-button">クリップボードから貼り付け</button>
+          <button id="apply-backup-code" class="deck-menu-button">適用</button>
+          <button id="clear-backup-input" class="deck-menu-button">消去</button>
+        </div>
+        <p class="deck-backup-warning">※ 適用すると現在の全デッキが上書きされます。</p>
+      </div>`;
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    // 閉じる
+    const closeBtn = content.querySelector('#deck-backup-close');
+    closeBtn?.addEventListener('click', () => {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+      }
+    });
+
+    // コピー
+    content.querySelector('#copy-backup-code')?.addEventListener('click', async () => {
+      const code = content.querySelector('#deck-backup-code-display')?.textContent?.trim() || '';
+      if (!code || code === '生成中...') return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(code);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('バックアップコードをコピーしました。');
+      } catch (_) {
+        alert('コピーに失敗しました');
+      }
+    });
+
+    // クリップボードから貼り付け
+    content.querySelector('#paste-backup-code')?.addEventListener('click', async () => {
+      try {
+        const txt = await navigator.clipboard.readText();
+        const input = content.querySelector('#deck-backup-input');
+        if (input) {
+          input.value = txt || '';
+          if (document.activeElement === input) input.blur();
+        }
+      } catch (_) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('クリップボードの読み取りに失敗しました。手動で貼り付けてください。');
+      }
+    });
+
+    // 消去
+    content.querySelector('#clear-backup-input')?.addEventListener('click', () => {
+      const input = content.querySelector('#deck-backup-input');
+      if (input) {
+        input.value = '';
+        if (document.activeElement === input) input.blur();
+      }
+    });
+
+    // 適用（確認ダイアログ付き）
+    content.querySelector('#apply-backup-code')?.addEventListener('click', async () => {
+      const input = content.querySelector('#deck-backup-input');
+      const val = input?.value?.trim() || '';
+      if (!val) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('バックアップコードを入力してください。');
+        return;
+      }
+
+      // まずコードを検証
+      let backupData;
+      try {
+        backupData = await restoreAllDecksFromBackup(val);
+      } catch (e) {
+        if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage(e.message || '無効なバックアップコードです');
+        return;
+      }
+
+      // デッキ内容のサマリーを作成
+      let summaryText = '';
+      const deckEntries = Object.entries(backupData.decks);
+      const nonEmptyDecks = deckEntries.filter(([, d]) => d.cards && Object.keys(d.cards).length > 0);
+      summaryText = `${nonEmptyDecks.length}個のデッキが含まれています。`;
+
+      // 確認ポップアップ
+      const confirmPopup = document.createElement('div');
+      confirmPopup.className = 'confirm-popup';
+      confirmPopup.innerHTML = `
+        <div class="confirm-content">
+          <p style="font-weight:bold;color:#ff5722;margin-bottom:8px;">全デッキが上書きされます</p>
+          <p style="font-size:13px;margin-bottom:4px;">この操作は取り消せません。<br>現在の全デッキデータが、バックアップの内容に置き換わります。</p>
+          <p style="font-size:12px;color:#888;margin-bottom:12px;">${summaryText}</p>
+          <div class="confirm-buttons">
+            <button id="apply-backup-yes">復元する</button>
+            <button id="apply-backup-no">やめる</button>
+          </div>
+        </div>`;
+      confirmPopup.addEventListener('click', (e) => {
+        if (e.target === confirmPopup) document.body.removeChild(confirmPopup);
+      });
+      document.body.appendChild(confirmPopup);
+
+      document.getElementById('apply-backup-no')?.addEventListener('click', () => {
+        document.body.removeChild(confirmPopup);
+      });
+
+      document.getElementById('apply-backup-yes')?.addEventListener('click', () => {
+        document.body.removeChild(confirmPopup);
+        try {
+          applyBackupData(backupData);
+          if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('全デッキを復元しました。');
+          // バックアップモーダルを閉じる
+          modal.classList.remove('active');
+          setTimeout(() => { modal.style.display = 'none'; document.body.classList.remove('modal-open'); }, 200);
+        } catch (e) {
+          if (typeof deckBuilder?.showMessage === 'function') deckBuilder.showMessage('復元に失敗しました。');
+        }
+      });
+    });
+  }
+
+  // バックアップコード生成
+  (async () => {
+    try {
+      const code = await generateAllDecksBackupCode();
+      const display = modal.querySelector('#deck-backup-code-display');
+      if (display) display.textContent = code;
+
+      // デッキサマリー表示
+      const summaryEl = modal.querySelector('#deck-backup-deck-summary');
+      if (summaryEl) {
+        const order = (Array.isArray(deckManager.deckOrder) && deckManager.deckOrder.length)
+          ? deckManager.deckOrder
+          : Object.keys(deckManager.decks).map(Number);
+        const lines = [];
+        order.forEach((id) => {
+          const deck = deckManager.decks[id];
+          if (deck) {
+            const cardCount = Array.isArray(deck.cards) ? deck.cards.length : 0;
+            const fullName = deck.name || ('デッキ' + id);
+            const name = fullName.length > 10 ? fullName.slice(0, 10) + '…' : fullName;
+            if (cardCount > 0) {
+              lines.push(`${name}: ${cardCount}枚`);
+            }
+          }
+        });
+        summaryEl.textContent = lines.length > 0
+          ? lines.join(' / ')
+          : 'デッキにカードがありません';
+      }
+    } catch (e) {
+      const display = modal.querySelector('#deck-backup-code-display');
+      if (display) display.textContent = 'コード生成に失敗しました';
+    }
+  })();
+
+  // 表示
+  modal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+}
+
+// バックアップボタンのイベントリスナー登録
+document.addEventListener('DOMContentLoaded', () => {
+  const backupBtn = document.getElementById('deck-backup-btn');
+  if (backupBtn) {
+    backupBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeckBackupModal();
+    });
+  }
+});
