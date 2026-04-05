@@ -3348,7 +3348,10 @@ const deckBuilder = {
     message.textContent = text;
     // タッチが裏のカード一覧に伝わらないようにする
     ['touchstart', 'touchmove', 'touchend'].forEach(type => {
-      message.addEventListener(type, (e) => e.stopPropagation(), { passive: false });
+      message.addEventListener(type, (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }, { passive: false });
     });
     document.body.appendChild(message);
     this._limitMsgTimer = setTimeout(() => message.remove(), 2000);
@@ -3699,7 +3702,10 @@ const deckBuilder = {
     messageDiv.className = 'deck-message';
     messageDiv.textContent = message;
     ['touchstart', 'touchmove', 'touchend'].forEach(type => {
-      messageDiv.addEventListener(type, (e) => e.stopPropagation(), { passive: false });
+      messageDiv.addEventListener(type, (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }, { passive: false });
     });
     document.body.appendChild(messageDiv);
 
