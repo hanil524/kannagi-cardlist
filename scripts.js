@@ -572,12 +572,12 @@ function applyRangeFilter() {
   rangeFilters[type] = { min: minVal, max: maxVal };
 
   closeRangeModal();
-  // フィルターモーダルも閉じる
-  closeModal();
+  if (!_bulkFilterModalOpen) closeModal();
   filterCards();
   updateActiveFilters();
   updateFilterDetails();
   saveFiltersToLocalStorage();
+  if (_bulkFilterModalOpen) updateBulkModalState();
 }
 
 function buildPickerItems(scrollId, maxVal, selectedIndex) {
@@ -689,9 +689,17 @@ function setupPickerDrag(scrollEl, maxVal) {
     scrollEl.style.transform = `translateY(${startTranslate + diff}px)`;
   }
 
-  function onTouchEnd() {
+  function onTouchEnd(e) {
     if (!isDragging) return;
     isDragging = false;
+    const touch = e && e.changedTouches && e.changedTouches[0];
+    if (touch && Math.abs(touch.clientY - startY) < 10) {
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (el && el.classList.contains('range-picker-item') && el.dataset.value !== undefined) {
+        onPickerItemClick(scrollEl.id, parseInt(el.dataset.value));
+        return;
+      }
+    }
     snapToNearest();
   }
 
@@ -720,6 +728,13 @@ function setupPickerDrag(scrollEl, maxVal) {
   function onPointerUp(e) {
     if (!isDragging || e.pointerType === 'touch') return;
     isDragging = false;
+    if (Math.abs(e.clientY - startY) < 5) {
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el && el.classList.contains('range-picker-item') && el.dataset.value !== undefined) {
+        onPickerItemClick(scrollEl.id, parseInt(el.dataset.value));
+        return;
+      }
+    }
     snapToNearest();
   }
 
@@ -1897,10 +1912,12 @@ const toggleFilterCard = (attribute, value) => {
   updateFilterDetails(); // フィルター詳細を更新
   saveFiltersToLocalStorage();
 
-  // モーダルを確実に閉じる
-  setTimeout(() => {
-    closeModal();
-  }, 10);
+  // モーダルを確実に閉じる（一括選択モーダル内からの呼び出し時はスキップ）
+  if (!_bulkFilterModalOpen) {
+    setTimeout(() => { closeModal(); }, 10);
+  } else {
+    updateBulkModalState();
+  }
 };
 
 const filterCards = () => {
@@ -1955,8 +1972,9 @@ const filterCards = () => {
     // type フィルター
     if (shouldDisplay && filters.type.size > 0) {
       if (andFilterEnabled) {
-        // typeは単一値なので、複数選択時は「全て一致」は不可能 → OR維持
-        if (!filters.type.has(entry.type)) shouldDisplay = false;
+        // typeは単一値のため、AND条件では全選択タイプに完全一致する必要がある
+        // （複数タイプ選択時は「場所札かつ怪異札」のカードは存在しないので0件が正しい）
+        if (![...filters.type].every(v => entry.type === v)) shouldDisplay = false;
       } else {
         if (!filters.type.has(entry.type)) shouldDisplay = false;
       }
@@ -2864,6 +2882,7 @@ function removeFilter(key, value) {
     updateActiveFilters();
     updateFilterDetails();
     saveFiltersToLocalStorage();
+    if (_bulkFilterModalOpen) updateBulkModalState();
   }
 }
 
@@ -2874,6 +2893,7 @@ function removeRangeFilter(key) {
     updateActiveFilters();
     updateFilterDetails();
     saveFiltersToLocalStorage();
+    if (_bulkFilterModalOpen) updateBulkModalState();
   }
 }
 
@@ -4223,7 +4243,7 @@ function _renderZeroModal(message, actionLabel) {
         <p class="zero-search-subtitle">カードを選択してキープ可能。</p>
         <p class="zero-search-subtitle">デッキ底に送られたカードは再登場しません。（2回周期）</p>
       </div>
-      <div class="zero-search-result">
+      <div class="zero-search-result${_zeroPhase === 'redrawn' ? ' confirmed' : ''}">
         ${displayCards.map((card, index) => `
           <div class="deck-card zero-search-card ${card.dataset.zeroSelected === 'true' ? 'selected' : ''}"
                data-number="${card.dataset.number}"
@@ -4332,6 +4352,9 @@ function toggleZeroCardSelection(card, cardElement) {
 
   if (_zeroPhase === 'redrawn') {
     deckBuilder.showMessage('引き直しが終わり、\n手札は確定されました。');
+    // このメッセージは画面中央に表示
+    const zeroMsg = document.querySelector('.deck-message');
+    if (zeroMsg) zeroMsg.classList.add('deck-message-center');
     const retryBtn = document.querySelector('.zero-search-buttons button:first-child');
     if (retryBtn) {
       retryBtn.classList.remove('retry-glow');
@@ -6100,6 +6123,173 @@ function updateFilterDetails() {
   // コンテナの表示・非表示を制御（実際に中身があるセクションのみカウント）
   const hasContent = keywordDetailsElement.children.length > 0 || roleDetailsElement.children.length > 0 || seriesDetailsElement.children.length > 0 || rareDetailsElement.children.length > 0;
   containerElement.style.display = hasContent ? 'block' : 'none';
+}
+
+// =====================
+// 一括フィルター選択モーダル
+// =====================
+let _bulkFilterModalOpen = false;
+
+const _bulkSections = [
+  { id: 'series', label: 'シリーズ' },
+  { id: 'type', label: '札種類' },
+  { id: 'cost', label: 'コスト' },
+  { id: 'season', label: '季節' },
+  { id: 'power', label: '力' },
+  { id: 'attribute', label: '属性' },
+  { id: 'keyword', label: 'キーワード' },
+  { id: 'role', label: '役割' },
+  { id: 'rare', label: 'レア' },
+];
+
+function openBulkFilterModal() {
+  if (document.getElementById('bulk-filter-modal')) return;
+  _bulkFilterModalOpen = true;
+
+  // 開閉状態をlocalStorageから読み込み（未保存時は役割のみ折りたたみ）
+  const savedStates = JSON.parse(localStorage.getItem('bulk-collapse-states') || '{}');
+  const isCollapsed = (id) => (id in savedStates) ? savedStates[id] : (id === 'role');
+
+  const bodyHTML = _bulkSections.map(({ id, label }) => {
+    const src = document.getElementById(id);
+    if (!src) return '';
+    const collapsed = isCollapsed(id) ? 'collapsed' : '';
+    // コスト・力は範囲選択ボタンを先頭に追加
+    const rangeBtn = (id === 'cost' || id === 'power')
+      ? `<button class="range-select-btn" onclick="openRangeModal('${id}')">範囲選択</button>`
+      : '';
+    return `
+      <div class="bulk-section-wrapper ${collapsed}" data-section-id="${id}">
+        <div class="bulk-section-title" onclick="toggleBulkSection('${id}')">${label}</div>
+        <div class="bulk-section-right">
+          <div class="bulk-section-content">
+            <div class="bulk-filter-section" data-section-id="${id}">${rangeBtn}${src.innerHTML}</div>
+          </div>
+          <button class="bulk-show-all" onclick="toggleBulkSection('${id}')">全て表示</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  const modal = document.createElement('div');
+  modal.id = 'bulk-filter-modal';
+  modal.className = 'bulk-filter-modal';
+  modal.innerHTML = `
+    <div class="bulk-filter-dialog">
+      <div class="bulk-filter-header">
+        <span>フィルターの一括選択</span>
+        <button class="bulk-filter-close" onclick="closeBulkFilterModal()">×</button>
+      </div>
+      <div class="bulk-filter-body">${bodyHTML}</div>
+      <div class="bulk-filter-result" id="bulk-filter-result"></div>
+      <div class="bulk-filter-footer">
+        <button class="bulk-footer-btn bulk-confirm-btn" onclick="closeBulkFilterModal()">確定</button>
+        <button class="bulk-footer-btn bulk-release-btn" onclick="toggleBulkRelease()">制限開放</button>
+        <button class="bulk-footer-btn bulk-and-btn" onclick="toggleBulkAnd()">絞り込み</button>
+        <button class="bulk-footer-btn bulk-clear-btn" onclick="resetFilters(); updateBulkModalState();">クリア</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+  const scrollbarWidth = getScrollbarWidth();
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+  document.body.classList.add('modal-open');
+  const headerContent = document.querySelector('.header-content');
+  if (headerContent) headerContent.style.paddingRight = `${scrollbarWidth}px`;
+  requestAnimationFrame(() => modal.classList.add('active'));
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeBulkFilterModal();
+  });
+  updateBulkModalState();
+}
+
+function toggleBulkSection(id) {
+  const wrapper = document.querySelector(`.bulk-section-wrapper[data-section-id="${id}"]`);
+  if (!wrapper) return;
+  wrapper.classList.toggle('collapsed');
+  saveBulkCollapseState();
+}
+
+function saveBulkCollapseState() {
+  const states = {};
+  document.querySelectorAll('.bulk-section-wrapper[data-section-id]').forEach(w => {
+    states[w.dataset.sectionId] = w.classList.contains('collapsed');
+  });
+  localStorage.setItem('bulk-collapse-states', JSON.stringify(states));
+}
+
+function closeBulkFilterModal() {
+  _bulkFilterModalOpen = false;
+  const modal = document.getElementById('bulk-filter-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.paddingRight = '';
+  document.body.classList.remove('modal-open');
+  const headerContent = document.querySelector('.header-content');
+  if (headerContent) headerContent.style.paddingRight = '';
+  setTimeout(() => { modal.remove(); }, 250);
+}
+
+function toggleBulkRelease() {
+  const enabled = !deckBuilder.limitReleaseEnabled;
+  deckBuilder.limitReleaseEnabled = enabled;
+  localStorage.setItem('limitReleaseEnabled', enabled);
+  const mainToggle = document.getElementById('limit-release-toggle');
+  if (mainToggle) mainToggle.checked = enabled;
+  updateBulkFooterState();
+}
+
+function toggleBulkAnd() {
+  andFilterEnabled = !andFilterEnabled;
+  localStorage.setItem('andFilterEnabled', andFilterEnabled);
+  const mainToggle = document.getElementById('and-filter-toggle');
+  if (mainToggle) mainToggle.checked = andFilterEnabled;
+  filterCards();
+  updateBulkFooterState();
+}
+
+function updateBulkFooterState() {
+  const releaseBtn = document.querySelector('.bulk-release-btn');
+  const andBtn = document.querySelector('.bulk-and-btn');
+  if (releaseBtn) releaseBtn.classList.toggle('bulk-footer-active', !!deckBuilder.limitReleaseEnabled);
+  if (andBtn) andBtn.classList.toggle('bulk-footer-active', !!andFilterEnabled);
+}
+
+function updateBulkModalState() {
+  const modal = document.getElementById('bulk-filter-modal');
+  if (!modal) return;
+
+  // 各ボタンのアクティブ状態を filters に合わせて同期
+  modal.querySelectorAll('.bulk-filter-section button').forEach(btn => {
+    const m = (btn.getAttribute('onclick') || '').match(/toggleFilterCard\('([^']+)',\s*'([^']+)'\)/);
+    if (m) {
+      btn.classList.toggle('bulk-active', !!(filters[m[1]] && filters[m[1]].has(m[2])));
+    }
+  });
+
+  // リザルトエリアを更新
+  const resultEl = document.getElementById('bulk-filter-result');
+  if (!resultEl) return;
+  const labels = { cost: 'コスト：', power: '力：' };
+  const btns = [];
+  for (const [key, vals] of Object.entries(filters)) {
+    const label = labels[key] || '';
+    vals.forEach(v => btns.push(
+      `<button class="bulk-result-btn" onclick="removeFilter('${key}','${v.replace(/'/g, "\\'")}');updateBulkModalState();">${label}${v}</button>`
+    ));
+  }
+  for (const [key, r] of Object.entries(rangeFilters)) {
+    if (r.min !== null && r.max !== null) {
+      const label = labels[key] || '';
+      btns.push(
+        `<button class="bulk-result-btn" onclick="removeRangeFilter('${key}');updateBulkModalState();">${label}${r.min}～${r.max}</button>`
+      );
+    }
+  }
+  resultEl.innerHTML = btns.length
+    ? `<span class="bulk-result-label">結果：</span>` + btns.join('')
+    : '<span class="bulk-result-empty">未選択</span>';
+
+  updateBulkFooterState();
 }
 
 // =====================

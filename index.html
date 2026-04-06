@@ -346,11 +346,6 @@
     </nav>
 
     <main>
-      <div class="update-info">
-        <i class="fas fa-envelope"></i>
-        <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">報告フォーム</a>
-      </div>
-
       <!-- フィルターボタン -->
       <section id="filter-section">
         <div id="filter-container">
@@ -384,6 +379,7 @@
             </div>
           </div>
           <div class="filter-group">
+            <button class="bulk-filter-btn" onclick="openBulkFilterModal()">一括選択</button>
             <button onclick="resetFilters()">リセット</button>
             <label class="limit-release" title="使用制限1～3枚の札を4枚まで解禁">
               <input type="checkbox" id="limit-release-toggle" />

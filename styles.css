@@ -209,11 +209,21 @@ header a {
   }
 }
 
+/* スティッキーフッター：コンテンツが少なくてもフッターを画面下端に固定 */
+#content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* メインコンテンツの上部マージンを調整 */
 main {
+  flex: 1;
   margin-top: 35px;
   padding: 20px;
   padding-bottom: 100px;
+  /* フッターが常に画面下端に収まるよう最低高さを確保 */
+  min-height: calc(100vh - 80px);
 }
 
 @media (max-width: 768px) {
@@ -236,8 +246,8 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 24px;
   margin-bottom: 20px;
-  /* フィルターボタンからカード画像までの間隔を広げる */
   gap: 5px;
 }
 
@@ -322,10 +332,13 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   height: 28px;
-  padding: 0 12px;
+  padding: 0 10px;
   border-radius: 25px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
   background: linear-gradient(135deg, rgba(38, 40, 95, 0.95) 0%, rgba(62, 66, 148, 0.95) 50%, rgba(78, 82, 175, 0.9) 100%);
   border: 1px solid rgba(110, 115, 210, 0.3);
   color: #ffffff;
@@ -1060,6 +1073,8 @@ header input::placeholder,
   padding: 6px 8px;
   font-size: 12px;
   letter-spacing: 1.2px;
+  text-indent: 1.2px;
+  line-height: 1;
   transition: all 0.18s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   font-weight: bold;
@@ -1105,13 +1120,17 @@ header input::placeholder,
 button[onclick='resetFilters()'] {
   background: linear-gradient(180deg, rgba(172, 52, 52, 0.92) 0%, rgba(140, 35, 35, 0.92) 100%);
   color: #ffffff;
+  font-size: 12px;
   font-weight: bold;
+  line-height: 1;
   border-radius: 25px;
-  padding: 6px 16px;
+  height: 28px;
+  padding: 0 12px 0 13.2px;
   border: 1px solid rgba(210, 70, 70, 0.3);
   box-shadow: 0 2px 8px rgba(140, 30, 30, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.18s ease;
   letter-spacing: 1.2px;
+  white-space: nowrap;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2166,6 +2185,10 @@ body.modal-open {
   text-align: center;
   pointer-events: none;
   animation: fadeOut 1.5s forwards;
+}
+/* 零探しの「引き直し確定」メッセージは画面中央に表示 */
+.deck-message.deck-message-center {
+  top: 50%;
 }
 
 /* PCのデッキボタンのバッジ */
@@ -4563,6 +4586,10 @@ body.modal-open {
   transform: translateY(-5px);
 }
 
+.zero-search-result.confirmed .deck-card:hover {
+  transform: none;
+}
+
 /* 零探しカード固有スタイル（deck-card から独立して調整可能） */
 @media (min-width: 768px) {
   .zero-search-card img {
@@ -4600,6 +4627,7 @@ body.modal-open {
   justify-content: center;
   padding: 8px 15px;
   font-size: 16px;
+  line-height: 1;
   background-color: #444;
   color: white;
   border: none;
@@ -4620,6 +4648,323 @@ body.modal-open {
 .retry-glow {
   animation: retryGlow 0.8s ease forwards;
 }
+
+/* ===== 一括フィルター選択モーダル ===== */
+/* ===== 一括フィルター選択モーダル ===== */
+.bulk-filter-btn {
+  background: linear-gradient(180deg, rgba(52, 90, 172, 0.92) 0%, rgba(35, 65, 140, 0.92) 100%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  border-radius: 25px;
+  height: 28px;
+  padding: 0 12px 0 13.2px;
+  border: 1px solid rgba(70, 110, 210, 0.3);
+  box-shadow: 0 2px 8px rgba(30, 60, 140, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.18s ease;
+  letter-spacing: 1.2px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bulk-filter-btn:hover {
+    background: linear-gradient(180deg, rgba(65, 105, 195, 0.95) 0%, rgba(45, 80, 162, 0.95) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 16px rgba(30, 60, 160, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+}
+.bulk-filter-btn:active {
+  background-color: rgba(60, 95, 145, 0.9);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bulk-filter-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.bulk-filter-modal.active { opacity: 1; }
+
+.bulk-filter-dialog {
+  background: #1c1c1c;
+  border-radius: 8px;
+  width: min(92vw, 580px);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+}
+
+/* ① タイトル中央・×ボタン右端 */
+.bulk-filter-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 48px;
+  border-bottom: 1px solid #333;
+  color: #eee;
+  font-size: 15px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.bulk-filter-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: #2e2e2e;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.bulk-filter-close:hover { background: #444; color: #eee; }
+
+/* ② メインエリア */
+.bulk-filter-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 10px 10px;
+}
+
+/* 各セクション：左に縦文字ラベル、右にボタン群 */
+.bulk-section-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+.bulk-section-wrapper:last-child { border-bottom: none; }
+
+/* 縦書きラベル（クリックで開閉） */
+.bulk-section-title {
+  writing-mode: vertical-rl;
+  text-orientation: upright; /* ーなど縦書き文字を正しく表示 */
+  color: #aaa;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 26px;
+  width: 26px;
+  flex-shrink: 0;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #252535, #1c1c2a);
+  border: 1px solid #3a3a50;
+  border-radius: 4px;
+  padding: 8px 0;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.bulk-section-title:hover {
+  background: linear-gradient(to bottom, #2e2e48, #232338);
+  color: #fff;
+  border-color: #5555aa;
+}
+.bulk-section-wrapper.collapsed .bulk-section-title {
+  background: linear-gradient(to bottom, #1e3020, #172518);
+  border-color: #2a6a2a;
+  color: #7acf7a;
+}
+.bulk-section-wrapper.collapsed .bulk-section-title:hover {
+  background: linear-gradient(to bottom, #264030, #1e3020);
+  color: #9aef9a;
+}
+
+/* 右側コンテンツ列 */
+.bulk-section-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* 開閉アニメーション（max-height） */
+.bulk-section-content {
+  overflow: hidden;
+  max-height: 1500px;
+}
+.bulk-section-wrapper.collapsed .bulk-section-content {
+  max-height: 0;
+}
+
+.bulk-filter-section {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-content: flex-start;
+  align-items: center;
+  padding: 4px 0;
+}
+
+/* 全て表示ボタン（折りたたみ時のみ表示） */
+.bulk-show-all {
+  display: none;
+  height: 26px;
+  padding: 0 14px;
+  background: #2a3a2a;
+  border: 1px solid #3a5a3a;
+  border-radius: 4px;
+  color: #8acf8a;
+  font-size: 12px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  align-self: flex-start;
+  transition: background 0.15s;
+}
+.bulk-show-all:hover { background: #3a5a3a; }
+.bulk-section-wrapper.collapsed .bulk-show-all { display: inline-flex; }
+
+/* filter-category の見出しは一括モーダル内では非表示 */
+.bulk-filter-modal .filter-category,
+.bulk-filter-modal .filter-category-header { display: none; }
+
+/* ボタン：高さ統一・コンパクト */
+.bulk-filter-section button {
+  height: 26px;
+  padding: 0 9px;
+  background: #2e2e2e;
+  color: #ddd;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background 0.15s, border-color 0.15s;
+}
+.bulk-filter-section button:hover { background: #3e3e3e; }
+.bulk-filter-section button.bulk-active {
+  background: #7a1a1a;
+  border-color: #c0392b;
+  color: #fff;
+}
+.bulk-filter-section button.bulk-active:hover { background: #9a2a2a; }
+.bulk-filter-section .range-select-btn {
+  background: #1e3a5a;
+  border-color: #2a5a8a;
+  color: #8ab4e0;
+  flex: 0 0 auto;
+  width: auto;
+  align-self: flex-start;
+  padding: 0 8px;
+  font-size: 11px;
+}
+.bulk-filter-section .range-select-btn:hover { background: #2a4a7a; }
+
+/* PCはダイアログを広げる */
+@media (min-width: 768px) {
+  .bulk-filter-dialog {
+    width: min(88vw, 900px);
+  }
+}
+
+/* ③ リザルトエリア */
+.bulk-filter-result {
+  padding: 5px 12px;
+  border-top: 1px solid #2a2a2a;
+  border-bottom: 1px solid #2a2a2a;
+  min-height: 34px;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.bulk-result-label {
+  color: #888;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+.bulk-result-btn {
+  height: 22px;
+  padding: 0 8px;
+  background: #5a1a1a;
+  border: 1px solid #8a2a2a;
+  border-radius: 3px;
+  color: #ffaaaa;
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.bulk-result-btn:hover { background: #7a2a2a; }
+.bulk-result-empty { color: #555; font-size: 12px; }
+
+/* ④ フッター：4ボタン均等配置 */
+.bulk-filter-footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  border-top: 1px solid #2a2a2a;
+}
+.bulk-footer-btn {
+  height: 36px;
+  padding: 0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2e2e2e;
+  color: #ddd;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.bulk-footer-btn:hover { background: #3e3e3e; }
+/* 確定ボタン */
+.bulk-confirm-btn { background: #2a5a8a; border-color: #3a6a9a; color: #fff; }
+.bulk-confirm-btn:hover { background: #3a6a9a; }
+/* クリアボタン */
+.bulk-clear-btn { background: #3a3a3a; border-color: #555; color: #ccc; }
+.bulk-clear-btn:hover { background: #4a4a4a; }
+/* 開放・絞り込みのアクティブ状態 */
+.bulk-footer-btn.bulk-footer-active {
+  background: #1e4a1e;
+  border-color: #3a8a3a;
+  color: #8acf8a;
+}
+.bulk-footer-btn.bulk-footer-active:hover { background: #2a5a2a; }
 
 /* 収録情報のスタイル */
 .card-series-info {
