@@ -961,7 +961,7 @@ function buildNumericFilterButtons() {
     [...values].sort((a, b) => a - b).forEach((val) => {
       const btn = document.createElement('button');
       btn.textContent = String(val);
-      btn.onclick = () => toggleFilterCard(attr, String(val));
+      btn.setAttribute('onclick', `toggleFilterCard('${attr}', '${String(val)}')`);
       container.appendChild(btn);
     });
   };
@@ -2042,8 +2042,10 @@ const filterCards = () => {
           shouldDisplay = false;
         }
       } else if (filters.cost.size > 0) {
-        if (!filters.cost.has(entry.cost)) {
-          shouldDisplay = false;
+        if (andFilterEnabled) {
+          if (![...filters.cost].every(v => entry.cost === v)) shouldDisplay = false;
+        } else {
+          if (!filters.cost.has(entry.cost)) shouldDisplay = false;
         }
       }
     }
@@ -2058,12 +2060,14 @@ const filterCards = () => {
           shouldDisplay = false;
         }
       } else if (filters.power.size > 0) {
-        let powerMatch = filters.power.has(entry.power);
-        if (filters.power.has('0')) {
-          powerMatch = powerMatch && (entry.type === '場所札');
-        }
-        if (!powerMatch) {
-          shouldDisplay = false;
+        if (andFilterEnabled) {
+          if (![...filters.power].every(v => entry.power === v)) shouldDisplay = false;
+        } else {
+          let powerMatch = filters.power.has(entry.power);
+          if (filters.power.has('0')) {
+            powerMatch = powerMatch && (entry.type === '場所札');
+          }
+          if (!powerMatch) shouldDisplay = false;
         }
       }
     }
