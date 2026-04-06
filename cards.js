@@ -13269,6 +13269,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2347"
+  data-name="殺人現場(さつじんげんば)"
+  data-cost="2"
+  data-power="2"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="罪 事件 人形"
+  data-keyword=""
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_15_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2349"
   data-name="遊具のある公園(ゆうぐのあるこうえん)"
   data-cost="4"
