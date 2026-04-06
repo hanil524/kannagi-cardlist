@@ -334,8 +334,8 @@ main {
   justify-content: center;
   gap: 4px;
   height: 28px;
-  padding: 0 10px;
-  border-radius: 25px;
+  padding: 0 8px;
+  border-radius: 5px;
   font-size: 12px;
   line-height: 1;
   white-space: nowrap;
@@ -1120,17 +1120,17 @@ header input::placeholder,
 button[onclick='resetFilters()'] {
   background: linear-gradient(180deg, rgba(172, 52, 52, 0.92) 0%, rgba(140, 35, 35, 0.92) 100%);
   color: #ffffff;
+  border: 1px solid rgba(210, 70, 70, 0.3);
+  border-radius: 5px;
+  height: 28px;
+  padding: 0 8px 0 9.2px;
   font-size: 12px;
   font-weight: bold;
   line-height: 1;
-  border-radius: 25px;
-  height: 28px;
-  padding: 0 12px 0 13.2px;
-  border: 1px solid rgba(210, 70, 70, 0.3);
-  box-shadow: 0 2px 8px rgba(140, 30, 30, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.18s ease;
   letter-spacing: 1.2px;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.18s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -4654,30 +4654,32 @@ body.modal-open {
 .bulk-filter-btn {
   background: linear-gradient(180deg, rgba(52, 90, 172, 0.92) 0%, rgba(35, 65, 140, 0.92) 100%);
   color: #ffffff;
+  border: 1px solid rgba(70, 110, 210, 0.3);
+  border-radius: 5px;
+  height: 28px;
+  padding: 0 8px 0 9.2px;
   font-size: 12px;
   font-weight: bold;
   line-height: 1;
-  border-radius: 25px;
-  height: 28px;
-  padding: 0 12px 0 13.2px;
-  border: 1px solid rgba(70, 110, 210, 0.3);
-  box-shadow: 0 2px 8px rgba(30, 60, 140, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.18s ease;
   letter-spacing: 1.2px;
   white-space: nowrap;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.18s ease;
 }
 @media (hover: hover) and (pointer: fine) {
   .bulk-filter-btn:hover {
     background: linear-gradient(180deg, rgba(65, 105, 195, 0.95) 0%, rgba(45, 80, 162, 0.95) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 5px 16px rgba(30, 60, 160, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
 }
 .bulk-filter-btn:active {
-  background-color: rgba(60, 95, 145, 0.9);
   transform: translateY(1px);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
 }
 
 .bulk-filter-modal {
@@ -4759,7 +4761,7 @@ body.modal-open {
 .bulk-section-title {
   writing-mode: vertical-rl;
   text-orientation: upright; /* ーなど縦書き文字を正しく表示 */
-  color: #aaa;
+  color: #fff;
   font-size: 11px;
   font-weight: bold;
   min-width: 26px;
