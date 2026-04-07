@@ -13077,6 +13077,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2321"
+  data-name="雷小僧(かみなりこぞう)"
+  data-cost="1"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="鬼 雨 災害"
+  data-keyword=""
+  data-role="手札公開"
+>
+  <img data-src="images/card_15_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2322"
   data-name="黒犬(こっけん)"
   data-cost="2"
