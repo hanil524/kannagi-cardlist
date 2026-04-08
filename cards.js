@@ -13413,6 +13413,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2365"
+  data-name="人柱(ひとばしら)"
+  data-cost="6"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="罪 樹木 胎内"
+  data-keyword=""
+  data-role="ランデス 除外加速"
+>
+  <img data-src="images/card_15_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2366"
   data-name="花面の神(かめんのかみ)"
   data-cost="7"
