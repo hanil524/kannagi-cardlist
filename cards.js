@@ -9904,102 +9904,7 @@ data-role="除外戻し ドロー"
 >
   <img data-src="images/card_12_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-<div
-  class="card"
-  data-number="1921"
-  data-name="夜刀神(やとのかみ)"
-  data-cost="4"
-  data-power="1"
-  data-series="妖怪デッキ：墓暴き"
-  data-type="場所札"
-  data-season="春"
-  data-rare=""
-  data-attribute="神 大蛇 妖怪 月"
-  data-keyword="神秘"
-  data-role="召喚時"
->
-  <img data-src="images/card_12_p (16).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-class="card"
-data-number="1922"
-data-name="沼御前（ぬまごぜん）"
-data-cost="0"
-data-power="0"
-data-series="妖怪デッキ：墓暴き"
-data-rare=""
-data-season="春"
-data-type="怪異札"
-data-role="バフ"
-data-keyword="鮮明 不屈"
-data-attribute="妖怪 大蛇"
->
-<img data-src="images/card_12_p (26).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-  class="card"
-  data-number="1923"
-  data-name="ヨモツモノ(よもつもの)"
-  data-cost="6"
-  data-power="0"
-  data-series="妖怪デッキ：墓暴き"
-  data-type="怪異札"
-  data-season="冬"
-  data-rare=""
-  data-attribute="墓地 妖怪 からくり"
-  data-keyword=""
-  data-role="2種類札 札除去 バニラ"
->
-  <img data-src="images/card_12_p (21).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-  class="card"
-  data-number="1924"
-  data-name="いったん木綿(いったんもめん)"
-  data-cost="0"
-  data-power="0"
-  data-series="妖怪デッキ：墓暴き"
-  data-type="季節札"
-  data-season="冬"
-  data-rare=""
-  data-attribute="墓地 妖怪"
-  data-keyword=""
-  data-role="バフ"
->
-  <img data-src="images/card_12_p (24).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-class="card"
-data-number="1925"
-data-name="屈服の刻印(くっぷくのこくいん)"
-data-cost="0"
-data-power="0"
-data-series="妖怪デッキ：墓暴き"
-data-type="道具札"
-data-season="無"
-data-rare=""
-data-attribute="墓地"
-data-keyword=""
-data-role="ロック"
->
-<img data-src="images/card_12_p (1).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-  class="card"
-  data-number="1926"
-  data-name="鈴鳴り(すずなり)"
-  data-cost="8"
-  data-power="0"
-  data-series="妖怪デッキ：墓暴き"
-  data-type="道具札"
-  data-season="無"
-  data-rare=""
-  data-attribute="御守り 髑髏"
-  data-keyword=""
-  data-role="魂戻し 追加行動"
->
-  <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
-</div>
+
 
 <!-- ナナフシギ襲来 -->
 
@@ -14104,6 +14009,102 @@ data-keyword="「起き」"
 data-role="召喚時"
 >
 <img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1921"
+  data-name="夜刀神(やとのかみ)"
+  data-cost="4"
+  data-power="1"
+  data-series="妖怪デッキ：墓暴き プロモ"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="神 大蛇 妖怪 月"
+  data-keyword="神秘"
+  data-role="召喚時"
+>
+  <img data-src="images/card_12_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1922"
+data-name="沼御前（ぬまごぜん）"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き プロモ"
+data-rare=""
+data-season="春"
+data-type="怪異札"
+data-role="バフ"
+data-keyword="鮮明 不屈"
+data-attribute="妖怪 大蛇"
+>
+<img data-src="images/card_12_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1923"
+  data-name="ヨモツモノ(よもつもの)"
+  data-cost="6"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き プロモ"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪 からくり"
+  data-keyword=""
+  data-role="2種類札 札除去 バニラ"
+>
+  <img data-src="images/card_12_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1924"
+  data-name="いったん木綿(いったんもめん)"
+  data-cost="0"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き プロモ"
+  data-type="季節札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="墓地 妖怪"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_12_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
+data-number="1925"
+data-name="屈服の刻印(くっぷくのこくいん)"
+data-cost="0"
+data-power="0"
+data-series="妖怪デッキ：墓暴き プロモ"
+data-type="道具札"
+data-season="無"
+data-rare=""
+data-attribute="墓地"
+data-keyword=""
+data-role="ロック"
+>
+<img data-src="images/card_12_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="1926"
+  data-name="鈴鳴り(すずなり)"
+  data-cost="8"
+  data-power="0"
+  data-series="妖怪デッキ：墓暴き プロモ"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="御守り 髑髏"
+  data-keyword=""
+  data-role="魂戻し 追加行動"
+>
+  <img data-src="images/card_12_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
 class="card"
