@@ -13381,6 +13381,22 @@ data-role="ロック"
 </div>
 <div
   class="card"
+  data-number="2356"
+  data-name="人形婚(にんぎょうこん)"
+  data-cost="11"
+  data-power="9"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="人形"
+  data-keyword=""
+  data-role="召喚時 魂戻し 魂利用 "
+>
+  <img data-src="images/card_15_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2361"
   data-name="痰壺小僧(たんつぼこぞう)"
   data-cost="1"
