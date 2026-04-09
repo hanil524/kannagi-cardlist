@@ -2470,7 +2470,7 @@ function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName, currentSeries)
     } else {
       const dateText = promoInfo.date ? `配布日：${promoInfo.date}` : '配布日：不明';
       parts.push(`<span style="color:#ffd700;font-weight:bold">${dateText}</span>`);
-      parts.push('<span style="color:#aaddff;font-size:12px">※新規プロモは1か月後に使用可能</span>');
+      parts.push('<span style="color:#aaddff;font-size:12px">※新規プロモは1か月後に「公式大会」で使用可能</span>');
     }
   }
 
