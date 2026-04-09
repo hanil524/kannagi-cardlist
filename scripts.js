@@ -2107,6 +2107,13 @@ const filterCards = () => {
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
+  // プロモフィルター適用時、ソートが未適用ならcards.js記載順（originalOrder）で表示
+  if (filters.series.has('プロモ') && !sortCriteria) {
+    const allCards = Array.from(cardList.querySelectorAll('.card:not([data-cloned])'));
+    allCards.sort((a, b) => parseInt(a.dataset.originalOrder || 0) - parseInt(b.dataset.originalOrder || 0));
+    allCards.forEach(card => cardList.appendChild(card));
+  }
+
   // カード数を更新
   updateCardCount();
 };
@@ -2402,18 +2409,70 @@ function getSeriesExtraInfo(cardName) {
   return infoSet.size > 0 ? Array.from(infoSet).join('\n') : '';
 }
 
+// プロモに付随する「擬似シリーズ」（実際の弾ではないため再録判定から除外）
+const PROMO_PSEUDO_SERIES = new Set(['妖怪デッキ：墓暴き', 'エクストラルール「闇」']);
+
+// プロモカード情報を取得
+// currentSeries: 現在表示中のカードの data-series（プロモを含まないカードには表示しない）
+// 戻り値: null（非プロモ or 日付なし新規プロモ）/ { type: 'reprint' }（再録プロモ）/ { type: 'new', date: string }（日付入り新規プロモ）
+function getPromoInfo(cardName, currentSeries) {
+  // 現在のカード自身がプロモでなければ表示しない
+  const currentSeriesList = currentSeries ? currentSeries.split(' ').filter(s => s) : [];
+  if (!currentSeriesList.includes('プロモ')) return null;
+
+  const allCardsWithSameName = document.querySelectorAll(`[data-name="${cardName}"]`);
+  let hasNonPromo = false;
+  let promoDate = '';
+
+  allCardsWithSameName.forEach(card => {
+    if (!card.dataset.series) return;
+    const seriesList = card.dataset.series.split(' ').filter(s => s);
+    if (seriesList.includes('プロモ') && !promoDate && card.dataset.promoDate) {
+      promoDate = card.dataset.promoDate;
+    }
+    // 擬似シリーズ以外の本物の弾に収録されていれば再録扱い
+    if (seriesList.some(s => s !== 'プロモ' && !PROMO_PSEUDO_SERIES.has(s))) {
+      hasNonPromo = true;
+    }
+  });
+
+  if (hasNonPromo) return { type: 'reprint' };
+  // 日付未設定の新規プロモは表示なし
+  if (!promoDate) return null;
+  return { type: 'new', date: promoDate };
+}
+
 // 収録情報 + 制限情報をseriesInfo要素に反映（画像の上、被らない）
 // data-series-infoは別要素で画像に重ねる
-function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName) {
-  // 収録 + 制限（画像の上）
+// currentSeries: 現在表示中のカードの data-series
+function updateSeriesInfoWithLimit(seriesEl, overlayEl, cardName, currentSeries) {
   const series = getSeriesOnlyText(cardName);
   const limit = getCardLimitText(cardName);
-  if (!series && !limit) { seriesEl.innerHTML = ''; }
-  else if (!limit) { seriesEl.textContent = series; }
-  else {
-    const escaped = series.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
-    seriesEl.innerHTML = escaped + (series ? '<br>' : '') + '<span style="color:#ff9800;font-size:12px">' + limit + '</span>';
+  const promoInfo = getPromoInfo(cardName, currentSeries);
+
+  // 表示パーツを順番に組み立てる
+  const parts = [];
+
+  if (promoInfo) {
+    if (promoInfo.type === 'reprint') {
+      parts.push('<span style="color:#ffd700;font-weight:bold">再録プロモ</span>');
+    } else {
+      const dateText = promoInfo.date ? `配布日：${promoInfo.date}` : '配布日：不明';
+      parts.push(`<span style="color:#ffd700;font-weight:bold">${dateText}</span>`);
+      parts.push('<span style="color:#aaddff;font-size:12px">※新規プロモは1か月後に使用可能</span>');
+    }
   }
+
+  if (series || limit) {
+    const escaped = series ? series.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+    if (limit) {
+      parts.push(escaped + (escaped ? '<br>' : '') + '<span style="color:#ff9800;font-size:12px">' + limit + '</span>');
+    } else {
+      parts.push(escaped);
+    }
+  }
+
+  seriesEl.innerHTML = parts.join('<br>');
 
   // series-info（画像に被せるオーバーレイ）
   if (overlayEl) {
@@ -2576,7 +2635,7 @@ const openImageModal = (src) => {
   const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
 
   // 既存要素の内容のみ更新（新しい要素は作成しない）
-  updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+  updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, currentCard.dataset.series);
 
   modalControls.innerHTML = `
     <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
@@ -2998,6 +3057,11 @@ const saveFiltersToLocalStorage = () => {
 
 // ローカルストレージからフィルター条件を読み込む関数
 const loadFiltersFromLocalStorage = () => {
+  // ソート復元前に各カードの元の順序を記録（プロモフィルター時の並び順維持のため）
+  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach((card, i) => {
+    card.dataset.originalOrder = i;
+  });
+
   // 保存されたデータを一度に読み込み
   const savedFilters = JSON.parse(localStorage.getItem('cardFilters'));
   const savedSortState = JSON.parse(localStorage.getItem('sortState'));
@@ -3162,7 +3226,7 @@ const showNextImage = () => {
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
-      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, nextCard.dataset.series);
 
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -3223,7 +3287,7 @@ const showPreviousImage = () => {
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
-      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName);
+      updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
 
       // カウント情報を更新
       let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
