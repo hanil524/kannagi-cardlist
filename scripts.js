@@ -448,23 +448,31 @@ const positionNavButtons = () => {
   // 画像がまだレンダリングされていない場合はスキップ
   if (imgRect.width === 0 || imgRect.height === 0) return;
 
+  // ボタンは position:absolute で .modal-content(position:relative) の子要素。
+  // getBoundingClientRect はビューポート座標なので、offsetParent の座標を引いて相対座標に変換する。
+  const container = prevButton.offsetParent;
+  const containerRect = container ? container.getBoundingClientRect() : { top: 0, left: 0 };
+
   const buttonGap = 6; // 画像端からの距離(px)
+  const prevWidth = prevButton.offsetWidth || 50;
+
+  // transform: translateY(-50%) があるため top = 画像中央の相対Y座標でボタン中央が合う
+  const centerY = imgRect.top + imgRect.height / 2 - containerRect.top;
 
   // prevボタン: 画像の左端の少し外側
-  const prevWidth = prevButton.offsetWidth || 50;
-  prevButton.style.left = (imgRect.left - prevWidth - buttonGap) + 'px';
+  prevButton.style.left = (imgRect.left - prevWidth - buttonGap - containerRect.left) + 'px';
   prevButton.style.right = 'auto';
-  prevButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+  prevButton.style.top = centerY + 'px';
 
   // nextボタン: 画像の右端の少し外側
-  nextButton.style.left = (imgRect.right + buttonGap) + 'px';
+  nextButton.style.left = (imgRect.right + buttonGap - containerRect.left) + 'px';
   nextButton.style.right = 'auto';
-  nextButton.style.top = (imgRect.top + imgRect.height / 2) + 'px';
+  nextButton.style.top = centerY + 'px';
 
   // 画面外にはみ出す場合は画像の端に重ねる（最小限のオーバーラップ）
   const viewportWidth = window.innerWidth;
   if (imgRect.left - prevWidth - buttonGap < 0) {
-    prevButton.style.left = '2px';
+    prevButton.style.left = (2 - containerRect.left) + 'px';
   }
   if (imgRect.right + buttonGap + (nextButton.offsetWidth || 50) > viewportWidth) {
     nextButton.style.left = 'auto';
@@ -2705,39 +2713,36 @@ const openImageModal = (src) => {
   document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
 
-  // 初回表示: 画像は opacity:0 のまま保持し、位置確定後にフェードイン
-  // （前後送りは opacity を触らず即時表示のまま）
-  const revealWithFade = () => {
-    setTimeout(() => {
+  // カード画像は即座に表示、左右ボタンは位置確定後にフェードイン
+  modalImage.style.transition = 'none';
+  modalImage.style.opacity = '1';
+
+  const showButtonsAfterPosition = () => {
+    preloadAdjacentImages();
+    // display:block 確定のために先に呼ぶ（getBoundingClientRect の正確性のため必須）
+    updateNavigationButtons();
+
+    // visible を即座に取り除き opacity:0 に保持
+    const prevBtn = document.getElementById('prev-image');
+    const nextBtn = document.getElementById('next-image');
+    const prevVisible = prevBtn && prevBtn.classList.contains('visible');
+    const nextVisible = nextBtn && nextBtn.classList.contains('visible');
+    if (prevBtn) prevBtn.classList.remove('visible');
+    if (nextBtn) nextBtn.classList.remove('visible');
+
+    // モバイルの body.position:fixed レイアウト安定後に位置確定 → 表示
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       positionNavButtons();
-      modalImage.style.transition = 'opacity 0.3s ease';
-      modalImage.style.opacity = '1';
-    }, 150);
+      if (prevVisible && prevBtn) prevBtn.classList.add('visible');
+      if (nextVisible && nextBtn) nextBtn.classList.add('visible');
+    }));
   };
 
   requestAnimationFrame(() => {
-    // 画像のロード完了後にナビゲーションボタンを表示・位置調整してからフェードイン
-    modalImage.onload = () => {
-      updateNavigationButtons();
-      preloadAdjacentImages();
-      revealWithFade();
-    };
+    modalImage.onload = () => showButtonsAfterPosition();
 
     // 既にキャッシュされている場合のためのフォールバック
-    if (modalImage.complete) {
-      updateNavigationButtons();
-      preloadAdjacentImages();
-      revealWithFade();
-    }
-
-    // 画像が読み込まれない場合の保険（2秒後に強制表示）
-    setTimeout(() => {
-      if (modalImage.style.opacity !== '1') {
-        positionNavButtons();
-        modalImage.style.transition = 'opacity 0.3s ease';
-        modalImage.style.opacity = '1';
-      }
-    }, 2000);
+    if (modalImage.complete) showButtonsAfterPosition();
   });
 };
 
