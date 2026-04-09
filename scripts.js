@@ -2705,25 +2705,39 @@ const openImageModal = (src) => {
   document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
 
-  // フェードイン効果とナビゲーションの表示を調整
-  requestAnimationFrame(() => {
-    modalImage.style.transition = 'opacity 0.3s ease';
-    modalImage.style.opacity = '1';
+  // 初回表示: 画像は opacity:0 のまま保持し、位置確定後にフェードイン
+  // （前後送りは opacity を触らず即時表示のまま）
+  const revealWithFade = () => {
+    setTimeout(() => {
+      positionNavButtons();
+      modalImage.style.transition = 'opacity 0.3s ease';
+      modalImage.style.opacity = '1';
+    }, 150);
+  };
 
-    // 画像のロード完了後にナビゲーションボタンを表示・位置調整
+  requestAnimationFrame(() => {
+    // 画像のロード完了後にナビゲーションボタンを表示・位置調整してからフェードイン
     modalImage.onload = () => {
       updateNavigationButtons();
       preloadAdjacentImages();
-      // 画像レンダリング後にボタン位置を確定
-      requestAnimationFrame(() => positionNavButtons());
+      revealWithFade();
     };
 
     // 既にキャッシュされている場合のためのフォールバック
     if (modalImage.complete) {
       updateNavigationButtons();
       preloadAdjacentImages();
-      requestAnimationFrame(() => positionNavButtons());
+      revealWithFade();
     }
+
+    // 画像が読み込まれない場合の保険（2秒後に強制表示）
+    setTimeout(() => {
+      if (modalImage.style.opacity !== '1') {
+        positionNavButtons();
+        modalImage.style.transition = 'opacity 0.3s ease';
+        modalImage.style.opacity = '1';
+      }
+    }, 2000);
   });
 };
 
