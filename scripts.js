@@ -1732,20 +1732,27 @@ const sortCards = (criteria) => {
   const cardList = document.getElementById('card-list');
   const cards = Array.from(document.querySelectorAll('.card'));
 
-  cards.sort((a, b) => {
-    if (criteria === 'type') {
-      const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
-      const aType = a.dataset.type;
-      const bType = b.dataset.type;
-      const aIndex = typeOrder.indexOf(aType);
-      const bIndex = typeOrder.indexOf(bType);
+  // プロモフィルター中のNo.ソートはoriginalOrder（cards.js記載順）を使用
+  if (filters.series.has('プロモ') && criteria === 'number') {
+    cards.sort((a, b) => {
+      const aVal = parseInt(a.dataset.originalOrder || 0);
+      const bVal = parseInt(b.dataset.originalOrder || 0);
+      return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+  } else if (criteria === 'type') {
+    const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+    cards.sort((a, b) => {
+      const aIndex = typeOrder.indexOf(a.dataset.type);
+      const bIndex = typeOrder.indexOf(b.dataset.type);
       return sortOrder === 'asc' ? aIndex - bIndex : bIndex - aIndex;
-    } else {
+    });
+  } else {
+    cards.sort((a, b) => {
       const aValue = parseInt(a.dataset[criteria]) || 0;
       const bValue = parseInt(b.dataset[criteria]) || 0;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
-    }
-  });
+    });
+  }
 
   cards.forEach((card) => cardList.appendChild(card));
   loadVisibleImages();
@@ -2107,10 +2114,14 @@ const filterCards = () => {
 
   document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
 
-  // プロモフィルター適用時、ソートが未適用ならcards.js記載順（originalOrder）で表示
-  if (filters.series.has('プロモ') && !sortCriteria) {
+  // プロモフィルター中でソートなし or No.ソート時はoriginalOrder（cards.js記載順）で整列
+  if (filters.series.has('プロモ') && (!sortCriteria || sortCriteria === 'number')) {
     const allCards = Array.from(cardList.querySelectorAll('.card:not([data-cloned])'));
-    allCards.sort((a, b) => parseInt(a.dataset.originalOrder || 0) - parseInt(b.dataset.originalOrder || 0));
+    allCards.sort((a, b) => {
+      const aVal = parseInt(a.dataset.originalOrder || 0);
+      const bVal = parseInt(b.dataset.originalOrder || 0);
+      return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+    });
     allCards.forEach(card => cardList.appendChild(card));
   }
 
