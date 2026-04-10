@@ -12894,7 +12894,7 @@ data-role="除外戻し ドロー"
 <div
   class="card"
   data-number="2303"
-  data-name="猫面の耳打ち(みょうめんのみみうち)"
+  data-name="猫面の耳打(みょうめんのみみうち)"
   data-cost="0"
   data-power="1"
   data-series="猫花の約束"
