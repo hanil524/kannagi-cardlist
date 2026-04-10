@@ -2723,11 +2723,11 @@ body.modal-open {
 
 /* モーダル内の拡大画像設定 */
 .image-modal .image-container img {
-  max-width: 80vw;
+  width: min(340px, 84vw);
+  height: auto;
   max-height: calc(85vh - 80px);
   opacity: 1;
   transition: opacity 0.4s ease;
-  object-fit: contain;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 18px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
@@ -2735,8 +2735,9 @@ body.modal-open {
 
 @media (min-width: 769px) {
   .image-modal .image-container img {
+    width: min(440px, 36vw);
+    height: auto;
     border-radius: 28px;
-    max-width: 40vw;
   }
 }
 

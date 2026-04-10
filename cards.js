@@ -2755,6 +2755,7 @@ data-type="場所札"
 data-role="憑依加速 常時"
 data-keyword=""
 data-attribute="蟲 病 廃旅館"
+data-connection="病ねずみ（やまいねずみ）"
 >
 <img data-src="images/card_3_ (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -6997,6 +6998,7 @@ data-rare="エキスパンション"
 data-attribute="SSS 血液 刀 からくり"
 data-keyword=""
 data-role="直接ダメ 魂加速"
+data-connection="血液の貯蔵庫（けつえきのちょぞうこ）"
 >
 <img data-src="images/card_8_p (39).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7032,6 +7034,7 @@ data-rare=""
 data-attribute="糧 家屋"
 data-keyword=""
 data-role="召喚時"
+data-connection="36524（さんろくごによん）,365×3（さんろくごかけるさん）"
 >
 <img data-src="images/card_10_p (37).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7112,6 +7115,7 @@ data-rare="エキスパンション"
 data-attribute="糧 家屋"
 data-keyword=""
 data-role="召喚時"
+data-connection="36524（さんろくごによん）"
 >
 <img data-src="images/card_10_p (39).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7176,6 +7180,7 @@ data-rare="エキスパンション"
 data-attribute="妖怪 動物"
 data-keyword="秘境 速攻 突現"
 data-role="召喚時"
+data-connection="すねこすり"
 >
 <img data-src="images/card_10_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7240,6 +7245,7 @@ data-rare="エキスパンション"
 data-attribute="動物"
 data-keyword=""
 data-role="除外加速 札除去 ヒール"
+data-connection="小熊猫（れっさーぱんだ）"
 >
 <img data-src="images/card_10_p (110).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -7352,6 +7358,7 @@ data-rare="エキスパンション"
 data-attribute="糧"
 data-keyword=""
 data-role="追加行動 ヒール 魂加速"
+data-connection="夜泣き蕎麦（よなきそば）"
 >
 <img data-src="images/card_10_p (59).jpg" src="placeholder.jpg" decoding="async" />
 </div>          
@@ -7832,6 +7839,7 @@ data-rare="エキスパンション"
 data-attribute="猫 墓地 墓場"
 data-keyword=""
 data-role="召喚時"
+data-connection="来来（らいらい）,検問（けんもん）,すねこすり,半修羅 生成(はんしゅら なまなり)"
 >
 <img data-src="images/card_10_p (107).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8184,6 +8192,7 @@ data-rare="エキスパンション"
 data-attribute="家屋 怨霊"
 data-keyword=""
 data-role="召喚時"
+data-connection="テイ（てい）"
 >
 <img data-src="images/card_10_p (54).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8232,6 +8241,7 @@ data-rare="エキスパンション"
 data-attribute="都市伝説 悪魔 UMA からくり"
 data-keyword=""
 data-role="直接ダメ ヒール ドレイン 常時"
+data-connection="邪死魔王（じゃーじーでびる）"
 >
 <img data-src="images/card_10_p (118).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8248,6 +8258,7 @@ data-rare="エキスパンション"
 data-attribute="家屋 怨霊"
 data-keyword="合唱"
 data-role="バウンス 底送り 攻撃時"
+data-connection="シロ（しろ）"
 >
 <img data-src="images/card_10_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -8680,6 +8691,7 @@ data-rare="エキスパンション"
 data-attribute="神 動物 妖怪 鬼 からくり 視線"
 data-keyword=""
 data-role="除外加速 ランデス 攻撃時 常時"
+data-connection="すねこすり"
 >
 <img data-src="images/card_10_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10368,6 +10380,7 @@ data-role="除外戻し ドロー"
   data-attribute="七不思議 人形"
   data-keyword=""
   data-role="直接ダメ"
+  data-connection="大赤見ノヴ(おおあかみのゔ)"
 >
   <img data-src="images/card_13_p (26).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -10962,6 +10975,7 @@ data-role="除外戻し ドロー"
   data-attribute="大蛇 噂"
   data-keyword=""
   data-role="攻撃時 サーチ 除外加速"
+  data-connection="沼御前（ぬまごぜん）"
 >
   <img data-src="images/card_14_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11058,6 +11072,7 @@ data-role="除外戻し ドロー"
   data-attribute="猫 墓地"
   data-keyword=""
   data-role="常時"
+  data-connection="すねこすり"
 >
   <img data-src="images/card_14_p (64).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11171,6 +11186,7 @@ data-role="除外戻し ドロー"
   data-attribute="動物"
   data-keyword=""
   data-role="除外戻し 直接ダメ ヒール ドレイン"
+  data-connection="小熊猫小熊猫（れっさーぱんだ）"
 >
   <img data-src="images/card_14_p (122).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11234,7 +11250,7 @@ data-role="除外戻し ドロー"
   data-rare="エキスパンション"
   data-attribute="糧"
   data-keyword="不屈"
-  data-role="ヒール"
+  data-role="ヒール"  
 >
   <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11538,6 +11554,7 @@ data-role="除外戻し ドロー"
   data-attribute="猫 月"
   data-keyword=""
   data-role="サーチ"
+  data-connection="すねこすり,月夜桜 すねこすり（つきよざくらすねこすり）"
 >
   <img data-src="images/card_14_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11778,6 +11795,7 @@ data-role="除外戻し ドロー"
   data-attribute="家屋 廃屋"
   data-keyword=""
   data-role="常時 攻撃時 除外加速 デッキ破壊"
+  data-connection="あのころのおもいで,座敷童（ざしきわらし）"
 >
   <img data-src="images/card_14_p (68).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11906,6 +11924,7 @@ data-role="除外戻し ドロー"
   data-attribute="交通事故"
   data-keyword=""
   data-role="サーチ"
+  data-connection="犬面人（けんめんじん）"
 >
   <img data-src="images/card_14_p (5).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12082,6 +12101,7 @@ data-role="除外戻し ドロー"
   data-attribute="陰 悪魔"
   data-keyword="合唱"
   data-role="召喚時"
+  data-connection="水際のカード屋さん（みずぎわのかーどやさん）"
 >
   <img data-src="images/card_14_p (84).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12482,6 +12502,7 @@ data-role="除外戻し ドロー"
   data-attribute="呪"
   data-keyword=""
   data-role="召喚時"
+  data-connection="ありがとう、の、代わり、に（ありがとうのかわりに）"
 >
   <img data-src="images/card_14_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12961,6 +12982,7 @@ data-role="除外戻し ドロー"
   data-attribute="海"
   data-keyword=""
   data-role="召喚時 魂加速 除外戻し"
+  data-connection="猫面の耳打(みょうめんのみみうち)"
 >
   <img data-src="images/card_15_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12977,6 +12999,7 @@ data-role="除外戻し ドロー"
   data-attribute="神 猫面"
   data-keyword=""
   data-role="常時 攻撃時 力固定 バフ"
+  data-connection="猫面の耳打(みょうめんのみみうち)"
 >
   <img data-src="images/card_15_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13121,6 +13144,7 @@ data-role="除外戻し ドロー"
   data-attribute="猫 猫面"
   data-keyword=""
   data-role="ヒール 直接ダメ"
+  data-connection="吉田猛々(よしだもうもう)"
 >
   <img data-src="images/card_15_p (24).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13265,6 +13289,7 @@ data-role="除外戻し ドロー"
   data-attribute="園 視線"
   data-keyword=""
   data-role="召喚時 サーチ"
+  data-connection="不気味な遊具(ぶきみなゆうぐ)"
 >
   <img data-src="images/card_15_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13281,6 +13306,7 @@ data-role="除外戻し ドロー"
   data-attribute="罪"
   data-keyword=""
   data-role="召喚時 魂加速 除外戻し"
+  data-connection="花面の耳打(かめんのみみうち)"
 >
   <img data-src="images/card_15_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13297,6 +13323,7 @@ data-role="除外戻し ドロー"
   data-attribute="神 花面"
   data-keyword=""
   data-role="常時 攻撃時 力固定 バフ"
+  data-connection="花面の耳打(かめんのみみうち)"
 >
   <img data-src="images/card_15_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13489,7 +13516,7 @@ data-role="除外戻し ドロー"
   data-attribute="花"
   data-keyword=""
   data-role="魂利用 魂戻し"
-  data-connection="花面の耳打(かめんのみみうち),"
+  data-connection="花面の耳打(かめんのみみうち)"
 >
   <img data-src="images/card_15_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13538,6 +13565,7 @@ data-role="除外戻し ドロー"
   data-attribute="牢獄"
   data-keyword=""
   data-role="ロック"
+  data-connection="形なき祟(かたちなきたたり)"
 >
   <img data-src="images/card_15_p (16).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -14136,6 +14164,7 @@ data-rare=""
 data-attribute="糧 神 家屋"
 data-keyword="「起き」"
 data-role="召喚時"
+data-connection="なないろ"
 >
 <img data-src="images/card_12_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -14362,6 +14391,7 @@ data-role=""
   data-attribute="怨霊 糧"
   data-keyword=""
   data-role="召喚時"
+  data-connection="アイリスラーメン(あいりすらーめん),"
 >
   <img data-src="images/card_14_p (126).jpg" src="placeholder.jpg" decoding="async" />
 </div>
