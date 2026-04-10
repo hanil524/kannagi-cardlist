@@ -5619,6 +5619,7 @@ data-rare="エキスパンション"
 data-attribute="からくり"
 data-keyword=""
 data-role="ランデス"
+data-connection="未完の石材（みかんのせきざい）"
 >
 <img data-src="images/card_7_p (87).jpg" src="placeholder.jpg" decoding="async" />
 </div>
