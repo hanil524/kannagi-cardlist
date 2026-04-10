@@ -2658,6 +2658,69 @@ body.modal-open {
   border: 2px solid #ffffff28;
 }
 
+/* 関連カード情報エリア */
+.card-connection-info {
+  position: absolute;
+  left: 50%;
+  bottom: -110px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 5px 14px;
+  border-radius: 15px;
+  font-size: 13px;
+  color: #ccc;
+  white-space: nowrap;
+  max-width: 80vw;
+  overflow-x: auto;
+  overflow-y: hidden;
+  z-index: 2502;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  -webkit-overflow-scrolling: touch;
+}
+
+.card-connection-info::-webkit-scrollbar {
+  height: 3px;
+}
+
+.card-connection-info::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card-connection-info::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.connection-label {
+  color: #fff;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.connection-link {
+  color: #4da6ff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.connection-link:active {
+  opacity: 0.7;
+}
+
+@media (min-width: 769px) {
+  .card-connection-info {
+    max-width: 40vw;
+  }
+}
+
+/* 関連情報がある場合の画像サイズ調整（画面内に収めるため） */
+.image-modal .image-container.has-connection img {
+  max-height: calc(85vh - 120px);
+}
+
 /* モーダル内の拡大画像設定 */
 .image-modal .image-container img {
   max-width: 80vw;
@@ -2665,7 +2728,7 @@ body.modal-open {
   opacity: 1;
   transition: opacity 0.4s ease;
   object-fit: contain;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 18px;
   box-shadow: 0 0 45px rgba(255, 255, 255, 0.4);
 }
@@ -4974,11 +5037,12 @@ body.modal-open {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 6px 20px;
   border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 14px;
   font-weight: bold;
   text-align: center;

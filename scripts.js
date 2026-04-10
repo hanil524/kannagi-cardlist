@@ -2570,6 +2570,8 @@ let modalContainer = null;
 let modalSeriesInfo = null;
 let modalOverlayInfo = null;
 let modalControls = null;
+let modalConnectionInfo = null;
+let connectionModalStack = [];
 let lastModalOpenTime = 0;
 
 
@@ -2636,6 +2638,13 @@ const openImageModal = (src) => {
   container.appendChild(overlayInfo);
   container.appendChild(controls);
 
+  // 関連カード情報エリア
+  const connectionInfo = document.createElement('div');
+  connectionInfo.className = 'card-connection-info';
+  connectionInfo.style.display = 'none';
+  connectionInfo.addEventListener('click', (e) => e.stopPropagation());
+  container.appendChild(connectionInfo);
+
   modalContent.appendChild(container);
   modalContent.appendChild(prevButton);
   modalContent.appendChild(nextButton);
@@ -2645,6 +2654,7 @@ const openImageModal = (src) => {
   modalSeriesInfo = seriesInfo;
   modalOverlayInfo = overlayInfo;
   modalControls = controls;
+  modalConnectionInfo = connectionInfo;
 
   // カウント情報の取得と表示
   let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
@@ -2668,6 +2678,9 @@ const openImageModal = (src) => {
 
   // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
   setupModalCardControlsOnce(modalControls, currentCard, cardName);
+
+  // 関連カード情報を更新
+  updateConnectionInfo(currentCard);
 
   // スワイプ操作のサポート（スマホ用）
   let touchStartX = 0;
@@ -2748,6 +2761,51 @@ const openImageModal = (src) => {
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
+  // 関連カードモーダルのスタックがある場合は前のカードに戻る
+  if (connectionModalStack.length > 0) {
+    const prevState = connectionModalStack.pop();
+    visibleCards = prevState.visibleCards;
+    currentImageIndex = prevState.currentImageIndex;
+
+    const prevCard = visibleCards[currentImageIndex];
+    if (prevCard) {
+      const img = prevCard.querySelector('img');
+      const src = img.getAttribute('data-src') || img.src;
+      const cardName = prevCard.dataset.name;
+
+      currentModalCard = prevCard;
+      currentModalCardName = cardName;
+
+      // モーダル画像を前のカードに戻す
+      const modalImage = document.getElementById('modal-image');
+      if (modalImage) {
+        modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
+        modalImage.src = src;
+      }
+
+      if (modalControls && modalSeriesInfo) {
+        updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
+
+        let currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        const maxAllowed = deckBuilder.getMaxAllowed(cardName);
+        const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+        modalControls.innerHTML = `
+          <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+          <div class="card-count">${currentCount}/${displayMax}</div>
+          <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
+        `;
+
+        setupModalButtonListeners(modalControls);
+        updateModalButtonStates(modalControls, cardName);
+      }
+
+      updateConnectionInfo(prevCard);
+      updateNavigationButtons();
+      preloadAdjacentImages();
+    }
+    return; // モーダル自体は閉じない（前のカードに戻るだけ）
+  }
+
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
   const modal = document.getElementById('image-modal');
@@ -2786,6 +2844,8 @@ const closeImageModal = () => {
   modalContainer = null;
   modalSeriesInfo = null;
   modalControls = null;
+  modalConnectionInfo = null;
+  connectionModalStack = [];
 
   // メモリリーク対策（全デバイス共通）
   if (seriesInfoCache.size > 100) {
@@ -2796,6 +2856,114 @@ const closeImageModal = () => {
     handleScroll();
   }, 100);
 };
+
+// 関連カード名から読み仮名（カッコ内）を除去して表示用にする
+function stripCardReading(name) {
+  return name.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '');
+}
+
+// 関連カード情報を更新（data-connectionがあるカードのみ表示）
+function updateConnectionInfo(card) {
+  if (!modalConnectionInfo) return;
+
+  const connectionData = card.dataset ? card.dataset.connection : null;
+  if (!connectionData || connectionData.trim() === '') {
+    modalConnectionInfo.style.display = 'none';
+    if (modalContainer) modalContainer.classList.remove('has-connection');
+    return;
+  }
+
+  const names = connectionData.split(',').map(n => n.trim()).filter(n => n);
+  if (names.length === 0) {
+    modalConnectionInfo.style.display = 'none';
+    if (modalContainer) modalContainer.classList.remove('has-connection');
+    return;
+  }
+
+  const linksHTML = names.map(fullName => {
+    const displayName = stripCardReading(fullName);
+    return '『<span class="connection-link" data-target="' + fullName.replace(/"/g, '&quot;') + '">' + displayName + '</span>』';
+  }).join('');
+
+  modalConnectionInfo.innerHTML = '<span class="connection-label">関連：</span>' + linksHTML;
+  modalConnectionInfo.style.display = 'flex';
+  if (modalContainer) modalContainer.classList.add('has-connection');
+
+  // リンクのクリックイベントを設定
+  modalConnectionInfo.querySelectorAll('.connection-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openConnectionCard(link.dataset.target);
+    });
+  });
+}
+
+// 関連カードをモーダルで表示（スタック方式で前のカードに戻れる）
+function openConnectionCard(targetName) {
+  // 対象カードを全カードから検索（data-nameの完全一致）
+  const allCards = Array.from(document.querySelectorAll('#card-list .card'));
+  const targetCard = allCards.find(c => c.dataset.name === targetName);
+  if (!targetCard) return; // カードが見つからない場合は何もしない
+
+  const img = targetCard.querySelector('img');
+  if (!img) return;
+  const src = img.getAttribute('data-src') || img.src;
+
+  // 遅延読み込みカードの場合、img.src を実際の画像に更新しておく（デッキ追加時のcloneNode対策）
+  if (img.getAttribute('data-src') && img.src !== src) {
+    img.src = src;
+  }
+
+  // 現在の状態をスタックに保存
+  connectionModalStack.push({
+    visibleCards: visibleCards,
+    currentImageIndex: currentImageIndex
+  });
+
+  // visibleCardsを更新してページャーを機能させる
+  const filteredCards = allCards.filter(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
+  visibleCards = filteredCards.includes(targetCard) ? filteredCards : allCards;
+  currentImageIndex = visibleCards.indexOf(targetCard);
+
+  // モーダル画像を更新
+  const modalImage = document.getElementById('modal-image');
+  if (modalImage) {
+    modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
+    modalImage.src = src;
+  }
+
+  const cardName = targetCard.dataset.name;
+  currentModalCard = targetCard;
+  currentModalCardName = cardName;
+
+  // 収録情報・コントロールを更新
+  if (modalControls && modalSeriesInfo) {
+    updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, targetCard.dataset.series);
+
+    let currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+    const maxAllowed = deckBuilder.getMaxAllowed(cardName);
+    const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
+    modalControls.innerHTML = `
+      <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
+      <div class="card-count">${currentCount}/${displayMax}</div>
+      <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
+    `;
+
+    setupModalButtonListeners(modalControls);
+    updateModalButtonStates(modalControls, cardName);
+  }
+
+  // 関連カード情報を更新（遷移先のカードにも関連があれば表示）
+  updateConnectionInfo(targetCard);
+
+  updateNavigationButtons();
+  // 関連カードビュー中はページャーボタンを非表示
+  const prevBtn = document.getElementById('prev-image');
+  const nextBtn = document.getElementById('next-image');
+  if (prevBtn) prevBtn.classList.remove('visible');
+  if (nextBtn) nextBtn.classList.remove('visible');
+  preloadAdjacentImages();
+}
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3253,6 +3421,9 @@ const showNextImage = () => {
 
     const cardName = nextCard.dataset.name;
 
+    // ページャー操作で関連カードスタックをクリア
+    connectionModalStack = [];
+
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
@@ -3277,6 +3448,9 @@ const showNextImage = () => {
 
       updateModalButtonStates(modalControls, cardName);
     }
+
+    // 関連カード情報を更新
+    updateConnectionInfo(nextCard);
 
     updateNavigationButtons();
     preloadAdjacentImages();
@@ -3314,6 +3488,9 @@ const showPreviousImage = () => {
 
     const cardName = prevCard.dataset.name;
 
+    // ページャー操作で関連カードスタックをクリア
+    connectionModalStack = [];
+
     // 既存の固定要素を使い回し（重要: 新しい要素を作成しない）
     if (modalControls && modalSeriesInfo) {
       // 収録情報を更新
@@ -3338,6 +3515,9 @@ const showPreviousImage = () => {
 
       updateModalButtonStates(modalControls, cardName);
     }
+
+    // 関連カード情報を更新
+    updateConnectionInfo(prevCard);
 
     updateNavigationButtons();
     preloadAdjacentImages();
