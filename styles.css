@@ -5207,7 +5207,7 @@ body.modal-open {
   background-size: contain;
 }
 
-/* モーダル内のタップ範囲を広げる */
+/* モーダル内のタップ範囲 */
 #add-card::after,
 #remove-card::after {
   content: '';
@@ -5215,9 +5215,23 @@ body.modal-open {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 180%;
-  height: 180%;
+  width: 130%;
+  height: 130%;
   background: transparent;
+}
+
+#add-card::before,
+#remove-card::before {
+  width: 60px;
+  height: 60px;
+}
+
+@media (max-width: 768px) {
+  #add-card::before,
+  #remove-card::before {
+    width: 70px;
+    height: 70px;
+  }
 }
 
 #add-card {
