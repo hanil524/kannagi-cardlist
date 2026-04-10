@@ -8563,6 +8563,7 @@ data-rare="エキスパンション"
 data-attribute="うつしよ"
 data-keyword=""
 data-role="2種類札 サーチ バニラ"
+data-connection="始まり始まり（はじまりはじまり）"
 >
 <img data-src="images/card_10_p (50).jpg" src="placeholder.jpg" decoding="async" />
 </div> 
@@ -11186,7 +11187,7 @@ data-role="除外戻し ドロー"
   data-attribute="動物"
   data-keyword=""
   data-role="除外戻し 直接ダメ ヒール ドレイン"
-  data-connection="小熊猫小熊猫（れっさーぱんだ）"
+  data-connection="小熊猫（れっさーぱんだ）"
 >
   <img data-src="images/card_14_p (122).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -12502,7 +12503,7 @@ data-role="除外戻し ドロー"
   data-attribute="呪"
   data-keyword=""
   data-role="召喚時"
-  data-connection="ありがとう、の、代わり、に（ありがとうのかわりに）"
+  data-connection="呪告の手引き（じゅこくのてびき）,ありがとう、の、代わり、に（ありがとうのかわりに）"
 >
   <img data-src="images/card_14_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>

@@ -2868,10 +2868,10 @@ function updateConnectionInfo(card) {
 
   const cardName = card.dataset ? card.dataset.name : null;
 
-  // デッキカードはlocalStorageから復元された場合にdata-connectionが欠落することがあるため、
-  // 属性がなければメインリストの元カードから読み直す
-  let connectionData = card.dataset ? card.dataset.connection : null;
-  if (!connectionData && cardName) {
+  // 常にメインリストの元カードを優先して読む（デッキカードのdata-connectionは古い可能性があるため）
+  // メインリストに見つからない場合のみカード自身の属性を使う
+  let connectionData = null;
+  if (cardName) {
     const allMainCards = document.querySelectorAll('#card-list .card');
     for (const c of allMainCards) {
       if (c.dataset.name === cardName) {
@@ -2879,6 +2879,9 @@ function updateConnectionInfo(card) {
         break;
       }
     }
+  }
+  if (!connectionData) {
+    connectionData = card.dataset ? card.dataset.connection : null;
   }
 
   if (!connectionData || connectionData.trim() === '') {
