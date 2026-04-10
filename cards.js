@@ -12902,6 +12902,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2306"
+  data-name="山火事(やまかじ)"
+  data-cost="2"
+  data-power="2"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="廃鉱山 災害 灯火"
+  data-keyword=""
+  data-role="攻撃時 力固定 バフ"
+>
+  <img data-src="images/card_15_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2308"
   data-name="黒妖の訓練場(こくようのくんれんじょう)"
   data-cost="3"
@@ -12947,6 +12963,22 @@ data-role="除外戻し ドロー"
   data-role="召喚時 魂加速 除外戻し"
 >
   <img data-src="images/card_15_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2312"
+  data-name="形ある祟(かたちあるたたり)"
+  data-cost="7"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="神 猫面"
+  data-keyword=""
+  data-role="常時 攻撃時 力固定 バフ"
+>
+  <img data-src="images/card_15_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -13110,6 +13142,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2332"
+  data-name="琴(こと)"
+  data-cost="8"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="楽器 猫面"
+  data-keyword=""
+  data-role="除外戻し ヒール"
+>
+  <img data-src="images/card_15_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2336"
   data-name="黒い太陽(くろいたいよう)"
   data-cost="3"
@@ -13159,7 +13207,7 @@ data-role="除外戻し ドロー"
 <div
   class="card"
   data-number="2343"
-  data-name="花面の耳打ち(かめんのみみうち)"
+  data-name="花面の耳打(かめんのみみうち)"
   data-cost="0"
   data-power="1"
   data-series="猫花の約束"
@@ -13238,6 +13286,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2352"
+  data-name="形なき祟(かたちなきたたり)"
+  data-cost="7"
+  data-power="5"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="神 花面"
+  data-keyword=""
+  data-role="常時 攻撃時 力固定 バフ"
+>
+  <img data-src="images/card_15_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2353"
   data-name="煽り(あおり)"
   data-cost="8"
@@ -13299,6 +13363,22 @@ data-role="除外戻し ドロー"
   data-role="召喚時 魂戻し 魂利用 "
 >
   <img data-src="images/card_15_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2360"
+  data-name="花咲く死体(はなさくしたい)"
+  data-cost="0"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="花"
+  data-keyword=""
+  data-role="自傷ダメ ドロー"
+>
+  <img data-src="images/card_15_p (44).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -13366,6 +13446,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2367"
+  data-name="よく動く機織(よくうごくはたおり)"
+  data-cost="1"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="からくり"
+  data-keyword=""
+  data-role="ドロー 底送り"
+>
+  <img data-src="images/card_15_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2368"
   data-name="不気味な遊具(ぶきみなゆうぐ)"
   data-cost="2"
@@ -13393,6 +13489,7 @@ data-role="除外戻し ドロー"
   data-attribute="花"
   data-keyword=""
   data-role="魂利用 魂戻し"
+  data-connection="花面の耳打(かめんのみみうち),"
 >
   <img data-src="images/card_15_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -13411,6 +13508,22 @@ data-role="除外戻し ドロー"
   data-role="直接ダメ"
 >
   <img data-src="images/card_15_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2372"
+  data-name="琵琶(びわ)"
+  data-cost="8"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="楽器 花面"
+  data-keyword=""
+  data-role="除外戻し ドロー"
+>
+  <img data-src="images/card_15_p (42).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
