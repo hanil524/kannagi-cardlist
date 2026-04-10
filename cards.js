@@ -13382,6 +13382,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2369"
+  data-name="花束(はなたば)"
+  data-cost="3"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="花"
+  data-keyword=""
+  data-role="魂利用 魂戻し"
+>
+  <img data-src="images/card_15_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2371"
   data-name="カーブミラー(かーぶみらー)"
   data-cost="5"
