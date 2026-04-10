@@ -2866,7 +2866,21 @@ function stripCardReading(name) {
 function updateConnectionInfo(card) {
   if (!modalConnectionInfo) return;
 
-  const connectionData = card.dataset ? card.dataset.connection : null;
+  const cardName = card.dataset ? card.dataset.name : null;
+
+  // デッキカードはlocalStorageから復元された場合にdata-connectionが欠落することがあるため、
+  // 属性がなければメインリストの元カードから読み直す
+  let connectionData = card.dataset ? card.dataset.connection : null;
+  if (!connectionData && cardName) {
+    const allMainCards = document.querySelectorAll('#card-list .card');
+    for (const c of allMainCards) {
+      if (c.dataset.name === cardName) {
+        connectionData = c.dataset.connection;
+        break;
+      }
+    }
+  }
+
   if (!connectionData || connectionData.trim() === '') {
     modalConnectionInfo.style.display = 'none';
     if (modalContainer) modalContainer.classList.remove('has-connection');
