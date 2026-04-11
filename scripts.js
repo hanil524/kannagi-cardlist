@@ -5952,6 +5952,258 @@ function loadHtml2Canvas() {
   });
 }
 
+// デッキ名テキストをキャンバス幅に合わせて折り返す
+function wrapCanvasText(ctx, text, maxWidth) {
+  const lines = [];
+  let currentLine = '';
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const testLine = currentLine + char;
+    if (ctx.measureText(testLine).width > maxWidth && currentLine.length > 0) {
+      lines.push(currentLine);
+      currentLine = char;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  return lines;
+}
+
+// ===== シェアページ用エンコード =====
+
+// デッキタイトル + カードマップ → Base64URLバイナリ
+// 形式: varint(titleByteLen) + title(UTF-8) + delta-varint pairs
+function encodeDeckShare(title, map) {
+  const titleBytes = new TextEncoder().encode(title || '');
+  const entries = Object.entries(map)
+    .filter(([, c]) => Number(c) > 0)
+    .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+    .sort((a, b) => a[0] - b[0]);
+  const out = [];
+  // タイトルバイト長（varint）
+  out.push(...v6_varintEncode(titleBytes.length));
+  // タイトルUTF-8バイト列
+  for (let i = 0; i < titleBytes.length; i++) out.push(titleBytes[i]);
+  // カードデータ（delta-varint pairs、V6と同じ）
+  let prev = 0;
+  for (const [id, cnt] of entries) {
+    out.push(...v6_varintEncode(id - prev));
+    out.push(...v6_varintEncode(cnt));
+    prev = id;
+  }
+  return b64urlEncode(v6_bytesToBin(out));
+}
+
+// シェアURLを生成
+function generateShareUrl(title, map) {
+  const encoded = encodeDeckShare(title, map);
+  const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+  return base + 'share.html#' + encoded;
+}
+
+// ===== QRコードライブラリ =====
+
+let _qrLibPromise = null;
+function loadQrCodeLib() {
+  if (_qrLibPromise) return _qrLibPromise;
+  if (typeof qrcode !== 'undefined') return Promise.resolve();
+  _qrLibPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('QRコードライブラリの読み込みに失敗'));
+    document.head.appendChild(script);
+  });
+  return _qrLibPromise;
+}
+
+// キャンバスの右下にQRコードを描画
+function addQrToCanvas(canvas, url) {
+  // QR生成（エラー訂正レベルM、自動バージョン）
+  const qr = qrcode(0, 'M');
+  qr.addData(url);
+  qr.make();
+
+  const ctx = canvas.getContext('2d');
+  const moduleCount = qr.getModuleCount();
+
+  // QRサイズ: キャンバス幅の15%（最小120px、最大300px）
+  const qrSize = Math.max(120, Math.min(300, Math.round(canvas.width * 0.15)));
+  const cellSize = qrSize / moduleCount;
+  const margin = Math.round(canvas.width * 0.015);
+  const padding = Math.round(cellSize * 1.5);
+  const totalSize = qrSize + padding * 2;
+
+  const x0 = canvas.width - totalSize - margin;
+  const y0 = canvas.height - totalSize - margin;
+
+  // 白背景＋角丸
+  const radius = Math.round(totalSize * 0.06);
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.moveTo(x0 + radius, y0);
+  ctx.lineTo(x0 + totalSize - radius, y0);
+  ctx.quadraticCurveTo(x0 + totalSize, y0, x0 + totalSize, y0 + radius);
+  ctx.lineTo(x0 + totalSize, y0 + totalSize - radius);
+  ctx.quadraticCurveTo(x0 + totalSize, y0 + totalSize, x0 + totalSize - radius, y0 + totalSize);
+  ctx.lineTo(x0 + radius, y0 + totalSize);
+  ctx.quadraticCurveTo(x0, y0 + totalSize, x0, y0 + totalSize - radius);
+  ctx.lineTo(x0, y0 + radius);
+  ctx.quadraticCurveTo(x0, y0, x0 + radius, y0);
+  ctx.closePath();
+  ctx.fill();
+
+  // QRモジュール描画
+  ctx.fillStyle = '#000000';
+  for (let row = 0; row < moduleCount; row++) {
+    for (let col = 0; col < moduleCount; col++) {
+      if (qr.isDark(row, col)) {
+        ctx.fillRect(
+          x0 + padding + col * cellSize,
+          y0 + padding + row * cellSize,
+          Math.ceil(cellSize),
+          Math.ceil(cellSize)
+        );
+      }
+    }
+  }
+
+  return canvas;
+}
+
+// デッキ画像にデッキ名ヘッダー／QRコードを追加した新しいキャンバスを生成
+// qrUrl が渡された場合、ヘッダー右端にQRコードを配置し、テキストはQRの左で折り返す
+function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl) {
+  const hasQr = !!qrUrl && typeof qrcode !== 'undefined';
+  if (!includeTitle && !hasQr) return originalCanvas;
+
+  const srcW = originalCanvas.width;
+  const srcH = originalCanvas.height;
+
+  // ヘッダー高さ: QRありなら広め
+  const headerHeight = Math.round(srcW * (hasQr ? 0.14 : 0.10));
+  const paddingX = Math.round(srcW * 0.018);
+  const paddingY = Math.round(headerHeight * 0.12);
+
+  // === QRコードのサイズ計算（ヘッダー内に収める） ===
+  let qrAreaWidth = 0;
+  let qrTotalSize = 0;
+  let qrObj = null;
+  if (hasQr) {
+    qrObj = qrcode(0, 'M');
+    qrObj.addData(qrUrl);
+    qrObj.make();
+    qrTotalSize = Math.round(headerHeight * 0.88);
+    qrAreaWidth = qrTotalSize + paddingX; // QR + テキストとの間隔
+  }
+
+  // テキストエリア（QRの左側に収まる幅）
+  const maxTextWidth = srcW - paddingX * 2 - qrAreaWidth;
+  const maxTextHeight = headerHeight - paddingY * 2;
+
+  // ヘッダー分だけ高さを拡張した新しいキャンバス
+  const newCanvas = document.createElement('canvas');
+  newCanvas.width = srcW;
+  newCanvas.height = srcH + headerHeight;
+  const ctx = newCanvas.getContext('2d');
+
+  // 背景を同色で塗りつぶし
+  ctx.fillStyle = '#2b2b2b';
+  ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+
+  // 元の画像をヘッダーの下に描画
+  ctx.drawImage(originalCanvas, 0, headerHeight);
+
+  // === デッキ名テキスト描画 ===
+  if (includeTitle && deckName) {
+    const fontFamily = "'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif";
+    const isPC = window.innerWidth >= 769;
+    // フォントサイズはQR有無に関わらず一定（タイトルのみ時の基準高で計算）
+    const titleBaseHeight = Math.round(srcW * 0.10);
+    let fontSize = Math.round(titleBaseHeight * (isPC ? 0.44 : 0.55));
+    const minFontSize = Math.round(titleBaseHeight * 0.18);
+    let lines = [];
+
+    while (fontSize >= minFontSize) {
+      ctx.font = '700 ' + fontSize + 'px ' + fontFamily;
+      lines = wrapCanvasText(ctx, deckName, maxTextWidth);
+      const totalH = lines.length * fontSize * 1.35;
+      if (totalH <= maxTextHeight) break;
+      fontSize -= 2;
+    }
+
+    // 最小でも収まらない場合は行数を上限に切り詰める
+    ctx.font = '700 ' + fontSize + 'px ' + fontFamily;
+    lines = wrapCanvasText(ctx, deckName, maxTextWidth);
+    const lineHeight = fontSize * 1.35;
+    const maxLines = Math.max(1, Math.floor(maxTextHeight / lineHeight));
+    if (lines.length > maxLines) {
+      lines = lines.slice(0, maxLines);
+      let lastLine = lines[maxLines - 1];
+      while (ctx.measureText(lastLine + '…').width > maxTextWidth && lastLine.length > 1) {
+        lastLine = lastLine.slice(0, -1);
+      }
+      lines[maxLines - 1] = lastLine + '…';
+    }
+
+    // テキストを左寄せ・上下均等配置で描画
+    ctx.fillStyle = '#ffffff';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    const sectionHeight = headerHeight / lines.length;
+    lines.forEach((line, i) => {
+      const y = sectionHeight * i + sectionHeight / 2;
+      ctx.fillText(line, paddingX, y, maxTextWidth);
+    });
+  }
+
+  // === QRコード描画（ヘッダー右端、上下中央） ===
+  if (hasQr && qrObj) {
+    const moduleCount = qrObj.getModuleCount();
+    const qrPadding = Math.round(qrTotalSize * 0.08);
+    const qrInnerSize = qrTotalSize - qrPadding * 2;
+    const cellSize = qrInnerSize / moduleCount;
+
+    // ヘッダー右端、上下中央に配置
+    const qrX = srcW - qrTotalSize - paddingX;
+    const qrY = Math.round((headerHeight - qrTotalSize) / 2);
+
+    // 白背景 + 角丸
+    const radius = Math.round(qrTotalSize * 0.06);
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(qrX + radius, qrY);
+    ctx.lineTo(qrX + qrTotalSize - radius, qrY);
+    ctx.quadraticCurveTo(qrX + qrTotalSize, qrY, qrX + qrTotalSize, qrY + radius);
+    ctx.lineTo(qrX + qrTotalSize, qrY + qrTotalSize - radius);
+    ctx.quadraticCurveTo(qrX + qrTotalSize, qrY + qrTotalSize, qrX + qrTotalSize - radius, qrY + qrTotalSize);
+    ctx.lineTo(qrX + radius, qrY + qrTotalSize);
+    ctx.quadraticCurveTo(qrX, qrY + qrTotalSize, qrX, qrY + qrTotalSize - radius);
+    ctx.lineTo(qrX, qrY + radius);
+    ctx.quadraticCurveTo(qrX, qrY, qrX + radius, qrY);
+    ctx.closePath();
+    ctx.fill();
+
+    // QRモジュール描画
+    ctx.fillStyle = '#000000';
+    for (let row = 0; row < moduleCount; row++) {
+      for (let col = 0; col < moduleCount; col++) {
+        if (qrObj.isDark(row, col)) {
+          ctx.fillRect(
+            qrX + qrPadding + col * cellSize,
+            qrY + qrPadding + row * cellSize,
+            Math.ceil(cellSize),
+            Math.ceil(cellSize)
+          );
+        }
+      }
+    }
+  }
+
+  return newCanvas;
+}
+
 // デッキ画像の保存機能
 async function captureDeck() {
   // 保存中メッセージを表示（最初に表示）
@@ -5978,16 +6230,16 @@ async function captureDeck() {
     // 現在のデッキ名を取得
     const currentDeckId = deckManager.currentDeckId;
     const deckButton = document.querySelector(`.deck-select-button[data-deck-id="${currentDeckId}"]`);
-    const deckName = deckButton ? deckButton.textContent : `デッキ${currentDeckId}`;
+    const deckName = deckButton ? deckButton.textContent.trim() : `デッキ${currentDeckId}`;
 
     // html2canvasでキャプチャ
-    const canvas = await html2canvas(deckDisplay, {
+    const originalCanvas = await html2canvas(deckDisplay, {
       backgroundColor: '#2a2a2a',
       scale: 4,
       logging: false,
       allowTaint: true,
       useCORS: true,
-      imageTimeout: 0, // タイムアウトを無効化して処理を高速化
+      imageTimeout: 0,
       removeContainer: true
     });
 
@@ -5995,127 +6247,174 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // iOS・Android は全員モーダル（長押し保存）、PC のみ直接ダウンロード
+    // Noto Sans JP フォントを先行読み込み
+    if (!document.querySelector('link[href*="Noto+Sans+JP"]')) {
+      const fontLink = document.createElement('link');
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap';
+      document.head.appendChild(fontLink);
+    }
+
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-    const isAndroid = /Android/.test(navigator.userAgent);
-    const useModal = isIOS || isAndroid;
+    const showSaveButton = !isIOS;
 
-    if (useModal) {
-      try {
-        // DataURLを生成（エラーハンドリング付き）
-        const dataUrl = await new Promise((resolve, reject) => {
-          try {
-            const url = canvas.toDataURL('image/png');
-            resolve(url);
-          } catch (e) {
-            reject(e);
-          }
-        });
+    try {
+      // 現在のキャンバスと DataURL を管理（チェックボックスで切り替わる）
+      let currentCanvas = originalCanvas;
+      let dataUrl = currentCanvas.toDataURL('image/png');
 
-        // モーダルを生成
-        const imageModal = document.createElement('div');
-        imageModal.className = 'deck-image-modal';
+      const instruction = isIOS
+        ? '共有ボタン、画像を長押しで保存。'
+        : '保存ボタンで画像を保存。';
 
-        const instruction = isIOS
-          ? '共有ボタン、画像を長押しで保存。'
-          : '保存ボタンで端末に保存。共有ボタンで送信。';
-
-        const modalHTML = `
-          <div class="deck-image-container">
-            <div class="deck-image-wrapper">
-              <img src="${dataUrl}" alt="${deckName}">
-              <button class="deck-share-button" type="button" aria-label="共有">
-                <i class="fas fa-share"></i>
-                <span>共有</span>
-              </button>
-            </div>
-            <p class="save-instruction">${instruction}</p>
-            ${isAndroid ? '<button class="deck-save-button">保存</button>' : ''}
+      // モーダルを生成（全プラットフォーム共通）
+      const imageModal = document.createElement('div');
+      imageModal.className = 'deck-image-modal';
+      imageModal.innerHTML = `
+        <div class="deck-image-container">
+          <div class="deck-image-wrapper">
+            <img src="${dataUrl}" alt="${deckName}">
+            <button class="deck-share-button" type="button" aria-label="共有">
+              <i class="fas fa-share"></i>
+              <span>共有</span>
+            </button>
+          </div>
+          <p class="save-instruction">${instruction}</p>
+          <div class="deck-image-options">
+            <label class="deck-image-option">
+              <input type="checkbox" class="deck-name-checkbox"> デッキ名を追加する
+            </label>
+            <label class="deck-image-option">
+              <input type="checkbox" class="deck-qr-checkbox"> QRコードを表示する
+            </label>
+          </div>
+          <div class="deck-modal-buttons">
+            ${showSaveButton ? '<button class="deck-save-button">保存</button>' : ''}
             <button class="modal-close-button">閉じる</button>
           </div>
-        `;
+        </div>
+      `;
 
-        imageModal.innerHTML = modalHTML;
+      // チェックボックスのトグル処理（プレビュー再生成を共通化）
+      const nameCheckbox = imageModal.querySelector('.deck-name-checkbox');
+      const qrCheckbox = imageModal.querySelector('.deck-qr-checkbox');
+      const previewImg = imageModal.querySelector('.deck-image-wrapper img');
+      let qrLibLoaded = false;
 
-        // Android 保存ボタン（blob URL でダウンロード）
-        const saveButton = imageModal.querySelector('.deck-save-button');
-        if (saveButton) {
-          saveButton.addEventListener('click', () => {
-            canvas.toBlob((blob) => {
-              if (!blob) {
-                deckBuilder?.showMessage?.('保存に失敗しました。共有をお試しください。');
+      // 現在のデッキマップ（QRコード用シェアURL生成に使用）
+      const deckMap = currentDeckToMap();
+
+      async function regeneratePreview() {
+        const includeTitle = nameCheckbox.checked;
+        const includeQr = qrCheckbox.checked;
+
+        // QRライブラリの事前読み込み
+        let shareUrl = null;
+        if (includeQr) {
+          if (!qrLibLoaded) {
+            try {
+              await loadQrCodeLib();
+              qrLibLoaded = true;
+            } catch (e) {
+              console.error(e);
+              qrCheckbox.checked = false;
+              deckBuilder?.showMessage?.('QRコードライブラリの読み込みに失敗しました。');
+              currentCanvas = originalCanvas;
+              dataUrl = currentCanvas.toDataURL('image/png');
+              previewImg.src = dataUrl;
+              return;
+            }
+          }
+          shareUrl = generateShareUrl(deckName, deckMap);
+        }
+
+        // タイトル・QRを統合してヘッダー付きキャンバスを生成
+        let canvas = originalCanvas;
+        if (includeTitle || includeQr) {
+          await document.fonts.ready;
+          canvas = generateDeckCanvas(originalCanvas, deckName, includeTitle, shareUrl);
+        }
+
+        currentCanvas = canvas;
+        dataUrl = currentCanvas.toDataURL('image/png');
+        previewImg.src = dataUrl;
+      }
+
+      nameCheckbox.addEventListener('change', regeneratePreview);
+      qrCheckbox.addEventListener('change', regeneratePreview);
+
+      // 保存ボタン（Android・PC）
+      const saveButton = imageModal.querySelector('.deck-save-button');
+      if (saveButton) {
+        saveButton.addEventListener('click', () => {
+          currentCanvas.toBlob((blob) => {
+            if (!blob) {
+              deckBuilder?.showMessage?.('保存に失敗しました。');
+              return;
+            }
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = `${deckName}.png`;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+          }, 'image/png');
+        });
+      }
+
+      // 共有ボタン
+      const shareButton = imageModal.querySelector('.deck-share-button');
+      if (shareButton) {
+        shareButton.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          shareButton.disabled = true;
+          shareButton.classList.add('is-loading');
+          try {
+            if (navigator.share) {
+              const blob = await (await fetch(dataUrl)).blob();
+              const file = new File([blob], `${deckName}.png`, { type: blob.type || 'image/png' });
+              const canShareFiles = !navigator.canShare || navigator.canShare({ files: [file] });
+              if (canShareFiles) {
+                await navigator.share({ title: deckName, files: [file] });
                 return;
               }
-              const blobUrl = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = blobUrl;
-              link.download = `${deckName}.png`;
-              link.click();
-              setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-            }, 'image/png');
-          });
-        }
-
-        // 共有ボタン
-        const shareButton = imageModal.querySelector('.deck-share-button');
-        if (shareButton) {
-          shareButton.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            shareButton.disabled = true;
-            shareButton.classList.add('is-loading');
-            try {
-              if (navigator.share) {
-                const blob = await (await fetch(dataUrl)).blob();
-                const file = new File([blob], `${deckName}.png`, { type: blob.type || 'image/png' });
-                const canShareFiles = !navigator.canShare || navigator.canShare({ files: [file] });
-                if (canShareFiles) {
-                  await navigator.share({ title: deckName, files: [file] });
-                  return;
-                }
-              }
-              deckBuilder?.showMessage?.('共有できませんでした。');
-            } catch (error) {
-              if (error && error.name === 'AbortError') return;
-              deckBuilder?.showMessage?.('共有に失敗しました。');
-            } finally {
-              shareButton.disabled = false;
-              shareButton.classList.remove('is-loading');
             }
-          });
-        }
-
-        const closeButton = imageModal.querySelector('.modal-close-button');
-        if (closeButton) {
-          closeButton.addEventListener('click', () => {
-            imageModal.remove();
-            document.body.classList.remove('modal-open');
-          });
-        }
-
-        imageModal.addEventListener('click', (e) => {
-          if (e.target === imageModal) {
-            imageModal.remove();
-            document.body.classList.remove('modal-open');
+            deckBuilder?.showMessage?.('共有できませんでした。');
+          } catch (error) {
+            if (error && error.name === 'AbortError') return;
+            deckBuilder?.showMessage?.('共有に失敗しました。');
+          } finally {
+            shareButton.disabled = false;
+            shareButton.classList.remove('is-loading');
           }
         });
-
-        // DOMに追加
-        document.body.appendChild(imageModal);
-
-        // 少し遅延してからフェードイン（Safari対策）
-        setTimeout(() => {
-          imageModal.classList.add('active');
-        }, 200);
-      } catch (error) {
-        console.error('モーダル表示エラー:', error);
-        alert('画像の表示に失敗しました。');
       }
-    } else {
-      // PCとAndroidは直接保存
-      const link = document.createElement('a');
-      link.download = `${deckName}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+
+      const closeButton = imageModal.querySelector('.modal-close-button');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => {
+          imageModal.remove();
+          document.body.classList.remove('modal-open');
+        });
+      }
+
+      imageModal.addEventListener('click', (e) => {
+        if (e.target === imageModal) {
+          imageModal.remove();
+          document.body.classList.remove('modal-open');
+        }
+      });
+
+      // DOMに追加
+      document.body.appendChild(imageModal);
+
+      // 少し遅延してからフェードイン（Safari対策）
+      setTimeout(() => {
+        imageModal.classList.add('active');
+      }, 200);
+    } catch (error) {
+      console.error('モーダル表示エラー:', error);
+      alert('画像の表示に失敗しました。');
     }
   } catch (error) {
     console.error('デッキの画像生成に失敗しました:', error);

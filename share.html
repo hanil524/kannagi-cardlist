@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>デッキ共有 | 巫カードフィルター</title>
+<meta name="description" content="巫KANNAGIカードゲーム デッキ共有ページ">
+<link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="images/icon.png">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.share-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* タイトル */
+.deck-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin: 12px 0 16px;
+  word-break: break-all;
+}
+
+/* カードグリッド */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+@media (min-width: 769px) {
+  .card-grid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+  }
+}
+.card-cell {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #2a2a3e;
+  aspect-ratio: 63/88;
+}
+.card-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.card-count {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 3px;
+  line-height: 1.4;
+}
+
+/* デッキコードエリア */
+.code-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.code-label {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+.code-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.code-text {
+  flex: 1;
+  background: #2a2a3e;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 12px;
+  padding: 10px;
+  word-break: break-all;
+  min-height: 44px;
+  line-height: 1.5;
+  user-select: all;
+  -webkit-user-select: all;
+}
+.copy-button {
+  flex-shrink: 0;
+  padding: 0 16px;
+  background: #4a90d9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+.copy-button:active { opacity: 0.8; }
+.copy-button.copied {
+  background: #5cb85c;
+}
+
+/* メインサイトリンク */
+.site-link {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+.site-link a {
+  color: #4da6ff;
+  text-decoration: none;
+  font-size: 14px;
+}
+.site-link a:hover { text-decoration: underline; }
+
+/* エラー */
+.error-message {
+  text-align: center;
+  margin-top: 60px;
+  color: #ccc;
+  font-size: 16px;
+}
+.error-message a { color: #4da6ff; }
+
+/* 枚数表示 */
+.deck-count {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="share-container" id="app">
+  <div class="error-message" id="error" style="display:none;">
+    <p>デッキデータが見つかりません。</p>
+    <p style="margin-top:12px;"><a href="./">巫カードフィルターへ戻る</a></p>
+  </div>
+</div>
+
+<!-- cards.js を読み込んでカード番号→画像パスのマッピングを取得 -->
+<script src="cards.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  // ===== デコード用ユーティリティ（scripts.js と同等の軽量版） =====
+
+  function b64urlDecode(s) {
+    let b64 = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    return atob(b64);
+  }
+  function b64urlEncode(str) {
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  }
+  function binToBytes(str) {
+    const out = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) out[i] = str.charCodeAt(i) & 0xff;
+    return out;
+  }
+  function bytesToBin(arr) {
+    let s = '';
+    for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 0xff);
+    return s;
+  }
+  function varintDecode(bytes, pos) {
+    let shift = 0, res = 0, b, i = pos;
+    do {
+      if (i >= bytes.length) return { value: null, next: i };
+      b = bytes[i++];
+      res |= (b & 0x7f) << shift;
+      shift += 7;
+    } while (b & 0x80);
+    return { value: res >>> 0, next: i };
+  }
+  function varintEncode(n) {
+    n = Number(n) >>> 0;
+    const out = [];
+    while (n >= 0x80) { out.push((n & 0x7f) | 0x80); n >>>= 7; }
+    out.push(n);
+    return out;
+  }
+
+  async function sha256Hex(text) {
+    const data = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ===== URLハッシュのデコード =====
+  // 形式: Base64URL( varint(titleByteLen) + title(UTF-8) + delta-varint pairs )
+
+  function decodeShareHash(hash) {
+    if (!hash) return null;
+    try {
+      const bytes = binToBytes(b64urlDecode(hash));
+      let pos = 0;
+
+      // タイトル長（バイト数）
+      const titleLen = varintDecode(bytes, pos);
+      if (titleLen.value === null) return null;
+      pos = titleLen.next;
+
+      // タイトルUTF-8
+      const titleBytes = bytes.slice(pos, pos + titleLen.value);
+      const title = new TextDecoder().decode(titleBytes);
+      pos += titleLen.value;
+
+      // カードデータ（delta-varint pairs）
+      const cards = {};
+      let prev = 0;
+      while (pos < bytes.length) {
+        const d = varintDecode(bytes, pos);
+        if (d.value === null) break;
+        pos = d.next;
+        const c = varintDecode(bytes, pos);
+        if (c.value === null) break;
+        pos = c.next;
+        const id = prev + d.value;
+        prev = id;
+        if (c.value > 0) cards[String(id)] = (cards[String(id)] || 0) + c.value;
+      }
+
+      return { title, cards };
+    } catch (e) {
+      console.error('デコードエラー:', e);
+      return null;
+    }
+  }
+
+  // ===== V6デッキコード生成 =====
+
+  async function generateV6Code(map) {
+    const entries = Object.entries(map)
+      .filter(([, c]) => Number(c) > 0)
+      .map(([id, c]) => [parseInt(id, 10) >>> 0, Number(c) >>> 0])
+      .sort((a, b) => a[0] - b[0]);
+    let prev = 0;
+    const bytes = [];
+    for (const [id, cnt] of entries) {
+      bytes.push(...varintEncode(id - prev));
+      bytes.push(...varintEncode(cnt));
+      prev = id;
+    }
+    const payload = b64urlEncode(bytesToBin(bytes));
+    const checksum = (await sha256Hex(payload)).slice(0, 10);
+    return '5|' + checksum + '|' + payload;
+  }
+
+  // ===== cards.js からカード番号→画像パス・名前マップを構築 =====
+
+  function buildCardMap() {
+    const html = window.__CARDS_HTML || '';
+    const map = {}; // { number: { src, name } }
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<div>' + html + '</div>', 'text/html');
+    const cards = doc.querySelectorAll('.card');
+    cards.forEach(card => {
+      const num = card.getAttribute('data-number');
+      const name = card.getAttribute('data-name') || '';
+      const img = card.querySelector('img');
+      const src = img ? (img.getAttribute('data-src') || img.getAttribute('src')) : '';
+      if (num && !map[num]) {
+        map[num] = { src, name };
+      }
+    });
+    return map;
+  }
+
+  // ===== メイン =====
+
+  async function init() {
+    const hash = location.hash.slice(1);
+    if (!hash) {
+      document.getElementById('error').style.display = '';
+      return;
+    }
+
+    const data = decodeShareHash(hash);
+    if (!data || Object.keys(data.cards).length === 0) {
+      document.getElementById('error').style.display = '';
+      return;
+    }
+
+    const cardMap = buildCardMap();
+    const app = document.getElementById('app');
+
+    // タイトル
+    if (data.title) {
+      const titleEl = document.createElement('h1');
+      titleEl.className = 'deck-title';
+      titleEl.textContent = data.title;
+      app.appendChild(titleEl);
+    }
+
+    // 総枚数
+    const totalCount = Object.values(data.cards).reduce((s, c) => s + c, 0);
+    const countEl = document.createElement('div');
+    countEl.className = 'deck-count';
+    countEl.textContent = totalCount + '枚';
+    app.appendChild(countEl);
+
+    // カードグリッド
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+
+    // カード番号順にソート
+    const sortedEntries = Object.entries(data.cards)
+      .sort(([a], [b]) => parseInt(a, 10) - parseInt(b, 10));
+
+    for (const [id, count] of sortedEntries) {
+      const info = cardMap[id];
+      for (let i = 0; i < count; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'card-cell';
+        if (info && info.src) {
+          const img = document.createElement('img');
+          img.src = info.src;
+          img.alt = info.name || 'Card ' + id;
+          img.loading = 'lazy';
+          cell.appendChild(img);
+        }
+        // 枚数バッジ（2枚以上、各カードの最初のセルだけに表示）
+        if (i === 0 && count >= 2) {
+          const badge = document.createElement('span');
+          badge.className = 'card-count';
+          badge.textContent = '×' + count;
+          cell.appendChild(badge);
+        }
+        grid.appendChild(cell);
+      }
+    }
+    app.appendChild(grid);
+
+    // デッキコード
+    const codeSection = document.createElement('div');
+    codeSection.className = 'code-section';
+
+    const codeLabel = document.createElement('div');
+    codeLabel.className = 'code-label';
+    codeLabel.textContent = 'デッキコード';
+    codeSection.appendChild(codeLabel);
+
+    const codeWrapper = document.createElement('div');
+    codeWrapper.className = 'code-wrapper';
+
+    const codeText = document.createElement('div');
+    codeText.className = 'code-text';
+    codeText.textContent = '生成中...';
+    codeWrapper.appendChild(codeText);
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-button';
+    copyBtn.textContent = 'コピー';
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codeText.textContent);
+        copyBtn.textContent = 'コピー済';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.textContent = 'コピー';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      } catch (e) {
+        // フォールバック: 手動選択
+        const range = document.createRange();
+        range.selectNodeContents(codeText);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+    codeWrapper.appendChild(copyBtn);
+    codeSection.appendChild(codeWrapper);
+    app.appendChild(codeSection);
+
+    // V6コードを非同期生成
+    try {
+      const code = await generateV6Code(data.cards);
+      codeText.textContent = code;
+    } catch (e) {
+      codeText.textContent = 'コード生成に失敗しました';
+    }
+
+    // メインサイトリンク
+    const linkDiv = document.createElement('div');
+    linkDiv.className = 'site-link';
+    const link = document.createElement('a');
+    link.href = './';
+    link.textContent = '← 巫カードフィルターへ戻る';
+    linkDiv.appendChild(link);
+    app.appendChild(linkDiv);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
