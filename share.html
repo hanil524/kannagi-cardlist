@@ -64,18 +64,6 @@ body {
   object-fit: cover;
   display: block;
 }
-.card-count {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  background: rgba(0,0,0,0.75);
-  color: #fff;
-  font-size: 11px;
-  font-weight: bold;
-  padding: 1px 5px;
-  border-radius: 3px;
-  line-height: 1.4;
-}
 
 /* デッキコードエリア */
 .code-section {
@@ -344,13 +332,6 @@ body {
           img.alt = info.name || 'Card ' + id;
           img.loading = 'lazy';
           cell.appendChild(img);
-        }
-        // 枚数バッジ（2枚以上、各カードの最初のセルだけに表示）
-        if (i === 0 && count >= 2) {
-          const badge = document.createElement('span');
-          badge.className = 'card-count';
-          badge.textContent = '×' + count;
-          cell.appendChild(badge);
         }
         grid.appendChild(cell);
       }
