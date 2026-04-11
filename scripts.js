@@ -6247,14 +6247,6 @@ async function captureDeck() {
     deckDisplay.classList.remove('capturing');
     modalContent.classList.remove('capturing-deck');
 
-    // Noto Sans JP フォントを先行読み込み
-    if (!document.querySelector('link[href*="Noto+Sans+JP"]')) {
-      const fontLink = document.createElement('link');
-      fontLink.rel = 'stylesheet';
-      fontLink.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap';
-      document.head.appendChild(fontLink);
-    }
-
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
     const showSaveButton = !isIOS;
 
@@ -6300,15 +6292,26 @@ async function captureDeck() {
       const qrCheckbox = imageModal.querySelector('.deck-qr-checkbox');
       const previewImg = imageModal.querySelector('.deck-image-wrapper img');
       let qrLibLoaded = false;
+      let fontLoaded = false;
+      let deckMap = null;
 
-      // 現在のデッキマップ（QRコード用シェアURL生成に使用）
-      const deckMap = currentDeckToMap();
+      // フォントを必要時に読み込み
+      function ensureFont() {
+        if (fontLoaded) return;
+        fontLoaded = true;
+        if (!document.querySelector('link[href*="Noto+Sans+JP"]')) {
+          const fontLink = document.createElement('link');
+          fontLink.rel = 'stylesheet';
+          fontLink.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap';
+          document.head.appendChild(fontLink);
+        }
+      }
 
       async function regeneratePreview() {
         const includeTitle = nameCheckbox.checked;
         const includeQr = qrCheckbox.checked;
 
-        // QRライブラリの事前読み込み
+        // QRライブラリの読み込み（チェック時のみ）
         let shareUrl = null;
         if (includeQr) {
           if (!qrLibLoaded) {
@@ -6325,12 +6328,14 @@ async function captureDeck() {
               return;
             }
           }
+          if (!deckMap) deckMap = currentDeckToMap();
           shareUrl = generateShareUrl(deckName, deckMap);
         }
 
         // タイトル・QRを統合してヘッダー付きキャンバスを生成
         let canvas = originalCanvas;
         if (includeTitle || includeQr) {
+          if (includeTitle) ensureFont();
           await document.fonts.ready;
           canvas = generateDeckCanvas(originalCanvas, deckName, includeTitle, shareUrl);
         }
