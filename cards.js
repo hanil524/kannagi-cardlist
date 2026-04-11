@@ -12941,6 +12941,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2307"
+  data-name="森公園(もりこうえん)"
+  data-cost="2"
+  data-power="3"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="渓谷 血液 蝙蝠"
+  data-keyword="楽園"
+  data-role="召喚時 札除去 底送り"
+>
+  <img data-src="images/card_15_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2308"
   data-name="黒妖の訓練場(こくようのくんれんじょう)"
   data-cost="3"
