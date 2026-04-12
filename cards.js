@@ -13605,6 +13605,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2380"
+  data-name="悪神の力：冬(あしんのちから：ふゆ)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="戦 鬼面の神"
+  data-keyword="潜在能力"
+  data-role="常時 ロック"
+>
+  <img data-src="images/card_15_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2382"
   data-name="画材(がざい)"
   data-cost="0"
