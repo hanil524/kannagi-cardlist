@@ -2386,6 +2386,42 @@ body.modal-open {
 }
 
 /* 零探しの結果表示用 */
+/* 闇カード専用ポップアップ */
+.dark-card-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: rgba(10, 0, 20, 0.95);
+  border: 2px solid #8833cc;
+  border-radius: 10px;
+  color: #e8d0ff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  padding: 18px 24px;
+  line-height: 1.8;
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(120, 40, 200, 0.7);
+  animation: darkCardPopupIn 0.3s ease;
+  white-space: nowrap;
+}
+
+@keyframes darkCardPopupIn {
+  from { opacity: 0; transform: translate(-50%, -54%) scale(0.93); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.dark-card-popup-hide {
+  animation: darkCardPopupOut 0.5s ease forwards;
+}
+
+@keyframes darkCardPopupOut {
+  to { opacity: 0; transform: translate(-50%, -46%) scale(0.95); }
+}
+
 .zero-search-modal {
   position: fixed;
   top: 0;

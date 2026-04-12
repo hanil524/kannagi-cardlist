@@ -3995,8 +3995,9 @@ const deckBuilder = {
 
   // メッセージを表示
   showMessage(message) {
-    document.querySelectorAll('.deck-message, .deck-limit-message').forEach(el => el.remove());
+    document.querySelectorAll('.deck-message, .deck-limit-message, .dark-card-popup').forEach(el => el.remove());
     clearTimeout(this._messageTimer);
+    clearTimeout(_darkPopupTimer);
     const messageDiv = document.createElement('div');
     messageDiv.className = 'deck-message';
     messageDiv.textContent = message;
@@ -4519,6 +4520,28 @@ function _zeroShuffle(arr) {
   }
 }
 
+let _darkPopupTimer = null;
+
+function _showDarkCardPopup() {
+  // 既存の闇ポップアップ・通常メッセージを即削除
+  document.querySelectorAll('.dark-card-popup').forEach((el) => el.remove());
+  document.querySelectorAll('.deck-message, .deck-limit-message').forEach((el) => el.remove());
+  clearTimeout(_darkPopupTimer);
+  clearTimeout(deckBuilder._messageTimer);
+
+  const popup = document.createElement('div');
+  popup.className = 'dark-card-popup';
+  popup.innerHTML = `『闇』はあらゆる場面で視認した時、<br>手札公開場に置かれる。`;
+  document.body.appendChild(popup);
+
+  popup.addEventListener('click', () => popup.remove());
+
+  _darkPopupTimer = setTimeout(() => {
+    popup.classList.add('dark-card-popup-hide');
+    popup.addEventListener('animationend', () => popup.remove(), { once: true });
+  }, 2000);
+}
+
 function _renderZeroModal(message, actionLabel) {
   const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
   const displayCards = [..._zeroCurrentHand].sort((a, b) => {
@@ -4599,6 +4622,11 @@ function performZeroSearch() {
   _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
   _zeroPhase = 'initial';
 
+  // 「闇」が引かれていた場合は自動選択
+  _zeroCurrentHand.forEach((c) => {
+    if (c.dataset.name === '闇(やみ)') c.dataset.zeroSelected = 'true';
+  });
+
   _renderZeroModal('山札の上から8枚ドローしました。', '引き直し');
 }
 
@@ -4638,6 +4666,11 @@ function performZeroRetry() {
   _zeroCurrentHand = _zeroDeckPool.splice(0, 8);
   _zeroPhase = 'retried';
 
+  // 「闇」が引かれていた場合は自動選択
+  _zeroCurrentHand.forEach((c) => {
+    if (c.dataset.name === '闇(やみ)') c.dataset.zeroSelected = 'true';
+  });
+
   _renderZeroModal('シャッフルし、新たに8枚ドローしました。', '引き直し');
 }
 
@@ -4663,6 +4696,12 @@ function toggleZeroCardSelection(card, cardElement) {
   const isSelected = card.dataset.zeroSelected === 'true';
 
   if (isSelected) {
+    // 初期ドロー時・リトライ時の「闇」は解除不可→クリックでポップアップ表示
+    if (_zeroPhase !== 'redrawn' && card.dataset.name === '闇(やみ)') {
+      _showDarkCardPopup();
+      return;
+    }
+
     // 選択解除の場合
     card.dataset.zeroSelected = 'false';
 
@@ -4688,15 +4727,20 @@ function toggleZeroCardSelection(card, cardElement) {
 
 // 零探しの選択をすべて解除する関数
 function resetZeroSelection() {
+  const isDarkLocked = _zeroPhase !== 'redrawn';
+
   deckBuilder.deck.forEach((card) => {
+    // 初期ドロー時の「闇」は解除しない
+    if (isDarkLocked && card.dataset.name === '闇(やみ)') return;
     card.dataset.zeroSelected = 'false';
   });
 
   // モーダル内のカードの選択状態も更新
   const modalCards = document.querySelectorAll('.zero-search-modal .deck-card');
-  modalCards.forEach((card) => {
-    card.classList.remove('selected');
-    const mark = card.querySelector('.zero-selected-mark');
+  modalCards.forEach((cardEl) => {
+    if (isDarkLocked && cardEl.dataset.name === '闇(やみ)') return;
+    cardEl.classList.remove('selected');
+    const mark = cardEl.querySelector('.zero-selected-mark');
     if (mark) mark.remove();
   });
 
@@ -6148,12 +6192,14 @@ function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl) {
     }
 
     // テキストを左寄せ・上下均等配置で描画
+    // 日本語フォントは em-square 基準のため視覚的に上寄りになりやすい→fontSize の7%下に補正
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
     const sectionHeight = headerHeight / lines.length;
+    const visualOffsetY = Math.round(fontSize * 0.12);
     lines.forEach((line, i) => {
-      const y = sectionHeight * i + sectionHeight / 2;
+      const y = sectionHeight * i + sectionHeight / 2 + visualOffsetY;
       ctx.fillText(line, paddingX, y, maxTextWidth);
     });
   }
