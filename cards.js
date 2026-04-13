@@ -13151,6 +13151,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2329"
+  data-name="角(つの)"
+  data-cost="3"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="刀"
+  data-keyword=""
+  data-role="バフ デバフ"
+>
+  <img data-src="images/card_15_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2330"
   data-name="半猫半人(はんびょうはんじん)"
   data-cost="4"
