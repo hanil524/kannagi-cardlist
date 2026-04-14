@@ -13312,6 +13312,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2348"
+  data-name="引き摺られた跡(ひきずられたあと)"
+  data-cost="3"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="交通事故 血液"
+  data-keyword="追撃"
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_15_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2349"
   data-name="遊具のある公園(ゆうぐのあるこうえん)"
   data-cost="4"
