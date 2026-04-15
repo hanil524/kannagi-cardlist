@@ -13055,6 +13055,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2320"
+  data-name="描かれた虎(えがかれたとら)"
+  data-cost="0"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="写真"
+  data-keyword="不屈"
+  data-role="ヒール"
+>
+  <img data-src="images/card_15_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2321"
   data-name="雷小僧(かみなりこぞう)"
   data-cost="1"
