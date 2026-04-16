@@ -6211,9 +6211,13 @@ function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl) {
     const qrInnerSize = qrTotalSize - qrPadding * 2;
     const cellSize = qrInnerSize / moduleCount;
 
-    // ヘッダー右端、上下中央に配置
+    // ヘッダー右端に配置
+    // キャプチャ時の .deck-display.capturing 上部 padding（5px × html2canvas scale 4 = 20px）が
+    // ヘッダーと同色で連続して見えるため、ヘッダー単体の中央だとQRが視覚的に上寄りになる。
+    // 「ヘッダー + デッキ画像の上余白」の視覚的中央に来るよう、下方向へ半分だけオフセットする。
+    const deckTopPadding = 20;
     const qrX = srcW - qrTotalSize - paddingX;
-    const qrY = Math.round((headerHeight - qrTotalSize) / 2);
+    const qrY = Math.round((headerHeight - qrTotalSize + deckTopPadding) / 2);
 
     // 白背景 + 角丸
     const radius = Math.round(qrTotalSize * 0.06);
