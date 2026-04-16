@@ -13669,6 +13669,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2381"
+  data-name="狭間(はざま)"
+  data-cost="0"
+  data-power="1"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="古城"
+  data-keyword=""
+  data-role="召喚時 魂加速 手札公開 除外加速"
+>
+  <img data-src="images/card_15_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2382"
   data-name="画材(がざい)"
   data-cost="0"
