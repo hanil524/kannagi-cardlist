@@ -13620,6 +13620,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2373"
+  data-name="学芸祭(がくげいさい)"
+  data-cost="2"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="噂"
+  data-keyword=""
+  data-role="ドロー 底送り"
+>
+  <img data-src="images/card_15_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2374"
   data-name="花瓶(かびん)"
   data-cost="9"
