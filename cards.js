@@ -13459,6 +13459,23 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2359"
+  data-name="懐柔の種(かいじゅうのたね)"
+  data-cost="0"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="樹木 怨霊"
+  data-keyword=""
+  data-role="魂戻し 魂利用 ドロー"
+  data-connection="花面の耳打(かめんのみみうち)"
+>
+  <img data-src="images/card_15_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2360"
   data-name="花咲く死体(はなさくしたい)"
   data-cost="0"
