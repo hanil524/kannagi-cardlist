@@ -13039,6 +13039,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2315"
+  data-name="森の海(もりのうみ)"
+  data-cost="10"
+  data-power="8"
+  data-series="猫花の約束"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="樹木 廃鉱山"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_15_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2316"
   data-name="ふれあい広場(ふれあいひろば)"
   data-cost="11"
