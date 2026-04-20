@@ -13280,6 +13280,23 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2340"
+  data-name="狐の嫁入り(きつねのよめいり)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="狐 狐面 雨"
+  data-keyword=""
+  data-role="直接ダメ"
+  data-connection="狐面の耳打(こめんのみみうち)"
+>
+  <img data-src="images/card_15_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2341"
   data-name="とおりゃんせ"
   data-cost="0"
