@@ -13719,6 +13719,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2379"
+  data-name="響鎧(きょうがい)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="刀 牢獄"
+  data-keyword="結界 不屈"
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_15_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2380"
   data-name="悪神の力：冬(あしんのちから：ふゆ)"
   data-cost="5"
