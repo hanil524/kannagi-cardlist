@@ -13557,6 +13557,23 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2364"
+  data-name="天狗(てんぐ)"
+  data-cost="5"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="妖怪 烏"
+  data-keyword=""
+  data-role="サーチ"
+  data-connection="花面の耳打(かめんのみみうち)"
+>
+  <img data-src="images/card_15_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2365"
   data-name="人柱(ひとばしら)"
   data-cost="6"
