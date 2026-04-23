@@ -13655,6 +13655,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2370"
+  data-name="窃盗団(せっとうだん)"
+  data-cost="4"
+  data-power="0"
+  data-series="猫花の約束"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="罪 糧 人形"
+  data-keyword=""
+  data-role="ハンデス ドロー"
+>
+  <img data-src="images/card_15_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2371"
   data-name="カーブミラー(かーぶみらー)"
   data-cost="5"
