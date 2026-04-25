@@ -983,8 +983,9 @@ document.addEventListener('DOMContentLoaded', () => {
   buildNumericFilterButtons();
 
   // モバイルでのプルトゥリフレッシュを防止
-  document.body.style.overscrollBehavior = 'none';
-  document.documentElement.style.overscrollBehavior = 'none';
+  // Keep vertical page scrolling native; only suppress horizontal overscroll.
+  document.body.style.overscrollBehaviorX = 'none';
+  document.documentElement.style.overscrollBehaviorX = 'none';
 
   // 強制的にページトップに移動
   window.scrollTo(0, 0);
@@ -1645,7 +1646,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCardCount();
   updateFilterDetails();
   ensureScrollUnlocked();
-  setupAndroidScrollAssist();
 });
 
 // 以下の関数は変更なし
