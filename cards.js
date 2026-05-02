@@ -14284,32 +14284,32 @@ data-role="除外戻し ドロー"
 <div
   class="card"
   data-number="2387"
-  data-name="？？？"
-  data-cost=""
-  data-power=""
+  data-name="煙天夏の鉄蟻（えんてんかのてつぎ）"
+  data-cost="7"
+  data-power="0"
   data-series="猫花の約束"
   data-type="季節札"
-  data-season="混化 秋夏"
+  data-season="夏"
   data-rare="KR"
-  data-attribute=""
+  data-attribute="妖怪 蟲 火事"
   data-keyword=""
-  data-role=""
+  data-role="直接ダメ"
 >
   <img data-src="images/card_15_p (75).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
   data-number="2388"
-  data-name="？？？"
-  data-cost=""
+  data-name="萬(よろず)"
+  data-cost="7"
   data-power="0"
   data-series="猫花の約束"
   data-type="怪異札"
-  data-season=""
+  data-season="無"
   data-rare="SSR"
-  data-attribute=""
+  data-attribute="神 戦 刀 鎌 銃 龍"
   data-keyword=""
-  data-role=""
+  data-role="直接ダメ"
 >
   <img data-src="images/card_15_p (70).jpg" src="placeholder.jpg" decoding="async" />
 </div>
