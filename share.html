@@ -264,17 +264,20 @@ body {
 
   function buildCardMap() {
     const html = window.__CARDS_HTML || '';
-    const map = {}; // { number: { src, name } }
+    const map = {}; // { number: { src, name, type, cost, season } }
     const parser = new DOMParser();
     const doc = parser.parseFromString('<div>' + html + '</div>', 'text/html');
     const cards = doc.querySelectorAll('.card');
     cards.forEach(card => {
       const num = card.getAttribute('data-number');
       const name = card.getAttribute('data-name') || '';
+      const type = card.getAttribute('data-type') || '';
+      const cost = card.getAttribute('data-cost') || '0';
+      const season = (card.getAttribute('data-season') || '').split(' ')[0] || '';
       const img = card.querySelector('img');
       const src = img ? (img.getAttribute('data-src') || img.getAttribute('src')) : '';
       if (num && !map[num]) {
-        map[num] = { src, name };
+        map[num] = { src, name, type, cost, season };
       }
     });
     return map;
@@ -317,9 +320,28 @@ body {
     const grid = document.createElement('div');
     grid.className = 'card-grid';
 
-    // カード番号順にソート
+    // デッキ画面と同じ並び順（種類→コスト→季節→名前）でソート
+    const typeOrder = ['場所札', '怪異札', '道具札', '季節札'];
+    const seasonOrder = ['春', '夏', '秋', '冬', '無', '混化'];
     const sortedEntries = Object.entries(data.cards)
-      .sort(([a], [b]) => parseInt(a, 10) - parseInt(b, 10));
+      .sort(([a], [b]) => {
+        const infoA = cardMap[a] || {};
+        const infoB = cardMap[b] || {};
+        // 種類順
+        const typeA = typeOrder.indexOf(infoA.type);
+        const typeB = typeOrder.indexOf(infoB.type);
+        if (typeA !== typeB) return (typeA === -1 ? 99 : typeA) - (typeB === -1 ? 99 : typeB);
+        // コスト昇順
+        const costA = parseInt(infoA.cost) || 0;
+        const costB = parseInt(infoB.cost) || 0;
+        if (costA !== costB) return costA - costB;
+        // 季節順
+        const seaA = seasonOrder.indexOf(infoA.season);
+        const seaB = seasonOrder.indexOf(infoB.season);
+        if (seaA !== seaB) return (seaA === -1 ? 99 : seaA) - (seaB === -1 ? 99 : seaB);
+        // カード名
+        return (infoA.name || '').localeCompare(infoB.name || '');
+      });
 
     for (const [id, count] of sortedEntries) {
       const info = cardMap[id];
