@@ -15194,5 +15194,22 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_15_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10062"
+  data-name="メーガス(めーがす)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年5月21日"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="罪 呪 刀"
+  data-keyword=""
+  data-role="ドレイン ヒール 直接ダメ 魂加速 "
+>
+  <img data-src="images/card_15_p (93).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
