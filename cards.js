@@ -15211,5 +15211,22 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_15_p (93).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10063"
+  data-name="廻MEGURU喫茶(めぐるきっさ)"
+  data-cost="8"
+  data-power="3"
+  data-series="プロモ"
+  data-promo-date="2026年5月16日"
+  data-type="場所札"
+  data-season="秋"
+  data-rare=""
+  data-attribute="樹木 幽霊"
+  data-keyword=""
+  data-role="召喚時 ドロー 特殊召喚 追加行動 "
+>
+  <img data-src="images/card_15_p (94).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
