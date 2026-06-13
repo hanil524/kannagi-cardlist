@@ -7167,7 +7167,7 @@ data-keyword=""
 data-role="除去無効 常時"
 >
 <img data-src="images/card_10_p (60).jpg" src="placeholder.jpg" decoding="async" />
-</div>       
+</div>
 <div
 class="card"
 data-number="1610"
@@ -7345,7 +7345,7 @@ data-keyword=""
 data-role="サーチ 底送り"
 >
 <img data-src="images/card_10_p (86).jpg" src="placeholder.jpg" decoding="async" />
-</div>          
+</div>
 <div
 class="card"
 data-number="1621"
@@ -7362,7 +7362,7 @@ data-role="追加行動 ヒール 魂加速"
 data-connection="夜泣き蕎麦（よなきそば）"
 >
 <img data-src="images/card_10_p (59).jpg" src="placeholder.jpg" decoding="async" />
-</div>          
+</div>
 <div
 class="card"
 data-number="1622"
@@ -7522,7 +7522,7 @@ data-keyword=""
 data-role="召喚時"
 >
 <img data-src="images/card_10_p (82).jpg" src="placeholder.jpg" decoding="async" />
-</div>          
+</div>
 <div
 class="card"
 data-number="1632"
@@ -8567,7 +8567,7 @@ data-role="2種類札 サーチ バニラ"
 data-connection="始まり始まり（はじまりはじまり）"
 >
 <img data-src="images/card_10_p (50).jpg" src="placeholder.jpg" decoding="async" />
-</div> 
+</div>
 <div
 class="card"
 data-number="1697"
@@ -9386,7 +9386,7 @@ data-keyword="神秘 鬼動"
 data-role="ランデス 攻撃時 常時"
 >
 <img data-src="images/card_11_p (11).jpg" src="placeholder.jpg" decoding="async" />
-</div>         
+</div>
 <div
 class="card"
 data-number="1828"
@@ -11252,7 +11252,7 @@ data-role="除外戻し ドロー"
   data-rare="エキスパンション"
   data-attribute="糧"
   data-keyword="不屈"
-  data-role="ヒール"  
+  data-role="ヒール"
 >
   <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -14734,7 +14734,7 @@ data-keyword=""
 data-role="除外加速 ドロー"
 >
 <img data-src="images/card_10_p (126).jpg" src="placeholder.jpg" decoding="async" />
-</div>          
+</div>
 <div
 class="card"
 data-number="10029"
@@ -15227,6 +15227,22 @@ data-attribute="妖怪 幽霊"
   data-role="召喚時 ドロー 特殊召喚 追加行動 "
 >
   <img data-src="images/card_15_p (94).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10064"
+  data-name="GKM(がーりっく・まねー・かも～)"
+  data-cost="0"
+  data-power="1"
+  data-series="プロモ"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 神隠し"
+  data-keyword="言霊"
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_15_p (95).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
