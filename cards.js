@@ -4142,7 +4142,7 @@ data-series="れもんちゃんデッキ"
 data-rare="C"
 data-season="冬"
 data-type="怪異札"
-data-role="デッキ破壊"
+data-role="デッキ破壊 除外加速"
 data-keyword=""
 data-attribute="みかん"
 >
@@ -14312,6 +14312,70 @@ data-role="除外戻し ドロー"
   data-role="直接ダメ"
 >
   <img data-src="images/card_15_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2412"
+  data-name="いちごちゃん"
+  data-cost="0"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="いちご"
+  data-keyword=""
+  data-role="ヒール"
+>
+  <img data-src="images/card_16_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2431"
+  data-name="すいかちゃん"
+  data-cost="0"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="すいか"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_16_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2451"
+  data-name="かきちゃん"
+  data-cost="0"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="かき"
+  data-keyword=""
+  data-role="ドロー 相手ドロー"
+>
+  <img data-src="images/card_16_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2470"
+  data-name="みかんさん"
+  data-cost="0"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="かき"
+  data-keyword=""
+  data-role="デッキ破壊 除外加速"
+>
+  <img data-src="images/card_16_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->

@@ -1444,7 +1444,9 @@ button[onclick='resetFilters()']:active {
 .modal-buttons button.toshiiro,
 .modal-buttons button.gakkouiro,
 .modal-buttons button.lemoniro,
-.modal-buttons button.oisyairo {
+.modal-buttons button.oisyairo,
+.modal-buttons button.okarutoiro
+{
   position: relative;
   overflow: hidden;
   font-weight: bold;
@@ -1454,6 +1456,11 @@ button[onclick='resetFilters()']:active {
 /* 各ボタンの背景色設定 */
 .modal-buttons button.batoruiro {
   background: linear-gradient(135deg, #1b1b1b 50%, #f74848 50%);
+  border: 2px solid #1d1d1d;
+}
+
+.modal-buttons button.okarutoiro {
+  background: linear-gradient(135deg, #f74848 50%, #1b1b1b 50%);
   border: 2px solid #1d1d1d;
 }
 
