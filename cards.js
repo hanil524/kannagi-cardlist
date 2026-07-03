@@ -14331,6 +14331,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2414"
+  data-name="竹林の白蛇（ちくりんのしろへび）"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="大蛇 髑髏"
+  data-keyword=""
+  data-role="バフ"
+>
+  <img data-src="images/card_16_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2431"
   data-name="すいかちゃん"
   data-cost="0"
