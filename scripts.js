@@ -36,6 +36,28 @@ const isAndroid = () => {
   return /Android/i.test(navigator.userAgent);
 };
 
+const SHARED_FOUR_COPY_CARD_NAME = '「古書の怪」';
+
+const getDeckLimitGroupKey = (cardName) => {
+  const name = String(cardName || '');
+  return name.includes(SHARED_FOUR_COPY_CARD_NAME) ? SHARED_FOUR_COPY_CARD_NAME : name;
+};
+
+const isSameDeckLimitGroup = (leftName, rightName) => {
+  return getDeckLimitGroupKey(leftName) === getDeckLimitGroupKey(rightName);
+};
+
+const countDeckLimitGroup = (cards, cardName) => {
+  return cards.filter((card) => isSameDeckLimitGroup(card?.dataset?.name, cardName)).length;
+};
+
+const findLastDeckLimitGroupCard = (cards, cardName) => {
+  for (let i = cards.length - 1; i >= 0; i -= 1) {
+    if (isSameDeckLimitGroup(cards[i]?.dataset?.name, cardName)) return cards[i];
+  }
+  return null;
+};
+
 const hasVisibleModal = () => {
   const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal', 'deck-backup-modal'];
   const modalOpen = modalIds.some((id) => {
@@ -2548,7 +2570,7 @@ function getSeriesInfo(cardName) {
 
 // 画像モーダル内のボタン制御
 const updateModalControls = (cardName, controls) => {
-  const currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+  const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
   const countDisplay = controls.querySelector('.card-count');
@@ -2657,7 +2679,7 @@ const openImageModal = (src) => {
   modalConnectionInfo = connectionInfo;
 
   // カウント情報の取得と表示
-  let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+  let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
 
   // カードの上限枚数を取得
   const maxAllowed = deckBuilder.getMaxAllowed(cardName);
@@ -2786,7 +2808,7 @@ const closeImageModal = () => {
       if (modalControls && modalSeriesInfo) {
         updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
 
-        let currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
         const maxAllowed = deckBuilder.getMaxAllowed(cardName);
         const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
         modalControls.innerHTML = `
@@ -2957,7 +2979,7 @@ function openConnectionCard(targetName) {
   if (modalControls && modalSeriesInfo) {
     updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, targetCard.dataset.series);
 
-    let currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+    let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
     const maxAllowed = deckBuilder.getMaxAllowed(cardName);
     const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
     modalControls.innerHTML = `
@@ -3447,7 +3469,7 @@ const showNextImage = () => {
       updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, nextCard.dataset.series);
 
       // カウント情報を更新
-      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
       const maxAllowed = deckBuilder.getMaxAllowed(cardName);
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
@@ -3514,7 +3536,7 @@ const showPreviousImage = () => {
       updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
 
       // カウント情報を更新
-      let currentCount = deckBuilder.deck.filter((card) => card.dataset.name === cardName).length;
+      let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
       const maxAllowed = deckBuilder.getMaxAllowed(cardName);
       const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
       modalControls.innerHTML = `
@@ -3701,7 +3723,7 @@ const deckBuilder = {
   // カードを追加
   addCard(card) {
     const cardName = card.dataset.name;
-    const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
+    const sameNameCount = countDeckLimitGroup(this.deck, cardName);
 
     const limit = this.getBaseLimit(cardName);
     if (limit !== Infinity && sameNameCount >= limit) {
@@ -4407,6 +4429,7 @@ if (typeof deckBuilder.limitReleaseEnabled === 'undefined') {
 
 // 2) 基本上限（制限解禁を考慮しない）
 deckBuilder.getBaseLimit = function (cardName) {
+  if (getDeckLimitGroupKey(cardName) === SHARED_FOUR_COPY_CARD_NAME) return this.maxCards;
   const limit = this.cardLimits.get(cardName);
   return limit !== undefined ? limit : this.maxCards; // 通常は4
 };
@@ -4426,7 +4449,7 @@ deckBuilder.getMaxAllowed = function (cardName) {
   deckBuilder.addCard = function (card) {
     if (!card || !card.dataset) return false;
     const cardName = card.dataset.name;
-    const sameNameCount = this.deck.filter((c) => c.dataset.name === cardName).length;
+    const sameNameCount = countDeckLimitGroup(this.deck, cardName);
     const maxAllowed = this.getMaxAllowed(cardName);
 
     if (maxAllowed !== Infinity && sameNameCount >= maxAllowed) {
@@ -4474,15 +4497,15 @@ function updateCardCountBadges() {
   // デッキ内の各カードの枚数をカウント
   const cardCounts = (deckBuilder.deck || []).reduce((counts, card) => {
     if (card && card.dataset && card.dataset.name) {
-      const name = card.dataset.name;
-      counts[name] = (counts[name] || 0) + 1;
+      const groupKey = getDeckLimitGroupKey(card.dataset.name);
+      counts[groupKey] = (counts[groupKey] || 0) + 1;
     }
     return counts;
   }, {});
 
   // カード一覧の各カードに枚数バッジを追加
   cards.forEach((card) => {
-    const count = cardCounts[card.dataset.name];
+    const count = cardCounts[getDeckLimitGroupKey(card.dataset.name)];
     if (count) {
       const badge = document.createElement('div');
       badge.className = 'card-count-badge';
@@ -4896,7 +4919,7 @@ document.addEventListener('keydown', (e) => {
   // 画像モーダルが表示中の場合のみ
   if (document.getElementById('image-modal').style.display === 'flex') {
     const cardName = visibleCards[currentImageIndex].dataset.name;
-    const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+    const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
 
     const maxAllowed = deckBuilder.getMaxAllowed(cardName);
 
@@ -4913,7 +4936,7 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
       // 下キーで減少
       if (currentCount > 0) {
-        const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+        const cardToRemove = findLastDeckLimitGroupCard(deckBuilder.deck, cardName);
         if (cardToRemove) {
           deckBuilder.removeCard(null, cardToRemove.dataset.number);
           updateCardCountInModal(cardName);
@@ -4928,7 +4951,7 @@ function updateCardCountInModal(cardName) {
   const controls = document.querySelector('.card-controls');
   if (!controls) return;
 
-  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
   const cardCountDiv = controls.querySelector('.card-count');
 
   // カードの上限枚数を取得
@@ -5000,7 +5023,7 @@ const setupCardControls = (controls, card, cardName) => {
   let maxAllowed = deckBuilder.getMaxAllowed(cardName);
 
   // 初期表示時から正しい上限枚数を表示
-  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
   const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
   controls.querySelector('.card-count').textContent = `${currentCount}/${displayMax}`;
 
@@ -5008,12 +5031,12 @@ const setupCardControls = (controls, card, cardName) => {
     e.stopPropagation();
     if (!addButton.disabled) {
       // 現在の枚数を取得
-      const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+      const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
       _lastShakeTarget = addButton;
 
       if (maxAllowed === Infinity || currentCount < maxAllowed) {
         deckBuilder.addCard(card.cloneNode(true));
-        const newCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        const newCount = countDeckLimitGroup(deckBuilder.deck, cardName);
         const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
         controls.querySelector('.card-count').textContent = `${newCount}/${displayMax}`;
 
@@ -5034,10 +5057,10 @@ const setupCardControls = (controls, card, cardName) => {
   removeButton.onclick = (e) => {
     e.stopPropagation();
     if (!removeButton.disabled) {
-      const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+      const cardToRemove = findLastDeckLimitGroupCard(deckBuilder.deck, cardName);
       if (cardToRemove) {
         deckBuilder.removeCard(null, cardToRemove.dataset.number);
-        const newCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+        const newCount = countDeckLimitGroup(deckBuilder.deck, cardName);
         const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
         controls.querySelector('.card-count').textContent = `${newCount}/${displayMax}`;
 
@@ -6549,7 +6572,7 @@ function handleModalAddCard() {
   const cardName = currentModalCardName;
 
   const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
 
   if (maxAllowed === Infinity || currentCount < maxAllowed) {
     deckBuilder.addCard(currentModalCard.cloneNode(true));
@@ -6562,7 +6585,7 @@ function handleModalAddCard() {
 // モーダルでのカード削除処理
 function handleModalRemoveCard() {
   const cardName = currentModalCardName;
-  const cardToRemove = deckBuilder.deck.findLast((c) => c.dataset.name === cardName);
+  const cardToRemove = findLastDeckLimitGroupCard(deckBuilder.deck, cardName);
   if (cardToRemove) {
     deckBuilder.removeCard(null, cardToRemove.dataset.number);
     updateCardCountInModal(cardName);
@@ -6575,7 +6598,7 @@ function updateModalButtonStates(controls, cardName) {
   const removeButton = controls.querySelector('#remove-card');
 
   const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-  const currentCount = deckBuilder.deck.filter((c) => c.dataset.name === cardName).length;
+  const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
 
   // addボタンはdisabled属性を使わずCSSクラスのみで制御（モバイルでタップ→アラート表示のため）
   if (maxAllowed !== Infinity && currentCount >= maxAllowed) {

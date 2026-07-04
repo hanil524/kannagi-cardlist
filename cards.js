@@ -4,7 +4,7 @@ window.__CARDS_HTML = `
 <div
 class="card"
 data-number="1"
-data-name="隠された櫛の家（かくされたくしのいえ）"
+data-name="隠された櫛の家(かくされたくしのいえ)"
 data-cost="0"
 data-power="1"
 data-series="夏VS冬バトルセット うつくしいせかい"
@@ -14315,6 +14315,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2407"
+  data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
+  data-cost="6"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="猫 災害"
+  data-keyword=""
+  data-role="召喚時 ヒール"
+>
+  <img data-src="images/card_16_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2412"
   data-name="いちごちゃん"
   data-cost="0"
@@ -14322,7 +14338,7 @@ data-role="除外戻し ドロー"
   data-series="オカルト"
   data-type="怪異札"
   data-season="春"
-  data-rare="C"
+  data-rare="エキスパンション"
   data-attribute="いちご"
   data-keyword=""
   data-role="ヒール"
@@ -14338,7 +14354,7 @@ data-role="除外戻し ドロー"
   data-series="オカルト"
   data-type="怪異札"
   data-season="春"
-  data-rare="C"
+  data-rare="エキスパンション"
   data-attribute="大蛇 髑髏"
   data-keyword=""
   data-role="バフ"
@@ -14354,12 +14370,28 @@ data-role="除外戻し ドロー"
   data-series="オカルト"
   data-type="怪異札"
   data-season="夏"
-  data-rare="C"
+  data-rare="エキスパンション"
   data-attribute="すいか"
   data-keyword=""
   data-role="直接ダメ"
 >
   <img data-src="images/card_16_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2437"
+  data-name="怪異のれもんちゃん（かいいのれもんちゃん）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="猫 怨霊"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_16_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14370,12 +14402,28 @@ data-role="除外戻し ドロー"
   data-series="オカルト"
   data-type="怪異札"
   data-season="秋"
-  data-rare="C"
+  data-rare="エキスパンション"
   data-attribute="かき"
   data-keyword=""
   data-role="ドロー 相手ドロー"
 >
   <img data-src="images/card_16_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2461"
+  data-name="季節のれもんちゃん（きせつのれもんちゃん）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="猫 花"
+  data-keyword=""
+  data-role="ドロー"
+>
+  <img data-src="images/card_16_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14386,12 +14434,28 @@ data-role="除外戻し ドロー"
   data-series="オカルト"
   data-type="怪異札"
   data-season="冬"
-  data-rare="C"
+  data-rare="エキスパンション"
   data-attribute="かき"
   data-keyword=""
   data-role="デッキ破壊 除外加速"
 >
   <img data-src="images/card_16_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2479"
+  data-name="道具のれもんちゃん（どうぐのれもんちゃん）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="猫 鏡"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_16_p (9).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
@@ -15323,6 +15387,176 @@ data-attribute="妖怪 幽霊"
   data-role="攻撃時 直接ダメ"
 >
   <img data-src="images/card_15_p (95).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10068"
+  data-name="地獄の行き方(じごくのいきかた「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10069"
+  data-name="あれ、なに(「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10070"
+  data-name="鬼になるまで(おにになるまで「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10071"
+  data-name="ぞくり(「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10072"
+  data-name="罪悪感(ざいあくかん「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10073"
+  data-name="もっとこうして(「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10074"
+  data-name="私達の足跡(わたしたちのあしあと「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10075"
+  data-name="これで最後。(これでさいご。「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10076"
+  data-name="崩壊記録(ほうかいきろく「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10077"
+  data-name="終わらせて(おわらせて「古書の怪」)"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月下旬"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+>
+  <img data-src="images/card_16_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
