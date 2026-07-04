@@ -15390,6 +15390,57 @@ data-attribute="妖怪 幽霊"
 </div>
 <div
   class="card"
+  data-number="10065"
+  data-name="針の汗(はりのあせ)"
+  data-cost="7"
+  data-power="6"
+  data-series="プロモ"
+  data-promo-date="2026年7月1日"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="蟲 廃屋"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ"
+>
+  <img data-src="images/card_16_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10066"
+  data-name="廃墟の電話(はいきょのでんわ)"
+  data-cost="2"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月1日"
+  data-type="道具札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="電話"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10067"
+  data-name="疫病の訪れ(やくびょうのおとずれ)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月1日"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="蟲"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="10068"
   data-name="地獄の行き方(じごくのいきかた「古書の怪」)"
   data-cost="3"
