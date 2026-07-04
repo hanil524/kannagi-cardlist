@@ -14457,6 +14457,22 @@ data-role="除外戻し ドロー"
 >
   <img data-src="images/card_16_p (9).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2485"
+  data-name="がしゃどくろ"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 髑髏"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
