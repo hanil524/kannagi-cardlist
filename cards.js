@@ -14363,6 +14363,38 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2424"
+  data-name="生き人形（いきにんぎょう）"
+  data-cost="8"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="人形"
+  data-keyword=""
+  data-role="憑依破壊"
+>
+  <img data-src="images/card_16_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2425"
+  data-name="人形神社（にんぎょうじんじゃ）"
+  data-cost="4"
+  data-power="4"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃神社 人形 日本人形 呪"
+  data-keyword="不屈"
+  data-role="除外戻し 直接ダメ "
+>
+  <img data-src="images/card_16_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2431"
   data-name="すいかちゃん"
   data-cost="0"
@@ -14376,6 +14408,22 @@ data-role="除外戻し ドロー"
   data-role="直接ダメ"
 >
   <img data-src="images/card_16_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2433"
+  data-name="呪いの人形師（のろいのにんぎょうし）"
+  data-cost="4"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人形 藁人形 呪"
+  data-keyword=""
+  data-role="除外加速 ランデス 直接ダメ "
+>
+  <img data-src="images/card_16_p (25).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
