@@ -14315,6 +14315,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2403"
+  data-name="殺生岩（せっしょうがん）"
+  data-cost="5"
+  data-power="7"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="廃鉱山 殺人"
+  data-keyword="襲撃"
+  data-role="常時 札除去 ランデス"
+>
+  <img data-src="images/card_16_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2407"
   data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
   data-cost="6"
