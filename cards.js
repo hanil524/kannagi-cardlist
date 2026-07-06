@@ -14475,6 +14475,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2450"
+  data-name="あなたのよこで"
+  data-cost="9"
+  data-power="5"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="神 交通事故 怨霊"
+  data-keyword=""
+  data-role="常時 ランデス"
+>
+  <img data-src="images/card_16_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2451"
   data-name="かきちゃん"
   data-cost="0"
