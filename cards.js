@@ -14363,6 +14363,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2413"
+  data-name="黒犬の調教師（こっけんのちょうきょうし）"
+  data-cost="2"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="犬族"
+  data-keyword=""
+  data-role="踏み倒し"
+>
+  <img data-src="images/card_16_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2414"
   data-name="竹林の白蛇（ちくりんのしろへび）"
   data-cost="3"
