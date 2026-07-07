@@ -2445,7 +2445,7 @@ data-series="百鬼夜行"
 data-rare="SR"
 data-season="春"
 data-type="場所札"
-data-role=""
+data-role="常時 「起き」"
 data-keyword="楽園 速攻"
 data-attribute="妖怪 災害 動物"
 >
@@ -14344,6 +14344,22 @@ data-role="除外戻し ドロー"
   data-role="召喚時 ヒール"
 >
   <img data-src="images/card_16_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2411"
+  data-name="陰摩羅鬼（いんもらき）"
+  data-cost="15"
+  data-power="15"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 災害 動物"
+  data-keyword="楽園 速攻"
+  data-role="常時 「起き」"
+>
+  <img data-src="images/card_16_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
