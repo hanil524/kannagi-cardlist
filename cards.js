@@ -1958,7 +1958,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="冬"
 data-type="場所札"
-data-role="除外加速 攻撃時"
+data-role="除外加速 攻撃時 手札公開"
 data-keyword=""
 data-attribute="廃マンション 賭博"
 >
@@ -14520,6 +14520,22 @@ data-role="除外戻し ドロー"
   data-role="ドロー"
 >
   <img data-src="images/card_16_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2464"
+  data-name="闇賭博居住群（やみとばくきょじゅうぐん）"
+  data-cost="4"
+  data-power="1"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃マンション 賭博"
+  data-keyword=""
+  data-role="攻撃時 手札公開 除外加速"
+>
+  <img data-src="images/card_16_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
