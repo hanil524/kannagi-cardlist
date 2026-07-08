@@ -14491,6 +14491,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2440"
+  data-name="八尺様（はっしゃくさま）"
+  data-cost="8"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="噂 怨念"
+  data-keyword=""
+  data-role="魂加速 "
+>
+  <img data-src="images/card_16_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2450"
   data-name="あなたのよこで"
   data-cost="9"
