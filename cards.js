@@ -14539,6 +14539,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2457"
+  data-name="古椿の霊（ふるつばきのれい）"
+  data-cost="8"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="樹木"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2461"
   data-name="季節のれもんちゃん（きせつのれもんちゃん）"
   data-cost="6"
@@ -15539,6 +15555,7 @@ data-attribute="妖怪 幽霊"
   data-cost="0"
   data-power="1"
   data-series="プロモ"
+  data-promo-date="2026年7月09日"
   data-type="場所札"
   data-season="夏"
   data-rare="C"
