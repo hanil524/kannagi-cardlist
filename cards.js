@@ -14603,6 +14603,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2476"
+  data-name="酒吞童子(しゅてんどうじ)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="神 妖怪 鬼"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2479"
   data-name="道具のれもんちゃん（どうぐのれもんちゃん）"
   data-cost="6"
