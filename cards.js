@@ -14604,7 +14604,7 @@ data-role="除外戻し ドロー"
 <div
   class="card"
   data-number="2476"
-  data-name="酒吞童子(しゅてんどうじ)"
+  data-name="酒呑童子（しゅてんどうじ）"
   data-cost="7"
   data-power="0"
   data-series="オカルト"
