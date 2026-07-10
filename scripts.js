@@ -2206,6 +2206,170 @@ const collectAllAttributes = () => {
   return Array.from(attributes);
 };
 
+// ===== 属性「全て表示」の五十音グループ化 =====
+// cards.js から自動取得した属性は漢字の読みが特殊でコード順ソートでは
+// バラバラに並ぶため、読み仮名テーブルで五十音の行ごとに分類する。
+// 新しい属性が増えたらここに読みを追加する（ひらがな・カタカナ属性と
+// 英数字始まりの属性は自動判定されるので追加不要。未登録の漢字属性は
+// 末尾の「その他」に表示されるため、追加漏れにすぐ気付ける）。
+const ATTRIBUTE_READINGS = {
+  '悪夢': 'あくむ', '悪魔': 'あくま', '雨': 'あめ', '戦': 'いくさ', '祈': 'いのり',
+  '海': 'うみ', '噂': 'うわさ', '園': 'その', '御守り': 'おまもり', '怨念': 'おんねん',
+  '怨霊': 'おんりょう', '鬼': 'おに',
+  '家屋': 'かおく', '火事': 'かじ', '鏡': 'かがみ', '仮面': 'かめん', '鎌': 'かま',
+  '神': 'かみ', '神隠し': 'かみかくし', '刀': 'かたな', '糧': 'かて', '烏': 'からす',
+  '壁': 'かべ', '楽器': 'がっき', '楽屋': 'がくや', '菌': 'きん', '狐': 'きつね', '狐面': 'こめん', '狐面の神': 'こめんのかみ',
+  '鬼面': 'きめん', '鬼面の神': 'きめんのかみ', '蜘蛛': 'くも', '鎖': 'くさり',
+  '渓谷': 'けいこく', '血液': 'けつえき', '解脱': 'げだつ', '幻覚': 'げんかく',
+  '犬族': 'けんぞく', '古城': 'こじょう', '古書': 'こしょ', '交通事故': 'こうつうじこ',
+  '蝙蝠': 'こうもり',
+  '災害': 'さいがい', '殺人': 'さつじん', '視線': 'しせん', '死神': 'しにがみ',
+  '写真': 'しゃしん', '事件': 'じけん', '銃': 'じゅう', '樹木': 'じゅもく',
+  '侵食': 'しんしょく', '侵蝕': 'しんしょく', '浸食': 'しんしょく', '石像': 'せきぞう',
+  '善行': 'ぜんこう', '蘇生': 'そせい',
+  '胎内': 'たいない', '大蛇': 'だいじゃ', '月': 'つき', '罪': 'つみ', '電話': 'でんわ',
+  '灯火': 'ともしび', '時計': 'とけい', '賭博': 'とばく', '都市伝説': 'としでんせつ',
+  '髑髏': 'どくろ', '動物': 'どうぶつ', '道路': 'どうろ', '洞窟': 'どうくつ',
+  '童謡': 'どうよう',
+  '雪崩': 'なだれ', '奈落': 'ならく', '七不思議': 'ななふしぎ', '虹': 'にじ',
+  '人形': 'にんぎょう', '人魚': 'にんぎょ', '日本人形': 'にほんにんぎょう',
+  '猫': 'ねこ', '猫面': 'みょうめん', '猫面の神': 'みょうめんのかみ', '呪': 'のろい',
+  '「廃」': 'はい', '廃駅': 'はいえき', '廃円宿': 'はいえんじゅく', '廃屋': 'はいおく',
+  '廃鉱山': 'はいこうざん', '廃校': 'はいこう', '廃劇場': 'はいげきじょう',
+  '廃車': 'はいしゃ', '廃集落': 'はいしゅうらく', '灰集落': 'はいしゅうらく',
+  '廃施設': 'はいしせつ', '廃人': 'はいじん', '廃神社': 'はいじんじゃ',
+  '廃隧道': 'はいずいどう', '廃線': 'はいせん', '廃村': 'はいそん',
+  '廃葬儀場': 'はいそうぎじょう', '廃病院': 'はいびょういん', '廃別荘': 'はいべっそう',
+  '廃マンション': 'はいまんしょん', '廃門': 'はいもん', '廃洋館': 'はいようかん',
+  '廃旅館': 'はいりょかん', '廃墟': 'はいきょ', '墓場': 'はかば', '博物館': 'はくぶつかん',
+  '箱': 'はこ', '畑': 'はたけ', '花': 'はな', '花面': 'かめん', '花面の神': 'かめんのかみ',
+  '光': 'ひかり', '日陰': 'ひかげ', '日差し': 'ひざし', '封印': 'ふういん',
+  '不吉': 'ふきつ', '腐乱': 'ふらん', '墓地': 'ぼち', '病': 'やまい',
+  '幻': 'まぼろし', '岬': 'みさき', '蟲': 'むし', '亡者': 'もうじゃ',
+  '野営': 'やえい', '闇': 'やみ', '幽霊': 'ゆうれい', '妖怪': 'ようかい',
+  '竜': 'りゅう', '龍': 'りゅう', '霊場': 'れいじょう', '霊能者': 'れいのうしゃ',
+  '牢獄': 'ろうごく', '藁人形': 'わらにんぎょう', '陰': 'かげ'
+};
+
+// 予備テーブル: 先頭の漢字1文字 → 読み。
+// 五十音の行（あ〜わ）の分類は先頭文字の読みだけで決まるため、
+// ATTRIBUTE_READINGS に未登録の新属性でも、先頭の漢字がここに
+// あれば自動で正しい行に配置される（例: 新属性「廃遊園地」→は行）。
+// つまり cards.js を手動更新するだけでよく、通常メンテナンス不要。
+const ATTRIBUTE_FIRST_KANJI_READINGS = {
+  // --- 現在の属性の頭文字 ---
+  '廃': 'はい', '灰': 'はい', '人': 'にん', '幽': 'ゆう', '神': 'かみ', '怨': 'おん',
+  '動': 'どう', '蟲': 'むし', '虫': 'むし', '火': 'か', '罪': 'つみ', '呪': 'のろ',
+  '狐': 'きつね', '病': 'びょう', '陰': 'かげ', '死': 'し', '鎌': 'かま', '灯': 'とう',
+  '藁': 'わら', '日': 'ひ', '胎': 'たい', '血': 'ち', '石': 'いし', '妖': 'よう',
+  '牢': 'ろう', '幻': 'げん', '古': 'こ', '鬼': 'おに', '霊': 'れい', '鏡': 'かがみ',
+  '野': 'や', '蘇': 'そ', '岬': 'みさき', '菌': 'きん', '渓': 'けい', '大': 'だい',
+  '園': 'その', '解': 'かい', '蝙': 'こう', '悪': 'あく', '殺': 'さつ', '家': 'か',
+  '壁': 'かべ', '犬': 'いぬ', '災': 'さい', '視': 'し', '髑': 'どく', '御': 'お',
+  '虹': 'にじ', '腐': 'ふ', '畑': 'はたけ', '侵': 'しん', '浸': 'しん', '亡': 'ぼう',
+  '竜': 'りゅう', '龍': 'りゅう', '刀': 'かたな', '銃': 'じゅう', '墓': 'はか',
+  '交': 'こう', '道': 'どう', '電': 'でん', '樹': 'じゅ', '時': 'とき', '糧': 'かて',
+  '箱': 'はこ', '不': 'ふ', '祈': 'いの', '洞': 'どう', '賭': 'と', '博': 'はく',
+  '雪': 'ゆき', '噂': 'うわさ', '事': 'じ', '楽': 'がく', '鎖': 'くさり', '写': 'しゃ',
+  '花': 'はな', '善': 'ぜん', '猫': 'ねこ', '蜘': 'くも', '都': 'と', '童': 'どう',
+  '戦': 'せん', '封': 'ふう', '烏': 'からす', '月': 'つき', '海': 'うみ', '光': 'ひかり',
+  '闇': 'やみ', '七': 'なな', '奈': 'な', '仮': 'か',
+  // --- 今後登場しそうな漢字（ホラー・和風ジャンル向け） ---
+  '夜': 'よる', '夢': 'ゆめ', '影': 'かげ', '魂': 'たましい', '魔': 'ま', '骨': 'ほね',
+  '首': 'くび', '屍': 'しかばね', '骸': 'むくろ', '棺': 'ひつぎ', '冥': 'めい',
+  '怪': 'かい', '奇': 'き', '秘': 'ひ', '謎': 'なぞ', '罠': 'わな', '罰': 'ばつ',
+  '業': 'ごう', '忌': 'いみ', '祟': 'たたり', '憑': 'ひょう', '祓': 'はらい',
+  '儀': 'ぎ', '祭': 'まつり', '面': 'めん', '社': 'やしろ', '寺': 'てら', '城': 'しろ',
+  '塔': 'とう', '門': 'もん', '橋': 'はし', '窓': 'まど', '床': 'ゆか', '井': 'い',
+  '島': 'しま', '森': 'もり', '林': 'はやし', '山': 'やま', '川': 'かわ', '沼': 'ぬま',
+  '池': 'いけ', '泉': 'いずみ', '空': 'そら', '星': 'ほし', '雲': 'くも', '霧': 'きり',
+  '雷': 'かみなり', '嵐': 'あらし', '風': 'かぜ', '水': 'みず', '氷': 'こおり',
+  '炎': 'ほのお', '煙': 'けむり', '蛇': 'へび', '狼': 'おおかみ', '狸': 'たぬき',
+  '兎': 'うさぎ', '熊': 'くま', '虎': 'とら', '猿': 'さる', '鹿': 'しか', '亀': 'かめ',
+  '鶴': 'つる', '蝶': 'ちょう', '蛍': 'ほたる', '鴉': 'からす', '鳥': 'とり',
+  '魚': 'さかな', '獣': 'けもの', '馬': 'うま', '牛': 'うし', '鼠': 'ねずみ',
+  '桜': 'さくら', '梅': 'うめ', '松': 'まつ', '竹': 'たけ', '藤': 'ふじ', '毒': 'どく',
+  '薬': 'くすり', '針': 'はり', '糸': 'いと', '紙': 'かみ', '本': 'ほん', '絵': 'え',
+  '歌': 'うた', '音': 'おと', '声': 'こえ', '鐘': 'かね', '鈴': 'すず', '傘': 'かさ',
+  '車': 'くるま', '船': 'ふね', '駅': 'えき', '天': 'てん', '地': 'ち', '土': 'つち',
+  '砂': 'すな', '泥': 'どろ', '赤': 'あか', '青': 'あお', '白': 'しろ', '黒': 'くろ',
+  '金': 'きん', '銀': 'ぎん', '鉄': 'てつ', '女': 'おんな', '男': 'おとこ', '子': 'こ',
+  '母': 'はは', '父': 'ちち', '姫': 'ひめ', '王': 'おう', '巫': 'みこ', '縁': 'えん',
+  '涙': 'なみだ', '雨': 'あめ', '祠': 'ほこら', '塚': 'つか', '鍵': 'かぎ', '扉': 'とびら',
+  '闘': 'とう', '術': 'じゅつ', '式': 'しき'
+};
+
+// カタカナ→ひらがな変換
+const attributeKataToHira = (str) =>
+  str.replace(/[ァ-ヶ]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+
+// 属性の読み仮名を返す（不明な場合は null）
+const getAttributeReading = (attr) => {
+  // ① 属性そのものの読みが登録済みならそれを使う（最も正確）
+  if (ATTRIBUTE_READINGS[attr]) return ATTRIBUTE_READINGS[attr];
+  // 「」や（）で囲まれた属性は中身で判定する
+  const stripped = attr.replace(/^[「『（(【]+/, '');
+  const hira = attributeKataToHira(stripped);
+  // ② ひらがな・カタカナのみの属性はそのまま読みとして使う
+  if (/^[ぁ-ゖー]+$/.test(hira)) return hira;
+  // ③ 予備: 先頭の漢字1文字の読みで行を推定（未登録の新属性向け）
+  const firstReading = ATTRIBUTE_FIRST_KANJI_READINGS[stripped[0]];
+  if (firstReading) return firstReading + stripped.slice(1);
+  return null;
+};
+
+// 五十音の行の定義（濁音・半濁音・小書きも同じ行に含める）
+const ATTRIBUTE_GYO_TABLE = [
+  ['あ', 'あいうえおぁぃぅぇぉ'],
+  ['か', 'かきくけこがぎぐげご'],
+  ['さ', 'さしすせそざじずぜぞ'],
+  ['た', 'たちつてとだぢづでどっ'],
+  ['な', 'なにぬねの'],
+  ['は', 'はひふへほばびぶべぼぱぴぷぺぽ'],
+  ['ま', 'まみむめも'],
+  ['や', 'やゆよゃゅょ'],
+  ['ら', 'らりるれろ'],
+  ['わ', 'わをん']
+];
+
+// 全属性を「英数 → あ〜わ行 → その他」のグループに分類し、
+// 各グループ内は読み仮名の五十音順に並べる
+const groupAttributesByReading = (attributes) => {
+  const alnumGroup = { label: '英数', items: [] };
+  const gyoGroups = ATTRIBUTE_GYO_TABLE.map(([label]) => ({ label: `${label}行`, items: [] }));
+  const otherGroup = { label: 'その他', items: [] };
+
+  attributes.forEach((attr) => {
+    if (/^[0-9A-Za-z]/.test(attr)) {
+      alnumGroup.items.push({ attr, reading: attr.toLowerCase() });
+      return;
+    }
+    const reading = getAttributeReading(attr);
+    if (!reading) {
+      otherGroup.items.push({ attr, reading: attr });
+      return;
+    }
+    const first = reading[0] === 'ー' ? reading[1] : reading[0];
+    const gyoIndex = ATTRIBUTE_GYO_TABLE.findIndex(([, chars]) => chars.includes(first));
+    if (gyoIndex >= 0) {
+      gyoGroups[gyoIndex].items.push({ attr, reading });
+    } else {
+      otherGroup.items.push({ attr, reading: attr });
+    }
+  });
+
+  const compare = attributeSortCollator
+    ? (a, b) => attributeSortCollator.compare(a.reading, b.reading)
+    : (a, b) => (a.reading < b.reading ? -1 : a.reading > b.reading ? 1 : 0);
+
+  return [alnumGroup, ...gyoGroups, otherGroup]
+    .filter((group) => group.items.length > 0)
+    .map((group) => ({
+      label: group.label,
+      items: group.items.sort(compare).map((entry) => entry.attr)
+    }));
+};
+
 let attributeEffectTargetOnly = true;
 
 const openModal = (filterId) => {
@@ -2355,10 +2519,17 @@ const openModal = (filterId) => {
       const effectTargetContent = filterElement.querySelectorAll('button, .filter-category');
       appendFilterElements(effectTargetContent);
     } else {
-      const sortedAttributes = sortAttributes(allAttributes);
-      sortedAttributes.forEach((attribute) => {
-        const newButton = createModalButton(attribute, '');
-        modalButtons.appendChild(newButton);
+      // 読み仮名テーブルで五十音の行ごとに見出しを付けて表示する
+      const grouped = groupAttributesByReading(allAttributes);
+      grouped.forEach((group) => {
+        const category = document.createElement('span');
+        category.className = 'filter-category';
+        category.textContent = group.label;
+        modalButtons.appendChild(category);
+        group.items.forEach((attribute) => {
+          const newButton = createModalButton(attribute, '');
+          modalButtons.appendChild(newButton);
+        });
       });
     }
 
@@ -6746,7 +6917,7 @@ function updateFilterDetails() {
       const tooltip = keywordButton.getAttribute('data-tooltip') || '';
       const detailItem = document.createElement('div');
       detailItem.className = 'details-item';
-      detailItem.innerHTML = `<span class="item-name">${keyword}</span>：<span class="item-description">${tooltip}</span>`;
+      detailItem.innerHTML = `<span class="item-name">${keyword}</span><span class="item-description">${tooltip}</span>`;
       keywordDetailsElement.appendChild(detailItem);
     }
   });
@@ -6759,7 +6930,7 @@ function updateFilterDetails() {
       const tooltip = roleButton.getAttribute('data-tooltip') || '';
       const detailItem = document.createElement('div');
       detailItem.className = 'details-item';
-      detailItem.innerHTML = `<span class="item-name">${role}</span>：<span class="item-description">${tooltip}</span>`;
+      detailItem.innerHTML = `<span class="item-name">${role}</span><span class="item-description">${tooltip}</span>`;
       roleDetailsElement.appendChild(detailItem);
     }
   });
@@ -6772,7 +6943,7 @@ function updateFilterDetails() {
       const tooltip = seriesButton.getAttribute('data-tooltip') || '';
       const detailItem = document.createElement('div');
       detailItem.className = 'details-item';
-      detailItem.innerHTML = `<span class="item-name">${series}</span>：<span class="item-description">${tooltip}</span>`;
+      detailItem.innerHTML = `<span class="item-name">${series}</span><span class="item-description">${tooltip}</span>`;
       seriesDetailsElement.appendChild(detailItem);
     }
   });
@@ -6786,7 +6957,7 @@ function updateFilterDetails() {
       if (tooltip) {
         const detailItem = document.createElement('div');
         detailItem.className = 'details-item';
-        detailItem.innerHTML = `<span class="item-name">${rare}</span>：<span class="item-description">${tooltip}</span>`;
+        detailItem.innerHTML = `<span class="item-name">${rare}</span><span class="item-description">${tooltip}</span>`;
         rareDetailsElement.appendChild(detailItem);
       }
     }

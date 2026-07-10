@@ -11,7 +11,12 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
-  background: #1a1a2e;
+  /* 本体サイトと同じチャコール＋深紅の空気感に統一 */
+  background-color: #232328;
+  background-image:
+    radial-gradient(120% 90% at 50% -10%, rgba(120, 22, 26, 0.16) 0%, rgba(120, 22, 26, 0) 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23303036' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
   color: #e0e0e0;
   min-height: 100vh;
   display: flex;
@@ -35,6 +40,7 @@ body {
   text-align: center;
   margin: 12px 0 16px;
   word-break: break-all;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
 /* カードグリッド */
@@ -55,7 +61,8 @@ body {
   position: relative;
   border-radius: 4px;
   overflow: hidden;
-  background: #2a2a3e;
+  background: #2b2b31;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   aspect-ratio: 63/88;
 }
 .card-cell img {
@@ -82,8 +89,8 @@ body {
 }
 .code-text {
   flex: 1;
-  background: #2a2a3e;
-  border: 1px solid #444;
+  background: #26262b;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 6px;
   color: #e0e0e0;
   font-size: 12px;
@@ -97,7 +104,7 @@ body {
 .copy-button {
   flex-shrink: 0;
   padding: 0 16px;
-  background: #4a90d9;
+  background: linear-gradient(180deg, #4a86d0 0%, #3a6cb0 100%);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -106,6 +113,7 @@ body {
   cursor: pointer;
   touch-action: manipulation;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 .copy-button:active { opacity: 0.8; }
 .copy-button.copied {

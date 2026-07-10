@@ -133,6 +133,50 @@
   box-sizing: border-box;
 }
 
+/* ===== デザインエンリッチメント（配色・質感のみ。寸法は不変） ===== */
+
+/* h1 の下線を深紅→白のグラデーションに（幅2pxは既存のまま） */
+.page-article h1 {
+  border-image: linear-gradient(90deg,
+      rgba(207, 70, 70, 0.65) 0%,
+      rgba(207, 70, 70, 0.20) 45%,
+      rgba(255, 255, 255, 0.08) 100%) 1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* h2 の左ボーダーを深紅アクセントに（幅3pxは既存のまま） */
+.page-article h2 {
+  border-left-color: rgba(207, 70, 70, 0.75);
+}
+
+/* 戻るリンクのホバーを温かみのある白に */
+.page-back-link:hover {
+  color: #ffb9b2;
+}
+
+/* ページ本文がふわっとせり上がって登場（transform/opacityのみで軽量） */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-main {
+  animation: pageEnter 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-main {
+    animation: none;
+  }
+}
+
 /* レスポンシブ */
 @media (max-width: 600px) {
   .page-main {

@@ -14443,6 +14443,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2427"
+  data-name="盟友の守護龍：赤竜（めいゆうのしゅごりゅう せきりゅう）"
+  data-cost="8"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 龍"
+  data-keyword=""
+  data-role="常時 直接ダメ "
+>
+  <img data-src="images/card_16_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2431"
   data-name="すいかちゃん"
   data-cost="0"
