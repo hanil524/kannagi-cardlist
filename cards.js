@@ -3004,7 +3004,7 @@ data-attribute="妖怪 視線"
 <div
 class="card"
 data-number="243"
-data-name="朧帷子（おぼろかたびた）"
+data-name="朧帷子（おぼろかたびら）"
 data-cost="0"
 data-power="2"
 data-series="百鬼夜行"
@@ -14520,6 +14520,22 @@ data-role="除外戻し ドロー"
   data-role="魂加速 "
 >
   <img data-src="images/card_16_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2442"
+  data-name="朧帷子（おぼろかたびら）"
+  data-cost="0"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 からくり"
+  data-keyword=""
+  data-role="神秘付与 常時"
+>
+  <img data-src="images/card_16_p (36).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
