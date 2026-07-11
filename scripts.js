@@ -1,3 +1,5 @@
+console.log('build-20260711-swipe-tap-fix3');
+
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
@@ -2766,12 +2768,18 @@ let modalControls = null;
 let modalConnectionInfo = null;
 let connectionModalStack = [];
 let lastModalOpenTime = 0;
+let activateNextModalTapDirectly = false;
+let directModalTapStartX = 0;
+let directModalTapStartY = 0;
+let suppressTrustedModalClickUntil = 0;
 
 
 const openImageModal = (src) => {
   const now = Date.now();
   if (now - lastModalOpenTime < 300) return;
   lastModalOpenTime = now;
+  activateNextModalTapDirectly = false;
+  suppressTrustedModalClickUntil = 0;
 
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -2903,11 +2911,15 @@ const openImageModal = (src) => {
 
     // 横方向のスワイプが縦方向より大きい場合のみ反応
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      const previousIndex = currentImageIndex;
       if (diffX > 0) {
         showNextImage();
       } else {
         showPreviousImage();
       }
+      // Chromiumがスワイプ直後のclickを生成しない場合でも、次の1タップを
+      // touchendから直接処理できるよう、実際にカードが切り替わった時だけ記録する。
+      activateNextModalTapDirectly = currentImageIndex !== previousIndex;
     }
 
     swiping = false;
@@ -2954,6 +2966,8 @@ const openImageModal = (src) => {
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
+  activateNextModalTapDirectly = false;
+
   // 関連カードモーダルのスタックがある場合は前のカードに戻る
   if (connectionModalStack.length > 0) {
     const prevState = connectionModalStack.pop();
@@ -3175,6 +3189,42 @@ function openConnectionCard(targetName) {
   preloadAdjacentImages();
 }
 
+// スワイプ直後にChromiumがclickを生成しない場合だけ、最初のタップ先を直接処理する。
+// 通常のclickと同じ分岐に揃え、画像・ナビ・デッキ操作・関連カードの全てを対象にする。
+const activateModalTapTarget = (target) => {
+  if (!target || typeof target.closest !== 'function') {
+    closeImageModal();
+    return;
+  }
+
+  if (target.closest('#prev-image')) {
+    showPreviousImage();
+    return;
+  }
+  if (target.closest('#next-image')) {
+    showNextImage();
+    return;
+  }
+  if (target.closest('#add-card')) {
+    if (currentModalCard && currentModalCardName) handleModalAddCard();
+    return;
+  }
+
+  const removeButton = target.closest('#remove-card');
+  if (removeButton) {
+    if (!removeButton.disabled && currentModalCardName) handleModalRemoveCard();
+    return;
+  }
+
+  const connectionLink = target.closest('.connection-link');
+  if (connectionLink) {
+    openConnectionCard(connectionLink.dataset.target);
+    return;
+  }
+
+  closeImageModal();
+};
+
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
@@ -3206,6 +3256,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
+
+  imageModal.addEventListener('touchstart', function (event) {
+    if (!activateNextModalTapDirectly || event.touches.length !== 1) return;
+    directModalTapStartX = event.touches[0].clientX;
+    directModalTapStartY = event.touches[0].clientY;
+  }, { passive: true, capture: true });
+
+  imageModal.addEventListener('touchend', function (event) {
+    if (!activateNextModalTapDirectly || event.changedTouches.length !== 1) return;
+
+    const touch = event.changedTouches[0];
+    const movedX = Math.abs(touch.clientX - directModalTapStartX);
+    const movedY = Math.abs(touch.clientY - directModalTapStartY);
+    if (movedX > 15 || movedY > 15) return;
+
+    activateNextModalTapDirectly = false;
+    suppressTrustedModalClickUntil = Date.now() + 100;
+    // preventDefaultできる端末では後続clickを止める。できない端末でも警告は出さない。
+    if (event.cancelable) event.preventDefault();
+    activateModalTapTarget(event.target);
+  }, { passive: false, capture: true });
+
+  // iPhoneなどtouchend後に通常のclickも届く端末で、操作が二重実行されるのを防ぐ。
+  imageModal.addEventListener('click', function (event) {
+    if (event.isTrusted && Date.now() <= suppressTrustedModalClickUntil) {
+      suppressTrustedModalClickUntil = 0;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+
   imageModal.addEventListener('click', function (event) {
     // 画像モーダル内のどの要素をクリックしても閉じるようにする
     // ただし、×アイコンはポインターイベントを無効にしているので影響しない

@@ -6282,28 +6282,14 @@ body {
   }
 }
 
+/* 注意: .image-modal（画像拡大モーダル）にはアニメーションを付けないこと。
+   JSの positionNavButtons() が getBoundingClientRect で実測座標を使って
+   左右ボタンを配置するため、transform/opacity アニメーション中に計測が
+   走るとボタン位置が狂う（既知の不具合として一度発生・撤去済み） */
 #modal,
-.image-modal,
 .range-modal-overlay,
 .confirm-popup {
   animation: overlayFadeIn 0.2s ease;
-}
-
-/* 画像モーダル: カードがふっと浮かび上がる */
-@keyframes imageReveal {
-  from {
-    opacity: 0;
-    transform: scale(0.965);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.image-modal .modal-content {
-  animation: imageReveal 0.22s cubic-bezier(0.22, 0.8, 0.36, 1);
 }
 
 /* デッキ作成画面: 全体がせり上がって登場 */
@@ -6408,10 +6394,8 @@ body {
   .deck-thumbnail-content,
   .confirm-modal,
   #modal,
-  .image-modal,
   .range-modal-overlay,
   .confirm-popup,
-  .image-modal .modal-content,
   .deck-modal-content,
   .keyword-role-details,
   .active-filters-pc .filter-item,
