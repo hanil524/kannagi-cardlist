@@ -14619,6 +14619,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2468"
+  data-name="もくれん"
+  data-cost="8"
+  data-power="6"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 霊場"
+  data-keyword=""
+  data-role="召喚時 2種類札 札除去 トップ確認 季節札除去"
+>
+  <img data-src="images/card_16_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2470"
   data-name="みかんさん"
   data-cost="0"
