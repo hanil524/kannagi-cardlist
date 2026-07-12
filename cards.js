@@ -14331,6 +14331,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2404"
+  data-name="開花する災能（かいかするさいのう）"
+  data-cost="5"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="蝙蝠 血液 災害"
+  data-keyword=""
+  data-role="召喚時 魂加速 "
+>
+  <img data-src="images/card_16_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2407"
   data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
   data-cost="6"
