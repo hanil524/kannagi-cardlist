@@ -2801,7 +2801,7 @@ data-series="百鬼夜行"
 data-rare="SR"
 data-season="夏"
 data-type="場所札"
-data-role="コスト軽減"
+data-role="常時 「起き」 コスト軽減"
 data-keyword="憤怒 速攻"
 data-attribute="神 妖怪 蟲"
 >
@@ -14475,6 +14475,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2430"
+  data-name="大百足の巓（おおむかでのいただき）"
+  data-cost="15"
+  data-power="9"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 妖怪 蟲"
+  data-keyword="憤怒 速攻"
+  data-role="常時 「起き」 コスト軽減"
+>
+  <img data-src="images/card_16_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2431"
   data-name="すいかちゃん"
   data-cost="0"
@@ -14584,6 +14600,22 @@ data-role="除外戻し ドロー"
   data-role="ドロー 相手ドロー"
 >
   <img data-src="images/card_16_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2453"
+  data-name="ろくろ首（ろくろくび）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪"
+  data-keyword=""
+  data-role="手札公開 ハンデス"
+>
+  <img data-src="images/card_16_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
