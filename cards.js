@@ -2769,7 +2769,7 @@ data-series="百鬼夜行"
 data-rare="R"
 data-season="夏"
 data-type="場所札"
-data-role="踏み倒し 底送り 除外戻し"
+data-role="踏み倒し 底送り 除外戻し 常時"
 data-keyword="速攻"
 data-attribute="妖怪 動物 廃屋 陰"
 >
@@ -14347,6 +14347,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2405"
+  data-name="那須物語(なすものがたり)"
+  data-cost="5"
+  data-power="4"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 動物 狐"
+  data-keyword="楽園"
+  data-role="攻撃時 ヒール "
+>
+  <img data-src="images/card_16_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2407"
   data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
   data-cost="6"
@@ -14360,6 +14376,22 @@ data-role="除外戻し ドロー"
   data-role="召喚時 ヒール"
 >
   <img data-src="images/card_16_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2410"
+  data-name="玉藻前（たまものまえ）"
+  data-cost="13"
+  data-power="13"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 動物 殺人"
+  data-keyword="呪い"
+  data-role="召喚時 札除去"
+>
+  <img data-src="images/card_16_p (43).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14472,6 +14504,22 @@ data-role="除外戻し ドロー"
   data-role="常時 直接ダメ "
 >
   <img data-src="images/card_16_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2428"
+  data-name="猫魈（ねこしょう）"
+  data-cost="8"
+  data-power="6"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 動物 廃屋"
+  data-keyword="速攻"
+  data-role="踏み倒し 底送り 除外戻し 常時"
+>
+  <img data-src="images/card_16_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
