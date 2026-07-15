@@ -14571,6 +14571,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2435"
+  data-name="狐女（きつねめ）"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="狐"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_16_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2437"
   data-name="怪異のれもんちゃん（かいいのれもんちゃん）"
   data-cost="6"
@@ -14792,6 +14808,23 @@ data-role="除外戻し ドロー"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2490"
+  data-name="芽吹く無秩序（めぶくむちつじょ）"
+  data-cost="12"
+  data-power="0"
+  data-series="オカルト"
+  data-type="季節札"
+  data-season="混化 秋夏"
+  data-rare="エキスパンション"
+  data-attribute="花"
+  data-keyword=""
+  data-role="ドロー 「起き」"
+  data-connection=""
+>
+  <img data-src="images/card_16_p (44).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
