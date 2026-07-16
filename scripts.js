@@ -327,6 +327,53 @@ let startY = 0;
 let observer = null;
 let isObserverSetup = false;
 
+// ===== 一覧用サムネイル（images/thumbs/*.webp） =====
+// カード一覧・デッキ・零探しなどの縮小表示ではサムネイル（幅480px WebP）を
+// 読み込み、拡大モーダルだけがフル解像度（images/*.jpg）を使う。
+// デコード後の画像メモリ（1枚あたり約3MB→約1MB）を抑え、
+// iPhone Safariのメモリ超過クラッシュ（白画面）を防ぐための仕組み。
+// サムネイルは「サムネ生成.bat」（make-thumbnails.py）で生成する。
+// 未生成でも onerror フォールバックで自動的にフル画像が表示されるため、
+// 生成し忘れで表示が壊れることはない。
+const THUMB_PATH_RE = /(^|\/)images\/thumbs\//;
+
+// フル画像パス → サムネイルパス（カード画像以外はそのまま返す）
+const toListImagePath = (src) => {
+  if (!src || THUMB_PATH_RE.test(src) || !/(^|\/)images\//.test(src)) return src;
+  if (!/\.jpe?g$/i.test(src)) return src;
+  return src.replace(/(^|\/)images\//, '$1images/thumbs/').replace(/\.jpe?g$/i, '.webp');
+};
+
+// サムネイルパス → フル画像パス（サムネイル以外はそのまま返す）
+const toFullImagePath = (src) => {
+  if (!src || !THUMB_PATH_RE.test(src)) return src;
+  return src.replace(THUMB_PATH_RE, '$1images/').replace(/\.webp$/i, '.jpg');
+};
+
+// img要素にサムネイルを表示する共通処理。
+// サムネイルが未生成（404）の場合はフル画像に自動フォールバックする。
+const setListImage = (imgEl, fullSrc, onDone) => {
+  const thumbSrc = toListImagePath(fullSrc);
+  let triedFull = thumbSrc === fullSrc;
+  imgEl.onload = () => {
+    imgEl.onload = null;
+    imgEl.onerror = null;
+    if (onDone) onDone(true);
+  };
+  imgEl.onerror = () => {
+    if (!triedFull) {
+      // サムネ未生成: フル画像で再試行
+      triedFull = true;
+      imgEl.src = fullSrc;
+    } else {
+      imgEl.onload = null;
+      imgEl.onerror = null;
+      if (onDone) onDone(false);
+    }
+  };
+  imgEl.src = thumbSrc;
+};
+
 const MAX_CONCURRENT_IMAGE_LOADS = 15;
 const imageLoadQueue = [];
 const queuedImages = new Set();
@@ -366,11 +413,10 @@ const processImageQueue = () => {
       processImageQueue();
     };
 
-    img.onload = () => finalize(true);
-    img.onerror = () => finalize(false);
-
-    img.removeAttribute('data-src');
-    img.src = src;
+    // 一覧はサムネイルを読み込む（未生成ならフル画像へ自動フォールバック）。
+    // data-src はフル解像度の参照先として保持し続ける
+    // （拡大モーダル・お気に入りキー生成が参照するため、削除しないこと）
+    setListImage(img, src, finalize);
   }
 };
 
@@ -1783,7 +1829,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const img = document.createElement('img');
-      img.src = card.querySelector('img').src;
+      const sourceImg = card.querySelector('img');
+      setListImage(img, toFullImagePath(sourceImg.getAttribute('data-src') || sourceImg.src));
       img.alt = card.dataset.name;
 
       // ボタングループを追加
@@ -2503,8 +2550,9 @@ const filterCards = () => {
           clone.setAttribute('data-cloned', 'true');
           const cloneImg = clone.querySelector('img');
           if (cloneImg) {
-            cloneImg.src = cloneImg.getAttribute('data-src') || cloneImg.src;
-            cloneImg.removeAttribute('data-src');
+            // 複製もサムネイルを表示（data-srcはフル解像度参照用に保持）
+            const cloneFull = cloneImg.getAttribute('data-src') || toFullImagePath(cloneImg.src);
+            setListImage(cloneImg, cloneFull);
             cloneImg.classList.add('loaded');
             cloneImg.style.opacity = '1';
           }
@@ -3255,9 +3303,10 @@ const openImageModal = (src) => {
     <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
   `;
 
-  // 画像の表示処理
+  // 画像の表示処理（モーダルは常にフル解像度を表示。
+  // srcがサムネイルパスの場合＝デッキ画面等から開いた場合はフルパスへ変換）
   modalImage.style.opacity = '0';
-  modalImage.src = src;
+  modalImage.src = toFullImagePath(src);
 
   // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
   setupModalCardControlsOnce(modalControls, currentCard, cardName);
@@ -3369,7 +3418,8 @@ const closeImageModal = () => {
       const modalImage = document.getElementById('modal-image');
       if (modalImage) {
         modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-        modalImage.src = src;
+        // モーダルは常にフル解像度
+        modalImage.src = toFullImagePath(src);
       }
 
       if (modalControls && modalSeriesInfo) {
@@ -3515,9 +3565,11 @@ function openConnectionCard(targetName) {
   if (!img) return;
   const src = img.getAttribute('data-src') || img.src;
 
-  // 遅延読み込みカードの場合、img.src を実際の画像に更新しておく（デッキ追加時のcloneNode対策）
-  if (img.getAttribute('data-src') && img.src !== src) {
-    img.src = src;
+  // 遅延読み込み前のカードは一覧用サムネイルを読み込ませておく
+  // （デッキ追加時のcloneNode対策。フル画像を直接書き込むと
+  //   一覧側にフル解像度のデコード画像が蓄積するため、必ずキュー経由で）
+  if (img.getAttribute('data-src') && !img.classList.contains('loaded')) {
+    loadImage(img, true);
   }
 
   // 現在の状態をスタックに保存
@@ -3531,11 +3583,11 @@ function openConnectionCard(targetName) {
   visibleCards = filteredCards.includes(targetCard) ? filteredCards : allCards;
   currentImageIndex = visibleCards.indexOf(targetCard);
 
-  // モーダル画像を更新
+  // モーダル画像を更新（常にフル解像度）
   const modalImage = document.getElementById('modal-image');
   if (modalImage) {
     modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-    modalImage.src = src;
+    modalImage.src = toFullImagePath(src);
   }
 
   const cardName = targetCard.dataset.name;
@@ -4049,15 +4101,18 @@ const loadFiltersFromLocalStorage = () => {
   }
 };
 
-// 画像のプリロード関数を追加
+// 隣接カードのフル解像度画像を事前取得する（モーダル送りを滑らかにするため）
+// 【重要】以前はここで「一覧側のimg」をフル画像に書き換えて固定していたが、
+// モーダルを見て回るほど一覧に3MB級のデコード済み画像が蓄積し、
+// iPhone Safariのメモリ超過クラッシュ（白画面）の直接原因になっていた。
+// 現在はDOMに一切触れず、ブラウザキャッシュを温めるだけの実装に変更済み。
+// 元の「一覧imgへの書き込み」実装に戻さないこと。
 const preloadModalImage = (targetImg) => {
-  if (targetImg && targetImg.hasAttribute('data-src')) {
-    const src = targetImg.getAttribute('data-src');
-    targetImg.src = src;
-    targetImg.removeAttribute('data-src');
-    targetImg.classList.add('loaded');
-    targetImg.style.opacity = '1';
-  }
+  if (!targetImg) return;
+  const full = toFullImagePath(targetImg.getAttribute('data-src') || targetImg.src);
+  if (!full || /placeholder\.jpg$/.test(full)) return;
+  const pre = new Image();
+  pre.src = full;
 };
 
 // 周辺画像のプリロード
@@ -4101,7 +4156,8 @@ const showNextImage = () => {
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
       modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-      modalImage.src = src;
+      // モーダルは常にフル解像度（デッキ画面のサムネから開いた場合もフルへ変換）
+      modalImage.src = toFullImagePath(src);
     }
 
     const cardName = nextCard.dataset.name;
@@ -4168,7 +4224,8 @@ const showPreviousImage = () => {
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
       modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-      modalImage.src = src;
+      // モーダルは常にフル解像度（デッキ画面のサムネから開いた場合もフルへ変換）
+      modalImage.src = toFullImagePath(src);
     }
 
     const cardName = prevCard.dataset.name;
@@ -4471,9 +4528,11 @@ const deckBuilder = {
       cardElement.dataset[key] = card.dataset[key];
     });
 
-    // 画像要素の作成
+    // 画像要素の作成（デッキ表示はサムネイル。元カードが未読み込みでも
+    // data-srcのフルパスから確実にサムネイルを解決する）
     const img = document.createElement('img');
-    img.src = card.querySelector('img').src;
+    const sourceImg = card.querySelector('img');
+    setListImage(img, toFullImagePath(sourceImg.getAttribute('data-src') || sourceImg.src));
     img.alt = card.dataset.name;
     img.classList.add('card-image');
 
@@ -4724,17 +4783,15 @@ const deckBuilder = {
                 card.dataset.attribute = originalCard.dataset.attribute;
               }
 
-              // 画像要素を作成
+              // 画像要素を作成（零探しの表示もサムネイルで十分）
               const img = document.createElement('img');
               const originalImg = originalCard.querySelector('img');
-              img.src = originalImg.getAttribute('data-src') || originalImg.src;
-              img.alt = data.name;
-
-              // 画像のロード完了時の処理
-              img.onload = () => {
+              const zeroFull = toFullImagePath(originalImg.getAttribute('data-src') || originalImg.src);
+              setListImage(img, zeroFull, () => {
                 img.style.opacity = '1';
                 img.classList.add('loaded');
-              };
+              });
+              img.alt = data.name;
 
               card.appendChild(img);
               return card;
@@ -6308,7 +6365,9 @@ const deckManager = {
           card.setAttribute(attrName, cardData.dataset[key]);
         });
         const img = document.createElement('img');
-        img.src = cardData.src;
+        // 保存済みデッキ（旧形式はフル画像URL）もサムネイルに変換して表示。
+        // サムネ未生成時は保存されていた元URLへフォールバックする
+        setListImage(img, toFullImagePath(cardData.src));
         img.alt = cardData.dataset.name || '';
         card.appendChild(img);
         return card;
@@ -7833,9 +7892,11 @@ function replaceDeckWithMap(map) {
     }
     const img = document.createElement('img');
     const originalImg = original.querySelector('img');
-    img.src = originalImg.getAttribute('data-src') || originalImg.src;
+    setListImage(img, toFullImagePath(originalImg.getAttribute('data-src') || originalImg.src), () => {
+      img.classList.add('loaded');
+      img.style.opacity = '1';
+    });
     img.alt = original.dataset.name;
-    img.onload = () => { img.classList.add('loaded'); img.style.opacity = '1'; };
     card.appendChild(img);
     newDeck.push(card);
     return true;
@@ -8257,7 +8318,7 @@ function applyBackupData(backupData) {
               }
               const img = document.createElement('img');
               const originalImg = original.querySelector('img');
-              img.src = originalImg.getAttribute('data-src') || originalImg.src;
+              setListImage(img, toFullImagePath(originalImg.getAttribute('data-src') || originalImg.src));
               img.alt = original.dataset.name;
               card.appendChild(img);
               cards.push(card);

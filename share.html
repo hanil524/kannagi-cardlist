@@ -358,7 +358,14 @@ body {
         cell.className = 'card-cell';
         if (info && info.src) {
           const img = document.createElement('img');
-          img.src = info.src;
+          // 一覧用サムネイルを表示（未生成ならフル画像へ自動フォールバック）
+          const thumbSrc = /^images\//.test(info.src) && /\.jpe?g$/i.test(info.src)
+            ? info.src.replace(/^images\//, 'images/thumbs/').replace(/\.jpe?g$/i, '.webp')
+            : info.src;
+          if (thumbSrc !== info.src) {
+            img.onerror = () => { img.onerror = null; img.src = info.src; };
+          }
+          img.src = thumbSrc;
           img.alt = info.name || 'Card ' + id;
           img.loading = 'lazy';
           cell.appendChild(img);
