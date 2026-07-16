@@ -1812,7 +1812,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="秋"
 data-type="道具札"
-data-role="ランデス"
+data-role="ランデス 魂利用 除外加速"
 data-keyword=""
 data-attribute="箱"
 >
@@ -14379,6 +14379,22 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
+  data-number="2408"
+  data-name="たんたん坊(たんたんぼう)"
+  data-cost="7"
+  data-power="15"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 災害 動物"
+  data-keyword=""
+  data-role="攻撃不可"
+>
+  <img data-src="images/card_16_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2410"
   data-name="玉藻前（たまものまえ）"
   data-cost="13"
@@ -14459,7 +14475,7 @@ data-role="除外戻し ドロー"
 </div>
 <div
   class="card"
-  data-number="2424"
+  data-number="2421"
   data-name="生き人形（いきにんぎょう）"
   data-cost="8"
   data-power="0"
@@ -14472,6 +14488,22 @@ data-role="除外戻し ドロー"
   data-role="憑依破壊"
 >
   <img data-src="images/card_16_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2424"
+  data-name="ワニ男(わにおとこ)"
+  data-cost="3"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="龍 UMA"
+  data-keyword=""
+  data-role="攻撃時 サーチ "
+>
+  <img data-src="images/card_16_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14696,6 +14728,22 @@ data-role="除外戻し ドロー"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2460"
+  data-name="コトリバコ（ことりばこ）"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="箱"
+  data-keyword=""
+  data-role="ランデス 魂利用 除外加速"
+>
+  <img data-src="images/card_16_p (46).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
