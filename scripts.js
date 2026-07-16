@@ -762,19 +762,36 @@ function updateFavoriteGroupControls() {
   if (mobileCurrentGroup) mobileCurrentGroup.textContent = String(selectedFavoriteGroup);
 }
 
-function toggleMobileFavoriteGroupMenu(event) {
-  event?.preventDefault();
-  event?.stopPropagation();
+// お気に入りグループメニューの開閉状態を反映する共通処理
+function setMobileFavoriteGroupMenuOpen(open) {
   const selector = document.querySelector('.mobile-favorite-group-selector');
   const toggleButton = selector?.querySelector('.mobile-favorite-group-toggle');
   const options = selector?.querySelector('.mobile-favorite-group-options');
   if (!selector || !toggleButton || !options) return;
 
-  const willOpen = !selector.classList.contains('is-open');
-  selector.classList.toggle('is-open', willOpen);
-  toggleButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-  options.hidden = !willOpen;
+  selector.classList.toggle('is-open', open);
+  toggleButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+  options.hidden = !open;
 }
+
+function toggleMobileFavoriteGroupMenu(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  const selector = document.querySelector('.mobile-favorite-group-selector');
+  if (!selector) return;
+
+  const willOpen = !selector.classList.contains('is-open');
+  setMobileFavoriteGroupMenuOpen(willOpen);
+  // 開閉状態を保存し、次回訪問時も同じ状態で表示する
+  localStorage.setItem('favoriteGroupMenuOpen', willOpen ? '1' : '0');
+}
+
+// ページ読み込み時に前回の開閉状態を復元
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('favoriteGroupMenuOpen') === '1') {
+    setMobileFavoriteGroupMenuOpen(true);
+  }
+});
 
 function selectFavoriteGroup(groupNumber, event) {
   event?.preventDefault();
@@ -2570,7 +2587,7 @@ const filterCards = () => {
       noCardsMessage.style.display = 'none';
     } else {
       noCardsMessage.innerHTML = favoriteFilterEnabled && selectedFavoriteCardKeys.size === 0
-        ? `<p><strong>お気に入り${selectedFavoriteGroup}（★）にしたカードがありません。</strong></p>`
+        ? '<p><strong>お気に入り（★）にしたカードがありません。</strong></p>'
         : '<p><strong>該当カードがありません。</strong></p><p><strong>「リセット」を押す、または</strong></p><p><strong>「絞り込み」をOFFにしてください。</strong></p>';
       noCardsMessage.style.display = 'block';
     }
@@ -3303,10 +3320,52 @@ const openImageModal = (src) => {
     <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
   `;
 
+  // 画像サイズ確定前は付属UI（収録情報・枚数コントローラー等）を不可視にする。
+  // 画像が読み込まれるまで .image-container が潰れており、その間に付属UIが
+  // 中央に密集して見えてしまうため、画像と同時に定位置で出現させる。
+  // レイアウト計算そのものには一切手を加えない（配置バグ防止）。
+  container.classList.add('modal-chrome-pending');
+  const revealModalChrome = () => container.classList.remove('modal-chrome-pending');
+  modalImage.addEventListener('load', revealModalChrome, { once: true });
+  // 万一画像の読み込みに失敗し続けても操作不能にならないための保険
+  setTimeout(revealModalChrome, 2000);
+
   // 画像の表示処理（モーダルは常にフル解像度を表示。
   // srcがサムネイルパスの場合＝デッキ画面等から開いた場合はフルパスへ変換）
+  // 体感速度対策（LQIP方式）: フル画像の取得・デコードを待つ間、
+  // 一覧で表示済み＝デコード済みのサムネイルを先に表示しておき、
+  // フル解像度が読み込め次第、同じ構図のまま差し替える。
   modalImage.style.opacity = '0';
-  modalImage.src = toFullImagePath(src);
+  const modalFullSrc = toFullImagePath(src);
+  const modalThumbSrc = toListImagePath(modalFullSrc);
+  if (modalThumbSrc !== modalFullSrc) {
+    modalImage.src = modalThumbSrc;
+    // src は絶対URLに正規化されるため、読み戻した値を比較用に保持する
+    const displayedThumbSrc = modalImage.src;
+    // サムネ未生成（404）の場合は直接フル画像へ
+    modalImage.onerror = () => {
+      modalImage.onerror = null;
+      if (modalImage.src === displayedThumbSrc) {
+        modalImage.src = modalFullSrc;
+      }
+    };
+    const fullLoader = new Image();
+    fullLoader.onload = () => {
+      // 前後送り・関連カード表示などで別カードに切り替わっていたら差し替えない
+      if (modalImage.src === displayedThumbSrc) {
+        // 注意: ここで modalImage.onload を外してはいけない。
+        // 「complete=true」でも load イベントの配送前のことがあり、外すと
+        // ボタン配置処理が一度も走らず左右ボタンが出ない競合が起きる（既知の不具合）。
+        // load が複数回発火しても、showButtonsAfterPosition 側の
+        // alreadyShown ガードが点滅を防ぐので、そのまま発火させる。
+        modalImage.onerror = null;
+        modalImage.src = fullLoader.src;
+      }
+    };
+    fullLoader.src = modalFullSrc;
+  } else {
+    modalImage.src = modalFullSrc;
+  }
 
   // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
   setupModalCardControlsOnce(modalControls, currentCard, cardName);
@@ -3368,8 +3427,22 @@ const openImageModal = (src) => {
 
   const showButtonsAfterPosition = () => {
     preloadAdjacentImages();
+
+    // 2回目以降の呼び出し（LQIP: サムネ表示→フル画像差し替えで load が複数回
+    // 発火する場合）は、消灯→再点灯をせず位置の更新だけ行う（点滅防止）
+    const prevBtnEl = document.getElementById('prev-image');
+    const nextBtnEl = document.getElementById('next-image');
+    const alreadyShown =
+      (prevBtnEl && prevBtnEl.classList.contains('visible')) ||
+      (nextBtnEl && nextBtnEl.classList.contains('visible'));
+
     // display:block 確定のために先に呼ぶ（getBoundingClientRect の正確性のため必須）
     updateNavigationButtons();
+
+    if (alreadyShown) {
+      positionNavButtons();
+      return;
+    }
 
     // visible を即座に取り除き opacity:0 に保持
     const prevBtn = document.getElementById('prev-image');

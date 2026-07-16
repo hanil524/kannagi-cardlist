@@ -6182,6 +6182,16 @@ header::after,
     0 0 90px rgba(170, 40, 35, 0.22);
 }
 
+/* 画像モーダル: 画像サイズ確定前は付属UI（収録情報・枚数コントローラー・
+   関連カード情報等）を不可視にする。画像読み込み前は .image-container が
+   潰れていて付属UIが中央に密集して見えるため、画像と同時に定位置で
+   出現させる（scripts.js の modal-chrome-pending 付与とセット。
+   レイアウト計算には一切影響しない opacity のみの制御） */
+.image-container.modal-chrome-pending > :not(#modal-image) {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ---------- 18. 補助（選択色・フォーカス・スクロールバー・浮きボタン） ---------- */
 ::selection {
   background: rgba(190, 55, 45, 0.55);
