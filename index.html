@@ -240,6 +240,27 @@
         <a href="https://www.kannagi-cardgame.jp/home" target="_blank" rel="noreferrer">公式サイト</a>
         <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">お問い合わせ</a>
       </div>
+      <section class="mobile-favorite-group-selector" aria-label="お気に入りグループ選択">
+        <button type="button" class="mobile-favorite-group-toggle" onclick="toggleMobileFavoriteGroupMenu(event)"
+          aria-expanded="false" aria-controls="mobile-favorite-group-options">
+          <span class="mobile-favorite-group-star" aria-hidden="true">★</span>
+          <span class="mobile-favorite-group-label">お気に入り</span>
+          <span class="mobile-favorite-group-current" aria-label="選択中のグループ">1</span>
+          <span class="mobile-favorite-group-icon" aria-hidden="true">＋</span>
+        </button>
+        <div id="mobile-favorite-group-options" class="mobile-favorite-group-options" hidden>
+          <button type="button" class="favorite-group-option is-active" data-favorite-group="1"
+            aria-pressed="true" aria-label="お気に入り1を選択" onclick="selectFavoriteGroup(1, event)">1</button>
+          <button type="button" class="favorite-group-option" data-favorite-group="2"
+            aria-pressed="false" aria-label="お気に入り2を選択" onclick="selectFavoriteGroup(2, event)">2</button>
+          <button type="button" class="favorite-group-option" data-favorite-group="3"
+            aria-pressed="false" aria-label="お気に入り3を選択" onclick="selectFavoriteGroup(3, event)">3</button>
+          <button type="button" class="favorite-group-option" data-favorite-group="4"
+            aria-pressed="false" aria-label="お気に入り4を選択" onclick="selectFavoriteGroup(4, event)">4</button>
+          <button type="button" class="favorite-group-option" data-favorite-group="5"
+            aria-pressed="false" aria-label="お気に入り5を選択" onclick="selectFavoriteGroup(5, event)">5</button>
+        </div>
+      </section>
       <ul>
         <!-- 巫 公式サイト -->
         <li class="nav-accordion">
@@ -287,6 +308,7 @@
             <span class="nav-accordion-icon">＋</span>
           </button>
           <ul class="nav-accordion-children">
+            <li><a href="https://amzn.to/4w0peRm" target="_blank" rel="noreferrer">公式Amazonページ（ad）</a></li>
             <li><a href="https://kannagi.base.ec/" target="_blank" rel="noreferrer">巫 公式ストア</a></li>
             <li><a href="https://eglanz.cart.fc2.com/" target="_blank" rel="noreferrer">AGITO池袋 通販</a></li>
             <li><a href="https://www.happyshoten.com/categories/6255701/11" target="_blank"
@@ -376,16 +398,33 @@
               <button data-filter="rare" onclick="openModal('rare')">レア</button>
             </div>
           </div>
-          <div class="filter-group">
-            <button class="bulk-filter-btn" onclick="openBulkFilterModal()">一括選択</button>
-            <label class="limit-release" title="使用制限1～3枚の札を4枚まで解禁">
-              <input type="checkbox" id="limit-release-toggle" />
-              開放
-            </label>
-            <label class="and-filter-toggle" title="フィルター条件が全て一致するカードのみ表示">
-              <input type="checkbox" id="and-filter-toggle" />
-              絞り込み
-            </label>
+          <div class="filter-group favorite-actions-group">
+            <div class="favorite-group-control">
+              <button type="button" id="favorite-filter-toggle" class="favorite-filter-btn"
+                onclick="toggleFavoriteFilter()" aria-pressed="false" aria-label="お気に入り1のカードだけを表示">★</button>
+              <div class="favorite-group-popover">
+                <div class="favorite-group-popover-panel" role="group" aria-label="お気に入りのグループ">
+                  <div class="favorite-group-popover-title">お気に入りのグループ</div>
+                  <div class="favorite-group-options">
+                    <button type="button" class="favorite-group-option is-active" data-favorite-group="1"
+                      aria-pressed="true" aria-label="お気に入り1を選択" onclick="selectFavoriteGroup(1, event)">1</button>
+                    <button type="button" class="favorite-group-option" data-favorite-group="2"
+                      aria-pressed="false" aria-label="お気に入り2を選択" onclick="selectFavoriteGroup(2, event)">2</button>
+                    <button type="button" class="favorite-group-option" data-favorite-group="3"
+                      aria-pressed="false" aria-label="お気に入り3を選択" onclick="selectFavoriteGroup(3, event)">3</button>
+                    <button type="button" class="favorite-group-option" data-favorite-group="4"
+                      aria-pressed="false" aria-label="お気に入り4を選択" onclick="selectFavoriteGroup(4, event)">4</button>
+                    <button type="button" class="favorite-group-option" data-favorite-group="5"
+                      aria-pressed="false" aria-label="お気に入り5を選択" onclick="selectFavoriteGroup(5, event)">5</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="bulk-filter-btn" onclick="openBulkFilterModal()">一括</button>
+            <button type="button" id="limit-release-toggle" class="limit-release"
+              aria-pressed="false" title="使用制限1～3枚の札を4枚まで解禁">解放</button>
+            <button type="button" id="and-filter-toggle" class="and-filter-toggle"
+              aria-pressed="false" title="フィルター条件が全て一致するカードのみ表示">絞り込み</button>
             <button onclick="resetFilters()">リセット</button>
           </div>
         </div>

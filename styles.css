@@ -343,6 +343,8 @@ main {
   border: 1px solid rgba(110, 115, 210, 0.3);
   color: #ffffff;
   font-weight: bold;
+  letter-spacing: 1.2px;
+  text-indent: 1.2px;
   cursor: pointer;
   user-select: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -375,14 +377,6 @@ main,
 #card-list .card img,
 #card-list * {
   touch-action: auto;
-}
-
-@media (max-width: 768px) {
-
-  .limit-release,
-  .and-filter-toggle {
-    font-weight: normal;
-  }
 }
 
 #card-list {
@@ -6407,6 +6401,511 @@ body {
 
   @view-transition {
     navigation: none;
+  }
+}
+
+/* ===== お気に入り（★） ===== */
+
+.favorite-actions-group {
+  position: relative;
+  z-index: 20;
+  overflow: visible;
+}
+
+.favorite-group-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 28px;
+  overflow: visible;
+}
+
+.favorite-group-popover,
+.mobile-favorite-group-selector {
+  display: none;
+}
+
+.favorite-group-option {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* PC：★の直下に、hover経路が途切れないグループ選択を表示する */
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  .favorite-group-popover {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 30;
+    display: block;
+    width: 176px;
+    padding-top: 8px;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.14s ease, visibility 0.14s ease;
+  }
+
+  .favorite-group-control:hover .favorite-group-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .favorite-group-popover-panel {
+    padding: 9px 10px 10px;
+    border: 1px solid rgba(190, 174, 112, 0.34);
+    border-left: 3px solid rgba(202, 179, 87, 0.72);
+    border-radius: 6px;
+    background: rgba(27, 27, 32, 0.98);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .favorite-group-popover-title {
+    margin-bottom: 8px;
+    color: #ddd7c1;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.35px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .favorite-group-options {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .favorite-group-popover .favorite-group-option {
+    width: 100%;
+    height: 27px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    background: rgba(72, 72, 78, 0.94);
+    color: #e5e5e8;
+    font-size: 12px;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+  }
+
+  .favorite-group-popover .favorite-group-option:hover {
+    border-color: rgba(221, 202, 132, 0.48);
+    background: rgba(98, 91, 65, 0.94);
+    color: #fff0b7;
+  }
+
+  .favorite-group-popover .favorite-group-option.is-active {
+    border-color: #d4b84f;
+    background: #65531d;
+    color: #fff1a4;
+  }
+}
+
+/* スマホメニュー：上部2列ボタンと公式サイト項目の間に置く専用選択欄 */
+@media (max-width: 768px) {
+  .mobile-favorite-group-selector {
+    display: block;
+    flex-shrink: 0;
+    margin: 12px 16px;
+    overflow: hidden;
+    border: 1px solid rgba(190, 174, 112, 0.28);
+    border-left: 3px solid rgba(202, 179, 87, 0.64);
+    border-radius: 7px;
+    background: rgba(91, 78, 36, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .mobile-favorite-group-toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    background: rgba(78, 69, 42, 0.22);
+    color: #ece8da;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-favorite-group-star {
+    color: #e0c869;
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  .mobile-favorite-group-label {
+    flex: 1;
+    letter-spacing: 0.4px;
+  }
+
+  .mobile-favorite-group-current {
+    min-width: 24px;
+    padding: 4px 5px;
+    border: 1px solid rgba(212, 184, 79, 0.5);
+    border-radius: 3px;
+    background: rgba(101, 83, 29, 0.72);
+    color: #fff1a4;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .mobile-favorite-group-icon {
+    width: 14px;
+    color: #cbbd84;
+    font-size: 16px;
+    line-height: 1;
+    text-align: center;
+    transition: transform 0.16s ease;
+  }
+
+  .mobile-favorite-group-selector.is-open .mobile-favorite-group-icon {
+    transform: rotate(45deg);
+  }
+
+  .mobile-favorite-group-options {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    padding: 9px 10px 10px;
+    border-top: 1px solid rgba(205, 188, 125, 0.18);
+    background: rgba(10, 10, 14, 0.22);
+  }
+
+  .mobile-favorite-group-options:not([hidden]) {
+    display: grid;
+  }
+
+  .mobile-favorite-group-options .favorite-group-option {
+    width: 100%;
+    min-width: 0;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    background: rgba(65, 65, 72, 0.88);
+    color: #e2e2e6;
+    font-size: 13px;
+  }
+
+  .mobile-favorite-group-options .favorite-group-option.is-active {
+    border-color: #d4b84f;
+    background: #65531d;
+    color: #fff1a4;
+    box-shadow: inset 0 0 0 1px rgba(255, 240, 174, 0.1);
+  }
+}
+
+/* フィルター操作列：既存ボタンと同じ角形・高さへ揃える */
+.favorite-filter-btn,
+.limit-release,
+.and-filter-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+}
+
+.favorite-filter-btn {
+  position: relative;
+  width: 36px;
+  min-width: 36px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  color: #eee3b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font-size: 0;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+/* フォントの字面ではなく図形を中央配置し、端末差による★の偏りをなくす */
+.favorite-filter-btn::before,
+#card-list .card > .favorite-card-button::before,
+#favorite-card.favorite-modal-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+  background: currentColor;
+  clip-path: polygon(50% 0, 61% 34%, 98% 35%, 68% 56%, 79% 92%, 50% 71%, 21% 92%, 32% 56%, 2% 35%, 39% 34%);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .favorite-filter-btn:hover {
+    background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+    color: #f5ecc8;
+    transform: translateY(-2px);
+  }
+}
+
+.favorite-filter-btn.is-active {
+  color: #f3e8bd;
+  border-color: rgba(183, 164, 96, 0.6);
+  background: linear-gradient(180deg, rgba(102, 91, 55, 0.96) 0%, rgba(74, 66, 43, 0.96) 100%);
+}
+
+.limit-release,
+.and-filter-toggle {
+  border: 1px solid rgba(110, 115, 210, 0.3);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.limit-release.is-active,
+.and-filter-toggle.is-active {
+  background: linear-gradient(180deg, rgba(38, 123, 68, 0.98) 0%, rgba(25, 87, 48, 0.98) 100%);
+  border-color: rgba(104, 222, 137, 0.7);
+  color: #e8ffed;
+  box-shadow: 0 0 12px rgba(63, 190, 102, 0.28), inset 0 1px 0 rgba(230, 255, 236, 0.2);
+}
+
+.favorite-filter-btn:active,
+.limit-release:active,
+.and-filter-toggle:active {
+  transform: translateY(1px);
+}
+
+/* お気に入りチップは左端固定。黄色は低彩度に抑え、角丸を使わない */
+.active-filters-pc .favorite-filter-item,
+.active-filters-mobile .favorite-filter-item {
+  order: -1;
+  color: #e9e2c7;
+  background: rgba(119, 105, 62, 0.18);
+  border: 1px solid rgba(189, 170, 104, 0.24);
+  border-left: 3px solid rgba(183, 162, 91, 0.52);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.active-filters-pc .favorite-filter-item:hover,
+.active-filters-mobile .favorite-filter-item:hover {
+  color: #f1ead2;
+  background: rgba(133, 118, 70, 0.28);
+  box-shadow: none;
+}
+
+/* 一覧用★はPCの通常カード一覧でホバーした時だけ生成・表示する */
+.favorite-card-button,
+.deck-card > .favorite-card-button {
+  display: none !important;
+}
+
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  #card-list .card > .favorite-card-button {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 6;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: grid !important;
+    place-items: center;
+    border: 1px solid rgba(225, 225, 230, 0.58);
+    border-left: 3px solid rgba(184, 163, 91, 0.88);
+    border-radius: 4px;
+    background: rgba(23, 23, 27, 0.88);
+    color: #e2d6a5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.52);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    font-size: 0;
+    transition: opacity 0.16s ease, background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  }
+
+  #card-list .card:hover > .favorite-card-button,
+  #card-list .card > .favorite-card-button:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #card-list .card > .favorite-card-button:hover {
+    background: rgba(48, 48, 54, 0.94);
+    border-color: rgba(236, 236, 240, 0.74);
+    color: #eee5bf;
+  }
+
+  #card-list .card > .favorite-card-button.is-favorite {
+    background: linear-gradient(135deg, #7a6421 0 50%, #554315 50% 100%);
+    border-color: #d4b84f;
+    border-left-color: #d4b84f;
+    color: #fff1a4;
+    box-shadow: 0 0 0 2px rgba(212, 184, 79, 0.22), 0 2px 6px rgba(0, 0, 0, 0.52);
+  }
+
+  #card-list .card > .favorite-card-button.is-favorite:hover {
+    background: linear-gradient(135deg, #897128 0 50%, #624e1a 50% 100%);
+    border-color: #e0c45c;
+    border-left-color: #e0c45c;
+    color: #fff4b0;
+  }
+}
+
+/* 拡大画像下：増減枠とは独立したまま、平面的な丸ボタンとして馴染ませる */
+#favorite-card.favorite-modal-button {
+  position: absolute;
+  left: calc(50% + 136px);
+  bottom: -60px;
+  transform: translateX(-50%);
+  z-index: 2503;
+  box-sizing: border-box;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 2px solid #777780;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3a3a40 0 50%, #29292e 50% 100%);
+  color: #d7cfad;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+#favorite-card.favorite-modal-button::before {
+  width: 18px;
+  height: 18px;
+  z-index: 2;
+}
+
+/* 内側の菱形で「丸に星を置いただけ」にせず、装飾は2Dに留める */
+#favorite-card.favorite-modal-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 21px;
+  height: 21px;
+  border: 1px solid rgba(196, 181, 125, 0.32);
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #favorite-card.favorite-modal-button:not(.is-favorite):hover {
+    color: #f3e7b4;
+    border-color: #aaa17d;
+    background: linear-gradient(135deg, #47474d 0 50%, #323237 50% 100%);
+  }
+}
+
+#favorite-card.favorite-modal-button.is-favorite {
+  color: #fff1a4;
+  border-color: #d4b84f;
+  background: linear-gradient(135deg, #7a6421 0 50%, #554315 50% 100%);
+  box-shadow: 0 0 0 2px rgba(212, 184, 79, 0.22), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#favorite-card.favorite-modal-button.is-favorite::after {
+  border-color: rgba(255, 232, 132, 0.62);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #favorite-card.favorite-modal-button.is-favorite:hover {
+    color: #fff4b0;
+    border-color: #e0c45c;
+    background: linear-gradient(135deg, #897128 0 50%, #624e1a 50% 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  #favorite-card.favorite-modal-button {
+    left: calc(50% + 124px);
+    bottom: -60px;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
+  }
+
+  #favorite-card.favorite-modal-button::before {
+    width: 17px;
+    height: 17px;
+  }
+
+  #favorite-card.favorite-modal-button::after {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ---------- 21. パフォーマンス最適化（軽量化・仕様変更なし） ---------- */
+
+/* 【警告・再導入禁止】#card-list .card への content-visibility: auto
+   （レンダリング仮想化）は一度導入したが、実機検証で
+   「高速スクロール時の表示遅れ拡大」「上方向スクロールでカード画像が
+   点滅し続ける（Safariの実装のクセ）」が確認され撤回した（2026-07）。
+   同じ提案を繰り返さないこと。軽量化の本命は一覧用サムネイル画像の導入 */
+
+/* (c) カード寸法の固定化 — スクロールカクつきの構造的原因への対処
+   従来はカードの高さが未指定（min-heightのみ）だったため、画像が
+   読み込まれるたびに高さが約150px→250pxへジャンプし、992枚が入った
+   巨大flexコンテナ全体の再レイアウトが毎回発生していた（一覧を
+   ひと通り見るだけで約950回）。さらにスクロール処理(loadVisibleImages)が
+   その汚れたレイアウトを強制再計算し、二重に負荷がかかっていた。
+   全カード画像の縦横比は同一（745:1041、実測で±0.5%以内）なので、
+   高さを最初から比率で確定させ、画像読み込みを「再レイアウトなしの
+   描画のみ」に変える。デッキ画面の .deck-card は以前から同じ手法を
+   使用しており、本サイトでの安全性は実証済み。
+   非対応の古いブラウザでは無視され従来どおり動く */
+#card-list .card {
+  aspect-ratio: 745 / 1041;
+}
+
+/* (b) スマホではすりガラス効果（backdrop-filter）を無効化
+   固定ヘッダー等の backdrop-filter はスクロールのたびに毎フレーム
+   背景のぼかし再計算が走り、モバイルSafari/Chromeのカクつきの
+   代表的な原因になる。背景色はほぼ不透明のため見た目の差は僅少。
+   PC表示（ヘッダー・サブメニュー等）はそのまま維持 */
+@media (max-width: 768px) {
+
+  .mobile-header,
+  .deck-menu,
+  .filter-group {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mobile-header {
+    background: rgba(8, 8, 14, 0.99);
+  }
+
+  .deck-menu {
+    background: rgba(38, 38, 44, 0.99);
   }
 }
 

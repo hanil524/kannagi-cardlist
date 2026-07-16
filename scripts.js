@@ -509,6 +509,7 @@ window.addEventListener('resize', () => {
   const modal = document.getElementById('image-modal');
   if (modal && modal.style.display !== 'none') {
     positionNavButtons();
+    positionModalFavoriteButton();
   }
 });
 
@@ -537,6 +538,370 @@ const filters = {
   cost: new Set(),
   power: new Set()
 };
+
+// === お気に入り ===
+const FAVORITES_STORAGE_KEY = 'kannagi-favorites';
+const FAVORITE_FILTER_STORAGE_KEY = 'favoriteFilterEnabled';
+const FAVORITES_STORAGE_VERSION = 3;
+const FAVORITE_GROUP_COUNT = 5;
+let favoriteCardGroups = createEmptyFavoriteGroups();
+let selectedFavoriteGroup = 1;
+let legacyFavoriteCardNames = new Set();
+let favoriteMigrationPending = false;
+let favoriteFilterEnabled = localStorage.getItem(FAVORITE_FILTER_STORAGE_KEY) === 'true';
+let favoriteCardObserver = null;
+let favoriteHoverMediaQuery = null;
+
+function createEmptyFavoriteGroups() {
+  return Array.from({ length: FAVORITE_GROUP_COUNT }, () => new Set());
+}
+
+function normalizeFavoriteGroup(groupNumber) {
+  const parsed = Number.parseInt(groupNumber, 10);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= FAVORITE_GROUP_COUNT ? parsed : 1;
+}
+
+function getFavoriteCardKeysForGroup(groupNumber = selectedFavoriteGroup) {
+  const normalizedGroup = normalizeFavoriteGroup(groupNumber);
+  return favoriteCardGroups[normalizedGroup - 1];
+}
+
+function loadFavoriteCards() {
+  favoriteCardGroups = createEmptyFavoriteGroups();
+  selectedFavoriteGroup = 1;
+  legacyFavoriteCardNames = new Set();
+  favoriteMigrationPending = false;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]');
+    if (saved && saved.version === FAVORITES_STORAGE_VERSION && Array.isArray(saved.groups)) {
+      favoriteCardGroups = createEmptyFavoriteGroups().map((emptyGroup, index) => {
+        const savedGroup = saved.groups[index];
+        return Array.isArray(savedGroup)
+          ? new Set(savedGroup.filter((key) => typeof key === 'string' && key.startsWith('card:')))
+          : emptyGroup;
+      });
+      selectedFavoriteGroup = normalizeFavoriteGroup(saved.selectedGroup);
+      return;
+    }
+
+    // v2のカード単位データは全て「お気に入り1」へ引き継ぐ。
+    if (saved && saved.version === 2 && Array.isArray(saved.keys)) {
+      favoriteCardGroups[0] = new Set(saved.keys.filter((key) => typeof key === 'string' && key.startsWith('card:')));
+      favoriteMigrationPending = true;
+      return;
+    }
+
+    // 旧配列形式は、カードキーとカード名を「お気に入り1」へ移行する。
+    const legacyValues = Array.isArray(saved) ? saved.filter((value) => typeof value === 'string' && value) : [];
+    favoriteCardGroups[0] = new Set(legacyValues.filter((value) => value.startsWith('card:')));
+    legacyFavoriteCardNames = new Set(legacyValues.filter((value) => !value.startsWith('card:')));
+    favoriteMigrationPending = true;
+  } catch (error) {
+    favoriteCardGroups = createEmptyFavoriteGroups();
+    selectedFavoriteGroup = 1;
+    legacyFavoriteCardNames = new Set();
+    favoriteMigrationPending = true;
+  }
+}
+
+function saveFavoriteCards() {
+  localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify({
+    version: FAVORITES_STORAGE_VERSION,
+    selectedGroup: selectedFavoriteGroup,
+    groups: favoriteCardGroups.map((group) => Array.from(group))
+  }));
+}
+
+function decodeFavoritePath(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch (error) {
+    return value;
+  }
+}
+
+function normalizeFavoriteImageSource(source) {
+  const rawSource = typeof source === 'string' ? source.trim().replace(/\\/g, '/') : '';
+  if (!rawSource) return '';
+
+  try {
+    const absoluteUrl = new URL(rawSource, document.baseURI);
+    const baseDirectoryUrl = new URL('.', document.baseURI);
+    const isInsideCurrentSite = absoluteUrl.protocol === baseDirectoryUrl.protocol
+      && absoluteUrl.host === baseDirectoryUrl.host
+      && absoluteUrl.pathname.startsWith(baseDirectoryUrl.pathname);
+
+    if (isInsideCurrentSite) {
+      const relativePath = absoluteUrl.pathname.slice(baseDirectoryUrl.pathname.length);
+      return `${decodeFavoritePath(relativePath).replace(/^\/+/, '')}${absoluteUrl.search}`;
+    }
+
+    return absoluteUrl.href;
+  } catch (error) {
+    return rawSource.replace(/^\.\//, '');
+  }
+}
+
+function findOriginalFavoriteCard(cardElement) {
+  if (!cardElement) return null;
+  if (cardElement.matches('#card-list .card:not([data-cloned])')) return cardElement;
+
+  const cardNumber = cardElement.dataset.number || '';
+  const cardName = cardElement.dataset.name || '';
+  return Array.from(document.querySelectorAll('#card-list .card:not([data-cloned])')).find((card) => (
+    card.dataset.number === cardNumber && card.dataset.name === cardName
+  )) || null;
+}
+
+function getFavoriteCardKey(cardElement) {
+  if (!cardElement) return '';
+  if (cardElement.dataset.favoriteKey) return cardElement.dataset.favoriteKey;
+
+  const originalCard = findOriginalFavoriteCard(cardElement);
+  const sourceCard = originalCard || cardElement;
+  const sourceImage = sourceCard.querySelector('img');
+  const source = sourceImage?.getAttribute('data-src') || sourceImage?.getAttribute('src') || sourceImage?.src || '';
+  const normalizedSource = normalizeFavoriteImageSource(source);
+  const cardNumber = sourceCard.dataset.number || cardElement.dataset.number || '';
+  const cardName = sourceCard.dataset.name || cardElement.dataset.name || '';
+  const favoriteKey = `card:${cardNumber}|${normalizedSource || `name:${cardName}`}`;
+
+  cardElement.dataset.favoriteKey = favoriteKey;
+  if (originalCard && !originalCard.dataset.favoriteKey) originalCard.dataset.favoriteKey = favoriteKey;
+  return favoriteKey;
+}
+
+function initializeFavoriteCardKeys() {
+  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach(getFavoriteCardKey);
+}
+
+function migrateLegacyFavoriteCards() {
+  if (!favoriteMigrationPending) return;
+  const originalCards = Array.from(document.querySelectorAll('#card-list .card:not([data-cloned])'));
+  if (legacyFavoriteCardNames.size > 0 && originalCards.length === 0) return;
+  const firstFavoriteGroup = getFavoriteCardKeysForGroup(1);
+
+  legacyFavoriteCardNames.forEach((legacyName) => {
+    const firstMatchingCard = originalCards.find((card) => card.dataset.name === legacyName);
+    const favoriteKey = getFavoriteCardKey(firstMatchingCard);
+    if (favoriteKey) firstFavoriteGroup.add(favoriteKey);
+  });
+
+  legacyFavoriteCardNames.clear();
+  favoriteMigrationPending = false;
+  saveFavoriteCards();
+}
+
+function setToggleButtonState(button, enabled) {
+  if (!button) return;
+  button.classList.toggle('is-active', !!enabled);
+  button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+}
+
+function updateFavoriteFilterButton() {
+  const button = document.getElementById('favorite-filter-toggle');
+  setToggleButtonState(button, favoriteFilterEnabled);
+  if (button) button.setAttribute('aria-label', `お気に入り${selectedFavoriteGroup}のカードだけを表示`);
+}
+
+function updateFavoriteGroupControls() {
+  document.querySelectorAll('[data-favorite-group]').forEach((button) => {
+    const isSelected = normalizeFavoriteGroup(button.dataset.favoriteGroup) === selectedFavoriteGroup;
+    button.classList.toggle('is-active', isSelected);
+    button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+  });
+
+  const mobileCurrentGroup = document.querySelector('.mobile-favorite-group-current');
+  if (mobileCurrentGroup) mobileCurrentGroup.textContent = String(selectedFavoriteGroup);
+}
+
+function toggleMobileFavoriteGroupMenu(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  const selector = document.querySelector('.mobile-favorite-group-selector');
+  const toggleButton = selector?.querySelector('.mobile-favorite-group-toggle');
+  const options = selector?.querySelector('.mobile-favorite-group-options');
+  if (!selector || !toggleButton || !options) return;
+
+  const willOpen = !selector.classList.contains('is-open');
+  selector.classList.toggle('is-open', willOpen);
+  toggleButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  options.hidden = !willOpen;
+}
+
+function selectFavoriteGroup(groupNumber, event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  const nextGroup = normalizeFavoriteGroup(groupNumber);
+  if (nextGroup === selectedFavoriteGroup) return;
+
+  selectedFavoriteGroup = nextGroup;
+  saveFavoriteCards();
+  updateFavoriteGroupControls();
+  updateFavoriteFilterButton();
+  updateFavoriteButtons();
+  updateActiveFilters();
+
+  if (favoriteFilterEnabled) {
+    filterCards();
+    loadVisibleImages();
+  }
+}
+
+function updateFavoriteButtonState(button, cardElement) {
+  if (!button || !cardElement) return;
+  const favoriteKey = getFavoriteCardKey(cardElement);
+  const cardName = cardElement.dataset.name || '';
+  if (!favoriteKey) return;
+  const isFavorite = getFavoriteCardKeysForGroup().has(favoriteKey);
+  button.classList.toggle('is-favorite', isFavorite);
+  button.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
+  button.setAttribute('aria-label', `${isFavorite ? 'お気に入りから外す' : 'お気に入りに追加'}：${cardName}`);
+  button.title = isFavorite ? 'お気に入りから外す' : 'お気に入りに追加';
+}
+
+function canShowFavoriteCardHoverButton() {
+  if (favoriteHoverMediaQuery) return favoriteHoverMediaQuery.matches;
+  return window.innerWidth > 768 && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
+function findDirectFavoriteButton(cardElement) {
+  if (!cardElement) return null;
+  return Array.from(cardElement.children).find((child) => child.classList?.contains('favorite-card-button')) || null;
+}
+
+function ensureFavoriteButton(cardElement) {
+  if (!cardElement) return;
+  const existingButton = findDirectFavoriteButton(cardElement);
+  const isMainListCard = cardElement.matches('.card') && !!cardElement.closest('#card-list');
+
+  // 一覧上の★は、マウスホバーが使えるPCの通常カード一覧だけに限定する。
+  if (!isMainListCard || !canShowFavoriteCardHoverButton()) {
+    existingButton?.remove();
+    return;
+  }
+
+  const cardName = cardElement.dataset.name;
+  if (!cardName) return;
+
+  let button = existingButton;
+  if (!button) {
+    button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'favorite-card-button';
+    button.textContent = '★';
+    cardElement.appendChild(button);
+  }
+
+  // cloneNode されたカードではイベントが複製されないため、DOMプロパティで登録済みを判定する。
+  if (!button._favoriteHandlerBound) {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const ownerCard = button.closest('#card-list .card');
+      if (ownerCard) toggleFavoriteCard(ownerCard);
+    });
+    button._favoriteHandlerBound = true;
+  }
+
+  updateFavoriteButtonState(button, cardElement);
+}
+
+function ensureFavoriteButtonsInNode(node) {
+  if (!(node instanceof Element) && !(node instanceof DocumentFragment)) return;
+  if (node instanceof Element && node.matches('.deck-card')) findDirectFavoriteButton(node)?.remove();
+  if (node instanceof Element && node.matches('#card-list .card')) ensureFavoriteButton(node);
+  node.querySelectorAll('#card-list .card').forEach(ensureFavoriteButton);
+  node.querySelectorAll('.deck-card > .favorite-card-button').forEach((button) => button.remove());
+}
+
+function syncFavoriteCardHoverButtons() {
+  document.querySelectorAll('.deck-card > .favorite-card-button').forEach((button) => button.remove());
+  document.querySelectorAll('#card-list .card').forEach(ensureFavoriteButton);
+}
+
+function updateFavoriteButtons(favoriteKey = null) {
+  document.querySelectorAll('#card-list .card').forEach((card) => {
+    if (!favoriteKey || getFavoriteCardKey(card) === favoriteKey) ensureFavoriteButton(card);
+  });
+
+  const modalFavoriteButton = document.getElementById('favorite-card');
+  if (modalFavoriteButton && currentModalCard && (!favoriteKey || getFavoriteCardKey(currentModalCard) === favoriteKey)) {
+    updateFavoriteButtonState(modalFavoriteButton, currentModalCard);
+  }
+}
+
+function showFavoriteMessage(message) {
+  if (typeof deckBuilder !== 'undefined' && typeof deckBuilder.showMessage === 'function') {
+    // showMessage は既存通知とタイマーを先に破棄するため、連打時も通知が重ならない。
+    deckBuilder.showMessage(message);
+  }
+}
+
+function toggleFavoriteCard(cardElement) {
+  const favoriteKey = getFavoriteCardKey(cardElement);
+  if (!favoriteKey) return;
+  const selectedFavoriteCardKeys = getFavoriteCardKeysForGroup();
+  const adding = !selectedFavoriteCardKeys.has(favoriteKey);
+  if (adding) {
+    selectedFavoriteCardKeys.add(favoriteKey);
+  } else {
+    selectedFavoriteCardKeys.delete(favoriteKey);
+  }
+
+  saveFavoriteCards();
+  updateFavoriteButtons(favoriteKey);
+  showFavoriteMessage(adding ? 'お気に入りに追加しました。' : 'お気に入りから外しました。');
+
+  // お気に入り表示中は、追加・解除した瞬間に通常フィルターとのAND結果へ反映する。
+  if (favoriteFilterEnabled) {
+    filterCards();
+    loadVisibleImages();
+  }
+}
+
+function toggleFavoriteFilter(forceState) {
+  favoriteFilterEnabled = typeof forceState === 'boolean' ? forceState : !favoriteFilterEnabled;
+  localStorage.setItem(FAVORITE_FILTER_STORAGE_KEY, favoriteFilterEnabled);
+  updateFavoriteFilterButton();
+  filterCards();
+  updateActiveFilters();
+  loadVisibleImages();
+}
+
+function removeFavoriteFilter() {
+  toggleFavoriteFilter(false);
+}
+
+function initializeFavoriteFeature() {
+  initializeFavoriteCardKeys();
+  migrateLegacyFavoriteCards();
+  updateFavoriteGroupControls();
+  updateFavoriteFilterButton();
+  favoriteHoverMediaQuery = window.matchMedia('(min-width: 769px) and (hover: hover) and (pointer: fine)');
+  syncFavoriteCardHoverButtons();
+
+  const handleFavoriteHoverCapabilityChange = () => syncFavoriteCardHoverButtons();
+  if (typeof favoriteHoverMediaQuery.addEventListener === 'function') {
+    favoriteHoverMediaQuery.addEventListener('change', handleFavoriteHoverCapabilityChange);
+  } else if (typeof favoriteHoverMediaQuery.addListener === 'function') {
+    favoriteHoverMediaQuery.addListener(handleFavoriteHoverCapabilityChange);
+  }
+
+  const favoriteCardList = document.getElementById('card-list');
+  if (!favoriteCardObserver && favoriteCardList) {
+    favoriteCardObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach(ensureFavoriteButtonsInNode);
+      });
+    });
+    favoriteCardObserver.observe(favoriteCardList, { childList: true, subtree: true });
+  }
+}
+
+loadFavoriteCards();
+document.addEventListener('DOMContentLoaded', initializeFavoriteFeature);
 
 // === 範囲フィルター ===
 // min/max が null の場合は範囲フィルター未適用
@@ -816,7 +1181,8 @@ const cardIndexCache = {
         nameLower: (card.dataset.name || '').toLowerCase(),
         attributeLower: (card.dataset.attribute || '').toLowerCase(),
         doubleFor: card.getAttribute('data-double-for') || '',
-        number: card.dataset.number || ''
+        number: card.dataset.number || '',
+        favoriteKey: getFavoriteCardKey(card)
       });
     });
     this.built = true;
@@ -1107,7 +1473,7 @@ document.addEventListener('DOMContentLoaded', () => {
   modalButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
       event.stopPropagation();
-      const match = button.getAttribute('onclick').match(/openModal\('(.+?)'\)/);
+      const match = (button.getAttribute('onclick') || '').match(/openModal\('(.+?)'\)/);
       if (match) {
         const filterId = match[1];
         openModal(filterId);
@@ -1118,15 +1484,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const limitToggle = document.getElementById('limit-release-toggle');
   if (limitToggle) {
     // localStorage から制限の状態を復元
-    const savedLimit = localStorage.getItem('limitReleaseEnabled');
-    if (savedLimit === 'true') {
-      limitToggle.checked = true;
-      deckBuilder.limitReleaseEnabled = true;
-    }
-    limitToggle.addEventListener('change', (e) => {
-      const limitEnabled = !!e.target.checked;
+    const limitEnabledOnLoad = localStorage.getItem('limitReleaseEnabled') === 'true';
+    deckBuilder.limitReleaseEnabled = limitEnabledOnLoad;
+    setToggleButtonState(limitToggle, limitEnabledOnLoad);
+    limitToggle.addEventListener('click', () => {
+      const limitEnabled = !deckBuilder.limitReleaseEnabled;
       deckBuilder.limitReleaseEnabled = limitEnabled;
       localStorage.setItem('limitReleaseEnabled', limitEnabled);
+      setToggleButtonState(limitToggle, limitEnabled);
       if (typeof deckBuilder?.showMessage === 'function') {
         deckBuilder.showMessage(
           limitEnabled
@@ -1155,14 +1520,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const andToggle = document.getElementById('and-filter-toggle');
   if (andToggle) {
     // localStorage から絞り込みの状態を復元
-    const savedAnd = localStorage.getItem('andFilterEnabled');
-    if (savedAnd === 'true') {
-      andToggle.checked = true;
-      andFilterEnabled = true;
-    }
-    andToggle.addEventListener('change', (e) => {
-      andFilterEnabled = !!e.target.checked;
+    andFilterEnabled = localStorage.getItem('andFilterEnabled') === 'true';
+    setToggleButtonState(andToggle, andFilterEnabled);
+    andToggle.addEventListener('click', () => {
+      andFilterEnabled = !andFilterEnabled;
       localStorage.setItem('andFilterEnabled', andFilterEnabled);
+      setToggleButtonState(andToggle, andFilterEnabled);
       if (typeof deckBuilder?.showMessage === 'function') {
         deckBuilder.showMessage(
           andFilterEnabled
@@ -1839,6 +2202,9 @@ const resetFilters = () => {
   rangeFilters.cost = { min: null, max: null };
   rangeFilters.power = { min: null, max: null };
   autoSeasonFilters.clear();
+  favoriteFilterEnabled = false;
+  localStorage.removeItem(FAVORITE_FILTER_STORAGE_KEY);
+  updateFavoriteFilterButton();
   document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
   const originalCards = document.querySelectorAll('.card:not([data-cloned])');
   originalCards.forEach((card) => {
@@ -1966,6 +2332,7 @@ const filterCards = () => {
   let anyVisible = false;
   const cardList = document.getElementById('card-list');
   const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
+  const selectedFavoriteCardKeys = getFavoriteCardKeysForGroup();
   const has廃Filter = filters.attribute.has('廃');
 
   // 「廃」フィルター用: 他の属性フィルターを事前計算
@@ -1990,8 +2357,13 @@ const filterCards = () => {
 
     let shouldDisplay = true;
 
+    // お気に入りは独立した追加条件として扱い、既存の検索・全フィルターとANDで適用する。
+    if (favoriteFilterEnabled && !selectedFavoriteCardKeys.has(entry.favoriteKey)) {
+      shouldDisplay = false;
+    }
+
     // series フィルター
-    if (filters.series.size > 0) {
+    if (shouldDisplay && filters.series.size > 0) {
       if (andFilterEnabled) {
         if (![...filters.series].every(v => entry.series.includes(v))) shouldDisplay = false;
       } else {
@@ -2144,7 +2516,17 @@ const filterCards = () => {
     }
   }
 
-  document.getElementById('no-cards-message').style.display = anyVisible ? 'none' : 'block';
+  const noCardsMessage = document.getElementById('no-cards-message');
+  if (noCardsMessage) {
+    if (anyVisible) {
+      noCardsMessage.style.display = 'none';
+    } else {
+      noCardsMessage.innerHTML = favoriteFilterEnabled && selectedFavoriteCardKeys.size === 0
+        ? `<p><strong>お気に入り${selectedFavoriteGroup}（★）にしたカードがありません。</strong></p>`
+        : '<p><strong>該当カードがありません。</strong></p><p><strong>「リセット」を押す、または</strong></p><p><strong>「絞り込み」をOFFにしてください。</strong></p>';
+      noCardsMessage.style.display = 'block';
+    }
+  }
 
   // プロモフィルター中でソートなし or No.ソート時はoriginalOrder（cards.js記載順）で整列
   if (filters.series.has('プロモ') && (!sortCriteria || sortCriteria === 'number')) {
@@ -3216,6 +3598,11 @@ const activateModalTapTarget = (target) => {
     return;
   }
 
+  if (target.closest('#favorite-card')) {
+    if (currentModalCard) toggleFavoriteCard(currentModalCard);
+    return;
+  }
+
   const connectionLink = target.closest('.connection-link');
   if (connectionLink) {
     openConnectionCard(connectionLink.dataset.target);
@@ -3369,6 +3756,10 @@ let activeFiltersResizeHandler = null;
 
 function updateActiveFilters() {
   const activeFilters = [];
+  if (favoriteFilterEnabled) {
+    // 常に先頭へ入れ、他の条件が増減してもお気に入りチップを左端に保つ。
+    activeFilters.push({ key: 'favorite', value: `★ お気に入り${selectedFavoriteGroup}`, isFavorite: true });
+  }
   for (const [key, values] of Object.entries(filters)) {
     if (values.size > 0) {
       values.forEach((value) => {
@@ -3391,6 +3782,9 @@ function updateActiveFilters() {
   };
 
   const filterDisplay = activeFilters.map((filter) => {
+    if (filter.isFavorite) {
+      return `<button class="filter-item favorite-filter-item" onclick="removeFavoriteFilter()">${filter.value}</button>`;
+    }
     const label = filterLabels[filter.key] || '';
     const displayText = label ? `${label}${filter.value}` : filter.value;
     if (filter.isRange) {
@@ -6763,10 +7157,52 @@ let modalControlsInitialized = false;
 let currentModalCard = null;
 let currentModalCardName = null;
 
+function positionModalFavoriteButton(controls = modalControls, favoriteButton = document.getElementById('favorite-card')) {
+  if (!controls || !favoriteButton || !controls.isConnected || !favoriteButton.isConnected) return;
+  const controlsWidth = controls.offsetWidth;
+  const controlsHeight = controls.offsetHeight;
+  const favoriteWidth = favoriteButton.offsetWidth;
+  const favoriteHeight = favoriteButton.offsetHeight;
+  if (!controlsWidth || !controlsHeight || !favoriteWidth || !favoriteHeight) return;
+
+  const gap = window.innerWidth <= 768 ? 12 : 14;
+  const centerOffset = controlsWidth / 2 + gap + favoriteWidth / 2;
+  const controlsBottom = parseFloat(window.getComputedStyle(controls).bottom) || 0;
+  const favoriteBottom = controlsBottom + (controlsHeight - favoriteHeight) / 2;
+
+  favoriteButton.style.left = `calc(50% + ${Math.round(centerOffset)}px)`;
+  favoriteButton.style.bottom = `${Math.round(favoriteBottom)}px`;
+}
+
+function ensureModalFavoriteButton(controls) {
+  if (!controls || !currentModalCardName) return null;
+  const container = controls.closest('.image-container') || modalContainer;
+  if (!container) return null;
+  let favoriteButton = container.querySelector('#favorite-card');
+  if (!favoriteButton) {
+    favoriteButton = document.createElement('button');
+    favoriteButton.type = 'button';
+    favoriteButton.id = 'favorite-card';
+    favoriteButton.className = 'favorite-modal-button';
+    favoriteButton.textContent = '★';
+    // 増減コントロールとは別要素として画像コンテナへ置き、既存枠の位置・幅を変えない。
+    container.appendChild(favoriteButton);
+  }
+  favoriteButton.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (currentModalCard) toggleFavoriteCard(currentModalCard);
+  };
+  updateFavoriteButtonState(favoriteButton, currentModalCard);
+  requestAnimationFrame(() => positionModalFavoriteButton(controls, favoriteButton));
+  return favoriteButton;
+}
+
 // モーダルボタンにイベントリスナーを設定する関数
 function setupModalButtonListeners(controls) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
+  ensureModalFavoriteButton(controls);
 
   if (addButton) {
     addButton.onclick = (e) => {
@@ -6795,6 +7231,7 @@ function setupModalCardControlsOnce(controls, card, cardName) {
   // 現在のカード情報を更新
   currentModalCard = card;
   currentModalCardName = cardName;
+  ensureModalFavoriteButton(controls);
 
   // イベントリスナーは一度だけ設定
   if (!modalControlsInitialized) {
@@ -7158,7 +7595,7 @@ function toggleBulkRelease() {
   deckBuilder.limitReleaseEnabled = enabled;
   localStorage.setItem('limitReleaseEnabled', enabled);
   const mainToggle = document.getElementById('limit-release-toggle');
-  if (mainToggle) mainToggle.checked = enabled;
+  setToggleButtonState(mainToggle, enabled);
   updateBulkFooterState();
 }
 
@@ -7166,7 +7603,7 @@ function toggleBulkAnd() {
   andFilterEnabled = !andFilterEnabled;
   localStorage.setItem('andFilterEnabled', andFilterEnabled);
   const mainToggle = document.getElementById('and-filter-toggle');
-  if (mainToggle) mainToggle.checked = andFilterEnabled;
+  setToggleButtonState(mainToggle, andFilterEnabled);
   filterCards();
   updateBulkFooterState();
 }
