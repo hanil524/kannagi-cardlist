@@ -7249,6 +7249,7 @@ data-attribute="花 樹木 妖怪"
 data-keyword=""
 data-role="常時"
 data-sakka="座敷笑死"
+>
 <img data-src="images/card_10_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
@@ -7265,6 +7266,7 @@ data-attribute="猫 動物"
 data-keyword=""
 data-role="召喚時"
 data-sakka="黒猫"
+>
 <img data-src="images/card_10_p (108).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
@@ -7281,6 +7283,7 @@ data-attribute="神 人魚"
 data-keyword=""
 data-role="バフ 常時"
 data-sakka="清水恵里"
+>
 <img data-src="images/card_10_p (97).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
@@ -8354,6 +8357,7 @@ data-attribute="廃校 不吉"
 data-keyword=""
 data-role="ダメ無効"
 data-sakka="ラヴィット"
+>
 <img data-src="images/card_10_p (115).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
@@ -11564,6 +11568,7 @@ data-role="除外戻し ドロー"
   data-keyword="不屈"
   data-role="ヒール"
 data-sakka="0831"
+>
   <img data-src="images/card_14_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
@@ -11596,6 +11601,7 @@ data-sakka="0831"
   data-keyword=""
   data-role="相手ドロー ドロー"
 data-sakka="marukko"
+>
   <img data-src="images/card_14_p (46).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
