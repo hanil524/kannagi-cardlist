@@ -15930,6 +15930,358 @@ data-role="除外戻し ドロー"
 >
   <img data-src="images/card_17_p (62).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="2801"
+  data-name="神隠しの廃集落（かみかくしのはいしゅうらく）夏"
+  data-cost="0"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 刀"
+  data-keyword=""
+  data-role="常時 ロック"
+>
+  <img data-src="images/card_17_p (77).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2802"
+  data-name="私に付きまとう男（わたしにつきまとうおとこ）"
+  data-cost="0"
+  data-power="1"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="事件"
+  data-keyword=""
+  data-role="召喚時 "
+>
+  <img data-src="images/card_17_p (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2803"
+  data-name="闘技場(とうぎじょう)"
+  data-cost="0"
+  data-power="1"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 血液"
+  data-keyword=""
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_17_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2804"
+  data-name="きさらぎ駅（きさらぎえき）"
+  data-cost="2"
+  data-power="2"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃駅"
+  data-keyword="不屈"
+  data-role="攻撃時 除外加速"
+>
+  <img data-src="images/card_17_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2805"
+  data-name="抹亞鉱山（まつあこうざん）"
+  data-cost="4"
+  data-power="3"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃鉱山"
+  data-keyword=""
+  data-role="召喚時 季節札除去 札除去"
+>
+  <img data-src="images/card_17_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2806"
+  data-name="高速バス（こうそくばす）"
+  data-cost="6"
+  data-power="5"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="追撃 速攻"
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_17_p (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2807"
+  data-name="輪入道（わにゅうどう）"
+  data-cost="6"
+  data-power="2"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 廃車 火事"
+  data-keyword=""
+  data-role="2種類札 ランデス 札除去"
+>
+  <img data-src="images/card_17_p (87).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2808"
+  data-name="沈黙する病院（ちんもくするびょういん）"
+  data-cost="7"
+  data-power="4"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃病院 怨霊"
+  data-keyword=""
+  data-role="召喚時 除外加速"
+>
+  <img data-src="images/card_17_p (79).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2809"
+  data-name="あたたかいだす"
+  data-cost="8"
+  data-power="7"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="猫 妖怪"
+  data-keyword=""
+  data-role="攻撃時 ランデス"
+>
+  <img data-src="images/card_17_p (74).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2810"
+  data-name="鬼の棲む山(おにのすむやま)"
+  data-cost="9"
+  data-power="2"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 刀"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_17_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2811"
+  data-name="未完の石材（みかんのせきざい）"
+  data-cost="0"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="石像"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_17_p (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2812"
+  data-name="狛侍（はくじ）"
+  data-cost="0"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_17_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2813"
+  data-name="予言（よげん）"
+  data-cost="2"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="視線"
+  data-keyword=""
+  data-role="公開ドロー ドロー "
+>
+  <img data-src="images/card_17_p (72).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2814"
+  data-name="霊安室の鏡（れいあんしつのかがみ）"
+  data-cost="5"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鏡 怨霊"
+  data-keyword=""
+  data-role="サーチ 直接ダメ "
+>
+  <img data-src="images/card_17_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2815"
+  data-name="修羅(しゅら)"
+  data-cost="5"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 刀"
+  data-keyword=""
+  data-role="直接ダメ 除外加速"
+>
+  <img data-src="images/card_17_p (69).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2816"
+  data-name="鬼面の神子（きめんのかみご）"
+  data-cost="6"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="鬼 鬼面の神"
+  data-keyword=""
+  data-role="直接ダメ"
+>
+  <img data-src="images/card_17_p (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2817"
+  data-name="化提灯（ばけちょうちん）"
+  data-cost="1"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 灯火"
+  data-keyword=""
+  data-role="2種類札 手札公開 ヒール無効"
+>
+  <img data-src="images/card_17_p (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2818"
+  data-name="のっぺらぼう"
+  data-cost="5"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 牢獄"
+  data-keyword=""
+  data-role="効果を失う 力固定 バフ"
+>
+  <img data-src="images/card_17_p (82).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2819"
+  data-name="まふゆのだんらん"
+  data-cost="3"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="血液 家屋"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_17_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2820"
+  data-name="まふゆの手術室（まふゆのしゅじゅつしつ）"
+  data-cost="0"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃病院 血液"
+  data-keyword=""
+  data-role="除外加速 除外利用"
+>
+  <img data-src="images/card_17_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2821"
+  data-name="アラハバキ（あらはばき）"
+  data-cost="10"
+  data-power="6"
+  data-series="鬼の棲む山"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ からくり"
+  data-keyword=""
+  data-role="召喚時 攻撃時 除外加速 札除去"
+>
+  <img data-src="images/card_17_p (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2822"
+  data-name="火の玉（ひのたま）"
+  data-cost="2"
+  data-power="0"
+  data-series="鬼の棲む山"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 幽霊"
+  data-keyword=""
+  data-role="サーチ"
+>
+  <img data-src="images/card_17_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
