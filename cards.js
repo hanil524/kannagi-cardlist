@@ -16688,7 +16688,7 @@ data-sakka="marukko"
   data-attribute="うつしよ からくり"
   data-keyword=""
   data-role="召喚時 攻撃時 除外加速 札除去"
-  data-sakka="アラハバキ"
+  data-sakka="宝箱"
 >
   <img data-src="images/card_17_p (88).jpg" src="placeholder.jpg" decoding="async" />
 </div>

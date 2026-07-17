@@ -3144,7 +3144,23 @@ const openModal = (filterId) => {
       if (element.classList.contains('filter-category')) {
         const category = document.createElement('span');
         category.className = 'filter-category';
-        category.textContent = element.textContent;
+
+        if (filterId === 'sakka' && !element.classList.contains('sakka-row-category')) {
+          category.classList.add('sakka-main-category');
+
+          const title = document.createElement('span');
+          title.className = 'sakka-category-title';
+          title.textContent = element.textContent;
+
+          const count = document.createElement('span');
+          count.className = 'sakka-designer-count';
+          count.textContent = `計${filterElement.querySelectorAll(':scope > button.sakka-filter-option').length}名`;
+
+          category.append(title, count);
+        } else {
+          category.textContent = element.textContent;
+        }
+
         modalButtons.appendChild(category);
         return;
       }
