@@ -15398,7 +15398,7 @@ data-role="除外戻し ドロー"
   data-rare="エキスパンション"
   data-attribute="蟲"
   data-keyword=""
-  data-role="召喚時 魂利用 魂回収"
+  data-role="召喚時 魂利用 魂戻し"
 >
   <img data-src="images/card_17_p (38).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -15577,6 +15577,358 @@ data-role="除外戻し ドロー"
   data-role="公開ドロー ドロー "
 >
   <img data-src="images/card_17_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2701"
+  data-name="神隠しの廃集落（かみかくしのはいしゅうらく）夏"
+  data-cost="0"
+  data-power="1"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃集落 神隠し"
+  data-keyword=""
+  data-role="攻撃時 底送り ドロー"
+>
+  <img data-src="images/card_17_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2702"
+  data-name="旅行計画(りょこうけいかく)"
+  data-cost="0"
+  data-power="1"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 日差し"
+  data-keyword=""
+  data-role="召喚時 底送り 公開ドロー ドロー "
+>
+  <img data-src="images/card_17_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2703"
+  data-name="羅生門（らしょうもん）"
+  data-cost="2"
+  data-power="1"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃門 糧"
+  data-keyword=""
+  data-role="常時 攻撃時 除外加速 ドロー"
+>
+  <img data-src="images/card_17_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2704"
+  data-name="魔女ノ城（うぃっちじょう）"
+  data-cost="2"
+  data-power="2"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="古城 怨霊"
+  data-keyword=""
+  data-role="直接ダメ 攻撃時"
+>
+  <img data-src="images/card_17_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2705"
+  data-name="あの世への乗り口（あのよへののりぐち）"
+  data-cost="4"
+  data-power="2"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="追撃 速攻"
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_17_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2706"
+  data-name="魔の急カーブ（まのきゅうかーぶ）"
+  data-cost="5"
+  data-power="5"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="追撃 速攻"
+  data-role="攻撃時 ハンデス"
+>
+  <img data-src="images/card_17_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2707"
+  data-name="エンジン停止（えんじんていし）"
+  data-cost="6"
+  data-power="3"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword=""
+  data-role="力固定"
+>
+  <img data-src="images/card_17_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2708"
+  data-name="覇王樹（はおうじゅ）"
+  data-cost="8"
+  data-power="5"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="花 樹木"
+  data-keyword=""
+  data-role="追加行動 召喚時"
+>
+  <img data-src="images/card_17_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2709"
+  data-name="とけいこわい"
+  data-cost="8"
+  data-power="7"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="猫 からくり"
+  data-keyword=""
+  data-role="攻撃時 ドロー"
+>
+  <img data-src="images/card_17_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2710"
+  data-name="霊園前電話ボックス（れいえんまえでんわぼっくす）"
+  data-cost="10"
+  data-power="3"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="電話 怨霊"
+  data-keyword=""
+  data-role="召喚時 追加行動"
+>
+  <img data-src="images/card_17_p (65).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2711"
+  data-name="狼鳴隧道（ろうめいずいどう）"
+  data-cost="10"
+  data-power="7"
+  data-series="不安の果実"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃隧道 からくり"
+  data-keyword=""
+  data-role="バフ 攻撃時"
+>
+  <img data-src="images/card_17_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2712"
+  data-name="ひきこさん"
+  data-cost="0"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="噂 糧"
+  data-keyword=""
+  data-role="底送り 公開ドロー ドロー "
+>
+  <img data-src="images/card_17_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2713"
+  data-name="犬面人（けんめんじん）"
+  data-cost="3"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 動物 交通事故"
+  data-keyword=""
+  data-role="直接ダメ "
+>
+  <img data-src="images/card_17_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2714"
+  data-name="あかなめ"
+  data-cost="3"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 侵食"
+  data-keyword=""
+  data-role="魂加速 "
+>
+  <img data-src="images/card_17_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2715"
+  data-name="えんらえんら"
+  data-cost="7"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 怨霊"
+  data-keyword=""
+  data-role="追加行動 魂利用 魂戻し"
+>
+  <img data-src="images/card_17_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2716"
+  data-name="不安の果実(ふあんのかじつ)"
+  data-cost="10"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 樹木"
+  data-keyword=""
+  data-role="ランデス 再利用"
+>
+  <img data-src="images/card_17_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2717"
+  data-name="双子だった(ふたごだった)"
+  data-cost="0"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 樹木"
+  data-keyword=""
+  data-role="除外戻し ドロー"
+>
+  <img data-src="images/card_17_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2718"
+  data-name="よく動く時計（よくうごくとけい）"
+  data-cost="3"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="時計 からくり"
+  data-keyword=""
+  data-role="公開ドロー 底送り ドロー "
+>
+  <img data-src="images/card_17_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2719"
+  data-name="首吊〆縄（くびつりしめなわ）"
+  data-cost="3"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃神社 罪"
+  data-keyword=""
+  data-role="公開ドロー ドロー 自傷ダメ "
+>
+  <img data-src="images/card_17_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2720"
+  data-name="傷秋鳥兜（しょうしょうとりかぶと）"
+  data-cost="4"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="花 髑髏"
+  data-keyword=""
+  data-role="ダメ無効 除去無効"
+>
+  <img data-src="images/card_17_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2721"
+  data-name="叫び出す無音（さけびだすむおん）"
+  data-cost="6"
+  data-power="6"
+  data-series="不安の果実"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="怨念"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ 魂加速 "
+>
+  <img data-src="images/card_17_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2722"
+  data-name="始まり始まり（はじまりはじまり）"
+  data-cost="0"
+  data-power="0"
+  data-series="不安の果実"
+  data-type="季節札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="うつしよ"
+  data-keyword=""
+  data-role="バフ バニラ"
+>
+  <img data-src="images/card_17_p (62).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
