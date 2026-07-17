@@ -1246,7 +1246,7 @@ data-series="新季の到来"
 data-rare="R"
 data-season="夏"
 data-type="場所札"
-data-role="回復フェイズ 「起き」 常時"
+data-role="回復フェイズ 「起き」 常時 効果を失う"
 data-keyword=""
 data-attribute="神 畑"
 >
@@ -1294,7 +1294,7 @@ data-series="新季の到来"
 data-rare="UC"
 data-season="夏"
 data-type="場所札"
-data-role="除去無効"
+data-role="常時 除去無効"
 data-keyword=""
 data-attribute="廃屋"
 >
@@ -15225,6 +15225,358 @@ data-role="除外戻し ドロー"
   data-role="公開ドロー ドロー "
 >
   <img data-src="images/card_17_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2601"
+  data-name="神隠しの廃集落（かみかくしのはいしゅうらく）夏"
+  data-cost="0"
+  data-power="1"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃集落 神隠し"
+  data-keyword=""
+  data-role="攻撃時 自傷ダメ 魂加速 "
+>
+  <img data-src="images/card_17_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2602"
+  data-name="くねくね"
+  data-cost="0"
+  data-power="7"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 畑"
+  data-keyword=""
+  data-role="回復フェイズ 「起き」 常時 効果を失う"
+>
+  <img data-src="images/card_17_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2603"
+  data-name="傷口(きずぐち)"
+  data-cost="0"
+  data-power="1"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 血液"
+  data-keyword=""
+  data-role="召喚時 公開ドロー ドロー 底送り"
+>
+  <img data-src="images/card_17_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2604"
+  data-name="殺人村（さつじんむら）"
+  data-cost="2"
+  data-power="3"
+  data-series="蟲たちの詩"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃村 殺人"
+  data-keyword="速攻 襲撃"
+  data-role="常時 札除去"
+>
+  <img data-src="images/card_17_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2605"
+  data-name="影残る廃屋（かげのこるはいおく）"
+  data-cost="2"
+  data-power="2"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃屋"
+  data-keyword=""
+  data-role="常時 除去無効"
+>
+  <img data-src="images/card_17_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2606"
+  data-name="オレンジハウス（おれんじはうす）"
+  data-cost="2"
+  data-power="1"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="廃屋 腐乱"
+  data-keyword="速攻 憤怒"
+  data-role="攻撃時 直接ダメ "
+>
+  <img data-src="images/card_17_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2607"
+  data-name="苦痛の日々（くつうのひび）"
+  data-cost="3"
+  data-power="2"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 侵食"
+  data-keyword=""
+  data-role="攻撃時 底送り ドロー"
+>
+  <img data-src="images/card_17_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2608"
+  data-name="霊能力者の家（れいのうりょくしゃのいえ）"
+  data-cost="3"
+  data-power="3"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="霊能者 亡者"
+  data-keyword="霊視"
+  data-role="召喚時 札除去 直接ダメ "
+>
+  <img data-src="images/card_17_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2609"
+  data-name="オオカチコチ（おおかちこち）"
+  data-cost="3"
+  data-power="5"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 蟲 廃村"
+  data-keyword=""
+  data-role="攻撃時 サーチ"
+>
+  <img data-src="images/card_17_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2610"
+  data-name="死の蛆(ですわーむ)"
+  data-cost="5"
+  data-power="8"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 蟲 都市伝説"
+  data-keyword="憤怒 速攻"
+  data-role="ランデス"
+>
+  <img data-src="images/card_17_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2611"
+  data-name="蟲たちの詩(むしたちのうた)"
+  data-cost="7"
+  data-power="5"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲"
+  data-keyword=""
+  data-role="召喚時 魂利用 魂回収"
+>
+  <img data-src="images/card_17_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2612"
+  data-name="エビ来た！（えびきた！）"
+  data-cost="8"
+  data-power="8"
+  data-series="蟲たちの詩"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="猫 蟲"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+>
+  <img data-src="images/card_17_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2613"
+  data-name="歪んだ愛情（ゆがんだあいじょう）"
+  data-cost="0"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="病 腐乱"
+  data-keyword=""
+  data-role="底送り 直接ダメ "
+>
+  <img data-src="images/card_17_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2614"
+  data-name="黒蝶(こくちょう)"
+  data-cost="0"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 死神"
+  data-keyword=""
+  data-role="公開ドロー ドロー 底送り"
+>
+  <img data-src="images/card_17_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2615"
+  data-name="感染（かんせん）"
+  data-cost="2"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="視線"
+  data-keyword=""
+  data-role="公開ドロー ドロー "
+>
+  <img data-src="images/card_17_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2616"
+  data-name="交配海老（こうはいえび）"
+  data-cost="3"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲"
+  data-keyword=""
+  data-role="サーチ 直接ダメ "
+>
+  <img data-src="images/card_17_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2617"
+  data-name="絡新婦（じょろうぐも）"
+  data-cost="8"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 蟲"
+  data-keyword=""
+  data-role="公開ドロー ドロー 底送り"
+>
+  <img data-src="images/card_17_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2618"
+  data-name="誘拐（ゆうかい）"
+  data-cost="0"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="噂"
+  data-keyword=""
+  data-role="札除去 自傷ダメ"
+>
+  <img data-src="images/card_17_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2619"
+  data-name="蚊柱（かばしら）"
+  data-cost="9"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 幻覚"
+  data-keyword=""
+  data-role="札除去 直接ダメ "
+>
+  <img data-src="images/card_17_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2620"
+  data-name="夏夜の天使様（なつよのてんしさま）"
+  data-cost="4"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="季節札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 病"
+  data-keyword=""
+  data-role="札除去 直接ダメ "
+>
+  <img data-src="images/card_17_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2621"
+  data-name="罪状（ざいじょう）"
+  data-cost="0"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="ランデス"
+>
+  <img data-src="images/card_17_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2622"
+  data-name="かごめかごめ"
+  data-cost="6"
+  data-power="0"
+  data-series="蟲たちの詩"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="罪 呪"
+  data-keyword=""
+  data-role="公開ドロー ドロー "
+>
+  <img data-src="images/card_17_p (32).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 <!-- ★★ -->
