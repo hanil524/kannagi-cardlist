@@ -3041,6 +3041,17 @@ const groupAttributesByReading = (attributes) => {
 
 let attributeEffectTargetOnly = true;
 
+// フィルターごとに、選択モーダル内の最後のスクロール位置を保持する
+const filterModalScrollPositions = Object.create(null);
+let activeFilterModalId = null;
+
+const saveCurrentFilterModalScrollPosition = () => {
+  if (!activeFilterModalId) return;
+  const modalButtons = document.getElementById('modal-buttons');
+  if (!modalButtons) return;
+  filterModalScrollPositions[activeFilterModalId] = modalButtons.scrollTop;
+};
+
 const openModal = (filterId) => {
   const modal = document.getElementById('modal');
   const modalButtons = document.getElementById('modal-buttons');
@@ -3197,6 +3208,7 @@ const openModal = (filterId) => {
     console.error(`Element with id ${filterId} not found`);
     return;
   }
+  activeFilterModalId = filterId;
 
   const renderAttributeModal = () => {
     modalButtons.innerHTML = '';
@@ -3274,9 +3286,13 @@ const openModal = (filterId) => {
 
   // スクロールバーの表示を更新
   updateScrollbarVisibility();
+  modalButtons.scrollTop = filterModalScrollPositions[filterId] || 0;
 };
 
 const closeModal = () => {
+  saveCurrentFilterModalScrollPosition();
+  activeFilterModalId = null;
+
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
   document.body.classList.remove('modal-open');
