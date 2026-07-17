@@ -1,5 +1,3 @@
-console.log('build-20260711-swipe-tap-fix3');
-
 // ページ更新時に最上部にスクロール（最優先で実行）
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
@@ -581,6 +579,7 @@ const filters = {
   keyword: new Set(),
   attribute: new Set(),
   rare: new Set(),
+  sakka: new Set(),
   cost: new Set(),
   power: new Set()
 };
@@ -1219,11 +1218,19 @@ function updateRangeDisplay() {
   document.getElementById('range-display-max').textContent = rangePickerMaxIndex;
 }
 
+// 作家名は半角カンマだけで区切る（名前に含まれる半角スペースは維持）
+function parseSakkaValues(value) {
+  return String(value || '')
+    .split(',')
+    .map((name) => name.trim())
+    .filter(Boolean);
+}
+
 // === フィルター高速化: 逆引きインデックス ===
 // カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
 const cardIndexCache = {
   built: false,
-  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:'', cost:'', power:'', name:'', nameLower:'', attributeLower:'', doubleFor:''}]
+  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:[], sakka:[], cost:'', power:'', name:'', nameLower:'', attributeLower:'', doubleFor:''}]
   build() {
     if (this.built) return;
     const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
@@ -1238,6 +1245,7 @@ const cardIndexCache = {
         keyword: card.dataset.keyword ? card.dataset.keyword.split(' ') : [],
         attribute: card.dataset.attribute ? card.dataset.attribute.split(' ') : [],
         rare: card.dataset.rare ? card.dataset.rare.split(' ') : [],
+        sakka: parseSakkaValues(card.dataset.sakka),
         cost: card.dataset.cost || '',
         power: card.dataset.power || '',
         name: card.dataset.name || '',
@@ -1431,9 +1439,211 @@ function buildNumericFilterButtons() {
   inject('power', 'power', powerValues);
 }
 
+// ===== 作家フィルターの読み仮名 =====
+// 英字・数字・漢字始まりの作家名は、ここを直すだけで並び順と行分類を変更できる。
+// ひらがな・カタカナ始まりの名前は自動判定するため、通常は登録不要。
+const SAKKA_READINGS = {
+  '？？？': 'はてな',
+  '0831': 'ぜろはちさんいち',
+  '18500': 'いちはちごーまるまる',
+  '310【SATO】': 'さとう',
+  '365×3': 'さんろくごかけるさん',
+  '36524': 'さんろくごによん',
+  '3代目': 'さんだいめ',
+  'AGITO池袋': 'あじといけぶくろ',
+  'Alice': 'ありす',
+  'AMO': 'あも',
+  'Bclass': 'びーくらす',
+  'BILLY LAURENT': 'びりーろーれん',
+  'Boo': 'ぶー',
+  'Cafe&Barカードピア': 'かふぇあんどばーかーどぴあ',
+  'D=fate': 'でぃーふぇいと',
+  'DEX': 'でっくす',
+  'ELIONE': 'いーらいわん',
+  'Geek': 'ぎーく',
+  'GMK': 'じーえむけー',
+  'HIDE': 'ひで',
+  'hiro_koectau': 'ひろ',
+  'HITOMI': 'ひとみ',
+  'INO': 'いの',
+  'Ittoku Beauty Clinic': 'いっとくびゅーてぃーくりにっく',
+  'kapurikoum': 'かぷりこうむ',
+  'kazuyuki': 'かずゆき',
+  'KO－TA': 'こーた',
+  'LILIA': 'りりあ',
+  'marukko': 'まるっこ',
+  'MASA': 'まさ',
+  'MATT SHOW【都市伝説ch】': 'まっとしょーとしでんせつちゃんねる',
+  'MEGURU×CAFE 3e': 'めぐるかふぇ',
+  'MEI': 'めい',
+  'MIYA': 'みや',
+  'Morio': 'もりお',
+  'NANAHUSIGI': 'ななふしぎ',
+  'NAO': 'なお',
+  'NICORAS': 'にこらす',
+  'Ole': 'おれ',
+  'OrcRage': 'おーくれいじ',
+  'ponkawa': 'ぽんかわ',
+  'R&G': 'あーるあんどじー',
+  'Rose': 'ろーず',
+  'Ryo47': 'りょうよんじゅうなな',
+  'RYOSUKE HIYAMA': 'りょうすけひやま',
+  'S1': 'えすわん',
+  'SAITO': 'さいとう',
+  'SAKURA': 'さくら',
+  'Shinmoto Shingo': 'しんもとしんご',
+  'shullys': 'しゅりーず',
+  'S大佐': 'えすたいさ',
+  'Ta2': 'たつ',
+  'TAKAHIRO': 'たかひろ',
+  'Takaおん': 'たかおん',
+  'T-Lab': 'てぃーらぼ',
+  'TOT': 'てぃーおーてぃー',
+  'toufu rayu': 'とうふらーゆ',
+  'Tふるる': 'てぃーふるる',
+  'whoga4': 'ふーがふぉー',
+  'yayami': 'ややみ',
+  'YOKOME': 'よこめ',
+  'YOU': 'ゆう',
+  'YUASA': 'ゆあさ',
+  '伊東睦': 'いとうむつみ',
+  '一樂神無': 'いちらくかんな',
+  '塩': 'しお',
+  '華炎・烈火': 'かえんれっか',
+  '怪遊奇': 'かいゆうき',
+  '角田 響': 'つのだひびき',
+  '韓': 'かん',
+  '鬼夜責': 'きよせ',
+  '吉田猛々': 'よしだもうもう',
+  '京ヶ島': 'きょうがしま',
+  '橋本サイクル': 'はしもとさいくる',
+  '光主任': 'ひかるしゅにん',
+  '幸せの赤いハンカチ': 'しあわせのあかいはんかち',
+  '黒音れも': 'くろねれも',
+  '黒猫': 'くろねこ',
+  '佐藤一徳': 'さとういっとく',
+  '座敷笑死': 'ざしきわらし',
+  '桜庭アリナ': 'さくらばありな',
+  '札絵れあ': 'ふだえれあ',
+  '三浦辰悟': 'みうらしんご',
+  '秋野天良': 'あきのてんりょう',
+  '秋葉原コネクト': 'あきはばらこねくと',
+  '寝倉 響': 'ねぐらひびき',
+  '塵積': 'ちりつも',
+  '睡奇': 'すいき',
+  '清水恵里': 'しみずえり',
+  '赤坂 茜': 'あかさかあかね',
+  '遜色': 'そんしょく',
+  '大赤見ノヴ': 'おおあかみのゔ',
+  '鳥人間': 'とりにんげん',
+  '藤村式': 'ふじむらしき',
+  '猫さん': 'ねこさん',
+  '廃chan': 'はいちゃん',
+  '牌塔': 'かーどたわー',
+  '八重光樹': 'やえみつき',
+  '貧乏中年TV': 'びんぼうちゅうねんてぃーびー',
+  '福島 進一': 'ふくしましんいち',
+  '宝箱': 'たからばこ',
+  '睦月': 'むつき',
+  '末裔の道の人': 'まつえいのみちのひと',
+  '万丈目': 'まんじょうめ',
+  '味覇': 'うぇいぱー',
+  '夜音': 'よね',
+  '理系のオカルト研 いの': 'りけいのおかるとけんいの',
+  '倭identity': 'わいでんてぃてぃ',
+  '杠舞華': 'ゆずりはまいか',
+  '颯爽kana': 'さっそうかな'
+};
+
+const SAKKA_GYO_TABLE = [
+  ['あ', 'あいうえおぁぃぅぇぉ'],
+  ['か', 'かきくけこがぎぐげご'],
+  ['さ', 'さしすせそざじずぜぞ'],
+  ['た', 'たちつてとだぢづでどっ'],
+  ['な', 'なにぬねの'],
+  ['は', 'はひふへほばびぶべぼぱぴぷぺぽ'],
+  ['ま', 'まみむめも'],
+  ['や', 'やゆよゃゅょ'],
+  ['ら', 'らりるれろ'],
+  ['わ', 'わをん']
+];
+
+const sakkaSortCollator =
+  typeof Intl !== 'undefined' && typeof Intl.Collator === 'function'
+    ? new Intl.Collator('ja', { usage: 'sort', sensitivity: 'base', numeric: true })
+    : null;
+
+const sakkaKataToHira = (value) =>
+  value.replace(/[ァ-ヶ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60));
+
+const getSakkaReading = (name) => {
+  if (SAKKA_READINGS[name]) return SAKKA_READINGS[name];
+  const hira = sakkaKataToHira(name.trim());
+  return /^[ぁ-ゖ]/.test(hira) ? hira : null;
+};
+
+const groupSakkaValuesByReading = (values) => {
+  const groups = SAKKA_GYO_TABLE.map(([label]) => ({ label, items: [] }));
+  const unclassified = { label: '未分類', items: [] };
+
+  values.forEach((name) => {
+    const reading = getSakkaReading(name);
+    const first = reading ? (reading[0] === 'ー' ? reading[1] : reading[0]) : '';
+    const groupIndex = SAKKA_GYO_TABLE.findIndex(([, chars]) => chars.includes(first));
+    const item = { name, reading: reading || name };
+    if (groupIndex >= 0) {
+      groups[groupIndex].items.push(item);
+    } else {
+      unclassified.items.push(item);
+    }
+  });
+
+  const compare = sakkaSortCollator
+    ? (a, b) => sakkaSortCollator.compare(a.reading, b.reading) || sakkaSortCollator.compare(a.name, b.name)
+    : (a, b) => (a.reading < b.reading ? -1 : a.reading > b.reading ? 1 : 0);
+
+  return [...groups, unclassified]
+    .filter((group) => group.items.length > 0)
+    .map((group) => ({
+      label: group.label,
+      items: group.items.sort(compare)
+    }));
+};
+
+// data-sakka が追加されたカードから、作家フィルターの選択肢を自動生成する
+function buildSakkaFilterButtons() {
+  const container = document.getElementById('sakka');
+  if (!container) return;
+
+  const sakkaValues = new Set();
+  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach((card) => {
+    parseSakkaValues(card.dataset.sakka).forEach((value) => sakkaValues.add(value));
+  });
+
+  container.querySelectorAll(':scope > button, :scope > .sakka-row-category').forEach((element) => element.remove());
+  groupSakkaValuesByReading(Array.from(sakkaValues)).forEach((group) => {
+    const category = document.createElement('span');
+    category.className = 'filter-category sakka-row-category';
+    category.textContent = group.label;
+    container.appendChild(category);
+
+    group.items.forEach(({ name, reading }) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'sakka-filter-option';
+      button.textContent = name;
+      button.dataset.filterKey = 'sakka';
+      button.dataset.filterValue = name;
+      button.dataset.sakkaReading = reading;
+      container.appendChild(button);
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // コスト・力フィルターボタンを自動生成
   buildNumericFilterButtons();
+  buildSakkaFilterButtons();
 
   // モバイルでのプルトゥリフレッシュを防止
   // Keep vertical page scrolling native; only suppress horizontal overscroll.
@@ -2156,6 +2366,7 @@ const checkFilters = (card) => {
       return cardAttributes.some((attr) => filters.attribute.has(attr));
     },
     rare: () => filters.rare.size === 0 || (card.dataset.rare ? card.dataset.rare.split(' ') : []).some(v => filters.rare.has(v)),
+    sakka: () => filters.sakka.size === 0 || parseSakkaValues(card.dataset.sakka).some(v => filters.sakka.has(v)),
     cost: () => filters.cost.size === 0 || filters.cost.has(card.dataset.cost),
     power: () => {
       if (filters.power.size === 0) return true;
@@ -2509,6 +2720,15 @@ const filterCards = () => {
       }
     }
 
+    // 作家フィルター（半角カンマ区切りの作家名と完全一致）
+    if (shouldDisplay && filters.sakka.size > 0) {
+      if (andFilterEnabled) {
+        if (![...filters.sakka].every(v => entry.sakka.includes(v))) shouldDisplay = false;
+      } else if (!entry.sakka.some(v => filters.sakka.has(v))) {
+        shouldDisplay = false;
+      }
+    }
+
     // cost フィルター（個別選択 or 範囲）
     if (shouldDisplay) {
       if (rangeFilters.cost.min !== null && rangeFilters.cost.max !== null) {
@@ -2826,6 +3046,24 @@ const openModal = (filterId) => {
   const modalButtons = document.getElementById('modal-buttons');
   modalButtons.innerHTML = '';
 
+  const fitSakkaModalButtonText = () => {
+    const minimumFontSize = 9;
+
+    modalButtons.querySelectorAll('button.sakka-filter-option').forEach((button) => {
+      const label = button.querySelector('.sakka-button-label');
+      if (!label) return;
+
+      label.style.fontSize = '';
+      if (label.scrollHeight <= label.clientHeight + 1) return;
+
+      let fontSize = parseFloat(window.getComputedStyle(label).fontSize);
+      while (label.scrollHeight > label.clientHeight + 1 && fontSize > minimumFontSize) {
+        fontSize = Math.max(minimumFontSize, fontSize - 0.5);
+        label.style.fontSize = `${fontSize}px`;
+      }
+    });
+  };
+
   // ツールチップ要素の追加を確認
   if (!document.querySelector('.tooltip')) {
     const tooltip = document.createElement('div');
@@ -2856,9 +3094,19 @@ const openModal = (filterId) => {
 
   const createModalButton = (label, className, tooltipText, valueOverride) => {
     const newButton = document.createElement('button');
-    newButton.innerText = label;
     if (className) {
       newButton.className = className;
+    }
+
+    if (filterId === 'sakka') {
+      const labelElement = document.createElement('span');
+      labelElement.className = 'sakka-button-label';
+      labelElement.textContent = label;
+      newButton.appendChild(labelElement);
+      newButton.setAttribute('aria-label', label);
+      newButton.title = label;
+    } else {
+      newButton.innerText = label;
     }
 
     if (tooltipText) {
@@ -2998,6 +3246,10 @@ const openModal = (filterId) => {
   modal.style.display = 'block';
   document.body.style.paddingRight = `${scrollbarWidth}px`;
   document.body.classList.add('modal-open');
+
+  if (filterId === 'sakka') {
+    fitSakkaModalButtonText();
+  }
 
   const headerContent = document.querySelector('.header-content');
   if (headerContent) {
@@ -7633,6 +7885,7 @@ const _bulkSections = [
   { id: 'keyword', label: 'キーワード' },
   { id: 'role', label: '役割' },
   { id: 'rare', label: 'レア' },
+  { id: 'sakka', label: '作家' },
 ];
 
 function openBulkFilterModal() {
@@ -7683,6 +7936,13 @@ function openBulkFilterModal() {
     </div>`;
 
   document.body.appendChild(modal);
+  modal.querySelectorAll('.bulk-filter-section button[data-filter-key][data-filter-value]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFilterCard(button.dataset.filterKey, button.dataset.filterValue);
+    });
+  });
   const scrollbarWidth = getScrollbarWidth();
   document.body.style.paddingRight = `${scrollbarWidth}px`;
   document.body.classList.add('modal-open');
@@ -7753,6 +8013,10 @@ function updateBulkModalState() {
 
   // 各ボタンのアクティブ状態を filters に合わせて同期
   modal.querySelectorAll('.bulk-filter-section button').forEach(btn => {
+    if (btn.dataset.filterKey && btn.dataset.filterValue) {
+      btn.classList.toggle('bulk-active', !!(filters[btn.dataset.filterKey] && filters[btn.dataset.filterKey].has(btn.dataset.filterValue)));
+      return;
+    }
     const m = (btn.getAttribute('onclick') || '').match(/toggleFilterCard\('([^']+)',\s*'([^']+)'\)/);
     if (m) {
       btn.classList.toggle('bulk-active', !!(filters[m[1]] && filters[m[1]].has(m[2])));

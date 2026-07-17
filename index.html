@@ -81,7 +81,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no" />
   <title>巫カードフィルター | 巫KANNAGIカードゲーム</title>
   <meta name="description" content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260717-sakka-yomi" />
   <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
   <!-- Windows タイル -->
   <meta name="msapplication-TileImage" content="images/icon.jpg" />
@@ -90,7 +90,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="images/icon.png" />
   <!-- Android Chrome / 汎用 -->
   <link rel="icon" type="image/png" sizes="192x192" href="images/icon.png" />
-  <script src="scripts.js"></script>
+  <script src="scripts.js?v=20260717-sakka-yomi"></script>
   <script>
     // Service Worker登録（キャッシュでリピーターの読み込みを高速化）
     if ('serviceWorker' in navigator) {
@@ -391,12 +391,12 @@
             </div>
           </div>
           <div class="filter-group">
-            <label>要素</label>
             <div class="filter-buttons">
               <button data-filter="attribute" onclick="openModal('attribute')">属性</button>
               <button data-filter="keyword" onclick="openModal('keyword')">キーワード</button>
               <button data-filter="role" onclick="openModal('role')">役割</button>
               <button data-filter="rare" onclick="openModal('rare')">レア</button>
+              <button data-filter="sakka" onclick="openModal('sakka')">作家</button>
             </div>
           </div>
           <div class="filter-group favorite-actions-group">
@@ -783,6 +783,11 @@
       <button onclick="toggleFilterCard('rare', 'SSR')" data-tooltip="スペシャルシークレットレア">SSR</button>
       <button onclick="toggleFilterCard('rare', 'エキスパンション')" data-tooltip="封入率、レアリティ固定">エキスパンション</button>
       <button onclick="toggleFilterCard('rare', '封印改訂')" data-tooltip="デッキ使用枚数に制限がある札">封印改訂</button>
+    </div>
+
+    <!-- 作家（選択肢は各カードの data-sakka から自動生成） -->
+    <div id="sakka" class="filter-content" style="display: none">
+      <span class="filter-category">カードデザイナー</span>
     </div>
 
     <div id="image-modal" class="image-modal">

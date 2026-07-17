@@ -1337,8 +1337,10 @@ button[onclick='resetFilters()']:active {
   /* ボタンの高さを少し縮小 */
   padding: 6px 8px;
   /* パディングを調整 */
-  font-size: 12px;
   /* フォントサイズを小さく */
+  font-size: 12px;
+  /* フォーム部品にも本文と同じ書体を使い、文字の縦位置を統一 */
+  font-family: inherit;
   letter-spacing: 1px;
   /* 文字間隔を0.2px広げる */
   font-weight: bold;
@@ -1356,6 +1358,19 @@ button[onclick='resetFilters()']:active {
   /* 角丸を少し小さく */
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 作家名だけは通常サイズを保ち、収まらない名前のみJSで縮小して2行に制限する */
+.modal-buttons button.sakka-filter-option .sakka-button-label {
+  display: -webkit-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 @media (hover: hover) and (pointer: fine) {
