@@ -1644,6 +1644,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // コスト・力フィルターボタンを自動生成
   buildNumericFilterButtons();
   buildSakkaFilterButtons();
+  // モーダル操作中の強制レイアウトを避けるため、スクロールバー幅を先に計測しておく。
+  getScrollbarWidth();
 
   // モバイルでのプルトゥリフレッシュを防止
   // Keep vertical page scrolling native; only suppress horizontal overscroll.
@@ -1736,21 +1738,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const filterButtons = document.querySelectorAll('.filter-buttons button');
   filterButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
+      // モーダルを開く処理は各ボタンの onclick に一本化する。
+      // ここでは既存どおり、親要素へのクリック伝播だけを止める。
       event.stopPropagation();
-      const attribute = button.getAttribute('data-filter');
-      openModal(attribute);
-    });
-  });
-
-  const modalButtons = document.querySelectorAll('.filter-group button');
-  modalButtons.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const match = (button.getAttribute('onclick') || '').match(/openModal\('(.+?)'\)/);
-      if (match) {
-        const filterId = match[1];
-        openModal(filterId);
-      }
     });
   });
 
@@ -1941,7 +1931,7 @@ document.addEventListener('DOMContentLoaded', () => {
     false
   );
 
-  // フィルターや並び替え後に再セットアップ
+  // 並び替え後に再セットアップ
   const resetLazyLoading = () => {
     if (observer) {
       observer.disconnect();
@@ -1950,7 +1940,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLazyLoading();
   };
 
-  document.querySelectorAll('.filter-buttons button, .sort-buttons button').forEach((button) => {
+  document.querySelectorAll('.sort-buttons button').forEach((button) => {
     button.addEventListener('click', () => {
       // 全デバイス共通: 遅延読み込みをリセット
       setTimeout(() => {
@@ -2829,7 +2819,13 @@ const filterCards = () => {
 };
 
 // スクロールバーの幅を取得するヘルパー関数
+let cachedScrollbarWidth;
+
 const getScrollbarWidth = () => {
+  if (cachedScrollbarWidth !== undefined) {
+    return cachedScrollbarWidth;
+  }
+
   const outer = document.createElement('div');
   outer.style.visibility = 'hidden';
   outer.style.overflow = 'scroll';
@@ -2839,11 +2835,15 @@ const getScrollbarWidth = () => {
   const inner = document.createElement('div');
   outer.appendChild(inner);
 
-  const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+  cachedScrollbarWidth = outer.offsetWidth - inner.offsetWidth;
   outer.parentNode.removeChild(outer);
 
-  return scrollbarWidth;
+  return cachedScrollbarWidth;
 };
+
+window.addEventListener('resize', () => {
+  cachedScrollbarWidth = undefined;
+});
 
 const attributeSortCollator =
   typeof Intl !== 'undefined' && typeof Intl.Collator === 'function'
@@ -3044,6 +3044,8 @@ let attributeEffectTargetOnly = true;
 // フィルターごとに、選択モーダル内の最後のスクロール位置を保持する
 const filterModalScrollPositions = Object.create(null);
 let activeFilterModalId = null;
+const sakkaModalFontSizeCache = new Map();
+let sakkaModalFontSizeCacheWidth = null;
 
 const saveCurrentFilterModalScrollPosition = () => {
   if (!activeFilterModalId) return;
@@ -3059,19 +3061,44 @@ const openModal = (filterId) => {
 
   const fitSakkaModalButtonText = () => {
     const minimumFontSize = 9;
+    const labels = Array.from(modalButtons.querySelectorAll('button.sakka-filter-option .sakka-button-label'));
+    if (labels.length === 0) return;
 
-    modalButtons.querySelectorAll('button.sakka-filter-option').forEach((button) => {
-      const label = button.querySelector('.sakka-button-label');
-      if (!label) return;
+    const availableWidth = labels[0].clientWidth;
+    if (availableWidth <= 0) return;
 
+    const canReuseCachedSizes =
+      sakkaModalFontSizeCacheWidth === availableWidth &&
+      labels.every((label) => sakkaModalFontSizeCache.has(label.textContent.trim()));
+
+    if (canReuseCachedSizes) {
+      labels.forEach((label) => {
+        label.style.fontSize = sakkaModalFontSizeCache.get(label.textContent.trim());
+      });
+      return;
+    }
+
+    sakkaModalFontSizeCache.clear();
+    sakkaModalFontSizeCacheWidth = availableWidth;
+
+    // 書き込みと読み取りを分け、全件でレイアウト計算が繰り返されないようにする。
+    labels.forEach((label) => {
       label.style.fontSize = '';
-      if (label.scrollHeight <= label.clientHeight + 1) return;
+    });
 
+    const overflowingLabels = labels.filter((label) => label.scrollHeight > label.clientHeight + 1);
+
+    overflowingLabels.forEach((label) => {
       let fontSize = parseFloat(window.getComputedStyle(label).fontSize);
       while (label.scrollHeight > label.clientHeight + 1 && fontSize > minimumFontSize) {
         fontSize = Math.max(minimumFontSize, fontSize - 0.5);
         label.style.fontSize = `${fontSize}px`;
       }
+    });
+
+    labels.forEach((label) => {
+      const name = label.textContent.trim();
+      sakkaModalFontSizeCache.set(name, label.style.fontSize);
     });
   };
 
@@ -3117,7 +3144,7 @@ const openModal = (filterId) => {
       newButton.setAttribute('aria-label', label);
       newButton.title = label;
     } else {
-      newButton.innerText = label;
+      newButton.textContent = label;
     }
 
     if (tooltipText) {
@@ -3151,6 +3178,8 @@ const openModal = (filterId) => {
   };
 
   const appendFilterElements = (elements) => {
+    const fragment = document.createDocumentFragment();
+
     elements.forEach((element) => {
       if (element.classList.contains('filter-category')) {
         const category = document.createElement('span');
@@ -3172,7 +3201,7 @@ const openModal = (filterId) => {
           category.textContent = element.textContent;
         }
 
-        modalButtons.appendChild(category);
+        fragment.appendChild(category);
         return;
       }
 
@@ -3192,15 +3221,17 @@ const openModal = (filterId) => {
         };
         header.appendChild(label);
         header.appendChild(btn);
-        modalButtons.appendChild(header);
+        fragment.appendChild(header);
         return;
       }
 
       const button = element;
       const tooltipText = button.getAttribute('data-tooltip');
-      const newButton = createModalButton(button.innerText, button.className, tooltipText);
-      modalButtons.appendChild(newButton);
+      const newButton = createModalButton(button.textContent.trim(), button.className, tooltipText);
+      fragment.appendChild(newButton);
     });
+
+    modalButtons.appendChild(fragment);
   };
 
   const filterElement = document.getElementById(filterId);
@@ -3275,10 +3306,6 @@ const openModal = (filterId) => {
   document.body.style.paddingRight = `${scrollbarWidth}px`;
   document.body.classList.add('modal-open');
 
-  if (filterId === 'sakka') {
-    fitSakkaModalButtonText();
-  }
-
   const headerContent = document.querySelector('.header-content');
   if (headerContent) {
     headerContent.style.paddingRight = `${scrollbarWidth}px`;
@@ -3286,6 +3313,11 @@ const openModal = (filterId) => {
 
   // スクロールバーの表示を更新
   updateScrollbarVisibility();
+
+  if (filterId === 'sakka') {
+    fitSakkaModalButtonText();
+  }
+
   modalButtons.scrollTop = filterModalScrollPositions[filterId] || 0;
 };
 
