@@ -4373,11 +4373,14 @@ function updateActiveFilters() {
   const pcElement = document.getElementById('active-filters-pc');
   const mobileElement = document.getElementById('active-filters-mobile');
 
+  // チップの内容はフィルターが変わったときだけ更新する。
+  // AndroidのブラウザUI伸縮によるresizeで再生成すると、登場アニメーションが再実行されて点滅する。
+  pcElement.innerHTML = filterDisplay;
+  mobileElement.innerHTML = filterDisplay;
+
   function setDisplayBasedOnScreenSize() {
     const isMobile = window.innerWidth <= 768;
     if (activeFilters.length > 0) {
-      pcElement.innerHTML = filterDisplay;
-      mobileElement.innerHTML = filterDisplay;
       pcElement.style.display = isMobile ? 'none' : 'flex';
       mobileElement.style.display = isMobile ? 'flex' : 'none';
     } else {
