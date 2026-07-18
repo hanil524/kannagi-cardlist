@@ -1441,6 +1441,7 @@ button[onclick='resetFilters()']:active {
 /* フィルター選択モーダル：上端は維持し、内容が多い時だけ下方向へ広げる */
 #modal {
   --filter-modal-top: 10vh;
+  --filter-modal-bottom-gap: clamp(72px, 10vh, 84px);
   box-sizing: border-box;
   width: 100vw;
   width: calc(100% + var(--filter-modal-scrollbar-width, 0px));
@@ -1457,6 +1458,7 @@ button[onclick='resetFilters()']:active {
 @supports (height: 100dvh) {
   #modal {
     --filter-modal-top: 10dvh;
+    --filter-modal-bottom-gap: clamp(72px, 10dvh, 84px);
   }
 }
 
@@ -1464,8 +1466,8 @@ button[onclick='resetFilters()']:active {
   box-sizing: border-box;
   width: 100%;
   max-width: 640px;
-  max-height: calc(100vh - var(--filter-modal-top) - 16px);
-  max-height: calc(100dvh - var(--filter-modal-top) - max(16px, env(safe-area-inset-bottom)));
+  max-height: calc(100vh - var(--filter-modal-top) - var(--filter-modal-bottom-gap));
+  max-height: calc(100dvh - var(--filter-modal-top) - max(var(--filter-modal-bottom-gap), env(safe-area-inset-bottom)));
   margin: var(--filter-modal-top) auto 0;
   padding: 0;
   overflow: hidden;
@@ -1494,8 +1496,8 @@ button[onclick='resetFilters()']:active {
 
 #modal .filter-modal-header {
   position: relative;
-  flex: 0 0 52px;
-  min-height: 52px;
+  flex: 0 0 48px;
+  min-height: 48px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
 }
@@ -1521,7 +1523,7 @@ button[onclick='resetFilters()']:active {
   cursor: pointer;
   touch-action: manipulation;
   background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.075) 0 16px, rgba(255, 255, 255, 0.14) 17px, transparent 18px),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.075) 0 14px, rgba(255, 255, 255, 0.14) 15px, transparent 16px),
     transparent;
   transition: color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
 }
@@ -1536,8 +1538,8 @@ button[onclick='resetFilters()']:active {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 18px;
-  height: 2.5px;
+  width: 16px;
+  height: 2.25px;
   border-radius: 999px;
   background: currentColor;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
@@ -1571,6 +1573,8 @@ button[onclick='resetFilters()']:active {
   gap: 8px;
   align-content: start;
   overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
   border-radius: 0 0 15px 15px;
   background:
     linear-gradient(180deg, rgba(5, 5, 9, 0.10), rgba(5, 5, 9, 0.24)),
@@ -6162,7 +6166,6 @@ header::after,
   }
 }
 
-#modal .modal-content,
 .range-modal,
 .bulk-filter-dialog,
 .zero-search-content,
@@ -6511,7 +6514,6 @@ body {
    JSの positionNavButtons() が getBoundingClientRect で実測座標を使って
    左右ボタンを配置するため、transform/opacity アニメーション中に計測が
    走るとボタン位置が狂う（既知の不具合として一度発生・撤去済み） */
-#modal,
 .range-modal-overlay,
 .confirm-popup {
   animation: overlayFadeIn 0.2s ease;

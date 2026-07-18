@@ -3289,7 +3289,6 @@ const openModal = (filterId) => {
       });
     }
 
-    updateScrollbarVisibility();
   };
 
   if (filterId === 'attribute') {
@@ -3311,9 +3310,6 @@ const openModal = (filterId) => {
   if (headerContent) {
     headerContent.style.paddingRight = `${scrollbarWidth}px`;
   }
-
-  // スクロールバーの表示を更新
-  updateScrollbarVisibility();
 
   if (filterId === 'sakka') {
     fitSakkaModalButtonText();
