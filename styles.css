@@ -2546,7 +2546,7 @@ body.modal-open {
   font-weight: bold;
 }
 
-/* カード一覧の4枚アイコン */
+/* カード一覧の採用枚数バッジ */
 .card-count-badge {
   position: absolute;
   top: 5px;
@@ -2559,10 +2559,18 @@ body.modal-open {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  padding: 0;
   font-size: 16px;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   z-index: 2;
+}
+
+.card-count-badge-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* レスポンシブ対応 スマホ用デッキ作成画面ヘッダー（縦幅） */
@@ -7233,6 +7241,18 @@ body {
   #favorite-card.favorite-modal-button::after {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* Android / Chromium: モバイルの操作ボタンに出る四角い標準タップハイライトを消す */
+@media (max-width: 768px) {
+  .mobile-header .hamburger-menu,
+  .mobile-header .deck-icon-container,
+  .deck-modal .deck-menu button,
+  .deck-modal .deck-menu .deck-counter,
+  #image-modal button,
+  #image-modal .connection-link {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

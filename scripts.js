@@ -785,42 +785,28 @@ function normalizeFavoriteImageSource(source) {
   }
 }
 
-function findOriginalFavoriteCard(cardElement) {
-  if (!cardElement) return null;
-  if (cardElement.matches('#card-list .card:not([data-cloned])')) return cardElement;
-
-  const cardNumber = cardElement.dataset.number || '';
-  const cardName = cardElement.dataset.name || '';
-  return Array.from(document.querySelectorAll('#card-list .card:not([data-cloned])')).find((card) => (
-    card.dataset.number === cardNumber && card.dataset.name === cardName
-  )) || null;
-}
-
 function getFavoriteCardKey(cardElement) {
   if (!cardElement) return '';
   if (cardElement.dataset.favoriteKey) return cardElement.dataset.favoriteKey;
 
-  const originalCard = findOriginalFavoriteCard(cardElement);
-  const sourceCard = originalCard || cardElement;
-  const sourceImage = sourceCard.querySelector('img');
+  const sourceImage = cardElement.querySelector('img');
   const source = sourceImage?.getAttribute('data-src') || sourceImage?.getAttribute('src') || sourceImage?.src || '';
   const normalizedSource = normalizeFavoriteImageSource(source);
-  const cardNumber = sourceCard.dataset.number || cardElement.dataset.number || '';
-  const cardName = sourceCard.dataset.name || cardElement.dataset.name || '';
+  const cardNumber = cardElement.dataset.number || '';
+  const cardName = cardElement.dataset.name || '';
   const favoriteKey = `card:${cardNumber}|${normalizedSource || `name:${cardName}`}`;
 
   cardElement.dataset.favoriteKey = favoriteKey;
-  if (originalCard && !originalCard.dataset.favoriteKey) originalCard.dataset.favoriteKey = favoriteKey;
   return favoriteKey;
 }
 
 function initializeFavoriteCardKeys() {
-  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach(getFavoriteCardKey);
+  document.querySelectorAll('#card-list .card').forEach(getFavoriteCardKey);
 }
 
 function migrateLegacyFavoriteCards() {
   if (!favoriteMigrationPending) return;
-  const originalCards = Array.from(document.querySelectorAll('#card-list .card:not([data-cloned])'));
+  const originalCards = Array.from(document.querySelectorAll('#card-list .card'));
   if (legacyFavoriteCardNames.size > 0 && originalCards.length === 0) return;
   const firstFavoriteGroup = getFavoriteCardKeysForGroup(1);
 
@@ -1327,10 +1313,10 @@ function parseSakkaValues(value) {
 // カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
 const cardIndexCache = {
   built: false,
-  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:[], sakka:[], cost:'', power:'', name:'', nameLower:'', attributeLower:'', doubleFor:''}]
+  entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:[], sakka:[], cost:'', power:'', name:'', nameLower:'', attributeLower:''}]
   build() {
     if (this.built) return;
-    const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+    const cards = document.querySelectorAll('#card-list .card');
     this.entries = [];
     cards.forEach(card => {
       this.entries.push({
@@ -1348,7 +1334,6 @@ const cardIndexCache = {
         name: card.dataset.name || '',
         nameLower: (card.dataset.name || '').toLowerCase(),
         attributeLower: (card.dataset.attribute || '').toLowerCase(),
-        doubleFor: card.getAttribute('data-double-for') || '',
         number: card.dataset.number || '',
         favoriteKey: getFavoriteCardKey(card)
       });
@@ -1508,7 +1493,7 @@ window.addEventListener('resize', resetFontSize);
 // ★ページロード後にDOMの初期化設定を行う
 // コスト・力フィルターボタンをカードデータから自動生成
 function buildNumericFilterButtons() {
-  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const cards = document.querySelectorAll('#card-list .card');
   const costValues = new Set();
   const powerValues = new Set();
 
@@ -1713,7 +1698,7 @@ function buildSakkaFilterButtons() {
   if (!container) return;
 
   const sakkaValues = new Set();
-  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach((card) => {
+  document.querySelectorAll('#card-list .card').forEach((card) => {
     parseSakkaValues(card.dataset.sakka).forEach((value) => sakkaValues.add(value));
   });
 
@@ -1824,7 +1809,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 複製カードにクリック判定を付与
+  // カード一覧のタッチ開始時にスクロール状態を正常化
   const cardList = document.getElementById('card-list');
   if (cardList) {
     cardList.addEventListener('touchstart', ensureScrollUnlocked, { passive: true });
@@ -2589,8 +2574,7 @@ const resetFilters = () => {
   favoriteFilterEnabled = false;
   localStorage.removeItem(FAVORITE_FILTER_STORAGE_KEY);
   updateFavoriteFilterButton();
-  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
-  const originalCards = document.querySelectorAll('.card:not([data-cloned])');
+  const originalCards = document.querySelectorAll('.card');
   originalCards.forEach((card) => {
     card.style.display = 'block';
   });
@@ -2729,9 +2713,6 @@ const filterCards = () => {
   const searchBox = document.getElementById('search-box');
   const mobileSearchBox = document.getElementById('mobile-search-box');
   const query = (searchBox?.value || mobileSearchBox?.value || '').toLowerCase();
-
-  // 複製カードの削除
-  document.querySelectorAll('.card[data-cloned]').forEach((clonedCard) => clonedCard.remove());
 
   // インデックスキャッシュを使った高速フィルタリング
   const entries = cardIndexCache.entries;
@@ -2887,24 +2868,6 @@ const filterCards = () => {
       anyVisible = true;
       card.style.display = 'block';
 
-      if (entry.doubleFor) {
-        const doubleFilters = entry.doubleFor.split(',');
-        const shouldDouble = doubleFilters.some((filter) => activeFilters.has(filter));
-
-        if (shouldDouble) {
-          const clone = card.cloneNode(true);
-          clone.setAttribute('data-cloned', 'true');
-          const cloneImg = clone.querySelector('img');
-          if (cloneImg) {
-            // 複製もサムネイルを表示（data-srcはフル解像度参照用に保持）
-            const cloneFull = cloneImg.getAttribute('data-src') || toFullImagePath(cloneImg.src);
-            setListImage(cloneImg, cloneFull);
-            cloneImg.classList.add('loaded');
-            cloneImg.style.opacity = '1';
-          }
-          cardList.insertBefore(clone, card.nextSibling);
-        }
-      }
     } else {
       card.style.display = 'none';
     }
@@ -2924,7 +2887,7 @@ const filterCards = () => {
 
   // プロモフィルター中でソートなし or No.ソート時はoriginalOrder（cards.js記載順）で整列
   if (filters.series.has('プロモ') && (!sortCriteria || sortCriteria === 'number')) {
-    const allCards = Array.from(cardList.querySelectorAll('.card:not([data-cloned])'));
+    const allCards = Array.from(cardList.querySelectorAll('.card'));
     allCards.sort((a, b) => {
       const aVal = parseInt(a.dataset.originalOrder || 0);
       const bVal = parseInt(b.dataset.originalOrder || 0);
@@ -2978,7 +2941,7 @@ const sortAttributes = (attributes) => {
 };
 
 const collectAllAttributes = () => {
-  const cards = document.querySelectorAll('#card-list .card:not([data-cloned])');
+  const cards = document.querySelectorAll('#card-list .card');
   const attributes = new Set();
   cards.forEach((card) => {
     const value = card.dataset.attribute;
@@ -4596,7 +4559,7 @@ const saveFiltersToLocalStorage = () => {
 // ローカルストレージからフィルター条件を読み込む関数
 const loadFiltersFromLocalStorage = () => {
   // ソート復元前に各カードの元の順序を記録（プロモフィルター時の並び順維持のため）
-  document.querySelectorAll('#card-list .card:not([data-cloned])').forEach((card, i) => {
+  document.querySelectorAll('#card-list .card').forEach((card, i) => {
     card.dataset.originalOrder = i;
   });
 
@@ -5785,6 +5748,78 @@ function showDeckModal(scrollPosition) {
   });
 }
 
+// 数字ごと・端末フォントごとに異なる字形の余白を実測し、赤丸の中心へ描画する
+function drawCardCountBadgeNumber(badge, count) {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'card-count-badge-canvas';
+  canvas.setAttribute('aria-hidden', 'true');
+  badge.appendChild(canvas);
+
+  const badgeSize = 28;
+  const pixelRatio = Math.max(1, window.devicePixelRatio || 1);
+  canvas.width = Math.round(badgeSize * pixelRatio);
+  canvas.height = Math.round(badgeSize * pixelRatio);
+
+  const context = canvas.getContext('2d');
+  if (!context) {
+    canvas.remove();
+    badge.textContent = count;
+    return;
+  }
+
+  context.scale(pixelRatio, pixelRatio);
+
+  const style = window.getComputedStyle(badge);
+  context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+  context.fillStyle = style.color;
+
+  const value = String(count);
+  const metrics = context.measureText(value);
+  const hasInkBounds = [
+    metrics.actualBoundingBoxLeft,
+    metrics.actualBoundingBoxRight,
+    metrics.actualBoundingBoxAscent,
+    metrics.actualBoundingBoxDescent
+  ].every(Number.isFinite);
+
+  if (hasInkBounds) {
+    // advance幅やベースラインではなく、実際に見える字形の外接矩形を中央へ置く
+    let x = badgeSize / 2 -
+      (metrics.actualBoundingBoxRight - metrics.actualBoundingBoxLeft) / 2;
+    const y = badgeSize / 2 +
+      (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
+    context.fillText(value, x, y);
+
+    if (value === '1') {
+      // 「1」は外接矩形内でも縦棒側へ白い面積が偏るため、描画結果の重心だけを横中央へ合わせる
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      let alphaTotal = 0;
+      let weightedX = 0;
+      for (let pixelIndex = 0; pixelIndex < pixels.length; pixelIndex += 4) {
+        const alpha = pixels[pixelIndex + 3];
+        if (alpha === 0) continue;
+        const pixelX = (pixelIndex / 4) % canvas.width;
+        alphaTotal += alpha;
+        weightedX += (pixelX + 0.5) * alpha;
+      }
+
+      if (alphaTotal > 0) {
+        const opticalCenterX = weightedX / alphaTotal;
+        x += (canvas.width / 2 - opticalCenterX) / pixelRatio;
+        context.clearRect(0, 0, badgeSize, badgeSize);
+        context.fillText(value, x, y);
+      }
+    }
+  } else {
+    // 古いブラウザー向けフォールバック
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(value, badgeSize / 2, badgeSize / 2);
+  }
+}
+
 // カード一覧の枚数表示を更新する関数
 function updateCardCountBadges() {
   const cardList = document.getElementById('card-list');
@@ -5815,8 +5850,9 @@ function updateCardCountBadges() {
     if (count) {
       const badge = document.createElement('div');
       badge.className = 'card-count-badge';
-      badge.textContent = count;
+      badge.setAttribute('aria-label', `${count}枚採用`);
       card.appendChild(badge);
+      drawCardCountBadgeNumber(badge, count);
     }
   });
 }
