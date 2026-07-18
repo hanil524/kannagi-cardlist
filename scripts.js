@@ -312,6 +312,103 @@ const setupAndroidScrollAssist = () => {
   document.addEventListener('touchcancel', onTouchCancel, { passive: true, capture: true });
 };
 
+// 慣性スクロール中に最初のclickがスクロール停止へ消費される端末でも、
+// フィルター領域の「移動していないタップ」だけはtouchendから直接有効化する。
+let filterTouchActivationInitialized = false;
+
+const setupFilterTouchActivation = () => {
+  if (filterTouchActivationInitialized) return;
+
+  const filterSection = document.getElementById('filter-section');
+  if (!filterSection) return;
+  filterTouchActivationInitialized = true;
+
+  const tapState = {
+    touchId: null,
+    button: null,
+    startX: 0,
+    startY: 0
+  };
+  const movementThreshold = 12;
+  let suppressTrustedClickButton = null;
+  let suppressTrustedClickUntil = 0;
+
+  const clearTapState = () => {
+    tapState.touchId = null;
+    tapState.button = null;
+  };
+
+  const getButton = (target) => (
+    target instanceof Element ? target.closest('button') : null
+  );
+
+  filterSection.addEventListener('touchstart', (event) => {
+    clearTapState();
+    if (event.touches.length !== 1) return;
+
+    const button = getButton(event.target);
+    if (!button || !filterSection.contains(button) || button.disabled) return;
+
+    const touch = event.touches[0];
+    tapState.touchId = touch.identifier;
+    tapState.button = button;
+    tapState.startX = touch.clientX;
+    tapState.startY = touch.clientY;
+  }, { passive: true, capture: true });
+
+  filterSection.addEventListener('touchmove', (event) => {
+    if (tapState.touchId === null) return;
+    const touch = Array.from(event.touches).find((item) => item.identifier === tapState.touchId);
+    if (!touch) {
+      clearTapState();
+      return;
+    }
+
+    const movedX = Math.abs(touch.clientX - tapState.startX);
+    const movedY = Math.abs(touch.clientY - tapState.startY);
+    if (movedX > movementThreshold || movedY > movementThreshold) {
+      clearTapState();
+    }
+  }, { passive: true, capture: true });
+
+  filterSection.addEventListener('touchend', (event) => {
+    if (tapState.touchId === null || !tapState.button) return;
+
+    const touch = Array.from(event.changedTouches).find((item) => item.identifier === tapState.touchId);
+    const button = tapState.button;
+    const startX = tapState.startX;
+    const startY = tapState.startY;
+    clearTapState();
+
+    if (!touch || !button.isConnected || button.disabled || getButton(event.target) !== button) return;
+    const movedX = Math.abs(touch.clientX - startX);
+    const movedY = Math.abs(touch.clientY - startY);
+    if (movedX > movementThreshold || movedY > movementThreshold) return;
+
+    suppressTrustedClickButton = button;
+    if (event.cancelable) event.preventDefault();
+    try {
+      button.click();
+    } finally {
+      // 重いフィルター処理の実行時間を含めず、その完了後から後続clickを抑止する。
+      suppressTrustedClickUntil = Date.now() + 400;
+    }
+  }, { passive: false, capture: true });
+
+  filterSection.addEventListener('touchcancel', clearTapState, { passive: true, capture: true });
+
+  // touchend後に通常のclickも届く端末では、同じ操作の二重実行だけを防ぐ。
+  filterSection.addEventListener('click', (event) => {
+    if (!event.isTrusted || Date.now() > suppressTrustedClickUntil) return;
+    if (getButton(event.target) !== suppressTrustedClickButton) return;
+
+    suppressTrustedClickButton = null;
+    suppressTrustedClickUntil = 0;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+};
+
 // 最初にすべてのグローバル変数を定義
 window.seasonSortOrder = 'asc'; // windowオブジェクトにアタッチして確実にグローバルスコープにする
 let sortCriteria = null;
@@ -1644,6 +1741,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // コスト・力フィルターボタンを自動生成
   buildNumericFilterButtons();
   buildSakkaFilterButtons();
+  setupFilterTouchActivation();
   // モーダル操作中の強制レイアウトを避けるため、スクロールバー幅を先に計測しておく。
   getScrollbarWidth();
 
@@ -2434,8 +2532,22 @@ const updateSortButtonsState = (activeCriteria) => {
 };
 
 // スムーズスクロール用の関数を最初に定義
+let smoothScrollFrame = null;
+
+const cancelSmoothScrollToTop = () => {
+  if (smoothScrollFrame !== null) {
+    cancelAnimationFrame(smoothScrollFrame);
+    smoothScrollFrame = null;
+  }
+};
+
 const smoothScrollToTop = (duration = 500) => {
+  cancelSmoothScrollToTop();
   const startPosition = window.pageYOffset;
+  if (startPosition <= 0 || duration <= 0) {
+    window.scrollTo(0, 0);
+    return;
+  }
   const startTime = performance.now();
 
   const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
@@ -2447,12 +2559,19 @@ const smoothScrollToTop = (duration = 500) => {
     window.scrollTo(0, startPosition * (1 - easeInOutQuad(progress)));
 
     if (progress < 1) {
-      requestAnimationFrame(animation);
+      smoothScrollFrame = requestAnimationFrame(animation);
+    } else {
+      smoothScrollFrame = null;
     }
   };
 
-  requestAnimationFrame(animation);
+  smoothScrollFrame = requestAnimationFrame(animation);
 };
+
+// 自動移動より次のユーザー操作を優先する。
+document.addEventListener('touchstart', cancelSmoothScrollToTop, { passive: true, capture: true });
+document.addEventListener('pointerdown', cancelSmoothScrollToTop, { passive: true, capture: true });
+window.addEventListener('wheel', cancelSmoothScrollToTop, { passive: true, capture: true });
 
 // TOPボタンのクリックハンドラ
 window.scrollToTop = () => {
