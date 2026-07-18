@@ -6113,35 +6113,73 @@ header::after,
   }
 }
 
-/* ---------- 6. 選択中フィルタ表示（ガラスパネル＋ピルチップ） ---------- */
+/* ---------- 6. 選択中フィルタ表示（ガラスパネル＋整列タイル） ---------- */
 .active-filters-pc,
 .active-filters-mobile {
   background-color: rgba(12, 12, 16, 0.55);
-  border-radius: 10px;
+  border-radius: 8px;
+  padding: 6px;
+  gap: 4px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
+.active-filter-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .active-filters-pc .filter-item,
 .active-filters-mobile .filter-item {
-  background-color: rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 5px 9px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  background: linear-gradient(180deg, rgba(70, 70, 77, 0.82), rgba(47, 47, 54, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    0 2px 6px rgba(0, 0, 0, 0.35);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .active-filters-pc .filter-item:hover,
   .active-filters-mobile .filter-item:hover {
-    background-color: rgba(180, 50, 42, 0.78);
+    background: linear-gradient(180deg, rgba(150, 55, 49, 0.88), rgba(112, 37, 34, 0.92));
+    border-color: rgba(255, 126, 116, 0.42);
     box-shadow:
-      inset 0 0 0 1px rgba(255, 120, 110, 0.45),
-      0 2px 10px rgba(150, 30, 25, 0.45);
+      inset 0 1px 0 rgba(255, 190, 180, 0.12),
+      0 2px 8px rgba(130, 30, 26, 0.38);
   }
+}
+
+.active-filters-pc .filter-item:active,
+.active-filters-mobile .filter-item:active {
+  transform: translateY(1px);
+  background: linear-gradient(180deg, rgba(125, 43, 39, 0.92), rgba(92, 29, 27, 0.94));
 }
 
 /* ---------- 7. 検索結果枚数（数字を深紅アクセントに） ---------- */
@@ -6255,6 +6293,95 @@ header::after,
 
 .details-item .item-description {
   color: rgba(255, 255, 255, 0.85);
+}
+
+/* シリーズ名は操作ボタンではなく、発売情報のラベルとして見せる */
+#series-details .item-name {
+  display: inline-block;
+  padding: 0 0 0 8px;
+  margin-right: 8px;
+  border-left: 3px solid rgba(207, 70, 70, 0.72);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #efaaa5;
+  line-height: 1.25;
+}
+
+@media (max-width: 768px) {
+  /* 空の詳細欄の余白を消し、表示中の行だけをコンパクトに並べる */
+  #filter-details {
+    padding: 5px 7px;
+  }
+
+  #filter-details .details-section {
+    margin-bottom: 0;
+  }
+
+  #filter-details .details-section:empty {
+    display: none;
+  }
+
+  #filter-details .details-section:not(:empty) ~ .details-section:not(:empty) {
+    margin-top: 8px;
+  }
+
+  /* シリーズごとに縦一列。横スクロールは各行の長文だけに限定する */
+  #series-details {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  #series-details .details-item {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  #series-details .series-detail-scroll {
+    min-width: 0;
+    padding: 5px 8px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  #series-details .details-item.is-scrollable .series-detail-scroll {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #series-details .details-item.is-scrollable .series-detail-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 長文のときだけ、続きがある側を広めの影で知らせる */
+  #series-details .details-item.can-scroll-left::before,
+  #series-details .details-item.can-scroll-right::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    width: 48px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #series-details .details-item.can-scroll-left::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(26, 26, 33, 0.98) 0%, rgba(26, 26, 33, 0.78) 38%, rgba(26, 26, 33, 0) 100%);
+  }
+
+  #series-details .details-item.can-scroll-right::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(26, 26, 33, 0.98) 0%, rgba(26, 26, 33, 0.78) 38%, rgba(26, 26, 33, 0) 100%);
+  }
 }
 
 /* デッキ画像モーダルの入れ物 */

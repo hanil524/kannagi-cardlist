@@ -4330,6 +4330,80 @@ document.querySelectorAll('.card-image-container').forEach((container) => {
 // フィルターの該当表示
 
 let activeFiltersResizeHandler = null;
+let activeFiltersLayoutFrame = null;
+
+function scheduleActiveFilterRows(container, force = false) {
+  if (!container || container.style.display === 'none') return;
+
+  const containerWidth = Math.round(container.getBoundingClientRect().width);
+  if (!force && Number(container.dataset.layoutWidth) === containerWidth) return;
+
+  if (activeFiltersLayoutFrame) {
+    cancelAnimationFrame(activeFiltersLayoutFrame);
+  }
+  activeFiltersLayoutFrame = requestAnimationFrame(() => {
+    activeFiltersLayoutFrame = null;
+    if (container.style.display === 'none') return;
+
+    const buttons = Array.from(container.querySelectorAll('.filter-item'));
+    container.querySelectorAll('.active-filter-row').forEach(row => row.remove());
+    buttons.forEach(button => container.appendChild(button));
+
+    if (buttons.length === 0) {
+      container.dataset.layoutWidth = String(containerWidth);
+      return;
+    }
+
+    const containerStyle = getComputedStyle(container);
+    const availableWidth = container.clientWidth
+      - parseFloat(containerStyle.paddingLeft)
+      - parseFloat(containerStyle.paddingRight);
+    const gap = parseFloat(containerStyle.columnGap) || 0;
+    const widths = buttons.map(button => button.getBoundingClientRect().width);
+    const best = new Array(buttons.length + 1);
+    best[buttons.length] = { rowCount: 0, balanceCost: 0, breaks: [] };
+
+    // 行数を最小にしたうえで、各行の空き幅の差が小さくなる分け方を選ぶ。
+    for (let start = buttons.length - 1; start >= 0; start--) {
+      let rowWidth = 0;
+      let bestChoice = null;
+      for (let end = start; end < buttons.length; end++) {
+        rowWidth += widths[end] + (end > start ? gap : 0);
+        if (rowWidth > availableWidth + 0.5) break;
+
+        const next = best[end + 1];
+        if (!next) continue;
+        const choice = {
+          rowCount: next.rowCount + 1,
+          balanceCost: next.balanceCost + Math.pow(availableWidth - rowWidth, 2),
+          breaks: [end + 1, ...next.breaks]
+        };
+        if (!bestChoice
+          || choice.rowCount < bestChoice.rowCount
+          || (choice.rowCount === bestChoice.rowCount && choice.balanceCost < bestChoice.balanceCost)) {
+          bestChoice = choice;
+        }
+      }
+
+      // max-widthで収まる想定だが、端数差が出ても必ず1件は配置する。
+      best[start] = bestChoice || {
+        rowCount: best[start + 1].rowCount + 1,
+        balanceCost: best[start + 1].balanceCost,
+        breaks: [start + 1, ...best[start + 1].breaks]
+      };
+    }
+
+    let start = 0;
+    best[0].breaks.forEach(end => {
+      const row = document.createElement('div');
+      row.className = 'active-filter-row';
+      buttons.slice(start, end).forEach(button => row.appendChild(button));
+      container.appendChild(row);
+      start = end;
+    });
+    container.dataset.layoutWidth = String(Math.round(container.getBoundingClientRect().width));
+  });
+}
 
 function updateActiveFilters() {
   const activeFilters = [];
@@ -4378,23 +4452,24 @@ function updateActiveFilters() {
   pcElement.innerHTML = filterDisplay;
   mobileElement.innerHTML = filterDisplay;
 
-  function setDisplayBasedOnScreenSize() {
+  function setDisplayBasedOnScreenSize(forceLayout = false) {
     const isMobile = window.innerWidth <= 768;
     if (activeFilters.length > 0) {
       pcElement.style.display = isMobile ? 'none' : 'flex';
       mobileElement.style.display = isMobile ? 'flex' : 'none';
+      scheduleActiveFilterRows(isMobile ? mobileElement : pcElement, forceLayout);
     } else {
       pcElement.style.display = 'none';
       mobileElement.style.display = 'none';
     }
   }
 
-  setDisplayBasedOnScreenSize();
+  setDisplayBasedOnScreenSize(true);
 
   if (activeFiltersResizeHandler) {
     window.removeEventListener('resize', activeFiltersResizeHandler);
   }
-  activeFiltersResizeHandler = setDisplayBasedOnScreenSize;
+  activeFiltersResizeHandler = () => setDisplayBasedOnScreenSize(false);
   window.addEventListener('resize', activeFiltersResizeHandler);
 }
 
@@ -7996,6 +8071,8 @@ function updateCardCount() {
   }
 }
 
+let seriesDetailsResizeObserver = null;
+
 // フィルター詳細表示を更新する関数
 function updateFilterDetails() {
   const keywordDetailsElement = document.getElementById('keyword-details');
@@ -8042,13 +8119,17 @@ function updateFilterDetails() {
 
   // シリーズ詳細を作成
   seriesDetailsElement.innerHTML = '';
+  seriesDetailsElement.classList.remove('is-scrollable', 'can-scroll-left', 'can-scroll-right');
   selectedSeries.forEach(series => {
     const seriesButton = document.querySelector(`#series button[onclick*="toggleFilterCard('series', '${series}')"]`);
     if (seriesButton) {
       const tooltip = seriesButton.getAttribute('data-tooltip') || '';
       const detailItem = document.createElement('div');
       detailItem.className = 'details-item';
-      detailItem.innerHTML = `<span class="item-name">${series}</span><span class="item-description">${tooltip}</span>`;
+      const detailTrack = document.createElement('div');
+      detailTrack.className = 'series-detail-scroll';
+      detailTrack.innerHTML = `<span class="item-name">${series}</span><span class="item-description">${tooltip}</span>`;
+      detailItem.appendChild(detailTrack);
       seriesDetailsElement.appendChild(detailItem);
     }
   });
@@ -8071,6 +8152,48 @@ function updateFilterDetails() {
   // コンテナの表示・非表示を制御（実際に中身があるセクションのみカウント）
   const hasContent = keywordDetailsElement.children.length > 0 || roleDetailsElement.children.length > 0 || seriesDetailsElement.children.length > 0 || rareDetailsElement.children.length > 0;
   containerElement.style.display = hasContent ? 'block' : 'none';
+
+  if (seriesDetailsResizeObserver) {
+    seriesDetailsResizeObserver.disconnect();
+    seriesDetailsResizeObserver = null;
+  }
+
+  const updateSeriesScrollState = (detailTrack) => {
+    const detailItem = detailTrack.closest('.details-item');
+    if (!detailItem) return;
+    const canScroll = window.innerWidth <= 768 &&
+      detailTrack.isConnected &&
+      detailTrack.scrollWidth > detailTrack.clientWidth + 1;
+    const maxScrollLeft = canScroll
+      ? detailTrack.scrollWidth - detailTrack.clientWidth
+      : 0;
+
+    detailItem.classList.toggle('is-scrollable', canScroll);
+    detailItem.classList.toggle('can-scroll-left', canScroll && detailTrack.scrollLeft > 1);
+    detailItem.classList.toggle('can-scroll-right', canScroll && detailTrack.scrollLeft < maxScrollLeft - 1);
+    if (canScroll) {
+      const seriesName = detailTrack.querySelector('.item-name')?.textContent || 'シリーズ';
+      detailTrack.tabIndex = 0;
+      detailTrack.setAttribute('role', 'region');
+      detailTrack.setAttribute('aria-label', `${seriesName}の発売情報。横方向にスクロールできます`);
+    } else {
+      detailTrack.removeAttribute('tabindex');
+      detailTrack.removeAttribute('role');
+      detailTrack.removeAttribute('aria-label');
+    }
+  };
+
+  const seriesDetailTracks = Array.from(seriesDetailsElement.querySelectorAll('.series-detail-scroll'));
+  if (seriesDetailTracks.length > 0 && typeof ResizeObserver === 'function') {
+    seriesDetailsResizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => updateSeriesScrollState(entry.target));
+    });
+  }
+  seriesDetailTracks.forEach(detailTrack => {
+    detailTrack.addEventListener('scroll', () => updateSeriesScrollState(detailTrack), { passive: true });
+    requestAnimationFrame(() => updateSeriesScrollState(detailTrack));
+    seriesDetailsResizeObserver?.observe(detailTrack);
+  });
 }
 
 // =====================
