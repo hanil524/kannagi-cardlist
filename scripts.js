@@ -2997,10 +2997,12 @@ const collectAllAttributes = () => {
 // ===== 属性「全て表示」の五十音グループ化 =====
 // cards.js から自動取得した属性は漢字の読みが特殊でコード順ソートでは
 // バラバラに並ぶため、読み仮名テーブルで五十音の行ごとに分類する。
-// 新しい属性が増えたらここに読みを追加する（ひらがな・カタカナ属性と
-// 英数字始まりの属性は自動判定されるので追加不要。未登録の漢字属性は
-// 末尾の「その他」に表示されるため、追加漏れにすぐ気付ける）。
+// 新しい属性が増えたらここに読みを追加する（ひらがな・カタカナ属性は
+// 自動判定。英数字始まりは常に「英数」に表示し、ここに読みを登録すると
+// 英数エリア内でもその読み順に並ぶ。未登録の漢字属性は末尾の
+// 「その他」に表示されるため、追加漏れにすぐ気付ける）。
 const ATTRIBUTE_READINGS = {
+  'WBD': 'うぇんずでー','SSS': 'すけありーすぽっとしすたーず','UMA': 'ゆーま',
   '悪夢': 'あくむ', '悪魔': 'あくま', '雨': 'あめ', '戦': 'いくさ', '祈': 'いのり',
   '海': 'うみ', '噂': 'うわさ', '園': 'その', '御守り': 'おまもり', '怨念': 'おんねん',
   '怨霊': 'おんりょう', '鬼': 'おに',
@@ -3121,18 +3123,18 @@ const ATTRIBUTE_GYO_TABLE = [
 ];
 
 // 全属性を「英数 → あ〜わ行 → その他」のグループに分類し、
-// 各グループ内は読み仮名の五十音順に並べる
+// 英数を含む各グループ内を登録済みの読み仮名順に並べる
 const groupAttributesByReading = (attributes) => {
   const alnumGroup = { label: '英数', items: [] };
   const gyoGroups = ATTRIBUTE_GYO_TABLE.map(([label]) => ({ label: `${label}行`, items: [] }));
   const otherGroup = { label: 'その他', items: [] };
 
   attributes.forEach((attr) => {
+    const reading = getAttributeReading(attr);
     if (/^[0-9A-Za-z]/.test(attr)) {
-      alnumGroup.items.push({ attr, reading: attr.toLowerCase() });
+      alnumGroup.items.push({ attr, reading: reading || attr.toLowerCase() });
       return;
     }
-    const reading = getAttributeReading(attr);
     if (!reading) {
       otherGroup.items.push({ attr, reading: attr });
       return;
@@ -3316,6 +3318,21 @@ const openModal = (filterId) => {
           count.textContent = `計${filterElement.querySelectorAll(':scope > button.sakka-filter-option').length}名`;
 
           category.append(title, count);
+        } else if (filterId === 'series') {
+          category.classList.add('series-main-category');
+
+          const title = document.createElement('span');
+          title.className = 'series-category-title';
+          title.textContent = element.textContent;
+
+          const seriesCount = Array.from(filterElement.querySelectorAll(':scope > button'))
+            .filter((button) => button.textContent.trim() !== 'プロモ')
+            .length;
+          const count = document.createElement('span');
+          count.className = 'series-count';
+          count.textContent = `全${seriesCount}種類`;
+
+          category.append(title, count);
         } else {
           category.textContent = element.textContent;
         }
@@ -3365,12 +3382,15 @@ const openModal = (filterId) => {
 
     const allAttributes = collectAllAttributes();
     const totalCount = allAttributes.length;
+    const displayedCount = attributeEffectTargetOnly
+      ? filterElement.querySelectorAll(':scope > button').length
+      : totalCount;
     const header = document.createElement('div');
     header.className = 'attribute-modal-header';
 
     const count = document.createElement('span');
     count.className = 'attribute-modal-count';
-    count.textContent = `全${totalCount}種類`;
+    count.textContent = `全${displayedCount}種類`;
 
     const toggle = document.createElement('button');
     toggle.type = 'button';

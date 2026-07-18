@@ -5592,18 +5592,21 @@ body.modal-open {
   margin-top: 0;
 }
 
-/* 作家一覧の先頭見出し：タイトルは中央のまま、人数を右側に表示 */
-.filter-category.sakka-main-category {
+/* 一覧の先頭見出し：タイトルは中央のまま、件数を右側に表示 */
+.filter-category.sakka-main-category,
+.filter-category.series-main-category {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
 }
 
-.sakka-main-category .sakka-category-title {
+.sakka-main-category .sakka-category-title,
+.series-main-category .series-category-title {
   grid-column: 2;
 }
 
-.sakka-main-category .sakka-designer-count {
+.sakka-main-category .sakka-designer-count,
+.series-main-category .series-count {
   grid-column: 3;
   justify-self: end;
   margin-right: 8px;
