@@ -14899,6 +14899,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2422"
+  data-name="手長足長(てながあしなが)"
+  data-cost="0"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 海"
+  data-keyword=""
+  data-role="常時 魂貫通"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2424"
   data-name="ワニ男(わにおとこ)"
   data-cost="3"
@@ -15076,6 +15093,23 @@ data-sakka="marukko"
   data-sakka="Bclass"
 >
   <img data-src="images/card_16_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2445"
+  data-name="羊男(ひつじおとこ)"
+  data-cost="4"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="UMA 悪魔"
+  data-keyword=""
+  data-role="召喚時 魂戻し 追加行動"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (50).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"

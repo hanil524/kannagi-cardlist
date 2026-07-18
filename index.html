@@ -81,7 +81,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no" />
   <title>巫カードフィルター | 巫KANNAGIカードゲーム</title>
   <meta name="description" content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
-  <link rel="stylesheet" href="styles.css?v=20260718-sakka-count" />
+  <link rel="stylesheet" href="styles.css?v=20260718-filter-modal-rich3" />
   <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
   <!-- Windows タイル -->
   <meta name="msapplication-TileImage" content="images/icon.jpg" />
@@ -90,7 +90,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="images/icon.png" />
   <!-- Android Chrome / 汎用 -->
   <link rel="icon" type="image/png" sizes="192x192" href="images/icon.png" />
-  <script src="scripts.js?v=20260718-filter-modal-speed4"></script>
+  <script src="scripts.js?v=20260718-filter-modal-rich-center"></script>
   <script>
     // Service Worker登録（キャッシュでリピーターの読み込みを高速化）
     if ('serviceWorker' in navigator) {
@@ -462,7 +462,11 @@
 
     <div id="modal" class="modal" onclick="closeModalOnClick(event)">
       <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="filter-modal-header">
+          <button type="button" class="close" onclick="closeModal()" aria-label="モーダルを閉じる">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div id="modal-buttons" class="modal-buttons"></div>
       </div>
     </div>
@@ -596,6 +600,7 @@
         <button onclick="toggleFilterCard('attribute', 'SSS')">SSS</button>
         <button onclick="toggleFilterCard('attribute', 'UMA')">UMA</button>
       <span class="filter-category">あ</span>
+      <button onclick="toggleFilterCard('attribute', '悪魔')">悪魔</button>
       <button onclick="toggleFilterCard('attribute', '噂')">噂</button>
       <button onclick="toggleFilterCard('attribute', '怨霊')">怨霊</button>
       <button onclick="toggleFilterCard('attribute', '鬼')">鬼</button>

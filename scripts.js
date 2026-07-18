@@ -3301,6 +3301,7 @@ const openModal = (filterId) => {
 
   scrollPosition = window.pageYOffset;
   const scrollbarWidth = getScrollbarWidth();
+  modal.style.setProperty('--filter-modal-scrollbar-width', `${scrollbarWidth}px`);
 
   modal.style.display = 'block';
   document.body.style.paddingRight = `${scrollbarWidth}px`;
