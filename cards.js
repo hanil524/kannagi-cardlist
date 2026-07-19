@@ -15204,6 +15204,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2472"
+  data-name="口裂け女（くちさけおんな）"
+  data-cost="4"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 噂"
+  data-keyword=""
+  data-role="除外加速"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2476"
   data-name="酒呑童子（しゅてんどうじ）"
   data-cost="7"
