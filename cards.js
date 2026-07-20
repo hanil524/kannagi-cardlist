@@ -15058,6 +15058,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2448"
+  data-name="ひでり神(ひでりがみ)"
+  data-cost="5"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 神"
+  data-keyword=""
+  data-role="召喚時 ハンデス"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2450"
   data-name="あなたのよこで"
   data-cost="9"
@@ -15169,6 +15186,23 @@ data-sakka="marukko"
   data-sakka="INO"
 >
   <img data-src="images/card_16_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2467"
+  data-name="空魚(すかいふぃっしゅ)"
+  data-cost="5"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="UMA 牢獄"
+  data-keyword=""
+  data-role="常時 ロック"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (52).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
