@@ -15008,6 +15008,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2438"
+  data-name="中野友加里(なかのゆかり)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="罪"
+  data-keyword=""
+  data-role="公開ドロー ドロー 直接ダメ 札ダメ"
+  data-sakka="中野友加里"
+>
+  <img data-src="images/card_16_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2440"
   data-name="八尺様（はっしゃくさま）"
   data-cost="8"
@@ -15120,6 +15137,23 @@ data-sakka="marukko"
   data-role="手札公開 ハンデス"
 >
   <img data-src="images/card_16_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2456"
+  data-name="世界ミステリーch(せかいみすてりーch)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="病"
+  data-keyword=""
+  data-role="特殊召喚 ドロー"
+  data-sakka="世界ミステリーch"
+>
+  <img data-src="images/card_16_p (58).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15285,6 +15319,23 @@ data-sakka="marukko"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2477"
+  data-name="MATT(まっと)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="烏"
+  data-keyword=""
+  data-role="サーチ"
+  data-sakka="MATT"
+>
+  <img data-src="images/card_16_p (56).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15462,7 +15513,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="動物 災害"
   data-keyword=""
-  data-role="攻撃時 直接ダメ 札除去"
+  data-role="攻撃時 直接ダメ 札ダメ"
 >
   <img data-src="images/card_17_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -15833,7 +15884,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="霊能者 亡者"
   data-keyword="霊視"
-  data-role="召喚時 札除去 直接ダメ "
+  data-role="召喚時 札ダメ 直接ダメ "
   data-sakka="一樂神無"
 >
   <img data-src="images/card_17_p (44).jpg" src="placeholder.jpg" decoding="async" />
@@ -15996,7 +16047,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="噂"
   data-keyword=""
-  data-role="札除去 自傷ダメ"
+  data-role="札ダメ 自傷ダメ"
   data-sakka="ふったー"
 >
   <img data-src="images/card_17_p (36).jpg" src="placeholder.jpg" decoding="async" />
@@ -16013,7 +16064,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="蟲 幻覚"
   data-keyword=""
-  data-role="札除去 直接ダメ "
+  data-role="札ダメ 直接ダメ "
   data-sakka="はん"
 >
   <img data-src="images/card_17_p (26).jpg" src="placeholder.jpg" decoding="async" />
@@ -16030,7 +16081,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="蟲 病"
   data-keyword=""
-  data-role="札除去 直接ダメ "
+  data-role="札ダメ 直接ダメ "
 >
   <img data-src="images/card_17_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
