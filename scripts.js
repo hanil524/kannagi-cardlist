@@ -58,6 +58,10 @@ const findLastDeckLimitGroupCard = (cards, cardName) => {
   return null;
 };
 
+// デッキ画面の表示カードと、deckBuilder.deck 内の1枚の実体を対応付ける。
+// data-* には識別子を足さないため、保存データや共有コードには影響しない。
+const deckCardSourceMap = new WeakMap();
+
 const hasVisibleModal = () => {
   const modalIds = ['modal', 'image-modal', 'deck-modal', 'deck-list-modal', 'deck-share-modal', 'deck-backup-modal'];
   const modalOpen = modalIds.some((id) => {
@@ -2228,16 +2232,20 @@ document.addEventListener('DOMContentLoaded', () => {
           currentCard.style.transition = '';
           currentCard.style.opacity = '1';
           currentCard.style.transform = '';
-          const cardData = currentCard.cloneNode(true);
+          const sourceCard = deckCardSourceMap.get(currentCard);
+          const cardData = (sourceCard || currentCard).cloneNode(true);
           _lastShakeTarget = currentCard;
-          deckBuilder.addCard(cardData);
+          deckBuilder.addCard(cardData, sourceCard);
         } else {
           // 下スワイプでカード削除
           currentCard.style.transition = 'all 0.3s';
           currentCard.style.opacity = '1';
           currentCard.style.transform = '';
+          const sourceCard = deckCardSourceMap.get(currentCard);
           const cardNumber = currentCard.getAttribute('data-number');
-          if (cardNumber) {
+          if (sourceCard) {
+            deckBuilder.removeCardInstance(sourceCard);
+          } else if (cardNumber) {
             deckBuilder.removeCard(null, cardNumber);
           }
         }
@@ -5027,6 +5035,18 @@ const deckBuilder = {
     }
   },
 
+  // デッキ画面で操作した「その1枚」を、番号検索ではなく実体で削除
+  removeCardInstance(card) {
+    const index = this.deck.indexOf(card);
+    if (index === -1) return false;
+
+    this.deck.splice(index, 1);
+    this.updateDisplay();
+    this.updateDeckCount();
+    deckManager.saveDeck(deckManager.currentDeckId);
+    return true;
+  },
+
   // デッキビルダーのupdateDisplay関数を更新
   updateDisplay() {
     const display = document.getElementById('deck-display');
@@ -5091,6 +5111,7 @@ const deckBuilder = {
   createDeckCard(card) {
     const cardElement = document.createElement('div');
     cardElement.className = 'deck-card';
+    deckCardSourceMap.set(cardElement, card);
 
     // データ属性を設定
     Object.keys(card.dataset).forEach((key) => {
@@ -5114,14 +5135,14 @@ const deckBuilder = {
     addButton.onclick = (e) => {
       e.stopPropagation();
       _lastShakeTarget = addButton;
-      this.addCard(card.cloneNode(true));
+      this.addCard(card.cloneNode(true), card);
     };
 
     const removeButton = document.createElement('button');
     removeButton.className = 'card-remove-button';
     removeButton.onclick = (e) => {
       e.stopPropagation();
-      this.removeCard(null, card.dataset.number);
+      this.removeCardInstance(card);
     };
 
     buttons.appendChild(addButton);
@@ -5717,8 +5738,7 @@ deckBuilder.getMaxAllowed = function (cardName) {
 
 // 4) addCard の上書き（上限判定を一本化）
 (function overrideAddCard() {
-  const originalAddCard = deckBuilder.addCard;
-  deckBuilder.addCard = function (card) {
+  deckBuilder.addCard = function (card, insertAfterCard = null) {
     if (!card || !card.dataset) return false;
     const cardName = card.dataset.name;
     const sameNameCount = countDeckLimitGroup(this.deck, cardName);
@@ -5729,8 +5749,14 @@ deckBuilder.getMaxAllowed = function (cardName) {
       return false;
     }
 
-    // 追加処理は元実装と同等
-    this.deck.push(card);
+    // デッキ画面の特定カードから増やした場合だけ、そのカードの直後へ追加。
+    // 一覧・画像モーダル等の既存経路は従来どおり末尾へ追加する。
+    const referenceIndex = insertAfterCard ? this.deck.indexOf(insertAfterCard) : -1;
+    if (referenceIndex >= 0) {
+      this.deck.splice(referenceIndex + 1, 0, card);
+    } else {
+      this.deck.push(card);
+    }
     this.updateDisplay();
     this.updateDeckCount();
     deckManager.saveDeck(deckManager.currentDeckId);
