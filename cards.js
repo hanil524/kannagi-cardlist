@@ -15172,6 +15172,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2462"
+  data-name="尻目(しりめ)"
+  data-cost="1"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 視線"
+  data-keyword=""
+  data-role="召喚時 サーチ 底送り"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2464"
   data-name="闇賭博居住群（やみとばくきょじゅうぐん）"
   data-cost="4"
@@ -15284,6 +15301,23 @@ data-sakka="marukko"
   data-role="ランデス"
 >
   <img data-src="images/card_16_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2483"
+  data-name="ムビエル・ムビエル・ムビエル(むびえる・むびえる・むびえる)"
+  data-cost="3"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="龍 UMA 侵食"
+  data-keyword=""
+  data-role="バニラ"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
