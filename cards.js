@@ -16098,6 +16098,7 @@ data-sakka="marukko"
   data-attribute="罪"
   data-keyword=""
   data-role="ランデス"
+  data-sakka="SAITO"
 >
   <img data-src="images/card_17_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
