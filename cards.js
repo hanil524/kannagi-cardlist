@@ -8616,6 +8616,23 @@ data-sakka="ななえもん"
 </div>
 <div
 class="card"
+data-number="1687"
+data-name="岩砕鬼（いわくだき）"
+data-cost="0"
+data-power="0"
+data-series="怪談師二章"
+data-type="怪異札"
+data-season="冬"
+data-rare="エキスパンション"
+data-attribute="鬼 石像 妖怪"
+data-keyword="妬み"
+data-role="サーチ"
+data-sakka="倭identity"
+>
+<img data-src="images/card_10_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+class="card"
 data-number="1688"
 data-name="半魚人（はんぎょじん）"
 data-cost="0"
@@ -8630,23 +8647,6 @@ data-role="「起き」 追加行動 特殊召喚"
 data-sakka="マグロ人間"
 >
 <img data-src="images/card_10_p (52).jpg" src="placeholder.jpg" decoding="async" />
-</div>
-<div
-class="card"
-data-number="1689"
-data-name="岩砕鬼（いわくだき）"
-data-cost="0"
-data-power="0"
-data-series="怪談師二章"
-data-type="怪異札"
-data-season="冬"
-data-rare="エキスパンション"
-data-attribute="鬼 石像 妖怪"
-data-keyword="妬み"
-data-role="サーチ"
-data-sakka="倭identity"
->
-<img data-src="images/card_10_p (19).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
 class="card"
@@ -8855,7 +8855,7 @@ data-sakka="ヲヲヲ"
 </div>
 <div
 class="card"
-data-number="1700"
+data-number="1701"
 data-name="合戦場（がっせんば）"
 data-cost="3"
 data-power="3"
@@ -17992,7 +17992,7 @@ data-attribute="妖怪 幽霊"
 </div>
 <div
   class="card"
-  data-number="10073"
+  data-number="10077"
   data-name="もっとこうして(「古書の怪」)"
   data-cost="3"
   data-power="0"
