@@ -6497,13 +6497,21 @@ const deckManager = {
   saveDeck(deckId) {
     const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
     if (button) {
-      this.decks[deckId] = {
+      const savedThumbnail = this.decks[deckId]?.thumbnail;
+      const savedDeck = {
         name: button.textContent,
         cards: [...deckBuilder.deck].map((card) => ({
           dataset: { ...card.dataset },
           src: card.querySelector('img')?.src
         }))
       };
+      const thumbnailStillExists = savedThumbnail && savedDeck.cards.some((card) => (
+        normalizeBackupImagePath(card.src) === normalizeBackupImagePath(savedThumbnail)
+      ));
+      if (thumbnailStillExists) {
+        savedDeck.thumbnail = savedThumbnail;
+      }
+      this.decks[deckId] = savedDeck;
       this.saveToLocalStorage();
     }
   },
@@ -8084,6 +8092,7 @@ function resetSpecificDeck(deckId, confirmed) {
       // デッキ内容をリセット
       deckManager.decks[deckId].cards = [];
       deckManager.decks[deckId].name = `デッキ${deckId}`;
+      delete deckManager.decks[deckId].thumbnail;
 
       // デッキ名ボタンのテキストを更新
       const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
@@ -8466,6 +8475,15 @@ async function sha256Hex(text) {
     .join('');
 }
 
+async function sha256Bytes(bytes) {
+  const cryptoObj = (window.crypto || self.crypto);
+  if (!cryptoObj || !cryptoObj.subtle) {
+    throw new Error('SHA-256が利用できません');
+  }
+  const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  return new Uint8Array(await cryptoObj.subtle.digest('SHA-256', view));
+}
+
 function b64urlEncode(str) {
   const b64 = btoa(str);
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
@@ -8516,6 +8534,11 @@ async function codeToMap(code) {
   try {
     const raw0 = normalizeWholeCode(code);
 
+    // v7: 固定カード辞書 + 組合せ順位（短縮バイナリ）
+    if (/^7[A-Za-z0-9_-]+$/.test(raw0)) {
+      return await deckCodeV7ToMap(raw0);
+    }
+
     // v6: 5|checksum|base64url(VARINT binary)
     if (/^5\|/.test(raw0)) {
       const firstBar = raw0.indexOf('|');
@@ -8529,8 +8552,8 @@ async function codeToMap(code) {
       const bytes = v6_binToBytes(b64urlDecode(payload));
       let i = 0, prev = 0; const map = {};
       while (i < bytes.length) {
-        const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
-        const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
+        const d = v6_varintDecode(bytes, i); if (d.value === null) throw new Error('Bad data'); i = d.next;
+        const c = v6_varintDecode(bytes, i); if (c.value === null) throw new Error('Bad data'); i = c.next;
         const id = prev + d.value; prev = id;
         if (c.value > 0) map[String(id)] = (map[String(id)] || 0) + c.value;
       }
@@ -8553,10 +8576,20 @@ async function codeToMap(code) {
       }
       return map;
     }
-    const firstBar = raw0.indexOf("|");
+
+    // 初期版では「v1/v2コード全文をBase64URL化」した形式も配布していた。
+    let legacyRaw = raw0;
+    if (!legacyRaw.includes('|') && /^[A-Za-z0-9_-]+$/.test(legacyRaw)) {
+      try {
+        const decoded = normalizeWholeCode(b64urlDecode(legacyRaw));
+        if (/^v[12]\|/i.test(decoded)) legacyRaw = decoded;
+      } catch (_) { }
+    }
+
+    const firstBar = legacyRaw.indexOf("|");
     if (firstBar <= 0) throw new Error("Bad format");
-    const versionRaw0 = raw0.slice(0, firstBar).toLowerCase(); const versionRaw = versionRaw0.startsWith('v') ? versionRaw0.slice(1) : versionRaw0;
-    const rest = raw0.slice(firstBar + 1);
+    const versionRaw0 = legacyRaw.slice(0, firstBar).toLowerCase(); const versionRaw = versionRaw0.startsWith('v') ? versionRaw0.slice(1) : versionRaw0;
+    const rest = legacyRaw.slice(firstBar + 1);
     const sep = rest.indexOf('|');
     if (sep < 0) throw new Error('Bad format');
     const checksumRaw = rest.slice(0, sep);
@@ -8571,7 +8604,7 @@ async function codeToMap(code) {
         const [idStr0, cntStr0] = pair.split(":");
         if (!idStr0 || !cntStr0) return;
         let idStr; let n;
-        if (versionRaw === "v1") {
+        if (versionRaw === "1") {
           idStr = idStr0;
           n = parseInt(cntStr0, 10) || 0;
         } else {
@@ -8819,8 +8852,7 @@ function openDeckShareModal() {
   (async () => {
     try {
       const map = currentDeckToMap();
-      const prefer = localStorage.getItem('deckCodeVersion') || 'v6';
-      const code = (prefer.toLowerCase() === 'v6' || prefer === '5') ? await deckToCodeV6(map) : (prefer.toLowerCase() === 'v5' ? await deckToCodeV5(map) : await deckToCodeFromMap(map));
+      const code = await deckToCodeV7(map);
       const display = modal.querySelector('#deck-code-display');
       if (display) display.textContent = code;
     } catch (e) {
@@ -8878,6 +8910,351 @@ function v6_varintDecode(bytes, pos) {
 }
 function v6_bytesToBin(arr) { let s = ''; for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i] & 0xff); return s; }
 function v6_binToBytes(str) { const out = new Uint8Array(str.length); for (let i = 0; i < str.length; i++) out[i] = str.charCodeAt(i) & 0xff; return out; }
+
+// ===== v7: 固定カード辞書 + 組合せ順位（v6より短い） =====
+// この範囲表はv7公開時点のカード番号と順位を固定する互換データ。
+// cards.jsの並び替えやカード追加に合わせて変更しないこと。未収録番号はraw領域で保存する。
+const DECK_CODE_V7_CATALOG_RANGES = '1-53,101-190,201-292,1003,1005,1101-1112,1201-1220,1301-1390,1401-1430,1501-1547,1601-1720,1801-1840,1901-1926,2000-2012,2014-2065,2101-2220,2301-2388,2403-2405,2407-2408,2410-2414,2421-2422,2424-2425,2427-2428,2430-2431,2433,2435,2437-2438,2440,2442,2445,2448,2450-2451,2453,2456-2457,2460-2462,2464,2467-2468,2470,2472,2476-2477,2479,2483,2485,2490,2501-2522,2601-2622,2701-2722,2801-2822,10001,10006-10047,10051,10055,10061-10077';
+const DECK_CODE_V7_CATALOG_SIZE = 1090;
+const DECK_CODE_V7_CATALOG_FINGERPRINT = 0x8fa93167;
+const DECK_CODE_V7_RAW_OFFSET = 16384;
+const DECK_CODE_V7_MAX_CARD_NUMBER = 0xffffffff;
+const DECK_CODE_V7_MAX_TOTAL = 10000;
+// 通常デッキを大きく超える場合はv6へ退避し、不正rankのBigInt演算量を抑える。
+const DECK_CODE_V7_MAX_UNIQUE = 256;
+const DECK_CODE_V7_CHECKSUM_BYTES = 5;
+let deckCodeV7CatalogCache = null;
+let deckCodeV7IndexCache = null;
+
+function compactConcatBytes(...parts) {
+  const arrays = parts.map((part) => part instanceof Uint8Array ? part : new Uint8Array(part));
+  const length = arrays.reduce((sum, part) => sum + part.length, 0);
+  const result = new Uint8Array(length);
+  let offset = 0;
+  arrays.forEach((part) => {
+    result.set(part, offset);
+    offset += part.length;
+  });
+  return result;
+}
+
+function compactBytesToBase64Url(bytes) {
+  return b64urlEncode(v6_bytesToBin(bytes));
+}
+
+function compactBase64UrlToBytes(text) {
+  const value = String(text || '');
+  if (!value || !/^[A-Za-z0-9_-]+$/.test(value) || value.length % 4 === 1) {
+    throw new Error('Bad Base64URL');
+  }
+  const bytes = v6_binToBytes(b64urlDecode(value));
+  if (compactBytesToBase64Url(bytes) !== value) {
+    throw new Error('Non-canonical Base64URL');
+  }
+  return bytes;
+}
+
+function compactVarintEncode(value) {
+  let number = Number(value);
+  if (!Number.isSafeInteger(number) || number < 0) throw new Error('Bad integer');
+  const bytes = [];
+  do {
+    const digit = number % 128;
+    number = Math.floor(number / 128);
+    bytes.push(digit + (number > 0 ? 128 : 0));
+  } while (number > 0);
+  return bytes;
+}
+
+function compactVarintDecode(bytes, start) {
+  let value = 0;
+  let multiplier = 1;
+  let cursor = start;
+  let count = 0;
+  while (cursor < bytes.length && count < 8) {
+    const byte = bytes[cursor++];
+    const digit = byte & 0x7f;
+    if (digit > Math.floor((Number.MAX_SAFE_INTEGER - value) / multiplier)) {
+      throw new Error('Integer overflow');
+    }
+    value += digit * multiplier;
+    count++;
+    if ((byte & 0x80) === 0) {
+      if (count > 1 && digit === 0) throw new Error('Non-canonical integer');
+      return { value, next: cursor };
+    }
+    multiplier *= 128;
+  }
+  throw new Error('Incomplete integer');
+}
+
+function getDeckCodeV7Catalog() {
+  if (deckCodeV7CatalogCache) return deckCodeV7CatalogCache;
+  let fingerprint = 2166136261;
+  for (let index = 0; index < DECK_CODE_V7_CATALOG_RANGES.length; index++) {
+    fingerprint ^= DECK_CODE_V7_CATALOG_RANGES.charCodeAt(index);
+    fingerprint = Math.imul(fingerprint, 16777619);
+  }
+  const numbers = [];
+  DECK_CODE_V7_CATALOG_RANGES.split(',').forEach((part) => {
+    const [startText, endText] = part.split('-');
+    const start = Number(startText);
+    const end = endText ? Number(endText) : start;
+    for (let number = start; number <= end; number++) numbers.push(number);
+  });
+  const isStrictlyAscending = numbers.every((number, index) => index === 0 || number > numbers[index - 1]);
+  if (
+    (fingerprint >>> 0) !== DECK_CODE_V7_CATALOG_FINGERPRINT ||
+    numbers.length !== DECK_CODE_V7_CATALOG_SIZE ||
+    new Set(numbers).size !== numbers.length ||
+    !isStrictlyAscending
+  ) {
+    throw new Error('v7 card catalog is invalid');
+  }
+  deckCodeV7CatalogCache = numbers;
+  deckCodeV7IndexCache = new Map(numbers.map((number, index) => [String(number), index]));
+  return deckCodeV7CatalogCache;
+}
+
+function getDeckCodeV7Index() {
+  getDeckCodeV7Catalog();
+  return deckCodeV7IndexCache;
+}
+
+function deckCodeV7PointForNumber(numberText) {
+  const normalized = String(numberText);
+  if (!/^[1-9]\d*$/.test(normalized)) throw new Error('Bad card number');
+  const number = Number(normalized);
+  if (!Number.isSafeInteger(number) || number > DECK_CODE_V7_MAX_CARD_NUMBER) {
+    throw new Error('Bad card number');
+  }
+  const fixedIndex = getDeckCodeV7Index().get(normalized);
+  return fixedIndex === undefined ? DECK_CODE_V7_RAW_OFFSET + number : fixedIndex;
+}
+
+function deckCodeV7NumberForPoint(point) {
+  const catalog = getDeckCodeV7Catalog();
+  if (point >= 0 && point < catalog.length) return String(catalog[point]);
+  if (point >= DECK_CODE_V7_RAW_OFFSET) {
+    const number = point - DECK_CODE_V7_RAW_OFFSET;
+    if (Number.isSafeInteger(number) && number > 0 && number <= DECK_CODE_V7_MAX_CARD_NUMBER) {
+      return String(number);
+    }
+  }
+  throw new Error('Bad card index');
+}
+
+function deckCodeV7Binomial(n, k) {
+  if (!Number.isSafeInteger(n) || !Number.isSafeInteger(k) || k < 0 || n < 0 || k > n) {
+    return BigInt(0);
+  }
+  let choose = Math.min(k, n - k);
+  let result = BigInt(1);
+  for (let i = 1; i <= choose; i++) {
+    result = (result * BigInt(n - choose + i)) / BigInt(i);
+  }
+  return result;
+}
+
+function deckCodeV7RankColex(values) {
+  let rank = BigInt(0);
+  for (let i = 0; i < values.length; i++) {
+    rank += deckCodeV7Binomial(values[i], i + 1);
+  }
+  return rank;
+}
+
+function deckCodeV7UnrankColex(rank, count, maxExclusive) {
+  const values = new Array(count);
+  let remaining = rank;
+  let upper = maxExclusive;
+
+  for (let choose = count; choose >= 1; choose--) {
+    const minValue = choose - 1;
+    const maxValue = upper - 1;
+    if (maxValue < minValue) throw new Error('Bad combination');
+
+    let low = minValue;
+    let high = Math.min(maxValue, Math.max(choose, 1));
+    while (high < maxValue && deckCodeV7Binomial(high, choose) <= remaining) {
+      low = high;
+      high = Math.min(maxValue, high * 2 + 1);
+    }
+
+    let best;
+    if (deckCodeV7Binomial(high, choose) <= remaining) {
+      best = high;
+    } else {
+      let left = low;
+      let right = high - 1;
+      best = minValue;
+      while (left <= right) {
+        const middle = left + Math.floor((right - left) / 2);
+        if (deckCodeV7Binomial(middle, choose) <= remaining) {
+          best = middle;
+          left = middle + 1;
+        } else {
+          right = middle - 1;
+        }
+      }
+    }
+
+    values[choose - 1] = best;
+    remaining -= deckCodeV7Binomial(best, choose);
+    upper = best;
+  }
+
+  if (remaining !== BigInt(0)) throw new Error('Bad combination rank');
+  return values;
+}
+
+function deckCodeV7BigIntToBytes(value) {
+  if (value < BigInt(0)) throw new Error('Bad rank');
+  if (value === BigInt(0)) return new Uint8Array(0);
+  const bytes = [];
+  const base = BigInt(256);
+  let remaining = value;
+  while (remaining > BigInt(0)) {
+    bytes.push(Number(remaining % base));
+    remaining /= base;
+  }
+  bytes.reverse();
+  return new Uint8Array(bytes);
+}
+
+function deckCodeV7BytesToBigInt(bytes) {
+  if (bytes.length > 0 && bytes[0] === 0) throw new Error('Non-canonical rank');
+  let value = BigInt(0);
+  const base = BigInt(256);
+  for (const byte of bytes) value = value * base + BigInt(byte);
+  return value;
+}
+
+function canEncodeDeckCodeV7(map) {
+  if (typeof BigInt !== 'function') return false;
+  let total = 0;
+  let unique = 0;
+  for (const countValue of Object.values(map || {})) {
+    const count = Number(countValue);
+    if (!Number.isSafeInteger(count) || count < 0) return false;
+    if (count > 0) {
+      total += count;
+      unique++;
+      if (!Number.isSafeInteger(total)) return false;
+    }
+  }
+  return total <= DECK_CODE_V7_MAX_TOTAL && unique <= DECK_CODE_V7_MAX_UNIQUE;
+}
+
+function encodeCompactDeckPayload(map) {
+  if (typeof BigInt !== 'function') throw new Error('BigInt is unavailable');
+  const entries = Object.entries(map || {})
+    .filter(([, count]) => Number(count) > 0)
+    .map(([number, count]) => {
+      const normalizedCount = Number(count);
+      if (!Number.isSafeInteger(normalizedCount) || normalizedCount <= 0) throw new Error('Bad card count');
+      return { number: String(number), count: normalizedCount, point: deckCodeV7PointForNumber(number) };
+    })
+    .sort((a, b) => a.point - b.point);
+
+  const total = entries.reduce((sum, entry) => sum + entry.count, 0);
+  if (!Number.isSafeInteger(total) || total > DECK_CODE_V7_MAX_TOTAL || entries.length > DECK_CODE_V7_MAX_UNIQUE) {
+    throw new Error('Deck is too large for v7');
+  }
+  for (let i = 1; i < entries.length; i++) {
+    if (entries[i - 1].point === entries[i].point) throw new Error('Duplicate card index');
+  }
+
+  const points = entries.map((entry) => entry.point);
+  let combinedRank = BigInt(0);
+  if (entries.length > 0) {
+    const cuts = [];
+    let used = 0;
+    for (let i = 0; i < entries.length - 1; i++) {
+      used += entries[i].count;
+      cuts.push(used - 1);
+    }
+    const countSpace = deckCodeV7Binomial(total - 1, entries.length - 1);
+    combinedRank = deckCodeV7RankColex(points) * countSpace + deckCodeV7RankColex(cuts);
+  }
+
+  return compactConcatBytes(
+    new Uint8Array(compactVarintEncode(total)),
+    new Uint8Array(compactVarintEncode(entries.length)),
+    deckCodeV7BigIntToBytes(combinedRank)
+  );
+}
+
+function decodeCompactDeckPayload(payload) {
+  if (typeof BigInt !== 'function') throw new Error('BigInt is unavailable');
+  if (!(payload instanceof Uint8Array) || payload.length < 2 || payload.length > 8192) {
+    throw new Error('Bad deck payload');
+  }
+  const totalResult = compactVarintDecode(payload, 0);
+  const uniqueResult = compactVarintDecode(payload, totalResult.next);
+  const total = totalResult.value;
+  const unique = uniqueResult.value;
+  if (total > DECK_CODE_V7_MAX_TOTAL || unique > DECK_CODE_V7_MAX_UNIQUE || total < unique) {
+    throw new Error('Bad deck size');
+  }
+  if ((total === 0) !== (unique === 0)) throw new Error('Bad empty deck');
+
+  const combinedRank = deckCodeV7BytesToBigInt(payload.slice(uniqueResult.next));
+  if (unique === 0) {
+    if (combinedRank !== BigInt(0)) throw new Error('Bad empty deck rank');
+    return {};
+  }
+
+  const countSpace = deckCodeV7Binomial(total - 1, unique - 1);
+  if (countSpace <= BigInt(0)) throw new Error('Bad count space');
+  const setRank = combinedRank / countSpace;
+  const countRank = combinedRank % countSpace;
+  const maxPointExclusive = DECK_CODE_V7_RAW_OFFSET + DECK_CODE_V7_MAX_CARD_NUMBER + 1;
+  const points = deckCodeV7UnrankColex(setRank, unique, maxPointExclusive);
+  const cuts = deckCodeV7UnrankColex(countRank, unique - 1, total - 1);
+
+  const counts = [];
+  let previousCut = -1;
+  for (const cut of cuts) {
+    counts.push(cut - previousCut);
+    previousCut = cut;
+  }
+  counts.push(total - previousCut - 1);
+
+  const map = {};
+  let restoredTotal = 0;
+  points.forEach((point, index) => {
+    const number = deckCodeV7NumberForPoint(point);
+    const count = counts[index];
+    if (!Number.isSafeInteger(count) || count <= 0 || map[number]) throw new Error('Bad card count');
+    map[number] = count;
+    restoredTotal += count;
+  });
+  if (restoredTotal !== total) throw new Error('Bad deck total');
+  return map;
+}
+
+async function deckToCodeV7(map) {
+  if (!canEncodeDeckCodeV7(map)) return await deckToCodeV6(map);
+  const body = encodeCompactDeckPayload(map);
+  const digest = await sha256Bytes(compactConcatBytes(Uint8Array.of(7), body));
+  const packed = compactConcatBytes(body, digest.slice(0, DECK_CODE_V7_CHECKSUM_BYTES));
+  return '7' + compactBytesToBase64Url(packed);
+}
+
+async function deckCodeV7ToMap(code) {
+  if (typeof BigInt !== 'function') throw new Error('BigInt is unavailable');
+  const packed = compactBase64UrlToBytes(String(code).slice(1));
+  if (packed.length < 2 + DECK_CODE_V7_CHECKSUM_BYTES) throw new Error('Bad v7 code');
+  const body = packed.slice(0, -DECK_CODE_V7_CHECKSUM_BYTES);
+  const checksum = packed.slice(-DECK_CODE_V7_CHECKSUM_BYTES);
+  const digest = await sha256Bytes(compactConcatBytes(Uint8Array.of(7), body));
+  for (let i = 0; i < checksum.length; i++) {
+    if (checksum[i] !== digest[i]) throw new Error('Invalid v7 checksum');
+  }
+  return decodeCompactDeckPayload(body);
+}
+
 async function deckToCodeV6(map) {
   const entries = Object.entries(map)
     .filter(([, c]) => Number(c) > 0)
@@ -8918,23 +9295,96 @@ function decodeDeckName(encoded) {
   return decodeURIComponent(escape(b64urlDecode(encoded)));
 }
 
-// 全デッキをBK2形式のバックアップコードに変換
-async function generateAllDecksBackupCode() {
-  deckManager.saveDeck(deckManager.currentDeckId);
+function deckMapFromSavedDeck(deck) {
+  const map = {};
+  if (deck && Array.isArray(deck.cards)) {
+    deck.cards.forEach((card) => {
+      const number = card?.dataset?.number;
+      if (number) map[number] = (map[number] || 0) + 1;
+    });
+  }
+  return map;
+}
 
+function normalizeBackupDeckOrder(order) {
+  const normalized = [];
+  (Array.isArray(order) ? order : []).forEach((value) => {
+    const id = Number(value);
+    if (Number.isInteger(id) && id >= 1 && id <= 15 && !normalized.includes(id)) normalized.push(id);
+  });
+  for (let id = 1; id <= 15; id++) {
+    if (!normalized.includes(id)) normalized.push(id);
+  }
+  return normalized;
+}
+
+function backupPermutationRank(order) {
+  const available = Array.from({ length: 15 }, (_, index) => index + 1);
+  let rank = 0;
+  for (let position = 0; position < 15; position++) {
+    const index = available.indexOf(order[position]);
+    if (index < 0) throw new Error('Bad deck order');
+    let factorial = 1;
+    for (let value = 2; value <= 14 - position; value++) factorial *= value;
+    rank += index * factorial;
+    available.splice(index, 1);
+  }
+  return rank;
+}
+
+function backupPermutationFromRank(rank) {
+  if (!Number.isSafeInteger(rank) || rank < 0) throw new Error('Bad deck order');
+  const available = Array.from({ length: 15 }, (_, index) => index + 1);
+  const order = [];
+  let remaining = rank;
+  for (let size = 15; size >= 1; size--) {
+    let factorial = 1;
+    for (let value = 2; value <= size - 1; value++) factorial *= value;
+    const index = Math.floor(remaining / factorial);
+    if (index >= available.length) throw new Error('Bad deck order');
+    remaining %= factorial;
+    order.push(available.splice(index, 1)[0]);
+  }
+  if (remaining !== 0) throw new Error('Bad deck order');
+  return order;
+}
+
+function normalizeBackupImagePath(src) {
+  if (!src) return '';
+  try {
+    return new URL(toFullImagePath(String(src)), document.baseURI).href;
+  } catch (_) {
+    return toFullImagePath(String(src));
+  }
+}
+
+function getBackupThumbnailInfo(deck) {
+  if (!deck?.thumbnail) return null;
+  const target = normalizeBackupImagePath(deck.thumbnail);
+  const matchingCard = (deck.cards || []).find((card) => normalizeBackupImagePath(card?.src) === target);
+  if (matchingCard?.dataset?.number) {
+    return { point: deckCodeV7PointForNumber(matchingCard.dataset.number) };
+  }
+  return { raw: String(deck.thumbnail) };
+}
+
+function flushCurrentDeckForBackup() {
+  if (deckManager.deckNameEditing && typeof deckManager.deckNameEditing.commit === 'function') {
+    deckManager.deckNameEditing.commit();
+  }
+  deckManager.updateDeckOrderFromDOM();
+  deckManager.saveDeck(deckManager.currentDeckId);
+}
+
+// BigInt非対応環境・極端に大きいデッキ用の従来BK2フォールバック
+async function generateAllDecksBackupCodeV2() {
   const parts = [];
   parts.push('o:' + (deckManager.deckOrder || []).join(','));
   parts.push('c:' + deckManager.currentDeckId);
 
   for (const [deckId, deck] of Object.entries(deckManager.decks)) {
     const name = encodeDeckName(deck?.name || ('デッキ' + deckId));
-    const map = {};
-    if (deck && Array.isArray(deck.cards)) {
-      deck.cards.forEach(card => {
-        const num = card?.dataset?.number;
-        if (num) map[num] = (map[num] || 0) + 1;
-      });
-    }
+    const map = deckMapFromSavedDeck(deck);
     // カードデータをVARINT delta符号化
     const entries = Object.entries(map)
       .filter(([, c]) => Number(c) > 0)
@@ -8955,10 +9405,139 @@ async function generateAllDecksBackupCode() {
   return `BK2|${checksum}|${body}`;
 }
 
-// バックアップコードから全デッキを復元（BK2新形式・BK1旧形式の両対応）
+// 全15デッキを短いBK3形式へ変換。外側の40bit検査値で一括保護する。
+async function generateAllDecksBackupCode() {
+  flushCurrentDeckForBackup();
+
+  const currentDeckId = Number(deckManager.currentDeckId);
+  if (typeof BigInt !== 'function' || !Number.isInteger(currentDeckId) || currentDeckId < 1 || currentDeckId > 15) {
+    return await generateAllDecksBackupCodeV2();
+  }
+
+  const naturalOrder = Array.from({ length: 15 }, (_, index) => index + 1);
+  const order = normalizeBackupDeckOrder(deckManager.deckOrder);
+  const hasCustomOrder = order.some((id, index) => id !== naturalOrder[index]);
+  const records = [];
+  let slotMask = 0;
+
+  for (let deckId = 1; deckId <= 15; deckId++) {
+    const deck = deckManager.decks[deckId];
+    const defaultName = `デッキ${deckId}`;
+    const name = deck?.name || defaultName;
+    const map = deckMapFromSavedDeck(deck);
+    if (!canEncodeDeckCodeV7(map)) return await generateAllDecksBackupCodeV2();
+
+    const customName = name !== defaultName;
+    const hasCards = Object.keys(map).length > 0;
+    const thumbnail = getBackupThumbnailInfo(deck);
+    if (!customName && !hasCards && !thumbnail) continue;
+
+    slotMask |= (1 << (deckId - 1));
+    let flags = (customName ? 1 : 0) | (hasCards ? 2 : 0);
+    if (thumbnail?.point !== undefined) flags |= 4;
+    if (thumbnail?.raw) flags |= 8;
+    const chunks = [Uint8Array.of(flags)];
+
+    if (customName) {
+      const nameBytes = new TextEncoder().encode(name);
+      chunks.push(new Uint8Array(compactVarintEncode(nameBytes.length)), nameBytes);
+    }
+    if (hasCards) {
+      const deckPayload = encodeCompactDeckPayload(map);
+      chunks.push(new Uint8Array(compactVarintEncode(deckPayload.length)), deckPayload);
+    }
+    if (thumbnail?.point !== undefined) {
+      chunks.push(new Uint8Array(compactVarintEncode(thumbnail.point)));
+    } else if (thumbnail?.raw) {
+      const thumbnailBytes = new TextEncoder().encode(thumbnail.raw);
+      chunks.push(new Uint8Array(compactVarintEncode(thumbnailBytes.length)), thumbnailBytes);
+    }
+    records.push(compactConcatBytes(...chunks));
+  }
+
+  const header = ((currentDeckId - 1) << 1) | (hasCustomOrder ? 1 : 0);
+  const bodyParts = [Uint8Array.of(header)];
+  if (hasCustomOrder) {
+    bodyParts.push(new Uint8Array(compactVarintEncode(backupPermutationRank(order))));
+  }
+  bodyParts.push(Uint8Array.of(slotMask & 0xff, (slotMask >>> 8) & 0x7f), ...records);
+  const body = compactConcatBytes(...bodyParts);
+  const digest = await sha256Bytes(compactConcatBytes(Uint8Array.of(3), body));
+  return 'BK3' + compactBytesToBase64Url(
+    compactConcatBytes(body, digest.slice(0, DECK_CODE_V7_CHECKSUM_BYTES))
+  );
+}
+
+// バックアップコードから全デッキを復元（BK3・BK2・BK1の全形式に対応）
 async function restoreAllDecksFromBackup(code) {
   try {
     const raw = normalizeWholeCode(code);
+
+    // BK3: 固定15枠 + v7生ペイロードをまとめた短縮形式
+    if (/^BK3[A-Za-z0-9_-]+$/.test(raw)) {
+      if (typeof BigInt !== 'function') throw new Error('この端末ではBK3を読み込めません');
+      const packed = compactBase64UrlToBytes(raw.slice(3));
+      if (packed.length < 3 + DECK_CODE_V7_CHECKSUM_BYTES) {
+        throw new Error('無効なバックアップコードです');
+      }
+      const body = packed.slice(0, -DECK_CODE_V7_CHECKSUM_BYTES);
+      const checksum = packed.slice(-DECK_CODE_V7_CHECKSUM_BYTES);
+      const digest = await sha256Bytes(compactConcatBytes(Uint8Array.of(3), body));
+      for (let index = 0; index < checksum.length; index++) {
+        if (checksum[index] !== digest[index]) throw new Error('バックアップコードが壊れています');
+      }
+
+      let cursor = 0;
+      const readVarint = () => {
+        const result = compactVarintDecode(body, cursor);
+        cursor = result.next;
+        return result.value;
+      };
+      const readBytes = (length) => {
+        if (!Number.isSafeInteger(length) || length < 0 || cursor + length > body.length) {
+          throw new Error('無効なバックアップデータです');
+        }
+        const result = body.slice(cursor, cursor + length);
+        cursor += length;
+        return result;
+      };
+      const decodeText = (bytes) => new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+
+      const header = body[cursor++];
+      if (header === undefined || header > 29) throw new Error('無効なバックアップデータです');
+      const currentDeckId = (header >>> 1) + 1;
+      const hasCustomOrder = (header & 1) !== 0;
+      const deckOrder = hasCustomOrder
+        ? backupPermutationFromRank(readVarint())
+        : Array.from({ length: 15 }, (_, index) => index + 1);
+
+      if (cursor + 2 > body.length) throw new Error('無効なバックアップデータです');
+      const slotMask = body[cursor++] | (body[cursor++] << 8);
+      if ((slotMask & 0x8000) !== 0) throw new Error('無効なバックアップデータです');
+
+      const backupData = { decks: {}, deckOrder, currentDeckId };
+      for (let deckId = 1; deckId <= 15; deckId++) {
+        const defaultName = `デッキ${deckId}`;
+        const deckInfo = { name: defaultName, cards: {} };
+        if ((slotMask & (1 << (deckId - 1))) !== 0) {
+          const flags = body[cursor++];
+          if (flags === undefined || (flags & ~15) !== 0 || ((flags & 4) && (flags & 8))) {
+            throw new Error('無効なバックアップデータです');
+          }
+          if (flags & 1) deckInfo.name = decodeText(readBytes(readVarint()));
+          if (flags & 2) deckInfo.cards = decodeCompactDeckPayload(readBytes(readVarint()));
+          if (flags & 4) {
+            deckInfo.thumbnailNumber = deckCodeV7NumberForPoint(readVarint());
+            if (!deckInfo.cards[deckInfo.thumbnailNumber]) throw new Error('無効なサムネイル情報です');
+          } else if (flags & 8) {
+            deckInfo.thumbnail = decodeText(readBytes(readVarint()));
+          }
+        }
+        backupData.decks[String(deckId)] = deckInfo;
+      }
+      if (cursor !== body.length) throw new Error('無効なバックアップデータです');
+      return backupData;
+    }
 
     // BK2: 新形式
     if (raw.startsWith('BK2|')) {
@@ -8988,8 +9567,8 @@ async function restoreAllDecksFromBackup(code) {
             const bytes = v6_binToBytes(b64urlDecode(v6payload));
             let i = 0, prev = 0;
             while (i < bytes.length) {
-              const d = v6_varintDecode(bytes, i); if (d.value === null) break; i = d.next;
-              const c = v6_varintDecode(bytes, i); if (c.value === null) break; i = c.next;
+              const d = v6_varintDecode(bytes, i); if (d.value === null) throw new Error('無効なバックアップデータです'); i = d.next;
+              const c = v6_varintDecode(bytes, i); if (c.value === null) throw new Error('無効なバックアップデータです'); i = c.next;
               const id = prev + d.value; prev = id;
               if (c.value > 0) cards[String(id)] = (cards[String(id)] || 0) + c.value;
             }
@@ -9021,65 +9600,89 @@ async function restoreAllDecksFromBackup(code) {
 
 // バックアップデータを実際に適用
 function applyBackupData(backupData) {
-  // 全デッキを上書き
-  deckManager.decks = {};
-  for (const [deckId, deckInfo] of Object.entries(backupData.decks)) {
+  if (!backupData?.decks || typeof backupData.decks !== 'object' || Array.isArray(backupData.decks)) {
+    throw new Error('無効なバックアップデータです');
+  }
+
+  const invalidDeckId = Object.keys(backupData.decks).find((value) => {
+    const id = Number(value);
+    return !Number.isInteger(id) || id < 1 || id > 15;
+  });
+  if (invalidDeckId !== undefined) throw new Error('無効なデッキ番号です');
+
+  const originals = new Map();
+  document.querySelectorAll('#card-list .card[data-number]').forEach((card) => {
+    const number = card.dataset.number;
+    if (originals.has(number)) throw new Error(`カード番号が重複しています: ${number}`);
+    originals.set(number, card);
+  });
+
+  // 先に15枠すべてを検証・再構築し、成功するまで現在のデータへ触れない。
+  const nextDecks = {};
+  for (let deckId = 1; deckId <= 15; deckId++) {
+    const deckInfo = backupData.decks[String(deckId)] || {};
+    const name = typeof deckInfo.name === 'string' && deckInfo.name ? deckInfo.name : `デッキ${deckId}`;
+    const cardMap = deckInfo.cards || {};
+    if (typeof cardMap !== 'object' || Array.isArray(cardMap)) throw new Error('無効なカードデータです');
+
     const cards = [];
-    if (deckInfo.cards && Object.keys(deckInfo.cards).length > 0) {
-      Object.entries(deckInfo.cards)
-        .sort(([a], [b]) => parseInt(a, 10) - parseInt(b, 10))
-        .forEach(([num, count]) => {
-          const original = document.querySelector(`.card[data-number="${num}"]`);
-          if (original) {
-            for (let i = 0; i < count; i++) {
-              const card = document.createElement('div');
-              card.className = 'card';
-              Object.assign(card.dataset, {
-                name: original.dataset.name,
-                type: original.dataset.type,
-                season: original.dataset.season,
-                cost: original.dataset.cost,
-                number: original.dataset.number
-              });
-              if (original.dataset.attribute) {
-                card.dataset.attribute = original.dataset.attribute;
-              }
-              const img = document.createElement('img');
-              const originalImg = original.querySelector('img');
-              setListImage(img, toFullImagePath(originalImg.getAttribute('data-src') || originalImg.src));
-              img.alt = original.dataset.name;
-              card.appendChild(img);
-              cards.push(card);
-            }
-          }
-        });
+    let total = 0;
+    const entries = Object.entries(cardMap).sort(([a], [b]) => Number(a) - Number(b));
+    for (const [number, countValue] of entries) {
+      const count = Number(countValue);
+      if (!/^[1-9]\d*$/.test(number) || !Number.isSafeInteger(count) || count <= 0) {
+        throw new Error('無効なカードデータです');
+      }
+      total += count;
+      if (!Number.isSafeInteger(total)) {
+        throw new Error('デッキの枚数が多すぎます');
+      }
+      const original = originals.get(number);
+      if (!original) throw new Error(`見つからない札があります: ${number}`);
+      const originalImg = original.querySelector('img');
+      if (!originalImg) throw new Error(`画像が見つからない札があります: ${number}`);
+      const src = toFullImagePath(originalImg.getAttribute('data-src') || originalImg.src);
+      for (let index = 0; index < count; index++) {
+        cards.push({ dataset: { ...original.dataset }, src });
+      }
     }
-    deckManager.decks[deckId] = {
-      name: deckInfo.name || ('デッキ' + deckId),
-      cards: cards.map(card => ({
-        dataset: { ...card.dataset },
-        src: card.querySelector('img')?.src
-      }))
-    };
 
-    // ボタン名を更新
-    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
-    if (button) (button.querySelector('span') || button).textContent = deckInfo.name || ('デッキ' + deckId);
+    const restoredDeck = { name, cards };
+    if (deckInfo.thumbnailNumber) {
+      const thumbnailNumber = String(deckInfo.thumbnailNumber);
+      const thumbnailCard = cards.find((card) => card.dataset.number === thumbnailNumber);
+      if (!thumbnailCard) throw new Error('無効なサムネイル情報です');
+      restoredDeck.thumbnail = thumbnailCard.src;
+    } else if (typeof deckInfo.thumbnail === 'string' && deckInfo.thumbnail) {
+      restoredDeck.thumbnail = deckInfo.thumbnail;
+    }
+    nextDecks[deckId] = restoredDeck;
   }
 
-  // deckOrderがあれば復元
-  if (Array.isArray(backupData.deckOrder) && backupData.deckOrder.length > 0) {
-    deckManager.deckOrder = backupData.deckOrder.map(id => parseInt(id, 10)).filter(id => Number.isFinite(id));
-    deckManager.applyDeckOrder();
-  }
+  const targetDeckIdValue = Number(backupData.currentDeckId);
+  const targetDeckId = Number.isInteger(targetDeckIdValue) && targetDeckIdValue >= 1 && targetDeckIdValue <= 15
+    ? targetDeckIdValue
+    : 1;
+  const nextOrder = normalizeBackupDeckOrder(backupData.deckOrder);
 
-  // currentDeckIdを復元
-  const targetDeckId = backupData.currentDeckId || 1;
+  // 保存容量不足などで失敗した場合、画面側を一切変更しない。
+  const serializedState = JSON.stringify({
+    currentDeckId: targetDeckId,
+    decks: nextDecks,
+    deckOrder: nextOrder,
+    version: '2'
+  });
+  localStorage.setItem('kannagi-deck-manager-v2', serializedState);
+
+  deckManager.decks = nextDecks;
+  deckManager.deckOrder = nextOrder;
   deckManager.currentDeckId = targetDeckId;
+  for (let deckId = 1; deckId <= 15; deckId++) {
+    const button = document.querySelector(`.deck-select-button[data-deck-id="${deckId}"]`);
+    if (button) (button.querySelector('span') || button).textContent = nextDecks[deckId].name;
+  }
+  deckManager.applyDeckOrder();
   deckManager.loadDeck(targetDeckId);
-  deckManager.saveToLocalStorage();
-
-  // デッキ一覧のUI（サムネイル・ハイライト）を即座に更新
   deckManager.updateDeckPreviews();
   deckManager.updateActiveButton();
 }
