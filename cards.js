@@ -18773,5 +18773,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_16_p (15).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10078"
+  data-name="家の中(いえのなか)"
+  data-cost="4"
+  data-power="3"
+  data-series="プロモ"
+  data-promo-date="2026年未定"
+  data-type="場所札"
+  data-season="春"
+  data-rare=""
+  data-attribute="家屋 猫 犬族"
+  data-keyword=""
+  data-role="攻撃時 ヒール 相手ヒール "
+  data-sakka="匠平"
+>
+  <img data-src="images/card_17_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
