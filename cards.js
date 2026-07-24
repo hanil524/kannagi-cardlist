@@ -3402,7 +3402,7 @@ data-series="百鬼夜行"
 data-rare="C"
 data-season="冬"
 data-type="場所札"
-data-role="攻撃時 召喚時"
+data-role="攻撃時 召喚時 デッキ確認"
 data-keyword=""
 data-attribute="博物館 視線"
 data-sakka="SAKURA"
@@ -14666,6 +14666,40 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2401"
+  data-name="光の指す方へ（ひかりのさすほうへ）"
+  data-cost="1"
+  data-power="1"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="廃線 解脱"
+  data-keyword="楽園"
+  data-role="常時 魂貫通"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2402"
+  data-name="終わらない夢(おわらないゆめ)"
+  data-cost="3"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="悪夢"
+  data-keyword=""
+  data-role="常時 "
+  data-sakka="はるち"
+>
+  <img data-src="images/card_16_p (103).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2403"
   data-name="殺生岩（せっしょうがん）"
   data-cost="5"
@@ -14715,6 +14749,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2406"
+  data-name="あのころのおもいで"
+  data-cost="6"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="家屋"
+  data-keyword=""
+  data-role="常時 回復フェイズ ヒール 魂加速 "
+  data-sakka="はん,YOKOME"
+>
+  <img data-src="images/card_16_p (102).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2407"
   data-name="場所のれもんちゃん（ばしょのれもんちゃん）"
   data-cost="6"
@@ -14745,6 +14796,23 @@ data-sakka="marukko"
   data-sakka="大赤見ノヴ"
 >
   <img data-src="images/card_16_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2409"
+  data-name="競争巨鶏(でいとなじゃいあんとちきん)"
+  data-cost="8"
+  data-power="8"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 災害 UMA"
+  data-keyword="神秘"
+  data-role="生贄 神秘付与 ヒール "
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (101).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14828,6 +14896,108 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2415"
+  data-name="飛び回る眷属（とびまわるけんぞく）"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="蝙蝠 血液"
+  data-keyword="不屈"
+  data-role="ドレイン 直接ダメ ヒール 底送り "
+  data-sakka="LILIA"
+>
+  <img data-src="images/card_16_p (100).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2416"
+  data-name="メーガス(めーがす)"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="罪 呪 刀"
+  data-keyword=""
+  data-role="直接ダメ 魂加速 ヒール "
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (99).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2417"
+  data-name="朱の盆(しゅのぼん)"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 鬼"
+  data-keyword=""
+  data-role="バフ "
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (98).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2418"
+  data-name="狼男(おおかみおとこ)"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 UMA"
+  data-keyword=""
+  data-role="バフ "
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (97).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2419"
+  data-name="だいだらぼっち"
+  data-cost="20"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="神 妖怪"
+  data-keyword=""
+  data-role="直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (96).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2420"
+  data-name="くまぼん"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="春"
+  data-rare="エキスパンション"
+  data-attribute="動物 古書 噂"
+  data-keyword=""
+  data-role="バフ"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (95).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2421"
   data-name="生き人形（いきにんぎょう）"
   data-cost="8"
@@ -14858,6 +15028,23 @@ data-sakka="marukko"
   data-sakka="大赤見ノヴ"
 >
   <img data-src="images/card_16_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2423"
+  data-name="三番目のトイレ（さんばんめのといれ）"
+  data-cost="3"
+  data-power="1"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="噂 廃校"
+  data-keyword="速攻 学校の怪談"
+  data-role="踏み倒し"
+  data-sakka="いこいP"
+>
+  <img data-src="images/card_16_p (94).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14894,6 +15081,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2426"
+  data-name="ヤマタノオロチ(やまたのおろち)"
+  data-cost="4"
+  data-power="5"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 大蛇 不吉"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (93).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2427"
   data-name="盟友の守護龍：赤竜（めいゆうのしゅごりゅう せきりゅう）"
   data-cost="8"
@@ -14924,6 +15128,23 @@ data-sakka="marukko"
   data-sakka="MASA,韓"
 >
   <img data-src="images/card_16_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2429"
+  data-name="神隠し（かみかくし）"
+  data-cost="9"
+  data-power="8"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="神 狐面"
+  data-keyword=""
+  data-role="召喚時 直接ダメ 除外加速"
+  data-sakka="YOU"
+>
+  <img data-src="images/card_16_p (92).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -14959,6 +15180,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2432"
+  data-name="背赤（せあか）"
+  data-cost="4"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲 侵蝕"
+  data-keyword=""
+  data-role="公開ドロー ドロー 底送り"
+  data-sakka="はん,YOU,Rose"
+>
+  <img data-src="images/card_16_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2433"
   data-name="呪いの人形師（のろいのにんぎょうし）"
   data-cost="4"
@@ -14976,6 +15214,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2434"
+  data-name="トカゲ男(とかげおとこ)"
+  data-cost="4"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="龍 UMA"
+  data-keyword=""
+  data-role="直接ダメ "
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (90).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2435"
   data-name="狐女（きつねめ）"
   data-cost="5"
@@ -14989,6 +15244,23 @@ data-sakka="marukko"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2436"
+  data-name="わたしのTO（わたしのとっぷおた トップオタ）"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="人魚"
+  data-keyword=""
+  data-role="特殊召喚 踏み倒し"
+  data-sakka="メゾンドマーメイド"
+>
+  <img data-src="images/card_16_p (89).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15025,6 +15297,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2439"
+  data-name="土豪の案内人（どごうのあんないにん）"
+  data-cost="8"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="蟲"
+  data-keyword="呪い"
+  data-role="追加行動"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (88).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2440"
   data-name="八尺様（はっしゃくさま）"
   data-cost="8"
@@ -15038,6 +15327,23 @@ data-sakka="marukko"
   data-role="魂加速 "
 >
   <img data-src="images/card_16_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2441"
+  data-name="萬倉（よろずぐら）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="エキスパンション"
+  data-attribute="刀 鎌 銃"
+  data-keyword=""
+  data-role="直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (87).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15058,6 +15364,40 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2443"
+  data-name="終わらない葬儀場（おわらないそうぎじょう）"
+  data-cost="4"
+  data-power="4"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="廃葬儀場"
+  data-keyword=""
+  data-role="召喚時 除外戻し 底送り"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (86).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2444"
+  data-name="おにごっこ"
+  data-cost="4"
+  data-power="5"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="動物 園"
+  data-keyword=""
+  data-role="バニラ"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (85).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2445"
   data-name="羊男(ひつじおとこ)"
   data-cost="4"
@@ -15075,6 +15415,40 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2446"
+  data-name="座敷童（ざしきわらし）"
+  data-cost="5"
+  data-power="1"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="神 廃屋"
+  data-keyword=""
+  data-role="常時 ロック"
+  data-sakka="MEI"
+>
+  <img data-src="images/card_16_p (84).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2447"
+  data-name="芍薬童子(しゃくやくどうじ)"
+  data-cost="5"
+  data-power="5"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 花 噂"
+  data-keyword="追撃"
+  data-role="召喚時 ドロー ハンデス"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (83).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2448"
   data-name="ひでり神(ひでりがみ)"
   data-cost="5"
@@ -15089,6 +15463,23 @@ data-sakka="marukko"
   data-sakka="大赤見ノヴ"
 >
   <img data-src="images/card_16_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2449"
+  data-name="フラッシュバック（ふらっしゅばっく）"
+  data-cost="7"
+  data-power="4"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 道路"
+  data-keyword="逆境"
+  data-role=""
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (82).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15124,6 +15515,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2452"
+  data-name="カエル男(かえるおとこ)"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="UMA 雨"
+  data-keyword=""
+  data-role="ランデス トップ送り"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (81).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2453"
   data-name="ろくろ首（ろくろくび）"
   data-cost="6"
@@ -15137,6 +15545,40 @@ data-sakka="marukko"
   data-role="手札公開 ハンデス"
 >
   <img data-src="images/card_16_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2454"
+  data-name="運気喰らいの生霊（うんきくらいのいきりょう）"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="怨念 呪"
+  data-keyword=""
+  data-role="デッキ破壊 底送り"
+  data-sakka="Takaおん"
+>
+  <img data-src="images/card_16_p (80).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2455"
+  data-name="鴉天狗（からすてんぐ）"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="妖怪"
+  data-keyword=""
+  data-role="ランデス 札除去"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (79).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15170,6 +15612,40 @@ data-sakka="marukko"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2458"
+  data-name="手の目(てのめ)"
+  data-cost="9"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="交通事故 樹木"
+  data-keyword=""
+  data-role="ハンデス"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (78).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2459"
+  data-name="贈り物（おくりもの）"
+  data-cost="10"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="エキスパンション"
+  data-attribute="花"
+  data-keyword="呪い"
+  data-role="公開ドロー ドロー 底送り"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (77).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15223,6 +15699,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2463"
+  data-name="青い鳥（あおいとり）"
+  data-cost="3"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃円宿"
+  data-keyword="四季欲"
+  data-role="ランデス"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (76).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2464"
   data-name="闇賭博居住群（やみとばくきょじゅうぐん）"
   data-cost="4"
@@ -15237,6 +15730,40 @@ data-sakka="marukko"
   data-sakka="INO"
 >
   <img data-src="images/card_16_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2465"
+  data-name="老人展覧会（ろうじんてんらんかい）"
+  data-cost="4"
+  data-power="2"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="博物館 視線"
+  data-keyword=""
+  data-role="召喚時 攻撃時 デッキ確認"
+  data-sakka="SAKURA"
+>
+  <img data-src="images/card_16_p (75).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2466"
+  data-name="氷蜃(ひょうしん)"
+  data-cost="5"
+  data-power="4"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 鬼 戦"
+  data-keyword="妬み"
+  data-role="攻撃時 ランデス"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (74).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15273,6 +15800,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2469"
+  data-name="悪魔ノ城（でびるじょう）"
+  data-cost="12"
+  data-power="8"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="廃円宿"
+  data-keyword="四季欲"
+  data-role="ランデス"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (73).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2470"
   data-name="みかんさん"
   data-cost="0"
@@ -15286,6 +15830,23 @@ data-sakka="marukko"
   data-role="デッキ破壊 除外加速"
 >
   <img data-src="images/card_16_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2471"
+  data-name="手洗い鬼(てあらいおに)"
+  data-cost="0"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 鬼"
+  data-keyword=""
+  data-role="ランデス 除外加速"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (72).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15303,6 +15864,57 @@ data-sakka="marukko"
   data-sakka=""
 >
   <img data-src="images/card_16_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2473"
+  data-name="餓鬼（がき）"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 鬼"
+  data-keyword="呪い"
+  data-role="魂加速"
+  data-sakka="マメ太朗"
+>
+  <img data-src="images/card_16_p (71).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2474"
+  data-name="紅姫（べにひめ）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="怨念"
+  data-keyword="呪い"
+  data-role="ランデス"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (70).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2475"
+  data-name="雪女（ゆきおんな）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 幽霊"
+  data-keyword=""
+  data-role="ランデス 除外加速"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (69).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15339,6 +15951,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2478"
+  data-name="人間で造った出音機（にんげんでつくったしゅつおんき）"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="事件 楽器"
+  data-keyword=""
+  data-role="除外戻し 底送り"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (68).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2479"
   data-name="道具のれもんちゃん（どうぐのれもんちゃん）"
   data-cost="6"
@@ -15352,6 +15981,57 @@ data-sakka="marukko"
   data-role="ランデス"
 >
   <img data-src="images/card_16_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2480"
+  data-name="花地怪鳥(ふろりだじゃいあんとぺんぎん)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="UMA 写真"
+  data-keyword=""
+  data-role="2種類札 札種変更"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (67).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2481"
+  data-name="音無き白（おとなきしろ）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="エキスパンション"
+  data-attribute="血液"
+  data-keyword=""
+  data-role="魂貫通"
+  data-sakka="LILIA"
+>
+  <img data-src="images/card_16_p (66).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2482"
+  data-name="百鬼夜行（ひゃっきやこう）"
+  data-cost="5"
+  data-power="3"
+  data-series="オカルト"
+  data-type="場所札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 神"
+  data-keyword=""
+  data-role="常時 除去無効 バフ"
+  data-sakka=""
+>
+  <img data-src="images/card_16_p (65).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -15372,6 +16052,23 @@ data-sakka="marukko"
 </div>
 <div
   class="card"
+  data-number="2484"
+  data-name="ぬらりひょん"
+  data-cost="5"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="妖怪"
+  data-keyword=""
+  data-role="追加行動 憑依加速 魂利用"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
   data-number="2485"
   data-name="がしゃどくろ"
   data-cost="7"
@@ -15385,6 +16082,74 @@ data-sakka="marukko"
   data-role="直接ダメ "
 >
   <img data-src="images/card_16_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2486"
+  data-name="匠平(しょうへい)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="糧"
+  data-keyword=""
+  data-role="ハンデス ランデス"
+  data-sakka="匠平"
+>
+  <img data-src="images/card_16_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2487"
+  data-name="ヨナルデパズトーリ(よなるでぱずとーり)"
+  data-cost="3"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="妖怪 樹木"
+  data-keyword=""
+  data-role="2種類札 手札公開 バニラ"
+  data-sakka="大赤見ノヴ"
+>
+  <img data-src="images/card_16_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2488"
+  data-name="ピグミー像(ぴぐみーぞう)"
+  data-cost="7"
+  data-power="0"
+  data-series="オカルト"
+  data-type="道具札"
+  data-season="無"
+  data-rare="エキスパンション"
+  data-attribute="UMA 動物"
+  data-keyword="徳"
+  data-role="ランデス"
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_16_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="2489"
+  data-name="絶望の姦姦陀螺（ぜつぼうのかんかんだら）"
+  data-cost="6"
+  data-power="0"
+  data-series="オカルト"
+  data-type="季節札"
+  data-season="混化 春夏"
+  data-rare="エキスパンション"
+  data-attribute="腐乱 大蛇"
+  data-keyword=""
+  data-role="ドレイン 直接ダメ ヒール "
+  data-sakka="MASA"
+>
+  <img data-src="images/card_16_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
