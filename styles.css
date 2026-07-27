@@ -1198,8 +1198,24 @@ button[onclick='resetFilters()']:active {
   z-index: 2500;
   /* デッキモーダル(2000)より大きい値 */
   overflow: hidden;
+  opacity: 1;
+  transition: none;
   touch-action: none;
   /* タッチスクロールを無効化 */
+}
+
+/* 閉じる時だけ暗幕ごと短くフェードする。
+   transformや寸法は一切変えないため、左右ボタンの実測配置には影響しない。 */
+.image-modal.is-closing {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-modal.is-closing {
+    transition: none;
+  }
 }
 
 /* モーダルコンテンツのコンテナ */
@@ -6656,10 +6672,11 @@ body {
   }
 }
 
-/* 注意: .image-modal（画像拡大モーダル）にはアニメーションを付けないこと。
+/* 注意: .image-modal（画像拡大モーダル）の表示時にはアニメーションを付けないこと。
    JSの positionNavButtons() が getBoundingClientRect で実測座標を使って
    左右ボタンを配置するため、transform/opacity アニメーション中に計測が
-   走るとボタン位置が狂う（既知の不具合として一度発生・撤去済み） */
+   走るとボタン位置が狂う（既知の不具合として一度発生・撤去済み）。
+   閉じる時だけの .is-closing は、配置完了後に親のopacityだけを変えるため対象外。 */
 .range-modal-overlay,
 .confirm-popup {
   animation: overlayFadeIn 0.2s ease;

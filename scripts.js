@@ -3708,6 +3708,9 @@ let activateNextModalTapDirectly = false;
 let directModalTapStartX = 0;
 let directModalTapStartY = 0;
 let suppressTrustedModalClickUntil = 0;
+let imageModalCloseTimer = null;
+let imageModalIsClosing = false;
+const IMAGE_MODAL_CLOSE_DURATION = 180;
 
 
 const openImageModal = (src) => {
@@ -3724,6 +3727,13 @@ const openImageModal = (src) => {
   const prevButton = document.getElementById('prev-image');
   const nextButton = document.getElementById('next-image');
   const modalContent = modal.querySelector('.modal-content');
+
+  if (imageModalCloseTimer !== null) {
+    clearTimeout(imageModalCloseTimer);
+    imageModalCloseTimer = null;
+  }
+  imageModalIsClosing = false;
+  modal.classList.remove('is-closing');
 
   // デッキモーダルが表示中かどうかを確認
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
@@ -4012,12 +4022,16 @@ const closeImageModal = () => {
   const modal = document.getElementById('image-modal');
   const deckModal = document.getElementById('deck-modal');
 
+  // 背景クリックでは既存リスナー2本から同じ関数が続けて呼ばれるため、
+  // 非同期の閉鎖処理を一度だけ開始する。
+  if (imageModalIsClosing || modal.style.display !== 'flex') return;
+  imageModalIsClosing = true;
+
   prevButton.classList.remove('visible');
   nextButton.classList.remove('visible');
 
-  modal.style.display = 'none';
-
-  // デッキ作成画面が開いているかチェック
+  // 暗幕がまだ不透明なうちに背面を本来の状態へ戻す。
+  // フェード中に固定bodyの幅やスクロール位置が切り替わって見えるのを防ぐ。
   if (deckModal && deckModal.style.display === 'block') {
     // デッキ作成画面が開いている場合はスクロール禁止を維持（position/topは必ずリセット）
     document.body.style.overflow = 'hidden';
@@ -4033,29 +4047,48 @@ const closeImageModal = () => {
     window.scrollTo(0, savedScrollPosition);
   }
 
-  // モーダル関連の変数をリセット（重要: 状態を完全にクリア）
-  currentModalCard = null;
-  currentModalCardName = null;
-  modalControlsInitialized = false;
+  const finishImageModalClose = () => {
+    if (!imageModalIsClosing) return;
+    if (imageModalCloseTimer !== null) {
+      clearTimeout(imageModalCloseTimer);
+      imageModalCloseTimer = null;
+    }
 
-  // 真の根本解決：作成した固定DOM要素を完全クリーンアップ（クラッシュ防止）
-  if (modalContainer && modalContainer.parentNode) {
-    modalContainer.parentNode.removeChild(modalContainer);
+    modal.style.display = 'none';
+    modal.classList.remove('is-closing');
+    imageModalIsClosing = false;
+
+    // モーダル関連の変数をリセット（重要: 状態を完全にクリア）
+    currentModalCard = null;
+    currentModalCardName = null;
+    modalControlsInitialized = false;
+
+    // 真の根本解決：作成した固定DOM要素を完全クリーンアップ（クラッシュ防止）
+    if (modalContainer && modalContainer.parentNode) {
+      modalContainer.parentNode.removeChild(modalContainer);
+    }
+    modalContainer = null;
+    modalSeriesInfo = null;
+    modalControls = null;
+    modalConnectionInfo = null;
+    connectionModalStack = [];
+
+    // メモリリーク対策（全デバイス共通）
+    if (seriesInfoCache.size > 100) {
+      seriesInfoCache.clear();
+    }
+
+    setTimeout(() => {
+      handleScroll();
+    }, 100);
+  };
+
+  modal.classList.add('is-closing');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    finishImageModalClose();
+  } else {
+    imageModalCloseTimer = setTimeout(finishImageModalClose, IMAGE_MODAL_CLOSE_DURATION);
   }
-  modalContainer = null;
-  modalSeriesInfo = null;
-  modalControls = null;
-  modalConnectionInfo = null;
-  connectionModalStack = [];
-
-  // メモリリーク対策（全デバイス共通）
-  if (seriesInfoCache.size > 100) {
-    seriesInfoCache.clear();
-  }
-
-  setTimeout(() => {
-    handleScroll();
-  }, 100);
 };
 
 // 関連カード名から読み仮名（カッコ内）を除去して表示用にする
@@ -4936,6 +4969,18 @@ function openDeckBuilder() {
     deckBuilder.savedScrollPosition = scrollPosition;
     deckBuilder.resizeDisplay(); // サイズを調整
   });
+
+  // 画像ボタンを押す前の空き時間に、画像化ライブラリの読み込みだけ済ませておく
+  const preloadCaptureLibrary = () => {
+    loadHtml2Canvas().catch(() => {
+      // 先読み失敗時は、画像ボタンを押した時に再試行する
+    });
+  };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(preloadCaptureLibrary, { timeout: 1500 });
+  } else {
+    setTimeout(preloadCaptureLibrary, 0);
+  }
 }
 
 // デッキビルダーの状態管理
@@ -7450,18 +7495,34 @@ const deckManager = {
 };
 
 // html2canvasライブラリを動的に読み込む
-function loadHtml2Canvas() {
-  return new Promise((resolve, reject) => {
-    if (window.html2canvas) {
-      resolve(window.html2canvas);
-      return;
-    }
+let html2CanvasLoadPromise = null;
 
+function loadHtml2Canvas() {
+  if (window.html2canvas) {
+    return Promise.resolve(window.html2canvas);
+  }
+
+  if (!html2CanvasLoadPromise) {
     const script = document.createElement('script');
     script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-    script.onload = () => resolve(window.html2canvas);
-    script.onerror = reject;
-    document.head.appendChild(script);
+    html2CanvasLoadPromise = new Promise((resolve, reject) => {
+      script.onload = () => resolve(window.html2canvas);
+      script.onerror = () => {
+        html2CanvasLoadPromise = null;
+        script.remove();
+        reject(new Error('html2canvasの読み込みに失敗しました。'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  return html2CanvasLoadPromise;
+}
+
+// 表示更新を2回待ち、メッセージやモーダルの初期状態を確実に描画する
+function waitForNextPaint() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
   });
 }
 
@@ -7587,29 +7648,40 @@ function addQrToCanvas(canvas, url) {
 
 // デッキ画像にデッキ名ヘッダー／QRコードを追加した新しいキャンバスを生成
 // qrUrl が渡された場合、ヘッダー右端にQRコードを配置し、テキストはQRの左で折り返す
-function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl) {
+function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl, capturedTopPadding = 0) {
   const hasQr = !!qrUrl && typeof qrcode !== 'undefined';
   if (!includeTitle && !hasQr) return originalCanvas;
 
   const srcW = originalCanvas.width;
   const srcH = originalCanvas.height;
 
-  // ヘッダー高さ: QRありなら広め
-  const headerHeight = Math.round(srcW * (hasQr ? 0.14 : 0.10));
+  // 追加ヘッダーとカード一覧の位置・外形は変えず、
+  // カード本体より上にあるキャプチャ余白だけをQRエリアへ含める。
+  const qrQuietZoneModules = 4;
+  let headerHeight = Math.round(srcW * 0.10);
   const paddingX = Math.round(srcW * 0.018);
-  const paddingY = Math.round(headerHeight * 0.12);
 
-  // === QRコードのサイズ計算（ヘッダー内に収める） ===
+  // === QRコードのサイズ計算（固定ヘッダー＋カード枠の上余白） ===
   let qrAreaWidth = 0;
   let qrTotalSize = 0;
+  let qrCellSize = 0;
   let qrObj = null;
   if (hasQr) {
     qrObj = qrcode(0, 'M');
     qrObj.addData(qrUrl);
     qrObj.make();
-    qrTotalSize = Math.round(headerHeight * 0.88);
+
+    // ヘッダー高は従来値のまま固定し、キャプチャ済みカード枠の上余白まで
+    // 右上のQRエリアとして使う。カード本体の開始位置には重ねない。
+    // 白いquiet zoneは規格どおり4マス分だけ確保する。
+    headerHeight = Math.round(srcW * 0.14);
+    const totalModuleCount = qrObj.getModuleCount() + qrQuietZoneModules * 2;
+    qrTotalSize = headerHeight + capturedTopPadding;
+    qrCellSize = qrTotalSize / totalModuleCount;
     qrAreaWidth = qrTotalSize + paddingX; // QR + テキストとの間隔
   }
+
+  const paddingY = Math.round(headerHeight * 0.12);
 
   // テキストエリア（QRの左側に収まる幅）
   const maxTextWidth = srcW - paddingX * 2 - qrAreaWidth;
@@ -7673,47 +7745,32 @@ function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl) {
     });
   }
 
-  // === QRコード描画（ヘッダー右端、上下中央） ===
+  // === QRコード描画（画像右上からカード本体の開始位置まで） ===
   if (hasQr && qrObj) {
     const moduleCount = qrObj.getModuleCount();
-    const qrPadding = Math.round(qrTotalSize * 0.08);
-    const qrInnerSize = qrTotalSize - qrPadding * 2;
-    const cellSize = qrInnerSize / moduleCount;
 
-    // ヘッダー右端に配置
-    // キャプチャ時の .deck-display.capturing 上部 padding（5px × html2canvas scale 4 = 20px）が
-    // ヘッダーと同色で連続して見えるため、ヘッダー単体の中央だとQRが視覚的に上寄りになる。
-    // 「ヘッダー + デッキ画像の上余白」の視覚的中央に来るよう、下方向へ半分だけオフセットする。
-    const deckTopPadding = 20;
-    const qrX = srcW - qrTotalSize - paddingX;
-    const qrY = Math.round((headerHeight - qrTotalSize + deckTopPadding) / 2);
+    // 白いQRエリアを画像の上・右端と、実際のカード画像の開始位置へ接続する。
+    const qrX = srcW - qrTotalSize;
+    const qrY = 0;
 
-    // 白背景 + 角丸
-    const radius = Math.round(qrTotalSize * 0.06);
+    // 白背景は読み取りに必要なquiet zone。角を欠かさず正方形で確保する。
     ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.moveTo(qrX + radius, qrY);
-    ctx.lineTo(qrX + qrTotalSize - radius, qrY);
-    ctx.quadraticCurveTo(qrX + qrTotalSize, qrY, qrX + qrTotalSize, qrY + radius);
-    ctx.lineTo(qrX + qrTotalSize, qrY + qrTotalSize - radius);
-    ctx.quadraticCurveTo(qrX + qrTotalSize, qrY + qrTotalSize, qrX + qrTotalSize - radius, qrY + qrTotalSize);
-    ctx.lineTo(qrX + radius, qrY + qrTotalSize);
-    ctx.quadraticCurveTo(qrX, qrY + qrTotalSize, qrX, qrY + qrTotalSize - radius);
-    ctx.lineTo(qrX, qrY + radius);
-    ctx.quadraticCurveTo(qrX, qrY, qrX + radius, qrY);
-    ctx.closePath();
-    ctx.fill();
+    ctx.fillRect(qrX, qrY, qrTotalSize, qrTotalSize);
 
-    // QRモジュール描画
+    // 各マスの境界を整数座標へ丸め、端数サイズでも滲ませない。
     ctx.fillStyle = '#000000';
     for (let row = 0; row < moduleCount; row++) {
       for (let col = 0; col < moduleCount; col++) {
         if (qrObj.isDark(row, col)) {
+          const x1 = qrX + Math.round((qrQuietZoneModules + col) * qrCellSize);
+          const x2 = qrX + Math.round((qrQuietZoneModules + col + 1) * qrCellSize);
+          const y1 = qrY + Math.round((qrQuietZoneModules + row) * qrCellSize);
+          const y2 = qrY + Math.round((qrQuietZoneModules + row + 1) * qrCellSize);
           ctx.fillRect(
-            qrX + qrPadding + col * cellSize,
-            qrY + qrPadding + row * cellSize,
-            Math.ceil(cellSize),
-            Math.ceil(cellSize)
+            x1,
+            y1,
+            x2 - x1,
+            y2 - y1
           );
         }
       }
@@ -7731,12 +7788,12 @@ async function captureDeck() {
   messageDiv.textContent = '画像を作成中...';
   document.body.appendChild(messageDiv);
 
-  // 確実にメッセージが表示されるよう少し待機
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
   try {
-    // html2canvasの読み込み
-    const html2canvas = await loadHtml2Canvas();
+    // 読み込みと「作成中」表示の描画待ちを並行して行う
+    const [html2canvas] = await Promise.all([
+      loadHtml2Canvas(),
+      waitForNextPaint()
+    ]);
 
     // デッキ表示エリアの取得
     const deckDisplay = document.getElementById('deck-display');
@@ -7752,19 +7809,28 @@ async function captureDeck() {
     const deckName = deckButton ? deckButton.textContent.trim() : `デッキ${currentDeckId}`;
 
     // html2canvasでキャプチャ
-    const originalCanvas = await html2canvas(deckDisplay, {
-      backgroundColor: '#2a2a2a',
-      scale: 4,
-      logging: false,
-      allowTaint: true,
-      useCORS: true,
-      imageTimeout: 0,
-      removeContainer: true
-    });
-
-    // キャプチャ用クラスを削除
-    deckDisplay.classList.remove('capturing');
-    modalContent.classList.remove('capturing-deck');
+    const captureScale = 4;
+    const capturedTopPadding = Math.round(
+      (parseFloat(window.getComputedStyle(deckDisplay).paddingTop) || 0) * captureScale
+    );
+    let originalCanvas;
+    try {
+      originalCanvas = await html2canvas(deckDisplay, {
+        backgroundColor: '#2a2a2a',
+        scale: captureScale,
+        logging: false,
+        allowTaint: true,
+        useCORS: true,
+        imageTimeout: 0,
+        removeContainer: true,
+        // 対象外のカード一覧1,000枚超を複製しない
+        ignoreElements: (element) => element.id === 'content'
+      });
+    } finally {
+      // 画像化に失敗した場合も通常表示へ必ず戻す
+      deckDisplay.classList.remove('capturing');
+      modalContent.classList.remove('capturing-deck');
+    }
 
     const isIOS = ['iPad', 'iPhone'].includes(navigator.platform) || (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
     const showSaveButton = !isIOS;
@@ -7856,7 +7922,13 @@ async function captureDeck() {
         if (includeTitle || includeQr) {
           if (includeTitle) ensureFont();
           await document.fonts.ready;
-          canvas = generateDeckCanvas(originalCanvas, deckName, includeTitle, shareUrl);
+          canvas = generateDeckCanvas(
+            originalCanvas,
+            deckName,
+            includeTitle,
+            shareUrl,
+            capturedTopPadding
+          );
         }
 
         currentCanvas = canvas;
@@ -7932,10 +8004,12 @@ async function captureDeck() {
       // DOMに追加
       document.body.appendChild(imageModal);
 
-      // 少し遅延してからフェードイン（Safari対策）
-      setTimeout(() => {
-        imageModal.classList.add('active');
-      }, 200);
+      // 初期状態を一度描画してからフェードイン
+      waitForNextPaint().then(() => {
+        if (imageModal.isConnected) {
+          imageModal.classList.add('active');
+        }
+      });
     } catch (error) {
       console.error('モーダル表示エラー:', error);
       alert('画像の表示に失敗しました。');
