@@ -10448,7 +10448,7 @@ data-role="除外戻し ドロー"
   data-rare="UC"
   data-attribute="七不思議 廃屋 怨霊"
   data-keyword=""
-  data-role="攻撃時 除外加速 直接ダメ"
+  data-role="攻撃時 除外加速 直接ダメ 生贄"
 >
   <img data-src="images/card_13_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -11120,7 +11120,7 @@ data-role="除外戻し ドロー"
   data-rare="C"
   data-attribute="七不思議 胎内 罪"
   data-keyword=""
-  data-role="直接ダメ ヒール ドレイン"
+  data-role="直接ダメ ヒール ドレイン 生贄"
 >
   <img data-src="images/card_13_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>
@@ -18790,6 +18790,24 @@ data-attribute="妖怪 幽霊"
   data-sakka="匠平"
 >
   <img data-src="images/card_17_p (89).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10079"
+  data-name="ゆるかわの猛々(ゆるかわのもうもう)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月28日"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="七不思議 都市伝説 UMA 猫"
+  data-keyword=""
+  data-role="ヒール "
+  data-sakka="吉田猛々"
+>
+  <img data-src="images/card_17_p (90).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
