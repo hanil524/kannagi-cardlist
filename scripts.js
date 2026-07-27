@@ -558,6 +558,57 @@ const loadImage = (img, priority = false) => {
   queueImageForLoad(img, priority);
 };
 
+// ===== カード一覧の画像はブラウザ標準の遅延読み込みに任せる =====
+//
+// 【経緯・2026年7月】長年の「高速スクロールでカクつき→白画面クラッシュ」の
+// 原因は、メモリでもCSSでもなく「自前の遅延読み込み方式」だった。
+// 実機計測で確定した事実:
+//   ・同じ画像1137枚でも、標準の loading="lazy" なら全て読み込んでも快適
+//     （実測: 1137枚 1394MB デコード済みで FPS 60 / クラッシュなし）
+//   ・自前方式では 179枚 219MB の時点で FPS が 4 まで低下しクラッシュ
+//   ・その時のJS実行の詰まりは最大64ms程度＝JSの処理時間の問題ではない
+//
+// 【なぜ自前方式が遅いのか】
+// IntersectionObserver で見つけた画像をキューに積み、同時15枚で読み込む
+// 実装だったが、このキューは一度積んだ画像を取り消さない。素早く
+// スクロールすると「すでに通り過ぎたカード」の画像まで延々とデコードし続け、
+// 今まさに画面へ出したい画像の描画を妨げていた。
+// ブラウザ標準の遅延読み込みは、通り過ぎた画像の読み込みを自動で取りやめ、
+// デコードの優先順位も画面の状況に合わせて最適化する。
+//
+// 【この関数がすること】
+// 全ての一覧画像に loading="lazy" とサムネイルのURLを設定し、あとは
+// ブラウザに任せる。同時に 'loaded' クラスを付けることで、既存の自前
+// キュー（loadImage / loadVisibleImages など）の対象外にする。
+// data-src（フル画像パス）は拡大モーダルが参照するため必ず保持する。
+const convertListImagesToNativeLazy = () => {
+  const images = document.querySelectorAll('#card-list .card img');
+  images.forEach((img) => {
+    const fullSrc = img.getAttribute('data-src');
+    if (!fullSrc) return;
+
+    const thumbSrc = toListImagePath(fullSrc);
+
+    // サムネイル未生成(404)ならフル画像へ自動フォールバックする
+    // （サムネ生成.bat の実行し忘れでも表示が壊れないようにするため）
+    if (thumbSrc !== fullSrc) {
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = fullSrc;
+      };
+    }
+
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    // 自前キューは 'loaded' が付いた画像を無視するため、二重読み込みを防げる
+    img.classList.add('loaded');
+
+    if (img.src.indexOf('/thumbs/') === -1) {
+      img.src = thumbSrc;
+    }
+  });
+};
+
 // ナビゲーションボタンの状態
 const updateNavigationButtons = () => {
   const prevButton = document.getElementById('prev-image');
@@ -1755,8 +1806,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ローディングスピナーを非表示にし、コンテンツを表示
     document.getElementById('loading-overlay').style.display = 'none';
     document.getElementById('content').style.display = 'block';
-    loadInitialImages();
-    setupLazyLoading();
+    // カード一覧の画像はブラウザ標準の遅延読み込みに任せる（詳細は関数のコメント参照）
+    convertListImagesToNativeLazy();
   });
 
   // 検索ボックスにイベントリスナーを追加
@@ -2915,6 +2966,12 @@ const filterCards = () => {
 
   // カード数を更新
   updateCardCount();
+
+  // 絞り込み後に画面へ入ってきたカードの画像を即座に読み込む。
+  // 窓化で解放済みの画像も、ここで最優先の復帰対象になる
+  // （IntersectionObserver の発火を待たずに埋まるため、空白が見えない）。
+  // ソート処理（sortCards）と同じ既存パターンに合わせている。
+  loadVisibleImages();
 };
 
 // スクロールバーの幅を取得するヘルパー関数

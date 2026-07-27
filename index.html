@@ -1103,6 +1103,16 @@
       </div>
     </div>
   </div>
+
+  <!-- 実機の重さ調査用の計測パネル。URLに ?diag=1 を付けた時だけ読み込まれる。
+       通常の利用者には一切影響しない。調査完了後はこのブロックごと削除してよい。 -->
+  <script>
+    if (location.search.indexOf('diag=1') !== -1) {
+      var s = document.createElement('script');
+      s.src = 'diag-hud.js';
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 
 </html>
