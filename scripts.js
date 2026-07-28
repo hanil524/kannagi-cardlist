@@ -2367,42 +2367,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.card');
   cards.forEach(addCardButtons);
 
-  // ヘルプボタン
-  const helpButton = document.querySelector('.deck-help-button');
-  const helpPopup = document.querySelector('.deck-help-popup');
-  const helpOverlay = document.querySelector('.deck-help-overlay');
-
-  if (helpButton && helpPopup && helpOverlay) {
-    const showHelp = () => {
-      helpPopup.style.display = 'block';
-      helpOverlay.style.display = 'block';
-    };
-
-    const hideHelp = () => {
-      helpPopup.style.display = 'none';
-      helpOverlay.style.display = 'none';
-    };
-
-    helpButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      showHelp();
-    });
-
-    // ポップアップ以外をクリックで閉じる
-    document.addEventListener('click', (e) => {
-      if (helpPopup.style.display === 'block' && !helpPopup.contains(e.target) && e.target !== helpButton) {
-        hideHelp();
-      }
-    });
-
-    // ESCキーでも閉じられるように
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && helpPopup.style.display === 'block') {
-        hideHelp();
-      }
-    });
-  }
-
   // ツールチップのイベントを設定
   document.querySelectorAll('[data-tooltip]').forEach((element) => {
     element.addEventListener('mouseenter', (e) => {
@@ -5667,6 +5631,13 @@ const deckBuilder = {
       const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
       bar.style.height = `${height}%`;
       bar.setAttribute('data-count', count);
+
+      // 棒が枚数の文字より低い場合、中央寄せだと文字が棒からはみ出して
+      // 下の目盛り枠にめり込む。その時だけ文字を棒の下端に揃える
+      // （揃え方はCSSの .cost-bar.is-short 側で指定）
+      if (count > 0 && height < 15) {
+        bar.classList.add('is-short');
+      }
 
       // 枚数表示を追加
       const countDisplay = document.createElement('div');

@@ -7319,4 +7319,330 @@ body {
   }
 }
 
+/* ---------- 22. 取り残された古い体裁の統一 ---------- */
+
+/* (a) 入力欄の文字を本文フォントに揃える
+   input / textarea / select は font-family を継承せず、ブラウザ既定
+   （Arial等）のまま取り残されていた。検索欄とデッキ名入力が本文と
+   別フォントで表示されていた状態を解消する。
+   これらは幅が固定（width:100% / flex:1）なので、文字幅が変わっても
+   レイアウトは一切動かない。 */
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* ============================================================
+   ▼ ボタンのフォント統一（元に戻す場合はこのブロックごと削除）▼
+
+   button も本文フォントに揃える。日本語ラベルの字幅が詰まるため、
+   ボタンの横幅が実測で以下のように狭くなる（＝省スペース化する）。
+
+     キーワード 85.2 → 68.1px   リセット   72 → 59.5px
+     シリーズ   71.4 → 60.3px   コスト   58.8 → 49.2px
+     レア       45.6 → 39.9px   絞り込み   72 → 67.3px
+
+   高さ・余白・文字サイズは一切変えていない。変わるのは字形と
+   それに伴う横幅のみ。元の見た目に戻したい時は、この
+   コメントから下の button { ... } までを削除すれば完全に戻る。
+   ============================================================ */
+button {
+  font-family: inherit;
+}
+
+/* (b) 一括選択モーダル: 単色の旧配色 → 他のモーダルと同じ質感に揃える
+   （高さ・余白・文字サイズは一切変更しない。色と影のみ） */
+.bulk-filter-section button {
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bulk-filter-section button:hover {
+    background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+.bulk-filter-section button.bulk-active {
+  background: linear-gradient(180deg, rgba(155, 28, 28, 0.95) 0%, rgba(125, 18, 18, 0.95) 100%);
+  border-color: rgba(200, 55, 55, 0.5);
+  box-shadow: 0 2px 8px rgba(160, 25, 25, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bulk-filter-section button.bulk-active:hover {
+    background: linear-gradient(180deg, rgba(178, 38, 38, 0.98) 0%, rgba(145, 26, 26, 0.98) 100%);
+  }
+}
+
+.bulk-footer-btn {
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.bulk-footer-btn:hover {
+  background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+}
+
+.bulk-confirm-btn {
+  background: linear-gradient(180deg, rgba(52, 90, 172, 0.95) 0%, rgba(35, 65, 140, 0.95) 100%);
+  border-color: rgba(70, 110, 210, 0.4);
+}
+
+.bulk-confirm-btn:hover {
+  background: linear-gradient(180deg, rgba(65, 105, 195, 0.98) 0%, rgba(45, 80, 162, 0.98) 100%);
+}
+
+.bulk-filter-close {
+  background: linear-gradient(180deg, rgba(88, 88, 93, 0.92) 0%, rgba(68, 68, 73, 0.92) 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.bulk-filter-close:hover {
+  background: linear-gradient(180deg, rgba(108, 108, 113, 0.95) 0%, rgba(88, 88, 93, 0.95) 100%);
+  color: #ffffff;
+}
+
+/* (c) デッキ名の入力欄: 単色の旧スタイル → 他の入力欄と同じダークガラスに */
+.deck-name-input {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  caret-color: #e05555;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- 23. デッキ分布モーダルの質感 ----------
+   平坦だったグラフ・パネル・×ボタンを立体的にする。
+   padding / width / height / font-size / position は一切変更せず、
+   背景・グラデーション・影・角丸・文字色のみで質感を出す
+   （枠線は box-shadow の inset リングで表現し、寸法に影響させない）*/
+
+/* (a) セクションのパネル: 単色の半透明 → ガラス調 */
+.cost-distribution,
+.season-distribution,
+.type-distribution,
+.attribute-distribution {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.025) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* (b) コストグラフの棒: 平坦な赤 → 上が明るい立体的な赤＋淡い発光 */
+.cost-bar {
+  background: linear-gradient(180deg,
+      rgba(255, 96, 86, 0.97) 0%,
+      rgba(214, 48, 44, 0.97) 45%,
+      rgba(158, 24, 24, 0.97) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset -1px 0 0 rgba(0, 0, 0, 0.22),
+    0 0 10px rgba(205, 45, 40, 0.35);
+}
+
+/* 背景の灰色の棒: 奥に沈んで見えるように */
+.cost-bar-background {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.045) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* 棒の上の数字を読みやすく */
+.cost-bar-count {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+/* 棒が低い時（枚数1枚など）だけ、数字を棒の下端に揃える。
+   既定は棒の中央寄せだが、棒が文字より低いと文字が下へはみ出して
+   目盛りの枠にめり込むため。棒の上へ抜ける分は問題ないので、
+   目盛りに触れないギリギリの位置に収まる。
+   ※ 対象の判定は scripts.js 側で .is-short を付与している */
+.cost-bar.is-short .cost-bar-count {
+  bottom: 0;
+}
+
+/* (c) 下部のコスト目盛り: 台座らしく */
+.cost-label {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.055) 100%);
+  border-radius: 0 0 4px 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.cost-label::before {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* (d) 縦書きの見出し帯（季節・種類・主な属性）に深紅のニュアンスを */
+.area-title {
+  background: linear-gradient(180deg, rgba(190, 55, 45, 0.26) 0%, rgba(255, 255, 255, 0.05) 100%);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.07);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+}
+
+/* (e) 数値部分を淡い赤系にして、項目名と視覚的に分ける */
+.season-text::after,
+.type-text::after {
+  color: #ffb3ac;
+}
+
+.attr-table .attr-count {
+  color: #ffb3ac;
+}
+
+/* (f) 「使用属性：○種」ラベルの文字を少し起こす */
+.attribute-unique-label {
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* (g) ×ボタン: 単色の灰色の丸 → 立体的な黒曜石調＋赤い縁取り
+   （「×」の中央寄せはセクション24でまとめて対応） */
+.distribution-close {
+  background:
+    radial-gradient(90% 80% at 50% 115%, rgba(190, 55, 45, 0.4) 0%, rgba(190, 55, 45, 0) 62%),
+    radial-gradient(130% 130% at 32% 20%, #3a3a42 0%, #232329 55%, #14141a 100%);
+  color: #ffd9d5;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.distribution-close:hover {
+  background:
+    radial-gradient(90% 80% at 50% 115%, rgba(214, 70, 60, 0.55) 0%, rgba(214, 70, 60, 0) 62%),
+    radial-gradient(130% 130% at 32% 20%, #46464f 0%, #2b2b32 55%, #191920 100%);
+  color: #ffffff;
+  box-shadow:
+    0 5px 16px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 150, 140, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- 24. 閉じるボタン「×」の中央寄せ（全画面共通） ----------
+
+   【なぜ必要か】
+   文字の「×」は、字面（インク）が行の中心より下に描かれるため、
+   CSSで中央寄せしても見た目が下寄りになる。しかもそのズレ量は
+   フォントごとに違うので、端末（iOS＝SF Pro / Windows＝Segoe UI）で
+   最適な補正値が変わってしまい、余白での微調整では揃えきれない。
+
+   【対策】
+   文字の代わりに2本の線を45度で交差させて「×」を描く。
+   線は要素の中心に絶対配置するため、フォントに一切依存せず
+   どの端末でも必ど真ん中に来る。
+   フィルターモーダルの×（#modal .close）が既にこの方式で、
+   それに全画面を揃える形。
+
+   【寸法を変えないための工夫】
+   元の「×」の文字は削除せず color: transparent で見えなくするだけ。
+   これで文字幅に依存して横幅が決まるボタン（デッキ画面の×など）でも
+   ボタンサイズが1pxも変わらない。線の色は --x-color で指定する。 */
+#back-to-gallery,
+.deck-list-close,
+.deck-thumbnail-close,
+.bulk-filter-close,
+.distribution-close,
+.clear-button {
+  color: transparent;
+}
+
+/* デッキ画面の×だけは position 未指定のため基準を作る
+   （他は元から absolute 配置なので触らない） */
+#back-to-gallery {
+  position: relative;
+}
+
+#back-to-gallery::before,
+#back-to-gallery::after,
+.deck-list-close::before,
+.deck-list-close::after,
+.deck-thumbnail-close::before,
+.deck-thumbnail-close::after,
+.bulk-filter-close::before,
+.bulk-filter-close::after,
+.distribution-close::before,
+.distribution-close::after,
+.clear-button::before,
+.clear-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--x-size, 13px);
+  height: var(--x-weight, 2px);
+  border-radius: 999px;
+  background: var(--x-color, #ffffff);
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+  transition: background-color 0.18s ease;
+}
+
+#back-to-gallery::after,
+.deck-list-close::after,
+.deck-thumbnail-close::after,
+.bulk-filter-close::after,
+.distribution-close::after,
+.clear-button::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* 各ボタンの線の太さ・長さ・色（元の文字サイズに合わせた見た目） */
+#back-to-gallery {
+  --x-size: 14px;
+  --x-weight: 2px;
+  --x-color: #ffffff;
+}
+
+.deck-list-close,
+.deck-thumbnail-close {
+  --x-size: 14px;
+  --x-weight: 2px;
+  --x-color: #e0e0e0;
+}
+
+.deck-list-close:hover,
+.deck-thumbnail-close:hover {
+  --x-color: #ffffff;
+}
+
+.bulk-filter-close {
+  --x-size: 10px;
+  --x-weight: 1.8px;
+  --x-color: #aaaaaa;
+}
+
+.bulk-filter-close:hover {
+  --x-color: #eeeeee;
+}
+
+.distribution-close {
+  --x-size: 11px;
+  --x-weight: 2px;
+  --x-color: #ffd9d5;
+}
+
+.distribution-close:hover {
+  --x-color: #ffffff;
+}
+
+.clear-button {
+  --x-size: 11px;
+  --x-weight: 1.8px;
+  --x-color: rgba(255, 255, 255, 0.55);
+}
+
+.clear-button:hover {
+  --x-color: #ffffff;
+}
+
 /* ▲▲ デザインエンリッチメント層 ここまで ▲▲ */
