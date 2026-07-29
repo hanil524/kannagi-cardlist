@@ -654,7 +654,7 @@ const updateNavigationButtons = () => {
   positionNavButtons();
 };
 
-// ナビゲーションボタンを画像の左右端に配置する
+// ナビゲーションボタンを、画像比率に左右されない一定の基準枠へ配置する
 const positionNavButtons = () => {
   const modalImage = document.getElementById('modal-image');
   const prevButton = document.getElementById('prev-image');
@@ -663,10 +663,13 @@ const positionNavButtons = () => {
 
   if (!modalImage || !prevButton || !nextButton || !modal || modal.style.display === 'none') return;
 
-  const imgRect = modalImage.getBoundingClientRect();
+  const imageStage = modalImage.closest('.image-container');
+  const stageRect = imageStage
+    ? imageStage.getBoundingClientRect()
+    : modalImage.getBoundingClientRect();
 
-  // 画像がまだレンダリングされていない場合はスキップ
-  if (imgRect.width === 0 || imgRect.height === 0) return;
+  // 基準枠がまだレンダリングされていない場合はスキップ
+  if (stageRect.width === 0 || stageRect.height === 0) return;
 
   // ボタンは position:absolute で .modal-content(position:relative) の子要素。
   // getBoundingClientRect はビューポート座標なので、offsetParent の座標を引いて相対座標に変換する。
@@ -677,24 +680,24 @@ const positionNavButtons = () => {
   const prevWidth = prevButton.offsetWidth || 50;
 
   // transform: translateY(-50%) があるため top = 画像中央の相対Y座標でボタン中央が合う
-  const centerY = imgRect.top + imgRect.height / 2 - containerRect.top;
+  const centerY = stageRect.top + stageRect.height / 2 - containerRect.top;
 
-  // prevボタン: 画像の左端の少し外側
-  prevButton.style.left = (imgRect.left - prevWidth - buttonGap - containerRect.left) + 'px';
+  // prevボタン: 基準枠の左端の少し外側
+  prevButton.style.left = (stageRect.left - prevWidth - buttonGap - containerRect.left) + 'px';
   prevButton.style.right = 'auto';
   prevButton.style.top = centerY + 'px';
 
-  // nextボタン: 画像の右端の少し外側
-  nextButton.style.left = (imgRect.right + buttonGap - containerRect.left) + 'px';
+  // nextボタン: 基準枠の右端の少し外側
+  nextButton.style.left = (stageRect.right + buttonGap - containerRect.left) + 'px';
   nextButton.style.right = 'auto';
   nextButton.style.top = centerY + 'px';
 
   // 画面外にはみ出す場合は画像の端に重ねる（最小限のオーバーラップ）
   const viewportWidth = window.innerWidth;
-  if (imgRect.left - prevWidth - buttonGap < 0) {
+  if (stageRect.left - prevWidth - buttonGap < 0) {
     prevButton.style.left = (2 - containerRect.left) + 'px';
   }
-  if (imgRect.right + buttonGap + (nextButton.offsetWidth || 50) > viewportWidth) {
+  if (stageRect.right + buttonGap + (nextButton.offsetWidth || 50) > viewportWidth) {
     nextButton.style.left = 'auto';
     nextButton.style.right = '2px';
   }
@@ -3968,16 +3971,6 @@ const closeImageModal = () => {
 
       if (modalControls && modalSeriesInfo) {
         updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
-
-        let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
-        const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-        const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
-        modalControls.innerHTML = `
-          <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
-          <div class="card-count">${currentCount}/${displayMax}</div>
-          <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
-        `;
-
         setupModalButtonListeners(modalControls);
         updateModalButtonStates(modalControls, cardName);
       }
@@ -4164,16 +4157,6 @@ function openConnectionCard(targetName) {
   // 収録情報・コントロールを更新
   if (modalControls && modalSeriesInfo) {
     updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, targetCard.dataset.series);
-
-    let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
-    const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-    const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
-    modalControls.innerHTML = `
-      <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
-      <div class="card-count">${currentCount}/${displayMax}</div>
-      <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
-    `;
-
     setupModalButtonListeners(modalControls);
     updateModalButtonStates(modalControls, cardName);
   }
@@ -4821,21 +4804,11 @@ const showNextImage = () => {
       // 収録情報を更新
       updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, nextCard.dataset.series);
 
-      // カウント情報を更新
-      let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
-      const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
-      modalControls.innerHTML = `
-        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
-        <div class="card-count">${currentCount}/${displayMax}</div>
-        <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
-      `;
-
       // カード情報とボタン状態を更新
       currentModalCard = nextCard;
       currentModalCardName = cardName;
 
-      // 新しいボタンにイベントリスナーを設定
+      // 既存ボタンの内容とイベントを更新
       setupModalButtonListeners(modalControls);
 
       updateModalButtonStates(modalControls, cardName);
@@ -4889,21 +4862,11 @@ const showPreviousImage = () => {
       // 収録情報を更新
       updateSeriesInfoWithLimit(modalSeriesInfo, modalOverlayInfo, cardName, prevCard.dataset.series);
 
-      // カウント情報を更新
-      let currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
-      const maxAllowed = deckBuilder.getMaxAllowed(cardName);
-      const displayMax = maxAllowed === Infinity ? '∞' : maxAllowed;
-      modalControls.innerHTML = `
-        <button class="card-control-button" id="remove-card" ${currentCount <= 0 ? 'disabled' : ''}>−</button>
-        <div class="card-count">${currentCount}/${displayMax}</div>
-        <button class="card-control-button${currentCount >= maxAllowed ? ' disabled' : ''}" id="add-card">＋</button>
-      `;
-
       // カード情報とボタン状態を更新
       currentModalCard = prevCard;
       currentModalCardName = cardName;
 
-      // 新しいボタンにイベントリスナーを設定
+      // 既存ボタンの内容とイベントを更新
       setupModalButtonListeners(modalControls);
 
       updateModalButtonStates(modalControls, cardName);
@@ -8592,12 +8555,26 @@ function handleModalRemoveCard() {
 function updateModalButtonStates(controls, cardName) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
+  const countDisplay = controls.querySelector('.card-count');
 
   const maxAllowed = deckBuilder.getMaxAllowed(cardName);
   const currentCount = countDeckLimitGroup(deckBuilder.deck, cardName);
+  const isInfinite = maxAllowed === Infinity;
+
+  if (countDisplay) {
+    if (isInfinite) {
+      countDisplay.classList.add('is-infinite');
+      countDisplay.setAttribute('data-count', currentCount);
+      countDisplay.textContent = '';
+    } else {
+      countDisplay.classList.remove('is-infinite');
+      countDisplay.removeAttribute('data-count');
+      countDisplay.textContent = `${currentCount}/${maxAllowed}`;
+    }
+  }
 
   // addボタンはdisabled属性を使わずCSSクラスのみで制御（モバイルでタップ→アラート表示のため）
-  if (maxAllowed !== Infinity && currentCount >= maxAllowed) {
+  if (!isInfinite && currentCount >= maxAllowed) {
     addButton.classList.add('disabled');
   } else {
     addButton.classList.remove('disabled');

@@ -2899,6 +2899,20 @@ body.modal-open {
   align-items: center;
 }
 
+/* 画像自体は元の縦横比のまま表示し、付属UIだけは一定の基準枠に固定する */
+.image-modal .image-container {
+  --modal-image-height: min(475px, 111.8vw, calc(85vh - 120px), calc(100vh - 222px));
+  flex: 0 0 auto;
+  height: calc(var(--modal-image-height) + 2px);
+  aspect-ratio: 11 / 15;
+}
+
+@supports (height: 100svh) {
+  .image-modal .image-container {
+    --modal-image-height: min(475px, 111.8vw, calc(85svh - 120px), calc(100svh - 222px));
+  }
+}
+
 /* カード増減ボタンのスタイル */
 .card-controls {
   position: absolute;
@@ -2988,9 +3002,15 @@ body.modal-open {
 
 /* モーダル内の拡大画像設定 */
 .image-modal .image-container img {
-  width: min(340px, 84vw);
-  height: auto;
-  max-height: calc(85vh - 80px);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: var(--modal-image-height);
+  max-width: none;
+  max-height: none;
+  margin: 0;
   opacity: 1;
   transition: opacity 0.4s ease;
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -2999,10 +3019,18 @@ body.modal-open {
 }
 
 @media (min-width: 769px) {
+  .image-modal .image-container {
+    --modal-image-height: min(615px, 50.3vw, calc(85vh - 120px), calc(100vh - 222px));
+  }
+
   .image-modal .image-container img {
-    width: min(440px, 36vw);
-    height: auto;
     border-radius: 28px;
+  }
+
+  @supports (height: 100svh) {
+    .image-modal .image-container {
+      --modal-image-height: min(615px, 50.3vw, calc(85svh - 120px), calc(100svh - 222px));
+    }
   }
 }
 

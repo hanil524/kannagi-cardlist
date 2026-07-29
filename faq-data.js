@@ -1,4 +1,4 @@
-// このファイルは「公式FAQを更新.bat」で自動生成しています。
+// 「公式FAQを更新.bat」で自動生成。
 window.__KANNAGI_FAQ_DATA__ = {
   "generatedAt": "2026-07-29T18:21:53+09:00",
   "sourceIndex": "https://www.kannagi-cardgame.jp/general-5",
