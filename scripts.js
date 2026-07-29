@@ -706,6 +706,7 @@ window.addEventListener('resize', () => {
   if (modal && modal.style.display !== 'none') {
     positionNavButtons();
     positionModalFavoriteButton();
+    positionModalFaqButton();
   }
 });
 
@@ -3676,6 +3677,11 @@ let suppressTrustedModalClickUntil = 0;
 let imageModalCloseTimer = null;
 let imageModalIsClosing = false;
 const IMAGE_MODAL_CLOSE_DURATION = 180;
+let modalFaqOverlay = null;
+let modalFaqCloseTimer = null;
+let modalFaqReturnFocus = null;
+let modalFaqOpenCardName = '';
+const MODAL_FAQ_CLOSE_DURATION = 160;
 
 
 const openImageModal = (src) => {
@@ -3934,6 +3940,7 @@ const openImageModal = (src) => {
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
+  closeCardFaqPanel({ restoreFocus: false, immediate: true });
   activateNextModalTapDirectly = false;
 
   // 関連カードモーダルのスタックがある場合は前のカードに戻る
@@ -4212,6 +4219,12 @@ const activateModalTapTarget = (target) => {
 
   if (target.closest('#favorite-card')) {
     if (currentModalCard) toggleFavoriteCard(currentModalCard);
+    return;
+  }
+
+  const faqButton = target.closest('#card-faq-button');
+  if (faqButton && !faqButton.hidden) {
+    openCardFaqPanel(faqButton);
     return;
   }
 
@@ -8003,21 +8016,30 @@ let modalControlsInitialized = false;
 let currentModalCard = null;
 let currentModalCardName = null;
 
-function positionModalFavoriteButton(controls = modalControls, favoriteButton = document.getElementById('favorite-card')) {
-  if (!controls || !favoriteButton || !controls.isConnected || !favoriteButton.isConnected) return;
+function positionModalSideButton(controls, button, direction) {
+  if (!controls || !button || !controls.isConnected || !button.isConnected || button.hidden) return;
   const controlsWidth = controls.offsetWidth;
   const controlsHeight = controls.offsetHeight;
-  const favoriteWidth = favoriteButton.offsetWidth;
-  const favoriteHeight = favoriteButton.offsetHeight;
-  if (!controlsWidth || !controlsHeight || !favoriteWidth || !favoriteHeight) return;
+  const buttonWidth = button.offsetWidth;
+  const buttonHeight = button.offsetHeight;
+  if (!controlsWidth || !controlsHeight || !buttonWidth || !buttonHeight) return;
 
   const gap = window.innerWidth <= 768 ? 12 : 14;
-  const centerOffset = controlsWidth / 2 + gap + favoriteWidth / 2;
+  const centerOffset = controlsWidth / 2 + gap + buttonWidth / 2;
   const controlsBottom = parseFloat(window.getComputedStyle(controls).bottom) || 0;
-  const favoriteBottom = controlsBottom + (controlsHeight - favoriteHeight) / 2;
+  const buttonBottom = controlsBottom + (controlsHeight - buttonHeight) / 2;
+  const operator = direction < 0 ? '-' : '+';
 
-  favoriteButton.style.left = `calc(50% + ${Math.round(centerOffset)}px)`;
-  favoriteButton.style.bottom = `${Math.round(favoriteBottom)}px`;
+  button.style.left = `calc(50% ${operator} ${Math.round(centerOffset)}px)`;
+  button.style.bottom = `${Math.round(buttonBottom)}px`;
+}
+
+function positionModalFavoriteButton(controls = modalControls, favoriteButton = document.getElementById('favorite-card')) {
+  positionModalSideButton(controls, favoriteButton, 1);
+}
+
+function positionModalFaqButton(controls = modalControls, faqButton = document.getElementById('card-faq-button')) {
+  positionModalSideButton(controls, faqButton, -1);
 }
 
 function ensureModalFavoriteButton(controls) {
@@ -8044,11 +8066,449 @@ function ensureModalFavoriteButton(controls) {
   return favoriteButton;
 }
 
+function normalizeModalFaqCardName(value) {
+  return String(value || '')
+    .normalize('NFKC')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/（[^）]*）/g, '')
+    .replace(/^[\s『「【]+|[\s』」】]+$/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getModalFaqRoot() {
+  const root = window.__KANNAGI_FAQ_DATA__;
+  return root && typeof root === 'object' ? root : null;
+}
+
+function normalizeModalFaqEntries(value) {
+  let entries = value;
+  if (entries && !Array.isArray(entries) && Array.isArray(entries.entries)) {
+    entries = entries.entries;
+  } else if (entries && !Array.isArray(entries) && typeof entries === 'object') {
+    entries = [entries];
+  }
+  if (!Array.isArray(entries)) return [];
+
+  return entries.filter((entry) => {
+    if (!entry || typeof entry !== 'object') return false;
+    const question = entry.question ?? entry.q ?? entry.title;
+    const answer = entry.answer ?? entry.a;
+    return String(question || '').trim() !== '' && String(answer || '').trim() !== '';
+  });
+}
+
+function getModalFaqEntries(cardName) {
+  const root = getModalFaqRoot();
+  const byCard = root && root.byCard;
+  if (!byCard || typeof byCard !== 'object') return [];
+
+  const displayName = stripCardReading(String(cardName || ''));
+  const normalizedName = normalizeModalFaqCardName(displayName);
+  if (!normalizedName) return [];
+
+  const directKeys = [cardName, displayName, normalizedName];
+  for (const key of directKeys) {
+    if (key && Object.prototype.hasOwnProperty.call(byCard, key)) {
+      return normalizeModalFaqEntries(byCard[key]);
+    }
+  }
+
+  const matchingKey = Object.keys(byCard).find(
+    (key) => normalizeModalFaqCardName(key) === normalizedName
+  );
+  return matchingKey ? normalizeModalFaqEntries(byCard[matchingKey]) : [];
+}
+
+function getModalFaqEntryText(entry, keys) {
+  for (const key of keys) {
+    const value = entry && entry[key];
+    if (value !== undefined && value !== null && String(value).trim() !== '') {
+      return String(value).trim();
+    }
+  }
+  return '';
+}
+
+function getSafeOfficialFaqUrl(entry) {
+  const rawUrl =
+    getModalFaqEntryText(entry, ['sourceUrl', 'url']) ||
+    (entry && entry.source && typeof entry.source === 'object' ? entry.source.url : '');
+  if (!rawUrl) return '';
+
+  try {
+    const url = new URL(rawUrl, 'https://www.kannagi-cardgame.jp/');
+    const host = url.hostname.toLowerCase();
+    const isOfficialHost =
+      host === 'kannagi-cardgame.jp' || host.endsWith('.kannagi-cardgame.jp');
+    return url.protocol === 'https:' && isOfficialHost ? url.href : '';
+  } catch (error) {
+    return '';
+  }
+}
+
+function getModalFaqGeneratedLabel() {
+  const root = getModalFaqRoot();
+  const rawDate =
+    root && (root.generatedAt || root.updatedAt || (root.meta && root.meta.generatedAt));
+  if (!rawDate) return '';
+
+  const match = String(rawDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `最終取得 ${match[1]}.${match[2]}.${match[3]}` : '';
+}
+
+function isCardFaqPanelOpen() {
+  return !!(modalFaqOverlay && modalFaqOverlay.classList.contains('is-open'));
+}
+
+function createModalFaqButtonIcon(button) {
+  const svgNamespace = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNamespace, 'svg');
+  svg.classList.add('card-faq-button-icon');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+
+  const curve = document.createElementNS(svgNamespace, 'path');
+  curve.setAttribute(
+    'd',
+    'M8.75 8.75a3.25 3.25 0 1 1 5.39 2.45C12.78 12.3 12 12.86 12 14.5'
+  );
+
+  const dot = document.createElementNS(svgNamespace, 'circle');
+  dot.setAttribute('cx', '12');
+  dot.setAttribute('cy', '18');
+  dot.setAttribute('r', '1.05');
+
+  svg.append(curve, dot);
+  button.replaceChildren(svg);
+}
+
+function ensureModalFaqButton(controls) {
+  if (!controls || !currentModalCardName) return null;
+  const container = controls.closest('.image-container') || modalContainer;
+  if (!container) return null;
+
+  const entries = getModalFaqEntries(currentModalCardName);
+  const normalizedCurrentName = normalizeModalFaqCardName(currentModalCardName);
+  if (
+    isCardFaqPanelOpen() &&
+    normalizeModalFaqCardName(modalFaqOpenCardName) !== normalizedCurrentName
+  ) {
+    closeCardFaqPanel({ restoreFocus: false, immediate: true });
+  }
+
+  let faqButton = container.querySelector('#card-faq-button');
+  if (entries.length === 0) {
+    if (faqButton) {
+      faqButton.hidden = true;
+      faqButton.setAttribute('aria-expanded', 'false');
+    }
+    return faqButton;
+  }
+
+  if (!faqButton) {
+    faqButton = document.createElement('button');
+    faqButton.type = 'button';
+    faqButton.id = 'card-faq-button';
+    faqButton.className = 'card-faq-modal-button';
+    faqButton.setAttribute('aria-haspopup', 'dialog');
+    faqButton.setAttribute('aria-controls', 'card-faq-dialog');
+    createModalFaqButtonIcon(faqButton);
+    // 増減コントロールとは別要素として画像コンテナへ置き、既存枠の位置・幅を変えない。
+    container.appendChild(faqButton);
+  }
+
+  const displayName = stripCardReading(currentModalCardName);
+  faqButton.hidden = false;
+  faqButton.title = '公式Q&A';
+  faqButton.setAttribute('aria-label', `公式Q&Aを表示：${displayName}`);
+  faqButton.setAttribute(
+    'aria-expanded',
+    String(
+      isCardFaqPanelOpen() &&
+      normalizeModalFaqCardName(modalFaqOpenCardName) === normalizedCurrentName
+    )
+  );
+  faqButton.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openCardFaqPanel(faqButton);
+  };
+
+  requestAnimationFrame(() => positionModalFaqButton(controls, faqButton));
+  return faqButton;
+}
+
+function createCardFaqOverlay() {
+  if (modalFaqOverlay && modalFaqOverlay.isConnected) return modalFaqOverlay;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'card-faq-overlay';
+  overlay.className = 'card-faq-overlay';
+  overlay.hidden = true;
+  overlay.setAttribute('aria-hidden', 'true');
+
+  const dialog = document.createElement('section');
+  dialog.id = 'card-faq-dialog';
+  dialog.className = 'card-faq-dialog';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-labelledby', 'card-faq-title');
+  dialog.setAttribute('aria-describedby', 'card-faq-meta');
+  dialog.tabIndex = -1;
+
+  const header = document.createElement('header');
+  header.className = 'card-faq-header';
+
+  const heading = document.createElement('div');
+  heading.className = 'card-faq-heading';
+
+  const eyebrow = document.createElement('span');
+  eyebrow.className = 'card-faq-eyebrow';
+  eyebrow.textContent = '公式Q&A';
+
+  const title = document.createElement('h2');
+  title.id = 'card-faq-title';
+
+  const meta = document.createElement('p');
+  meta.id = 'card-faq-meta';
+  meta.className = 'card-faq-meta';
+
+  heading.append(eyebrow, title, meta);
+
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'card-faq-close';
+  closeButton.setAttribute('aria-label', 'Q&Aを閉じる');
+  closeButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    closeCardFaqPanel();
+  });
+
+  header.append(heading, closeButton);
+
+  const scrollArea = document.createElement('div');
+  scrollArea.className = 'card-faq-scroll';
+  scrollArea.tabIndex = 0;
+  scrollArea.setAttribute('aria-label', 'Q&A本文');
+
+  dialog.append(header, scrollArea);
+  overlay.appendChild(dialog);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closeCardFaqPanel();
+  });
+  dialog.addEventListener('click', (event) => event.stopPropagation());
+  overlay.addEventListener('keydown', handleCardFaqPanelKeydown);
+
+  document.body.appendChild(overlay);
+  modalFaqOverlay = overlay;
+  return overlay;
+}
+
+function handleCardFaqPanelKeydown(event) {
+  // 背面にある画像送り・カード増減用のdocumentキーハンドラーへ流さない。
+  event.stopPropagation();
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeCardFaqPanel();
+    return;
+  }
+  if (event.key !== 'Tab') return;
+
+  const focusable = Array.from(
+    modalFaqOverlay.querySelectorAll(
+      'button:not([disabled]), a[href], summary, [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((element) => !element.hidden && element.getClientRects().length > 0);
+
+  if (focusable.length === 0) {
+    event.preventDefault();
+    modalFaqOverlay.querySelector('.card-faq-dialog')?.focus({ preventScroll: true });
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus({ preventScroll: true });
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
+}
+
+function renderCardFaqPanel(entries, cardName) {
+  const overlay = createCardFaqOverlay();
+  const title = overlay.querySelector('#card-faq-title');
+  const meta = overlay.querySelector('#card-faq-meta');
+  const scrollArea = overlay.querySelector('.card-faq-scroll');
+  const displayName = stripCardReading(String(cardName || ''));
+
+  title.textContent = `『${displayName}』のQ&A`;
+  const metaParts = [`${entries.length}件`];
+  const generatedLabel = getModalFaqGeneratedLabel();
+  if (generatedLabel) metaParts.push(generatedLabel);
+  meta.textContent = metaParts.join(' ・ ');
+  scrollArea.replaceChildren();
+
+  entries.forEach((entry, index) => {
+    const details = document.createElement('details');
+    details.className = 'card-faq-entry';
+    details.open = index === 0;
+
+    const summary = document.createElement('summary');
+    summary.className = 'card-faq-question';
+
+    const questionMark = document.createElement('span');
+    questionMark.className = 'card-faq-mark card-faq-mark-q';
+    questionMark.setAttribute('aria-hidden', 'true');
+    questionMark.textContent = 'Q';
+
+    const questionText = document.createElement('span');
+    questionText.className = 'card-faq-question-text';
+    questionText.textContent = getModalFaqEntryText(entry, ['question', 'q', 'title']);
+
+    const chevron = document.createElement('span');
+    chevron.className = 'card-faq-chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+
+    summary.append(questionMark, questionText, chevron);
+
+    const answer = document.createElement('div');
+    answer.className = 'card-faq-answer';
+
+    const answerMark = document.createElement('span');
+    answerMark.className = 'card-faq-mark card-faq-mark-a';
+    answerMark.setAttribute('aria-hidden', 'true');
+    answerMark.textContent = 'A';
+
+    const answerText = document.createElement('div');
+    answerText.className = 'card-faq-answer-text';
+    answerText.textContent = getModalFaqEntryText(entry, ['answer', 'a']);
+    answer.append(answerMark, answerText);
+
+    const footer = document.createElement('footer');
+    footer.className = 'card-faq-entry-footer';
+    const series = getModalFaqEntryText(entry, [
+      'series',
+      'category',
+      'pageTitle',
+      'sourceTitle'
+    ]);
+    if (series) {
+      const seriesChip = document.createElement('span');
+      seriesChip.className = 'card-faq-series';
+      seriesChip.textContent = series;
+      footer.appendChild(seriesChip);
+    }
+
+    const sourceUrl = getSafeOfficialFaqUrl(entry);
+    if (sourceUrl) {
+      const sourceLink = document.createElement('a');
+      sourceLink.className = 'card-faq-source';
+      sourceLink.href = sourceUrl;
+      sourceLink.target = '_blank';
+      sourceLink.rel = 'noopener noreferrer';
+      sourceLink.textContent = '公式ページで確認';
+      sourceLink.setAttribute('aria-label', '公式ページで確認（新しいタブで開く）');
+      const externalMark = document.createElement('span');
+      externalMark.setAttribute('aria-hidden', 'true');
+      externalMark.textContent = '↗';
+      sourceLink.append(' ', externalMark);
+      footer.appendChild(sourceLink);
+    }
+
+    details.append(summary, answer);
+    if (footer.childElementCount > 0) details.appendChild(footer);
+    scrollArea.appendChild(details);
+  });
+
+  scrollArea.scrollTop = 0;
+}
+
+function openCardFaqPanel(trigger = document.getElementById('card-faq-button')) {
+  if (!currentModalCardName) return;
+  const entries = getModalFaqEntries(currentModalCardName);
+  if (entries.length === 0) return;
+
+  if (modalFaqCloseTimer !== null) {
+    clearTimeout(modalFaqCloseTimer);
+    modalFaqCloseTimer = null;
+  }
+
+  const overlay = createCardFaqOverlay();
+  renderCardFaqPanel(entries, currentModalCardName);
+  modalFaqReturnFocus = trigger && trigger.isConnected ? trigger : null;
+  modalFaqOpenCardName = currentModalCardName;
+
+  const modalContent = document.querySelector('#image-modal .modal-content');
+  if (modalContent) {
+    modalContent.inert = true;
+    modalContent.setAttribute('aria-hidden', 'true');
+  }
+
+  overlay.hidden = false;
+  overlay.setAttribute('aria-hidden', 'false');
+  if (modalFaqReturnFocus) modalFaqReturnFocus.setAttribute('aria-expanded', 'true');
+
+  requestAnimationFrame(() => {
+    overlay.classList.add('is-open');
+    overlay.querySelector('.card-faq-close')?.focus({ preventScroll: true });
+  });
+}
+
+function closeCardFaqPanel({ restoreFocus = true, immediate = false } = {}) {
+  const overlay = modalFaqOverlay;
+  if (!overlay || overlay.hidden) return;
+
+  if (modalFaqCloseTimer !== null) {
+    clearTimeout(modalFaqCloseTimer);
+    modalFaqCloseTimer = null;
+  }
+
+  const returnTarget = modalFaqReturnFocus;
+  const modalContent = document.querySelector('#image-modal .modal-content');
+  if (modalContent) {
+    modalContent.inert = false;
+    modalContent.removeAttribute('aria-hidden');
+  }
+
+  if (returnTarget && returnTarget.isConnected) {
+    returnTarget.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) returnTarget.focus({ preventScroll: true });
+  } else if (overlay.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
+
+  overlay.classList.remove('is-open');
+  overlay.setAttribute('aria-hidden', 'true');
+  modalFaqOpenCardName = '';
+  modalFaqReturnFocus = null;
+
+  const finishClose = () => {
+    overlay.hidden = true;
+    overlay.querySelector('.card-faq-scroll')?.replaceChildren();
+    modalFaqCloseTimer = null;
+  };
+
+  if (immediate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    finishClose();
+  } else {
+    modalFaqCloseTimer = setTimeout(finishClose, MODAL_FAQ_CLOSE_DURATION);
+  }
+}
+
 // モーダルボタンにイベントリスナーを設定する関数
 function setupModalButtonListeners(controls) {
   const addButton = controls.querySelector('#add-card');
   const removeButton = controls.querySelector('#remove-card');
   ensureModalFavoriteButton(controls);
+  ensureModalFaqButton(controls);
 
   if (addButton) {
     addButton.onclick = (e) => {
@@ -8078,6 +8538,7 @@ function setupModalCardControlsOnce(controls, card, cardName) {
   currentModalCard = card;
   currentModalCardName = cardName;
   ensureModalFavoriteButton(controls);
+  ensureModalFaqButton(controls);
 
   // イベントリスナーは一度だけ設定
   if (!modalControlsInitialized) {
