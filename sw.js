@@ -1,7 +1,7 @@
 // Service Worker - 巫カードフィルター キャッシュ
 // GitHub Pages対応: 静的リソースをキャッシュしてリピーターの読み込みを高速化
 
-const CACHE_VERSION = 'kannagi-v1';
+const CACHE_VERSION = 'kannagi-v2-20260729-card-faq';
 const STATIC_CACHE = CACHE_VERSION + '-static';
 const IMAGE_CACHE = CACHE_VERSION + '-images';
 
@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   './index.html',
   './styles.css',
   './scripts.js',
+  './faq-data.js',
   './cards.js',
   './placeholder.jpg',
   './favicon/favicon.ico'
