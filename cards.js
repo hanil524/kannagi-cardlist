@@ -18809,5 +18809,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (90).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10080"
+  data-name="副流煙（ふくりゅうえん）"
+  data-cost="6"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年7月30日"
+  data-type="道具札"
+  data-season="秋"
+  data-rare=""
+  data-attribute="噂 灯火"
+  data-keyword=""
+  data-role=""
+  data-sakka="大赤見ノヴ,ハニトラ梅木"
+>
+  <img data-src="images/card_17_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
