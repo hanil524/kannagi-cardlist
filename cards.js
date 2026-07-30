@@ -18794,7 +18794,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10079"
-  data-name="ゆるかわの猛々(ゆるかわのもうもう)"
+  data-name="つばさねこ"
   data-cost="0"
   data-power="0"
   data-series="プロモ"
@@ -18826,6 +18826,25 @@ data-attribute="妖怪 幽霊"
   data-sakka="大赤見ノヴ,ハニトラ梅木"
 >
   <img data-src="images/card_17_p (91).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10081"
+  data-name="神奈備(かみなび)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年8月29日"
+  data-type="怪異札"
+  data-season="無"
+  data-rare=""
+  data-attribute="都市伝説 烏 罪 病"
+  data-keyword=""
+  data-role="サーチ "
+  data-connection="八咫烏（やたがらす）,中野友加里(なかのゆかり),世界ミステリーch(せかいみすてりーch),MATT(まっと),KAMNA(かむな)"
+  data-sakka="KAMNA"
+>
+  <img data-src="images/card_17_p (92).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;
