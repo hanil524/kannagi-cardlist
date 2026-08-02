@@ -18830,7 +18830,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10081"
-  data-name="神奈備(かみなび)"
+  data-name="神奈備(かむなび)"
   data-cost="0"
   data-power="0"
   data-series="プロモ"
