@@ -7729,6 +7729,52 @@ function generateDeckCanvas(originalCanvas, deckName, includeTitle, qrUrl, captu
   return newCanvas;
 }
 
+// html2canvas が小数pxの外寸を片側だけ切り上げないよう、
+// キャプチャ中だけ現在の切り上げ後と同じ整数外寸へ揃える。
+// カード自体の寸法は変えず、増えた端数は既存の中央配置で四辺へ分配する。
+function normalizeDeckCaptureFrame(deckDisplay, captureScale) {
+  const originalWidth = deckDisplay.style.width;
+  const originalHeight = deckDisplay.style.height;
+  const computedStyle = window.getComputedStyle(deckDisplay);
+  const initialRect = deckDisplay.getBoundingClientRect();
+  const toNumber = (value) => parseFloat(value) || 0;
+  const horizontalInsets =
+    toNumber(computedStyle.paddingLeft) +
+    toNumber(computedStyle.paddingRight) +
+    toNumber(computedStyle.borderLeftWidth) +
+    toNumber(computedStyle.borderRightWidth);
+  const verticalInsets =
+    toNumber(computedStyle.paddingTop) +
+    toNumber(computedStyle.paddingBottom) +
+    toNumber(computedStyle.borderTopWidth) +
+    toNumber(computedStyle.borderBottomWidth);
+  const targetWidth = Math.ceil(initialRect.width - 0.001);
+  const targetHeight = Math.ceil(initialRect.height - 0.001);
+  const isBorderBox = computedStyle.boxSizing === 'border-box';
+
+  if (targetWidth - initialRect.width > 0.001) {
+    deckDisplay.style.width = `${Math.max(0, targetWidth - (isBorderBox ? 0 : horizontalInsets))}px`;
+  }
+  if (targetHeight - initialRect.height > 0.001) {
+    deckDisplay.style.height = `${Math.max(0, targetHeight - (isBorderBox ? 0 : verticalInsets))}px`;
+  }
+
+  const normalizedRect = deckDisplay.getBoundingClientRect();
+  const firstCard = deckDisplay.querySelector('.deck-card');
+  const firstCardRect = firstCard?.getBoundingClientRect();
+  const capturedTopPadding = firstCardRect
+    ? Math.round(Math.max(0, firstCardRect.top - normalizedRect.top) * captureScale)
+    : Math.round(toNumber(computedStyle.paddingTop) * captureScale);
+
+  return {
+    capturedTopPadding,
+    restore() {
+      deckDisplay.style.width = originalWidth;
+      deckDisplay.style.height = originalHeight;
+    }
+  };
+}
+
 // デッキ画像の保存機能
 async function captureDeck() {
   // 保存中メッセージを表示（最初に表示）
@@ -7759,9 +7805,8 @@ async function captureDeck() {
 
     // html2canvasでキャプチャ
     const captureScale = 4;
-    const capturedTopPadding = Math.round(
-      (parseFloat(window.getComputedStyle(deckDisplay).paddingTop) || 0) * captureScale
-    );
+    const captureFrame = normalizeDeckCaptureFrame(deckDisplay, captureScale);
+    const capturedTopPadding = captureFrame.capturedTopPadding;
     let originalCanvas;
     try {
       originalCanvas = await html2canvas(deckDisplay, {
@@ -7777,6 +7822,7 @@ async function captureDeck() {
       });
     } finally {
       // 画像化に失敗した場合も通常表示へ必ず戻す
+      captureFrame.restore();
       deckDisplay.classList.remove('capturing');
       modalContent.classList.remove('capturing-deck');
     }
