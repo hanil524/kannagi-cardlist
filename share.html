@@ -3,149 +3,479 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#18181c">
 <title>デッキ共有 | 巫カードフィルター</title>
 <meta name="description" content="巫KANNAGIカードゲーム デッキ共有ページ">
 <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="images/icon.png">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  color-scheme: dark;
+  --share-bg: #18181c;
+  --share-panel: rgba(34, 34, 40, 0.94);
+  --share-panel-deep: rgba(24, 24, 29, 0.96);
+  --share-line: rgba(255, 255, 255, 0.11);
+  --share-line-soft: rgba(255, 255, 255, 0.065);
+  --share-text: #f3f1f1;
+  --share-muted: #aaa5a6;
+  --share-red: #a63a40;
+  --share-red-bright: #cf5960;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  background: var(--share-bg);
+}
+
 body {
-  font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
-  /* 本体サイトと同じチャコール＋深紅の空気感に統一 */
-  background-color: #232328;
-  background-image:
-    radial-gradient(120% 90% at 50% -10%, rgba(120, 22, 26, 0.16) 0%, rgba(120, 22, 26, 0) 55%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23303036' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat, repeat;
-  color: #e0e0e0;
+  position: relative;
   min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  color: var(--share-text);
+  font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'メイリオ', sans-serif;
+  background-color: var(--share-bg);
+  background-image:
+    radial-gradient(100% 55% at 50% -8%, rgba(142, 35, 42, 0.24) 0%, rgba(93, 22, 28, 0.06) 46%, transparent 74%),
+    linear-gradient(180deg, #202024 0%, #18181c 48%, #151519 100%);
 }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .share-container {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 900px;
-  padding: 16px;
+  max-width: 932px;
+  padding: 18px 16px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* タイトル */
-.deck-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #fff;
+.share-header {
+  position: relative;
+  width: 100%;
+  margin: 4px 0 14px;
+  padding: 20px 24px 18px;
+  overflow: hidden;
   text-align: center;
-  margin: 12px 0 16px;
-  word-break: break-all;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--share-line);
+  border-radius: 16px;
+  background:
+    radial-gradient(80% 150% at 50% -55%, rgba(182, 60, 68, 0.23), transparent 70%),
+    linear-gradient(145deg, rgba(47, 46, 52, 0.97), rgba(29, 29, 34, 0.97));
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
-/* カードグリッド */
+.share-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--share-red-bright), transparent);
+  box-shadow: 0 0 14px rgba(207, 89, 96, 0.45);
+}
+
+.share-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #d5a8aa;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.share-eyebrow::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--share-red-bright);
+  box-shadow: 0 0 8px rgba(207, 89, 96, 0.7);
+}
+
+.deck-title {
+  margin: 7px 0 10px;
+  color: #fff;
+  font-size: clamp(20px, 3.4vw, 27px);
+  font-weight: 750;
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+}
+
+.deck-count {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  min-width: 58px;
+  padding: 4px 11px;
+  color: #cbc6c7;
+  font-size: 12px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid rgba(207, 89, 96, 0.28);
+  border-radius: 999px;
+  background: rgba(119, 31, 37, 0.18);
+}
+
+.deck-count strong {
+  color: #f07a80;
+  font-size: 16px;
+}
+
+.deck-panel {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--share-line-soft);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(38, 38, 44, 0.88), rgba(22, 22, 27, 0.94));
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.deck-panel::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  border-radius: 13px;
+}
+
 .card-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
   width: 100%;
-  margin-bottom: 20px;
 }
-@media (min-width: 769px) {
-  .card-grid {
-    grid-template-columns: repeat(8, 1fr);
-    gap: 6px;
-  }
-}
+
 .card-cell {
   position: relative;
-  border-radius: 4px;
   overflow: hidden;
-  background: #2b2b31;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   aspect-ratio: 63/88;
+  border-radius: 5px;
+  background: #2b2b31;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.46);
 }
+
+.card-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.075);
+}
+
 .card-cell img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* デッキコードエリア */
 .code-section {
   width: 100%;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--share-line);
+  border-radius: 15px;
+  background:
+    linear-gradient(135deg, rgba(42, 41, 47, 0.96), rgba(25, 25, 30, 0.97));
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
+
+.code-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .code-label {
-  font-size: 13px;
-  color: #aaa;
-  margin-bottom: 6px;
+  color: #f2eeee;
+  font-size: 14px;
+  font-weight: 700;
 }
+
+.code-hint {
+  color: var(--share-muted);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: right;
+}
+
 .code-wrapper {
   display: flex;
-  gap: 8px;
-  align-items: stretch;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 11px;
 }
+
 .code-text {
-  flex: 1;
-  background: #26262b;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 6px;
-  color: #e0e0e0;
-  font-size: 12px;
-  padding: 10px;
+  min-width: 0;
+  min-height: 48px;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  padding: 11px 13px;
+  overflow-wrap: anywhere;
   word-break: break-all;
-  min-height: 44px;
-  line-height: 1.5;
+  color: #dedadb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 10px;
+  background: rgba(13, 13, 17, 0.54);
+  box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.28);
   user-select: all;
   -webkit-user-select: all;
 }
+
 .copy-button {
-  flex-shrink: 0;
-  padding: 0 16px;
-  background: linear-gradient(180deg, #4a86d0 0%, #3a6cb0 100%);
+  flex: 0 0 92px;
+  inline-size: 92px;
+  min-inline-size: 92px;
+  max-inline-size: 92px;
+  block-size: 48px;
+  min-block-size: 48px;
+  max-block-size: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(237, 132, 138, 0.3);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #a43b42 0%, #7e282e 100%);
+  box-shadow:
+    0 5px 13px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition: background 160ms ease, box-shadow 160ms ease, transform 100ms ease, opacity 160ms ease;
 }
-.copy-button:active { opacity: 0.8; }
+
+.copy-label {
+  grid-area: 1 / 1;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.copy-label-done {
+  opacity: 0;
+  transform: translateY(3px);
+}
+
 .copy-button.copied {
-  background: #5cb85c;
+  border-color: rgba(139, 210, 157, 0.28);
+  background: linear-gradient(180deg, #4f9b65 0%, #39754c 100%);
 }
 
-/* メインサイトリンク */
+.copy-button.copied .copy-label-default {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.copy-button.copied .copy-label-done {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.copy-button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.copy-button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.copy-button:focus-visible,
+.site-link a:focus-visible {
+  outline: 2px solid #e16a70;
+  outline-offset: 3px;
+}
+
 .site-link {
-  margin-top: 8px;
-  margin-bottom: 24px;
+  margin: 14px 0 4px;
 }
+
 .site-link a {
-  color: #4da6ff;
-  text-decoration: none;
-  font-size: 14px;
-}
-.site-link a:hover { text-decoration: underline; }
-
-/* エラー */
-.error-message {
-  text-align: center;
-  margin-top: 60px;
-  color: #ccc;
-  font-size: 16px;
-}
-.error-message a { color: #4da6ff; }
-
-/* 枚数表示 */
-.deck-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  color: #c9c4c5;
   font-size: 13px;
-  color: #aaa;
-  margin-bottom: 12px;
+  text-decoration: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  transition: color 150ms ease, background 150ms ease;
+}
+
+@media (hover: hover) {
+  .copy-button:hover:not(:disabled) {
+    background: linear-gradient(180deg, #b8464e 0%, #8a2c32 100%);
+  }
+
+  .copy-button.copied:hover:not(:disabled) {
+    background: linear-gradient(180deg, #58a66e 0%, #3d7c50 100%);
+  }
+
+  .site-link a:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+.error-message {
+  width: min(100%, 520px);
+  margin-top: 14vh;
+  padding: 28px 22px;
+  color: #d2cdce;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  border: 1px solid var(--share-line);
+  border-radius: 15px;
+  background: var(--share-panel);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.34);
+}
+
+.error-message a {
+  color: #e07a7f;
+}
+
+@media (min-width: 769px) {
+  .card-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .card-cell {
+    border-radius: 7px;
+  }
+}
+
+@media (max-width: 520px) {
+  .share-container {
+    padding: 10px 9px 22px;
+  }
+
+  .share-header {
+    margin-top: 2px;
+    margin-bottom: 9px;
+    padding: 16px 13px 14px;
+    border-radius: 14px;
+  }
+
+  .deck-title {
+    margin-top: 6px;
+    margin-bottom: 9px;
+  }
+
+  .deck-panel {
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  .deck-panel::after {
+    inset: 3px;
+    border-radius: 11px;
+  }
+
+  .card-grid {
+    gap: 3px;
+  }
+
+  .card-cell {
+    border-radius: 4px;
+  }
+
+  .code-section {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 13px;
+  }
+
+  .code-heading {
+    gap: 8px;
+  }
+
+  .code-hint {
+    font-size: 10px;
+  }
+
+  .code-wrapper {
+    gap: 7px;
+    margin-top: 9px;
+  }
+
+  .code-text {
+    min-height: 46px;
+    padding: 9px 10px;
+    font-size: 11px;
+  }
+
+  .copy-button {
+    flex-basis: 86px;
+    inline-size: 86px;
+    min-inline-size: 86px;
+    max-inline-size: 86px;
+    block-size: 46px;
+    min-block-size: 46px;
+    max-block-size: 46px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
 </head>
@@ -159,7 +489,7 @@ body {
 </div>
 
 <!-- cards.js を読み込んでカード番号→画像パスのマッピングを取得 -->
-<script src="cards.js"></script>
+<script src="cards.js?v=20260804-share-v7"></script>
 <script>
 (function() {
   'use strict';
@@ -268,6 +598,200 @@ body {
     return '5|' + checksum + '|' + payload;
   }
 
+  // ===== 現行V7デッキコード生成 =====
+  // scripts.js の deckToCodeV7 と同じ公開仕様。共有URL自体の形式は変更しない。
+
+  const DECK_CODE_V7_CATALOG_RANGES = '1-53,101-190,201-292,1003,1005,1101-1112,1201-1220,1301-1390,1401-1430,1501-1547,1601-1720,1801-1840,1901-1926,2000-2012,2014-2065,2101-2220,2301-2388,2403-2405,2407-2408,2410-2414,2421-2422,2424-2425,2427-2428,2430-2431,2433,2435,2437-2438,2440,2442,2445,2448,2450-2451,2453,2456-2457,2460-2462,2464,2467-2468,2470,2472,2476-2477,2479,2483,2485,2490,2501-2522,2601-2622,2701-2722,2801-2822,10001,10006-10047,10051,10055,10061-10077';
+  const DECK_CODE_V7_CATALOG_SIZE = 1090;
+  const DECK_CODE_V7_CATALOG_FINGERPRINT = 0x8fa93167;
+  const DECK_CODE_V7_RAW_OFFSET = 16384;
+  const DECK_CODE_V7_MAX_CARD_NUMBER = 0xffffffff;
+  const DECK_CODE_V7_MAX_TOTAL = 10000;
+  const DECK_CODE_V7_MAX_UNIQUE = 256;
+  const DECK_CODE_V7_CHECKSUM_BYTES = 5;
+  let deckCodeV7CatalogCache = null;
+  let deckCodeV7IndexCache = null;
+
+  async function sha256Bytes(bytes) {
+    const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+    return new Uint8Array(await crypto.subtle.digest('SHA-256', view));
+  }
+
+  function compactConcatBytes(...parts) {
+    const arrays = parts.map(part => part instanceof Uint8Array ? part : new Uint8Array(part));
+    const length = arrays.reduce((sum, part) => sum + part.length, 0);
+    const result = new Uint8Array(length);
+    let offset = 0;
+    arrays.forEach(part => {
+      result.set(part, offset);
+      offset += part.length;
+    });
+    return result;
+  }
+
+  function compactBytesToBase64Url(bytes) {
+    return b64urlEncode(bytesToBin(bytes));
+  }
+
+  function compactVarintEncode(value) {
+    let number = Number(value);
+    if (!Number.isSafeInteger(number) || number < 0) throw new Error('Bad integer');
+    const bytes = [];
+    do {
+      const digit = number % 128;
+      number = Math.floor(number / 128);
+      bytes.push(digit + (number > 0 ? 128 : 0));
+    } while (number > 0);
+    return bytes;
+  }
+
+  function getDeckCodeV7Catalog() {
+    if (deckCodeV7CatalogCache) return deckCodeV7CatalogCache;
+    let fingerprint = 2166136261;
+    for (let index = 0; index < DECK_CODE_V7_CATALOG_RANGES.length; index++) {
+      fingerprint ^= DECK_CODE_V7_CATALOG_RANGES.charCodeAt(index);
+      fingerprint = Math.imul(fingerprint, 16777619);
+    }
+    const numbers = [];
+    DECK_CODE_V7_CATALOG_RANGES.split(',').forEach(part => {
+      const [startText, endText] = part.split('-');
+      const start = Number(startText);
+      const end = endText ? Number(endText) : start;
+      for (let number = start; number <= end; number++) numbers.push(number);
+    });
+    const isStrictlyAscending = numbers.every((number, index) => index === 0 || number > numbers[index - 1]);
+    if (
+      (fingerprint >>> 0) !== DECK_CODE_V7_CATALOG_FINGERPRINT ||
+      numbers.length !== DECK_CODE_V7_CATALOG_SIZE ||
+      new Set(numbers).size !== numbers.length ||
+      !isStrictlyAscending
+    ) {
+      throw new Error('v7 card catalog is invalid');
+    }
+    deckCodeV7CatalogCache = numbers;
+    deckCodeV7IndexCache = new Map(numbers.map((number, index) => [String(number), index]));
+    return deckCodeV7CatalogCache;
+  }
+
+  function getDeckCodeV7Index() {
+    getDeckCodeV7Catalog();
+    return deckCodeV7IndexCache;
+  }
+
+  function deckCodeV7PointForNumber(numberText) {
+    const normalized = String(numberText);
+    if (!/^[1-9]\d*$/.test(normalized)) throw new Error('Bad card number');
+    const number = Number(normalized);
+    if (!Number.isSafeInteger(number) || number > DECK_CODE_V7_MAX_CARD_NUMBER) {
+      throw new Error('Bad card number');
+    }
+    const fixedIndex = getDeckCodeV7Index().get(normalized);
+    return fixedIndex === undefined ? DECK_CODE_V7_RAW_OFFSET + number : fixedIndex;
+  }
+
+  function deckCodeV7Binomial(n, k) {
+    if (!Number.isSafeInteger(n) || !Number.isSafeInteger(k) || k < 0 || n < 0 || k > n) {
+      return BigInt(0);
+    }
+    const choose = Math.min(k, n - k);
+    let result = BigInt(1);
+    for (let i = 1; i <= choose; i++) {
+      result = (result * BigInt(n - choose + i)) / BigInt(i);
+    }
+    return result;
+  }
+
+  function deckCodeV7RankColex(values) {
+    let rank = BigInt(0);
+    for (let i = 0; i < values.length; i++) {
+      rank += deckCodeV7Binomial(values[i], i + 1);
+    }
+    return rank;
+  }
+
+  function deckCodeV7BigIntToBytes(value) {
+    if (value < BigInt(0)) throw new Error('Bad rank');
+    if (value === BigInt(0)) return new Uint8Array(0);
+    const bytes = [];
+    const base = BigInt(256);
+    let remaining = value;
+    while (remaining > BigInt(0)) {
+      bytes.push(Number(remaining % base));
+      remaining /= base;
+    }
+    bytes.reverse();
+    return new Uint8Array(bytes);
+  }
+
+  function canEncodeDeckCodeV7(map) {
+    if (typeof BigInt !== 'function') return false;
+    let total = 0;
+    let unique = 0;
+    for (const countValue of Object.values(map || {})) {
+      const count = Number(countValue);
+      if (!Number.isSafeInteger(count) || count < 0) return false;
+      if (count > 0) {
+        total += count;
+        unique++;
+        if (!Number.isSafeInteger(total)) return false;
+      }
+    }
+    return total <= DECK_CODE_V7_MAX_TOTAL && unique <= DECK_CODE_V7_MAX_UNIQUE;
+  }
+
+  function encodeCompactDeckPayload(map) {
+    if (typeof BigInt !== 'function') throw new Error('BigInt is unavailable');
+    const entries = Object.entries(map || {})
+      .filter(([, count]) => Number(count) > 0)
+      .map(([number, count]) => {
+        const normalizedCount = Number(count);
+        if (!Number.isSafeInteger(normalizedCount) || normalizedCount <= 0) {
+          throw new Error('Bad card count');
+        }
+        return {
+          number: String(number),
+          count: normalizedCount,
+          point: deckCodeV7PointForNumber(number)
+        };
+      })
+      .sort((a, b) => a.point - b.point);
+
+    const total = entries.reduce((sum, entry) => sum + entry.count, 0);
+    if (!Number.isSafeInteger(total) || total > DECK_CODE_V7_MAX_TOTAL || entries.length > DECK_CODE_V7_MAX_UNIQUE) {
+      throw new Error('Deck is too large for v7');
+    }
+    for (let i = 1; i < entries.length; i++) {
+      if (entries[i - 1].point === entries[i].point) throw new Error('Duplicate card index');
+    }
+
+    const points = entries.map(entry => entry.point);
+    let combinedRank = BigInt(0);
+    if (entries.length > 0) {
+      const cuts = [];
+      let used = 0;
+      for (let i = 0; i < entries.length - 1; i++) {
+        used += entries[i].count;
+        cuts.push(used - 1);
+      }
+      const countSpace = deckCodeV7Binomial(total - 1, entries.length - 1);
+      combinedRank = deckCodeV7RankColex(points) * countSpace + deckCodeV7RankColex(cuts);
+    }
+
+    return compactConcatBytes(
+      new Uint8Array(compactVarintEncode(total)),
+      new Uint8Array(compactVarintEncode(entries.length)),
+      deckCodeV7BigIntToBytes(combinedRank)
+    );
+  }
+
+  async function generateCurrentDeckCode(map) {
+    if (!canEncodeDeckCodeV7(map)) return generateV6Code(map);
+    const body = encodeCompactDeckPayload(map);
+    const digest = await sha256Bytes(compactConcatBytes(Uint8Array.of(7), body));
+    const packed = compactConcatBytes(body, digest.slice(0, DECK_CODE_V7_CHECKSUM_BYTES));
+    return '7' + compactBytesToBase64Url(packed);
+  }
+
   // ===== cards.js からカード番号→画像パス・名前マップを構築 =====
 
   function buildCardMap() {
@@ -281,7 +805,7 @@ body {
       const name = card.getAttribute('data-name') || '';
       const type = card.getAttribute('data-type') || '';
       const cost = card.getAttribute('data-cost') || '0';
-      const season = (card.getAttribute('data-season') || '').split(' ')[0] || '';
+      const season = card.getAttribute('data-season') || '';
       const img = card.querySelector('img');
       const src = img ? (img.getAttribute('data-src') || img.getAttribute('src')) : '';
       if (num && !map[num]) {
@@ -309,20 +833,27 @@ body {
     const cardMap = buildCardMap();
     const app = document.getElementById('app');
 
-    // タイトル
-    if (data.title) {
-      const titleEl = document.createElement('h1');
-      titleEl.className = 'deck-title';
-      titleEl.textContent = data.title;
-      app.appendChild(titleEl);
-    }
-
-    // 総枚数
+    // 共有デッキ概要
     const totalCount = Object.values(data.cards).reduce((s, c) => s + c, 0);
+    const shareHeader = document.createElement('header');
+    shareHeader.className = 'share-header';
+
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'share-eyebrow';
+    eyebrow.textContent = '共有デッキ';
+
+    const titleEl = document.createElement('h1');
+    titleEl.className = 'deck-title';
+    titleEl.textContent = data.title || 'デッキレシピ';
+
     const countEl = document.createElement('div');
     countEl.className = 'deck-count';
-    countEl.textContent = totalCount + '枚';
-    app.appendChild(countEl);
+    const countNumber = document.createElement('strong');
+    countNumber.textContent = String(totalCount);
+    countEl.append(countNumber, document.createTextNode('枚'));
+
+    shareHeader.append(eyebrow, titleEl, countEl);
+    app.appendChild(shareHeader);
 
     // カードグリッド
     const grid = document.createElement('div');
@@ -338,7 +869,7 @@ body {
         // 種類順
         const typeA = typeOrder.indexOf(infoA.type);
         const typeB = typeOrder.indexOf(infoB.type);
-        if (typeA !== typeB) return (typeA === -1 ? 99 : typeA) - (typeB === -1 ? 99 : typeB);
+        if (typeA !== typeB) return typeA - typeB;
         // コスト昇順
         const costA = parseInt(infoA.cost) || 0;
         const costB = parseInt(infoB.cost) || 0;
@@ -346,7 +877,7 @@ body {
         // 季節順
         const seaA = seasonOrder.indexOf(infoA.season);
         const seaB = seasonOrder.indexOf(infoB.season);
-        if (seaA !== seaB) return (seaA === -1 ? 99 : seaA) - (seaB === -1 ? 99 : seaB);
+        if (seaA !== seaB) return seaA - seaB;
         // カード名
         return (infoA.name || '').localeCompare(infoB.name || '');
       });
@@ -373,16 +904,29 @@ body {
         grid.appendChild(cell);
       }
     }
-    app.appendChild(grid);
+    const deckPanel = document.createElement('section');
+    deckPanel.className = 'deck-panel';
+    deckPanel.setAttribute('aria-label', 'デッキレシピ');
+    deckPanel.appendChild(grid);
+    app.appendChild(deckPanel);
 
     // デッキコード
     const codeSection = document.createElement('div');
     codeSection.className = 'code-section';
 
+    const codeHeading = document.createElement('div');
+    codeHeading.className = 'code-heading';
+
     const codeLabel = document.createElement('div');
     codeLabel.className = 'code-label';
     codeLabel.textContent = 'デッキコード';
-    codeSection.appendChild(codeLabel);
+
+    const codeHint = document.createElement('div');
+    codeHint.className = 'code-hint';
+    codeHint.textContent = 'カードフィルター本画面で読み込めます';
+
+    codeHeading.append(codeLabel, codeHint);
+    codeSection.appendChild(codeHeading);
 
     const codeWrapper = document.createElement('div');
     codeWrapper.className = 'code-wrapper';
@@ -393,16 +937,31 @@ body {
     codeWrapper.appendChild(codeText);
 
     const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
     copyBtn.className = 'copy-button';
-    copyBtn.textContent = 'コピー';
+    copyBtn.disabled = true;
+    copyBtn.setAttribute('aria-label', 'デッキコードをコピー');
+
+    const copyLabelDefault = document.createElement('span');
+    copyLabelDefault.className = 'copy-label copy-label-default';
+    copyLabelDefault.textContent = 'コピー';
+
+    const copyLabelDone = document.createElement('span');
+    copyLabelDone.className = 'copy-label copy-label-done';
+    copyLabelDone.textContent = 'コピー済';
+    copyLabelDone.setAttribute('aria-hidden', 'true');
+    copyBtn.append(copyLabelDefault, copyLabelDone);
+
+    let copyResetTimer = null;
     copyBtn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(codeText.textContent);
-        copyBtn.textContent = 'コピー済';
+        clearTimeout(copyResetTimer);
         copyBtn.classList.add('copied');
-        setTimeout(() => {
-          copyBtn.textContent = 'コピー';
+        copyBtn.setAttribute('aria-label', 'デッキコードをコピーしました');
+        copyResetTimer = setTimeout(() => {
           copyBtn.classList.remove('copied');
+          copyBtn.setAttribute('aria-label', 'デッキコードをコピー');
         }, 2000);
       } catch (e) {
         // フォールバック: 手動選択
@@ -417,10 +976,11 @@ body {
     codeSection.appendChild(codeWrapper);
     app.appendChild(codeSection);
 
-    // V6コードを非同期生成
+    // 本画面と同じ現行コードを非同期生成（旧共有URLも同じmapから生成可能）
     try {
-      const code = await generateV6Code(data.cards);
+      const code = await generateCurrentDeckCode(data.cards);
       codeText.textContent = code;
+      copyBtn.disabled = false;
     } catch (e) {
       codeText.textContent = 'コード生成に失敗しました';
     }
@@ -430,7 +990,7 @@ body {
     linkDiv.className = 'site-link';
     const link = document.createElement('a');
     link.href = './';
-    link.textContent = '← 巫カードフィルターへ戻る';
+    link.textContent = '← カードフィルターへ戻る';
     linkDiv.appendChild(link);
     app.appendChild(linkDiv);
   }
