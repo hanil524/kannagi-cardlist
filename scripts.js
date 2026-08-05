@@ -616,23 +616,9 @@ const updateNavigationButtons = () => {
 
   if (!prevButton || !nextButton || !visibleCards) return;
 
-  // 前のカードの存在チェック
-  let hasPrev = false;
-  for (let i = currentImageIndex - 1; i >= 0; i--) {
-    if (!visibleCards[i].hasAttribute('data-empty')) {
-      hasPrev = true;
-      break;
-    }
-  }
-
-  // 次のカードの存在チェック
-  let hasNext = false;
-  for (let i = currentImageIndex + 1; i < visibleCards.length; i++) {
-    if (!visibleCards[i].hasAttribute('data-empty')) {
-      hasNext = true;
-      break;
-    }
-  }
+  // 前後送り本体と同じ条件で、空枠・同名同番号の複製を除いた遷移先を判定する。
+  const hasPrev = findNavigableImageIndex(currentImageIndex, -1) >= 0;
+  const hasNext = findNavigableImageIndex(currentImageIndex, 1) >= 0;
 
   // ボタンの表示制御
   prevButton.style.display = hasPrev ? 'block' : 'none';
@@ -3687,6 +3673,178 @@ let modalFaqReturnFocus = null;
 let modalFaqOpenCardName = '';
 const MODAL_FAQ_CLOSE_DURATION = 160;
 
+// 拡大モーダル専用の小さなデコード済み画像キャッシュ。
+// 一覧DOMをフル画像へ書き換える旧方式は、閲覧枚数ぶんメモリが増え続けるため使わない。
+// モーダル表示中の「現在・実際の前・実際の次」だけを保持し、切替速度とメモリ上限を両立する。
+const modalImagePreloadCache = new Map();
+let modalImageSwitchToken = 0;
+
+const normalizeModalFullImageSrc = (src) => {
+  const fullSrc = toFullImagePath(src);
+  if (!fullSrc) return '';
+
+  try {
+    return new URL(fullSrc, document.baseURI).href;
+  } catch (error) {
+    return fullSrc;
+  }
+};
+
+const getModalCardFullImageSrc = (card) => {
+  const image = card?.querySelector('img');
+  if (!image) return '';
+  return normalizeModalFullImageSrc(image.getAttribute('data-src') || image.src);
+};
+
+const findNavigableImageIndex = (fromIndex, step) => {
+  if (!Array.isArray(visibleCards) || !visibleCards[fromIndex]) return -1;
+
+  const fromCard = visibleCards[fromIndex];
+  let index = fromIndex + step;
+
+  while (index >= 0 && index < visibleCards.length) {
+    const candidate = visibleCards[index];
+    const isSameCard = candidate.dataset.name === fromCard.dataset.name &&
+      candidate.dataset.number === fromCard.dataset.number;
+
+    if (!candidate.hasAttribute('data-empty') && !isSameCard) {
+      return index;
+    }
+    index += step;
+  }
+
+  return -1;
+};
+
+const preloadModalFullImage = (src, fetchPriority = 'high') => {
+  const fullSrc = normalizeModalFullImageSrc(src);
+  if (!fullSrc || /placeholder\.jpg(?:$|\?)/i.test(fullSrc)) return null;
+
+  let cached = modalImagePreloadCache.get(fullSrc);
+  if (cached?.settled && !cached.isReady) {
+    modalImagePreloadCache.delete(fullSrc);
+    cached = null;
+  }
+  if (cached) {
+    if (fetchPriority === 'high' && 'fetchPriority' in cached.image) {
+      cached.image.fetchPriority = 'high';
+    }
+    return cached;
+  }
+
+  const image = new Image();
+  image.decoding = 'async';
+  if ('fetchPriority' in image) image.fetchPriority = fetchPriority;
+
+  let resolveReady;
+  const entry = {
+    image,
+    ready: null,
+    isReady: false,
+    settled: false,
+    cancelled: false,
+    decodeStarted: false,
+    cancel: null
+  };
+
+  entry.ready = new Promise((resolve) => {
+    resolveReady = resolve;
+  });
+
+  const settle = (isReady) => {
+    if (entry.settled) return;
+    entry.settled = true;
+    entry.isReady = isReady;
+    image.onload = null;
+    image.onerror = null;
+    resolveReady(entry);
+  };
+
+  const handleLoad = async () => {
+    if (entry.settled || entry.decodeStarted) return;
+    entry.decodeStarted = true;
+
+    if (typeof image.decode === 'function') {
+      try {
+        await image.decode();
+      } catch (error) {
+        // load済みなら表示は可能。decode非対応・一時失敗時も通常表示へ進める。
+      }
+    }
+
+    settle(!entry.cancelled && image.naturalWidth > 0);
+  };
+
+  image.onload = handleLoad;
+  image.onerror = () => settle(false);
+  entry.cancel = () => {
+    if (entry.settled) return;
+    entry.cancelled = true;
+    image.onload = null;
+    image.onerror = null;
+    image.removeAttribute('src');
+    settle(false);
+  };
+
+  modalImagePreloadCache.set(fullSrc, entry);
+  image.src = fullSrc;
+
+  // メモリキャッシュから同期的に復元されたブラウザ向けの保険。
+  if (image.complete) {
+    queueMicrotask(() => {
+      if (image.naturalWidth > 0) {
+        handleLoad();
+      } else {
+        settle(false);
+      }
+    });
+  }
+
+  return entry;
+};
+
+const setModalImageSource = (modalImage, src) => {
+  if (!modalImage) return;
+
+  const fullSrc = normalizeModalFullImageSrc(src);
+  if (!fullSrc) return;
+
+  const switchToken = ++modalImageSwitchToken;
+  const preloadEntry = preloadModalFullImage(fullSrc, 'high');
+  const thumbSrc = toListImagePath(fullSrc);
+
+  const showFullImage = (entry) => {
+    if (!entry?.isReady || switchToken !== modalImageSwitchToken || !modalImage.isConnected) return;
+    modalImage.onerror = null;
+    if (modalImage.src !== fullSrc) modalImage.src = fullSrc;
+  };
+
+  if (preloadEntry?.isReady) {
+    showFullImage(preloadEntry);
+    return;
+  }
+
+  // 未デコード時も対象カードの軽いWebPを即表示し、操作待ち・空白を発生させない。
+  if (thumbSrc && thumbSrc !== fullSrc) {
+    modalImage.onerror = () => {
+      if (switchToken !== modalImageSwitchToken) return;
+      modalImage.onerror = null;
+      modalImage.src = fullSrc;
+    };
+    modalImage.src = thumbSrc;
+  } else {
+    modalImage.src = fullSrc;
+  }
+
+  preloadEntry?.ready.then(showFullImage);
+};
+
+const clearModalImagePreloads = () => {
+  modalImageSwitchToken++;
+  modalImagePreloadCache.forEach((entry) => entry.cancel?.());
+  modalImagePreloadCache.clear();
+};
+
 
 const openImageModal = (src) => {
   const now = Date.now();
@@ -3694,6 +3852,7 @@ const openImageModal = (src) => {
   lastModalOpenTime = now;
   activateNextModalTapDirectly = false;
   suppressTrustedModalClickUntil = 0;
+  clearModalImagePreloads();
 
   // 現在のスクロール位置を保存
   savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -3804,42 +3963,11 @@ const openImageModal = (src) => {
   // 万一画像の読み込みに失敗し続けても操作不能にならないための保険
   setTimeout(revealModalChrome, 2000);
 
-  // 画像の表示処理（モーダルは常にフル解像度を表示。
-  // srcがサムネイルパスの場合＝デッキ画面等から開いた場合はフルパスへ変換）
-  // 体感速度対策（LQIP方式）: フル画像の取得・デコードを待つ間、
-  // 一覧で表示済み＝デコード済みのサムネイルを先に表示しておき、
-  // フル解像度が読み込め次第、同じ構図のまま差し替える。
+  // 対象カードのサムネイルを即表示し、デコード済みのフル画像へ差し替える。
+  // 同じ経路を前後送り・関連カード表示でも使い、初回だけ重くなる差をなくす。
   modalImage.style.opacity = '0';
-  const modalFullSrc = toFullImagePath(src);
-  const modalThumbSrc = toListImagePath(modalFullSrc);
-  if (modalThumbSrc !== modalFullSrc) {
-    modalImage.src = modalThumbSrc;
-    // src は絶対URLに正規化されるため、読み戻した値を比較用に保持する
-    const displayedThumbSrc = modalImage.src;
-    // サムネ未生成（404）の場合は直接フル画像へ
-    modalImage.onerror = () => {
-      modalImage.onerror = null;
-      if (modalImage.src === displayedThumbSrc) {
-        modalImage.src = modalFullSrc;
-      }
-    };
-    const fullLoader = new Image();
-    fullLoader.onload = () => {
-      // 前後送り・関連カード表示などで別カードに切り替わっていたら差し替えない
-      if (modalImage.src === displayedThumbSrc) {
-        // 注意: ここで modalImage.onload を外してはいけない。
-        // 「complete=true」でも load イベントの配送前のことがあり、外すと
-        // ボタン配置処理が一度も走らず左右ボタンが出ない競合が起きる（既知の不具合）。
-        // load が複数回発火しても、showButtonsAfterPosition 側の
-        // alreadyShown ガードが点滅を防ぐので、そのまま発火させる。
-        modalImage.onerror = null;
-        modalImage.src = fullLoader.src;
-      }
-    };
-    fullLoader.src = modalFullSrc;
-  } else {
-    modalImage.src = modalFullSrc;
-  }
+  setModalImageSource(modalImage, src);
+  preloadAdjacentImages();
 
   // イベントリスナーを一度だけ設定（重要: 重複登録を防ぐ）
   setupModalCardControlsOnce(modalControls, currentCard, cardName);
@@ -3966,8 +4094,8 @@ const closeImageModal = () => {
       const modalImage = document.getElementById('modal-image');
       if (modalImage) {
         modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-        // モーダルは常にフル解像度
-        modalImage.src = toFullImagePath(src);
+        setModalImageSource(modalImage, src);
+        if (modalImage.complete) requestAnimationFrame(() => positionNavButtons());
       }
 
       if (modalControls && modalSeriesInfo) {
@@ -4038,6 +4166,7 @@ const closeImageModal = () => {
     modalControls = null;
     modalConnectionInfo = null;
     connectionModalStack = [];
+    clearModalImagePreloads();
 
     // メモリリーク対策（全デバイス共通）
     if (seriesInfoCache.size > 100) {
@@ -4148,7 +4277,8 @@ function openConnectionCard(targetName) {
   const modalImage = document.getElementById('modal-image');
   if (modalImage) {
     modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-    modalImage.src = toFullImagePath(src);
+    setModalImageSource(modalImage, src);
+    if (modalImage.complete) requestAnimationFrame(() => positionNavButtons());
   }
 
   const cardName = targetCard.dataset.name;
@@ -4736,53 +4866,38 @@ const loadFiltersFromLocalStorage = () => {
   }
 };
 
-// 隣接カードのフル解像度画像を事前取得する（モーダル送りを滑らかにするため）
-// 【重要】以前はここで「一覧側のimg」をフル画像に書き換えて固定していたが、
-// モーダルを見て回るほど一覧に3MB級のデコード済み画像が蓄積し、
-// iPhone Safariのメモリ超過クラッシュ（白画面）の直接原因になっていた。
-// 現在はDOMに一切触れず、ブラウザキャッシュを温めるだけの実装に変更済み。
-// 元の「一覧imgへの書き込み」実装に戻さないこと。
-const preloadModalImage = (targetImg) => {
-  if (!targetImg) return;
-  const full = toFullImagePath(targetImg.getAttribute('data-src') || targetImg.src);
-  if (!full || /placeholder\.jpg$/.test(full)) return;
-  const pre = new Image();
-  pre.src = full;
-};
-
-// 周辺画像のプリロード
+// 実際に前後送りで到達するカードだけをデコードし、最大3枚へ刈り込む。
+// 一覧側のimgは常にWebPサムネイルのまま維持すること。
 const preloadAdjacentImages = () => {
-  // 前の画像をプリロード
-  if (currentImageIndex > 0) {
-    const prevCard = visibleCards[currentImageIndex - 1];
-    preloadModalImage(prevCard.querySelector('img'));
-  }
+  if (!Array.isArray(visibleCards) || !visibleCards[currentImageIndex]) return;
 
-  // 次の画像をプリロード
-  if (currentImageIndex < visibleCards.length - 1) {
-    const nextCard = visibleCards[currentImageIndex + 1];
-    preloadModalImage(nextCard.querySelector('img'));
-  }
+  const prevIndex = findNavigableImageIndex(currentImageIndex, -1);
+  const nextIndex = findNavigableImageIndex(currentImageIndex, 1);
+  const wantedSources = new Set();
+
+  [currentImageIndex, prevIndex, nextIndex].forEach((index) => {
+    if (index < 0) return;
+    const fullSrc = getModalCardFullImageSrc(visibleCards[index]);
+    if (!fullSrc) return;
+    wantedSources.add(fullSrc);
+    if (index !== currentImageIndex) preloadModalFullImage(fullSrc, 'high');
+  });
+
+  modalImagePreloadCache.forEach((entry, fullSrc) => {
+    if (wantedSources.has(fullSrc)) return;
+    entry.cancel?.();
+    modalImagePreloadCache.delete(fullSrc);
+  });
 };
 
 // showNextImage関数
 const showNextImage = () => {
   if (currentImageIndex >= visibleCards.length - 1) return;
 
-  const currentCard = visibleCards[currentImageIndex];
-  let nextIndex = currentImageIndex + 1;
-
-  // 次のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
-  while (nextIndex < visibleCards.length && (
-    visibleCards[nextIndex].hasAttribute('data-empty') ||
-    (visibleCards[nextIndex].dataset.name === currentCard.dataset.name &&
-      visibleCards[nextIndex].dataset.number === currentCard.dataset.number)
-  )) {
-    nextIndex++;
-  }
+  const nextIndex = findNavigableImageIndex(currentImageIndex, 1);
 
   // 次のカードが有効なカードの場合のみ切り替え
-  if (nextIndex < visibleCards.length && !visibleCards[nextIndex].hasAttribute('data-empty')) {
+  if (nextIndex >= 0 && nextIndex < visibleCards.length && !visibleCards[nextIndex].hasAttribute('data-empty')) {
     currentImageIndex = nextIndex;
     const nextCard = visibleCards[nextIndex];
     const img = nextCard.querySelector('img');
@@ -4791,8 +4906,8 @@ const showNextImage = () => {
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
       modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-      // モーダルは常にフル解像度（デッキ画面のサムネから開いた場合もフルへ変換）
-      modalImage.src = toFullImagePath(src);
+      setModalImageSource(modalImage, src);
+      if (modalImage.complete) requestAnimationFrame(() => positionNavButtons());
     }
 
     const cardName = nextCard.dataset.name;
@@ -4827,17 +4942,7 @@ const showNextImage = () => {
 const showPreviousImage = () => {
   if (currentImageIndex <= 0) return;
 
-  const currentCard = visibleCards[currentImageIndex];
-  let prevIndex = currentImageIndex - 1;
-
-  // 前のカードが透明カードまたは同じカード（名前もナンバーも同じ）の場合はスキップ
-  while (prevIndex >= 0 && (
-    visibleCards[prevIndex].hasAttribute('data-empty') ||
-    (visibleCards[prevIndex].dataset.name === currentCard.dataset.name &&
-      visibleCards[prevIndex].dataset.number === currentCard.dataset.number)
-  )) {
-    prevIndex--;
-  }
+  const prevIndex = findNavigableImageIndex(currentImageIndex, -1);
 
   // 前のカードが有効なカードの場合のみ切り替え
   if (prevIndex >= 0 && !visibleCards[prevIndex].hasAttribute('data-empty')) {
@@ -4849,8 +4954,8 @@ const showPreviousImage = () => {
     const modalImage = document.getElementById('modal-image');
     if (modalImage) {
       modalImage.onload = () => requestAnimationFrame(() => positionNavButtons());
-      // モーダルは常にフル解像度（デッキ画面のサムネから開いた場合もフルへ変換）
-      modalImage.src = toFullImagePath(src);
+      setModalImageSource(modalImage, src);
+      if (modalImage.complete) requestAnimationFrame(() => positionNavButtons());
     }
 
     const cardName = prevCard.dataset.name;
