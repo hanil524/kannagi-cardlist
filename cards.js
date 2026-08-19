@@ -18846,5 +18846,41 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (92).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10082"
+  data-name="一番目の花子さん（いちばんめのはなこさん）"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年8月22日"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="噂 幽霊"
+  data-keyword=""
+  data-role="サーチ 除外加速"
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (93).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10083"
+  data-name="統率する猛火：超龍（とうそつするもうか：ちょうりゅう）"
+  data-cost="7"
+  data-power="5"
+  data-series="プロモ"
+  data-promo-date="2026年8月22日"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="神 龍 火事"
+  data-keyword=""
+  data-role="召喚時 「起き」 札ダメ 直接ダメ "
+  data-sakka="超カードゲーム市場"
+>
+  <img data-src="images/card_17_p (94).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
