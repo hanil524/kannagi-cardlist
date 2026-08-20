@@ -2396,13 +2396,18 @@ body.modal-open {
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 32px);
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 15px 25px;
   border-radius: 8px;
   z-index: 3000;
   font-weight: bold;
-  white-space: pre;
+  line-height: 1.45;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
   text-align: center;
   pointer-events: none;
   animation: fadeOut 1.5s forwards;
@@ -7408,8 +7413,9 @@ body {
   place-items: center;
   padding:
     max(14px, env(safe-area-inset-top))
-    14px
-    max(14px, env(safe-area-inset-bottom));
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
   background:
     radial-gradient(70% 55% at 50% 8%, rgba(133, 35, 40, 0.15), transparent 72%),
     rgba(5, 4, 7, 0.84);
@@ -8225,6 +8231,291 @@ button {
 
 .clear-button:hover {
   --x-color: #ffffff;
+}
+
+/* ---------- カード拡大：収録情報付き画像共有 ---------- */
+/* 既存の下段（Q&A / 増減 / お気に入り）へ要素を足さず、暗幕右上にだけ控えめに置く。 */
+#card-share-button.card-share-modal-button {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  right: calc(10px + env(safe-area-inset-right));
+  z-index: 2504;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#card-share-button.card-share-modal-button::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 50%;
+  background: rgba(17, 17, 22, 0.68);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+}
+
+@supports ((-webkit-backdrop-filter: blur(6px)) or (backdrop-filter: blur(6px))) {
+  #card-share-button.card-share-modal-button::before {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
+
+#card-share-button.card-share-modal-button .fa-share {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #card-share-button.card-share-modal-button:hover {
+    color: #ffffff;
+  }
+
+  #card-share-button.card-share-modal-button:hover::before {
+    border-color: rgba(229, 111, 104, 0.48);
+    background: rgba(49, 27, 31, 0.86);
+  }
+}
+
+#card-share-button.card-share-modal-button:active::before {
+  transform: scale(0.94);
+}
+
+#card-share-button.card-share-modal-button:disabled {
+  cursor: wait;
+}
+
+#card-share-button.card-share-modal-button.is-loading .fa-share {
+  opacity: 0;
+}
+
+#card-share-button.card-share-modal-button.is-loading::after {
+  content: '';
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.30);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: cardShareSpin 0.7s linear infinite;
+}
+
+@keyframes cardShareSpin {
+  to { transform: rotate(360deg); }
+}
+
+.card-share-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+  overflow-y: auto;
+  background:
+    radial-gradient(75% 55% at 50% 8%, rgba(137, 38, 43, 0.13), transparent 72%),
+    rgba(5, 5, 8, 0.88);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.17s ease, visibility 0s linear 0.17s;
+  touch-action: pan-y;
+}
+
+@supports ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .card-share-preview-overlay {
+    -webkit-backdrop-filter: blur(8px) saturate(0.86);
+    backdrop-filter: blur(8px) saturate(0.86);
+  }
+}
+
+.card-share-preview-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.17s ease, visibility 0s;
+}
+
+.card-share-preview-dialog {
+  position: relative;
+  box-sizing: border-box;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 28px);
+  max-height: calc(100dvh - max(14px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)));
+  min-height: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(80% 52% at 50% 0, rgba(139, 42, 45, 0.10), transparent 68%),
+    rgba(22, 22, 27, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 15px;
+  box-shadow:
+    0 24px 68px rgba(0, 0, 0, 0.74),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  transform: translateY(8px) scale(0.985);
+  transition: transform 0.19s cubic-bezier(0.22, 0.8, 0.36, 1);
+}
+
+.card-share-preview-overlay.is-open .card-share-preview-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.card-share-preview-image-frame {
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  flex: 0 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6px;
+  background: #0d0d11;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  touch-action: pan-x pan-y;
+}
+
+.card-share-preview-image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+  line-height: 0;
+}
+
+.card-share-preview-image-frame img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  max-height: calc(100dvh - max(14px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 112px);
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-touch-callout: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card-share-preview-actions {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+}
+
+.card-share-preview-action {
+  min-width: 0;
+  min-height: 42px;
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  background: linear-gradient(180deg, #36363d 0%, #2b2b31 100%);
+  color: #f4f4f5;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-share-preview-action.is-muted {
+  color: #c7c7ca;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.card-share-preview-share-button {
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.58);
+}
+
+.card-share-preview-action:active {
+  filter: brightness(0.9);
+}
+
+.card-share-preview-action:disabled {
+  opacity: 0.68;
+  cursor: wait;
+}
+
+/* プレビュー上で出す保存・失敗通知だけは、プレビューより前面へ。 */
+body.card-share-preview-open .deck-message {
+  z-index: 10030;
+}
+
+@media (max-width: 520px) {
+  .card-share-preview-dialog {
+    padding: 10px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+
+  .card-share-preview-image-frame {
+    padding: 5px;
+  }
+
+  .card-share-preview-action {
+    min-height: 40px;
+    padding-inline: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #card-share-button.card-share-modal-button::before,
+  .card-share-preview-overlay,
+  .card-share-preview-dialog {
+    transition: none;
+  }
+
+  #card-share-button.card-share-modal-button.is-loading::after {
+    animation-duration: 1.4s;
+  }
 }
 
 /* ▲▲ デザインエンリッチメント層 ここまで ▲▲ */

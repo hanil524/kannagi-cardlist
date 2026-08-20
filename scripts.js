@@ -3674,6 +3674,10 @@ let modalFaqCloseTimer = null;
 let modalFaqReturnFocus = null;
 let modalFaqOpenCardName = '';
 const MODAL_FAQ_CLOSE_DURATION = 160;
+let cardSharePreviewOverlay = null;
+let cardSharePreviewObjectUrl = '';
+let cardShareReturnFocus = null;
+let cardShareGenerationToken = 0;
 
 // 拡大モーダル専用の小さなデコード済み画像キャッシュ。
 // 一覧DOMをフル画像へ書き換える旧方式は、閲覧枚数ぶんメモリが増え続けるため使わない。
@@ -3851,6 +3855,7 @@ const clearModalImagePreloads = () => {
 const openImageModal = (src) => {
   const now = Date.now();
   if (now - lastModalOpenTime < 300) return;
+  cancelPendingCardShareGeneration();
   lastModalOpenTime = now;
   activateNextModalTapDirectly = false;
   suppressTrustedModalClickUntil = 0;
@@ -4074,6 +4079,8 @@ const openImageModal = (src) => {
 
 // 画像モーダルを閉じる関数
 const closeImageModal = () => {
+  cancelPendingCardShareGeneration();
+  closeCardSharePreview({ restoreFocus: false });
   closeCardFaqPanel({ restoreFocus: false, immediate: true });
   activateNextModalTapDirectly = false;
 
@@ -4255,6 +4262,7 @@ function openConnectionCard(targetName) {
 
   const img = targetCard.querySelector('img');
   if (!img) return;
+  cancelPendingCardShareGeneration();
   const src = img.getAttribute('data-src') || img.src;
 
   // 遅延読み込み前のカードは一覧用サムネイルを読み込ませておく
@@ -4341,6 +4349,12 @@ const activateModalTapTarget = (target) => {
   const faqButton = target.closest('#card-faq-button');
   if (faqButton && !faqButton.hidden) {
     openCardFaqPanel(faqButton);
+    return;
+  }
+
+  const shareButton = target.closest('#card-share-button');
+  if (shareButton && !shareButton.disabled) {
+    openCardSharePreview(shareButton);
     return;
   }
 
@@ -4900,6 +4914,7 @@ const showNextImage = () => {
 
   // 次のカードが有効なカードの場合のみ切り替え
   if (nextIndex >= 0 && nextIndex < visibleCards.length && !visibleCards[nextIndex].hasAttribute('data-empty')) {
+    cancelPendingCardShareGeneration();
     currentImageIndex = nextIndex;
     const nextCard = visibleCards[nextIndex];
     const img = nextCard.querySelector('img');
@@ -4948,6 +4963,7 @@ const showPreviousImage = () => {
 
   // 前のカードが有効なカードの場合のみ切り替え
   if (prevIndex >= 0 && !visibleCards[prevIndex].hasAttribute('data-empty')) {
+    cancelPendingCardShareGeneration();
     currentImageIndex = prevIndex;
     const prevCard = visibleCards[prevIndex];
     const img = prevCard.querySelector('img');
@@ -8128,6 +8144,569 @@ async function captureDeck() {
   }
 }
 
+// ===== カード拡大モーダル：収録情報付き共有画像 =====
+// 画面DOMを撮影せず、元の高画質カード画像と上部の収録情報だけをCanvasへ合成する。
+// これにより画面サイズに関係なく、左右送り・増減・FAQ・お気に入り等は画像へ混入しない。
+function cancelPendingCardShareGeneration() {
+  cardShareGenerationToken++;
+  const shareButton = document.getElementById('card-share-button');
+  if (!shareButton) return;
+  shareButton.disabled = false;
+  shareButton.classList.remove('is-loading');
+  shareButton.removeAttribute('aria-busy');
+}
+
+function getCardShareVisualLayout() {
+  const modalImage = document.getElementById('modal-image');
+  const seriesInfo = document.querySelector('#image-modal .card-series-info');
+  if (!modalImage || !seriesInfo) return null;
+
+  const imageRect = modalImage.getBoundingClientRect();
+  const seriesRect = seriesInfo.getBoundingClientRect();
+  if (imageRect.width <= 0 || seriesRect.width <= 0) return null;
+
+  const imageStyle = getComputedStyle(modalImage);
+  const seriesStyle = getComputedStyle(seriesInfo);
+  const normalFontSize = parseFloat(seriesStyle.fontSize) || 14;
+  const smallSpan = Array.from(seriesInfo.querySelectorAll('span')).find((span) => {
+    return (parseFloat(getComputedStyle(span).fontSize) || normalFontSize) < normalFontSize;
+  });
+  const smallStyle = smallSpan ? getComputedStyle(smallSpan) : null;
+  const normalLineHeight = parseFloat(seriesStyle.lineHeight) || normalFontSize * 1.3;
+  const smallFontSize = parseFloat(smallStyle?.fontSize) || normalFontSize * (12 / 14);
+  const smallLineHeight = parseFloat(smallStyle?.lineHeight) || smallFontSize * 1.3;
+
+  return {
+    imageWidth: imageRect.width,
+    panelWidth: seriesRect.width,
+    normalFontSize,
+    smallFontSize,
+    normalLineHeight,
+    smallLineHeight,
+    fontFamily: seriesStyle.fontFamily,
+    fontWeight: seriesStyle.fontWeight,
+    panelPaddingLeft: parseFloat(seriesStyle.paddingLeft) || 0,
+    panelPaddingRight: parseFloat(seriesStyle.paddingRight) || 0,
+    panelPaddingTop: parseFloat(seriesStyle.paddingTop) || 0,
+    panelPaddingBottom: parseFloat(seriesStyle.paddingBottom) || 0,
+    panelGap: parseFloat(seriesStyle.marginBottom) || 0,
+    panelRadius: parseFloat(seriesStyle.borderRadius) || 0,
+    panelBorderWidth: parseFloat(seriesStyle.borderLeftWidth) || 0,
+    panelBackground: seriesStyle.backgroundColor || 'rgba(0, 0, 0, 0.8)',
+    panelBorderColor: seriesStyle.borderLeftColor || 'rgba(255, 255, 255, 0.15)',
+    cardRadius: parseFloat(imageStyle.borderRadius) || 0,
+    cardBorderWidth: parseFloat(imageStyle.borderLeftWidth) || 0,
+    cardBorderColor: imageStyle.borderLeftColor || 'rgba(255, 255, 255, 0.15)'
+  };
+}
+
+function buildCardShareModel(card) {
+  if (!card || !card.dataset) throw new Error('共有するカードが見つかりません。');
+
+  const cardName = card.dataset.name || '巫カード';
+  const displayName = stripCardReading(cardName).trim() || '巫カード';
+  const fullSrc = getModalCardFullImageSrc(card);
+  if (!fullSrc) throw new Error('カード画像が見つかりません。');
+
+  const lines = [];
+  const promoInfo = getPromoInfo(cardName, card.dataset.series || '');
+  if (promoInfo?.type === 'reprint') {
+    lines.push({ text: '再録プロモ', color: '#ffd700', size: 'normal' });
+  } else if (promoInfo?.type === 'new') {
+    lines.push({
+      text: promoInfo.date ? `配布日：${promoInfo.date}` : '配布日：不明',
+      color: '#ffd700',
+      size: 'normal'
+    });
+    lines.push({
+      text: '※新規プロモは1か月後に「公式大会」で使用可能',
+      color: '#aaddff',
+      size: 'small'
+    });
+  }
+
+  const series = getSeriesOnlyText(cardName);
+  const limit = getCardLimitText(cardName);
+  if (series) lines.push({ text: series, color: '#ffffff', size: 'normal' });
+  if (limit) lines.push({ text: limit, color: '#ff9800', size: 'small' });
+  if (lines.length === 0) {
+    lines.push({ text: '収録情報なし', color: '#c7c7cc', size: 'normal' });
+  }
+
+  const safeFileName = displayName
+    .replace(/[<>:"\/\\|?*\u0000-\u001f]/g, '_')
+    .replace(/[. ]+$/g, '') || '巫カード';
+
+  return {
+    cardName,
+    displayName,
+    fileName: `${safeFileName}_収録情報.png`,
+    fullSrc,
+    lines,
+    visualLayout: getCardShareVisualLayout()
+  };
+}
+
+function loadCardShareSource(fullSrc) {
+  const normalizedSrc = normalizeModalFullImageSrc(fullSrc);
+  if (!normalizedSrc) return Promise.reject(new Error('カード画像が見つかりません。'));
+  const decodedEntry = modalImagePreloadCache.get(normalizedSrc);
+  if (decodedEntry?.isReady && decodedEntry.image?.naturalWidth > 0) {
+    return Promise.resolve(decodedEntry.image);
+  }
+
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = 'async';
+    if ('fetchPriority' in image) image.fetchPriority = 'high';
+    let settled = false;
+    let finishing = false;
+
+    const fail = () => {
+      if (settled) return;
+      settled = true;
+      image.onload = null;
+      image.onerror = null;
+      reject(new Error('高画質カード画像を読み込めませんでした。'));
+    };
+
+    const finish = async () => {
+      if (settled || finishing) return;
+      finishing = true;
+      try {
+        if (typeof image.decode === 'function') await image.decode();
+      } catch (error) {
+        // load済みなら描画できるため、decode非対応・一時失敗時も続行する。
+      }
+      if (!image.naturalWidth || !image.naturalHeight) {
+        fail();
+        return;
+      }
+      settled = true;
+      image.onload = null;
+      image.onerror = null;
+      resolve(image);
+    };
+
+    image.onload = finish;
+    image.onerror = fail;
+    image.src = normalizedSrc;
+    if (image.complete) queueMicrotask(() => image.naturalWidth ? finish() : fail());
+  });
+}
+
+function setCardShareCanvasFont(ctx, fontSize, weight = 700, fontFamily = '') {
+  const family = fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+  ctx.font = `${weight} ${fontSize}px ${family}`;
+}
+
+function wrapCardShareText(ctx, text, maxWidth) {
+  const value = String(text || '');
+  if (!value) return [];
+
+  const lines = [];
+  let current = '';
+  const prohibitedLineStart = /[、。，．！？：；）」』】〕〉》］｝〟’”ァィゥェォッャュョヮヵヶー]/;
+
+  for (const char of value) {
+    const candidate = current + char;
+    if (current && ctx.measureText(candidate).width > maxWidth) {
+      // 実画面の日本語通常改行に合わせ、句読点や閉じ括弧を行頭へ孤立させない。
+      if (prohibitedLineStart.test(char)) {
+        current += char;
+        lines.push(current);
+        current = '';
+      } else {
+        lines.push(current);
+        current = char;
+      }
+    } else {
+      current = candidate;
+    }
+  }
+
+  if (current) lines.push(current);
+  return lines;
+}
+
+function layoutCardShareLines(
+  ctx,
+  sourceLines,
+  maxWidth,
+  normalSize,
+  smallSize,
+  normalLineHeight,
+  smallLineHeight,
+  fontFamily,
+  fontWeight
+) {
+  const result = [];
+  sourceLines.forEach((sourceLine) => {
+    const fontSize = sourceLine.size === 'small' ? smallSize : normalSize;
+    const lineHeight = sourceLine.size === 'small' ? smallLineHeight : normalLineHeight;
+    setCardShareCanvasFont(ctx, fontSize, fontWeight, fontFamily);
+
+    const paragraphs = String(sourceLine.text || '').split(/\r?\n/);
+    paragraphs.forEach((paragraph) => {
+      const wrapped = wrapCardShareText(ctx, paragraph, maxWidth);
+      (wrapped.length ? wrapped : ['']).forEach((text) => {
+        result.push({
+          text,
+          color: sourceLine.color,
+          fontSize,
+          lineHeight
+        });
+      });
+    });
+  });
+  return result;
+}
+
+function roundedCardShareRect(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
+}
+
+function cardShareCanvasToBlob(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error('PNG画像を作成できませんでした。'));
+    }, 'image/png');
+  });
+}
+
+async function createCardShareBlob(model) {
+  const sourceImage = await loadCardShareSource(model.fullSrc);
+  const cardWidth = sourceImage.naturalWidth;
+  const cardHeight = sourceImage.naturalHeight;
+  const sourceScale = Math.max(0.75, cardWidth / 868);
+  const visualLayout = model.visualLayout;
+  const uiScale = visualLayout?.imageWidth > 0 ? cardWidth / visualLayout.imageWidth : null;
+  const outerPadding = Math.round(32 * sourceScale);
+  const normalSize = Math.round(uiScale ? visualLayout.normalFontSize * uiScale : 39 * sourceScale);
+  const smallSize = Math.round(uiScale ? visualLayout.smallFontSize * uiScale : 33 * sourceScale);
+  const normalLineHeight = Math.round(uiScale ? visualLayout.normalLineHeight * uiScale : 51 * sourceScale);
+  const smallLineHeight = Math.round(uiScale ? visualLayout.smallLineHeight * uiScale : 43 * sourceScale);
+  const panelPaddingLeft = Math.round(uiScale ? visualLayout.panelPaddingLeft * uiScale : 56 * sourceScale);
+  const panelPaddingRight = Math.round(uiScale ? visualLayout.panelPaddingRight * uiScale : 56 * sourceScale);
+  const panelPaddingTop = Math.round(uiScale ? visualLayout.panelPaddingTop * uiScale : 17 * sourceScale);
+  const panelPaddingBottom = Math.round(uiScale ? visualLayout.panelPaddingBottom * uiScale : 17 * sourceScale);
+  const panelGap = Math.round(uiScale ? visualLayout.panelGap * uiScale : 28 * sourceScale);
+  const panelRadius = Math.round(uiScale ? visualLayout.panelRadius * uiScale : 11 * sourceScale);
+  const panelBorderWidth = Math.max(1, Math.round(uiScale ? visualLayout.panelBorderWidth * uiScale : 3 * sourceScale));
+  const panelWidth = Math.round(uiScale ? visualLayout.panelWidth * uiScale : cardWidth * 1.096);
+  const cardRadius = Math.round(uiScale ? visualLayout.cardRadius * uiScale : cardWidth * (18 / 302));
+  const cardBorderWidth = Math.max(1, Math.round(uiScale ? visualLayout.cardBorderWidth * uiScale : 3 * sourceScale));
+  const canvasWidth = Math.max(cardWidth, panelWidth) + outerPadding * 2;
+  const fontFamily = visualLayout?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+  const fontWeight = visualLayout?.fontWeight || 700;
+
+  const measureCanvas = document.createElement('canvas');
+  const measureContext = measureCanvas.getContext('2d');
+  if (!measureContext) throw new Error('画像の文字領域を作成できませんでした。');
+  const laidOutLines = layoutCardShareLines(
+    measureContext,
+    model.lines,
+    panelWidth - panelPaddingLeft - panelPaddingRight - panelBorderWidth * 2,
+    normalSize,
+    smallSize,
+    normalLineHeight,
+    smallLineHeight,
+    fontFamily,
+    fontWeight
+  );
+  const panelHeight = panelBorderWidth * 2 + panelPaddingTop + panelPaddingBottom
+    + laidOutLines.reduce((sum, line) => sum + line.lineHeight, 0);
+  const cardY = outerPadding + panelHeight + panelGap;
+  const canvasHeight = cardY + cardHeight + outerPadding;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('共有画像を作成できませんでした。');
+
+  ctx.fillStyle = '#101014';
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  const cardX = Math.round((canvasWidth - cardWidth) / 2);
+  // カード画像自体をぼかさず、同じ角丸の背面を一度だけ発光させる。
+  // 実画面の強い光を高解像度へそのまま拡大すると白濁するため、共有画像用に抑える。
+  ctx.save();
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.22)';
+  ctx.shadowBlur = Math.min(32, Math.round(22 * sourceScale));
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  roundedCardShareRect(ctx, cardX, cardY, cardWidth, cardHeight, cardRadius);
+  ctx.fillStyle = '#101014';
+  ctx.fill();
+  ctx.restore();
+
+  const panelX = Math.round((canvasWidth - panelWidth) / 2);
+  const panelY = outerPadding;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.42)';
+  ctx.shadowBlur = Math.round((uiScale ? 4 * uiScale : 11 * sourceScale));
+  ctx.shadowOffsetY = Math.round((uiScale ? 2 * uiScale : 6 * sourceScale));
+  roundedCardShareRect(ctx, panelX, panelY, panelWidth, panelHeight, panelRadius);
+  ctx.fillStyle = visualLayout?.panelBackground || 'rgba(0, 0, 0, 0.8)';
+  ctx.fill();
+  ctx.restore();
+
+  const panelStrokeInset = panelBorderWidth / 2;
+  roundedCardShareRect(
+    ctx,
+    panelX + panelStrokeInset,
+    panelY + panelStrokeInset,
+    panelWidth - panelBorderWidth,
+    panelHeight - panelBorderWidth,
+    panelRadius
+  );
+  ctx.strokeStyle = visualLayout?.panelBorderColor || 'rgba(255, 255, 255, 0.15)';
+  ctx.lineWidth = panelBorderWidth;
+  ctx.stroke();
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  let textY = panelY + panelBorderWidth + panelPaddingTop;
+  laidOutLines.forEach((line) => {
+    setCardShareCanvasFont(ctx, line.fontSize, fontWeight, fontFamily);
+    ctx.fillStyle = line.color;
+    ctx.fillText(line.text, panelX + panelWidth / 2, textY + line.lineHeight / 2);
+    textY += line.lineHeight;
+  });
+
+  // 実画面と同じ角丸で四隅だけを隠し、画像本体は縮小・切り抜きせず等倍で描く。
+  ctx.save();
+  roundedCardShareRect(ctx, cardX, cardY, cardWidth, cardHeight, cardRadius);
+  ctx.clip();
+  ctx.drawImage(sourceImage, cardX, cardY, cardWidth, cardHeight);
+  ctx.restore();
+
+  const cardStrokeInset = cardBorderWidth / 2;
+  roundedCardShareRect(
+    ctx,
+    cardX + cardStrokeInset,
+    cardY + cardStrokeInset,
+    cardWidth - cardBorderWidth,
+    cardHeight - cardBorderWidth,
+    cardRadius
+  );
+  ctx.strokeStyle = visualLayout?.cardBorderColor || 'rgba(255, 255, 255, 0.15)';
+  ctx.lineWidth = cardBorderWidth;
+  ctx.stroke();
+  return cardShareCanvasToBlob(canvas);
+}
+
+function closeCardSharePreview({ restoreFocus = true } = {}) {
+  const overlay = cardSharePreviewOverlay;
+  if (overlay) overlay.remove();
+  cardSharePreviewOverlay = null;
+  document.body.classList.remove('card-share-preview-open');
+
+  if (cardSharePreviewObjectUrl) {
+    URL.revokeObjectURL(cardSharePreviewObjectUrl);
+    cardSharePreviewObjectUrl = '';
+  }
+
+  const modalContent = document.querySelector('#image-modal .modal-content');
+  if (modalContent && !isCardFaqPanelOpen()) {
+    modalContent.inert = false;
+    modalContent.removeAttribute('aria-hidden');
+  }
+
+  const returnTarget = cardShareReturnFocus;
+  cardShareReturnFocus = null;
+  if (restoreFocus && returnTarget?.isConnected) {
+    returnTarget.focus({ preventScroll: true });
+  }
+}
+
+function downloadCardShareImage(blobUrl, fileName) {
+  const link = document.createElement('a');
+  link.href = blobUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+function showCardSharePreview(blob, model, trigger) {
+  closeCardSharePreview({ restoreFocus: false });
+  cardShareReturnFocus = trigger?.isConnected ? trigger : null;
+  cardSharePreviewObjectUrl = URL.createObjectURL(blob);
+
+  let file = null;
+  if (typeof File === 'function') {
+    try {
+      file = new File([blob], model.fileName, { type: 'image/png' });
+    } catch (error) {
+      file = null;
+    }
+  }
+  let canShareFile = false;
+  if (file && typeof navigator.share === 'function') {
+    try {
+      canShareFile = typeof navigator.canShare !== 'function' || navigator.canShare({ files: [file] });
+    } catch (error) {
+      canShareFile = false;
+    }
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'card-share-preview-overlay';
+  overlay.setAttribute('role', 'presentation');
+
+  const dialog = document.createElement('section');
+  dialog.className = 'card-share-preview-dialog';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-label', `${model.displayName}の共有画像`);
+
+  const imageFrame = document.createElement('div');
+  imageFrame.className = 'card-share-preview-image-frame';
+  const imageWrapper = document.createElement('div');
+  imageWrapper.className = 'card-share-preview-image-wrapper';
+  const previewImage = document.createElement('img');
+  previewImage.src = cardSharePreviewObjectUrl;
+  previewImage.alt = `${model.displayName}の収録情報付きカード画像`;
+  imageWrapper.appendChild(previewImage);
+  imageFrame.appendChild(imageWrapper);
+
+  const actions = document.createElement('div');
+  actions.className = 'card-share-preview-actions';
+  const saveButton = document.createElement('button');
+  saveButton.type = 'button';
+  saveButton.className = 'card-share-preview-action';
+  saveButton.textContent = '保存';
+
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'card-share-preview-action is-muted';
+  closeButton.textContent = '閉じる';
+  actions.append(saveButton, closeButton);
+
+  const shareButton = document.createElement('button');
+  shareButton.type = 'button';
+  shareButton.className = 'deck-share-button card-share-preview-share-button';
+  shareButton.setAttribute('aria-label', 'カード画像を共有');
+  shareButton.innerHTML = '<i class="fas fa-share" aria-hidden="true"></i><span>共有</span>';
+  imageWrapper.appendChild(shareButton);
+
+  dialog.append(imageFrame, actions);
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+  cardSharePreviewOverlay = overlay;
+  document.body.classList.add('card-share-preview-open');
+
+  const modalContent = document.querySelector('#image-modal .modal-content');
+  if (modalContent) {
+    if (modalContent.contains(document.activeElement)) document.activeElement.blur();
+    modalContent.inert = true;
+    modalContent.setAttribute('aria-hidden', 'true');
+  }
+
+  const closePreview = () => closeCardSharePreview();
+  closeButton.addEventListener('click', closePreview);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closePreview();
+  });
+  dialog.addEventListener('click', (event) => event.stopPropagation());
+
+  saveButton.addEventListener('click', () => {
+    // iOSでは表示・Files保存などブラウザ側の選択になるため、保存完了とは断定しない。
+    downloadCardShareImage(cardSharePreviewObjectUrl, model.fileName);
+  });
+
+  shareButton.addEventListener('click', async () => {
+    if (!canShareFile) {
+      deckBuilder?.showMessage?.('画像共有に未対応です。\n保存ボタンをご利用ください。');
+      return;
+    }
+
+    shareButton.disabled = true;
+    shareButton.classList.add('is-loading');
+    try {
+      await navigator.share({
+        title: `${model.displayName}｜巫カードフィルター`,
+        files: [file]
+      });
+      closeCardSharePreview({ restoreFocus: false });
+    } catch (error) {
+      if (error?.name !== 'AbortError') {
+        console.error('カード画像の共有に失敗しました:', error);
+        deckBuilder?.showMessage?.('共有に失敗しました。保存ボタンをご利用ください。');
+      }
+    } finally {
+      if (shareButton.isConnected) {
+        shareButton.disabled = false;
+        shareButton.classList.remove('is-loading');
+      }
+    }
+  });
+
+  overlay.addEventListener('keydown', (event) => {
+    event.stopPropagation();
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closePreview();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(dialog.querySelectorAll('button:not([disabled])'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  });
+
+  requestAnimationFrame(() => {
+    overlay.classList.add('is-open');
+    (shareButton || saveButton).focus({ preventScroll: true });
+  });
+}
+
+async function openCardSharePreview(trigger = document.getElementById('card-share-button')) {
+  if (!currentModalCard || !trigger || trigger.disabled) return;
+
+  const card = currentModalCard;
+  const generationToken = ++cardShareGenerationToken;
+  trigger.disabled = true;
+  trigger.classList.add('is-loading');
+  trigger.setAttribute('aria-busy', 'true');
+
+  try {
+    const model = buildCardShareModel(card);
+    const blob = await createCardShareBlob(model);
+    const imageModal = document.getElementById('image-modal');
+    if (generationToken !== cardShareGenerationToken || imageModal?.style.display !== 'flex') return;
+    showCardSharePreview(blob, model, trigger);
+  } catch (error) {
+    if (generationToken !== cardShareGenerationToken) return;
+    console.error('カード共有画像の生成に失敗しました:', error);
+    deckBuilder?.showMessage?.('カード画像を作成できませんでした。');
+  } finally {
+    if (generationToken === cardShareGenerationToken && trigger.isConnected) {
+      trigger.disabled = false;
+      trigger.classList.remove('is-loading');
+      trigger.removeAttribute('aria-busy');
+    }
+  }
+}
+
 // イベントリスナーの重複登録を防ぐためのフラグ
 let modalControlsInitialized = false;
 let currentModalCard = null;
@@ -8157,6 +8736,32 @@ function positionModalFavoriteButton(controls = modalControls, favoriteButton = 
 
 function positionModalFaqButton(controls = modalControls, faqButton = document.getElementById('card-faq-button')) {
   positionModalSideButton(controls, faqButton, -1);
+}
+
+function ensureModalShareButton(controls) {
+  if (!controls || !currentModalCardName) return null;
+  const modalContent = controls.closest('.modal-content');
+  if (!modalContent) return null;
+
+  let shareButton = modalContent.querySelector('#card-share-button');
+  if (!shareButton) {
+    shareButton = document.createElement('button');
+    shareButton.type = 'button';
+    shareButton.id = 'card-share-button';
+    shareButton.className = 'card-share-modal-button';
+    shareButton.innerHTML = '<i class="fas fa-share" aria-hidden="true"></i>';
+    modalContent.appendChild(shareButton);
+  }
+
+  const displayName = stripCardReading(currentModalCardName).trim();
+  shareButton.title = 'カード画像を共有';
+  shareButton.setAttribute('aria-label', `${displayName}の収録情報付きカード画像を共有`);
+  shareButton.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openCardSharePreview(shareButton);
+  };
+  return shareButton;
 }
 
 function ensureModalFavoriteButton(controls) {
@@ -8626,6 +9231,7 @@ function setupModalButtonListeners(controls) {
   const removeButton = controls.querySelector('#remove-card');
   ensureModalFavoriteButton(controls);
   ensureModalFaqButton(controls);
+  ensureModalShareButton(controls);
 
   if (addButton) {
     addButton.onclick = (e) => {
@@ -8656,6 +9262,7 @@ function setupModalCardControlsOnce(controls, card, cardName) {
   currentModalCardName = cardName;
   ensureModalFavoriteButton(controls);
   ensureModalFaqButton(controls);
+  ensureModalShareButton(controls);
 
   // イベントリスナーは一度だけ設定
   if (!modalControlsInitialized) {
