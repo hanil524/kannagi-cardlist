@@ -687,6 +687,57 @@ const positionNavButtons = () => {
     nextButton.style.left = 'auto';
     nextButton.style.right = '2px';
   }
+
+  // PCでは共有ボタンを収録ラベルの右側へ置く。
+  // スマホはCSSの右上配置をそのまま使う。
+  positionModalShareButton();
+};
+
+const positionModalShareButton = () => {
+  const shareButton = document.getElementById('card-share-button');
+  if (!shareButton) return;
+
+  if (window.innerWidth <= 768) {
+    shareButton.style.removeProperty('left');
+    shareButton.style.removeProperty('top');
+    shareButton.style.removeProperty('right');
+    return;
+  }
+
+  const seriesInfo = document.querySelector('#image-modal .card-series-info');
+  const container = shareButton.offsetParent;
+  if (!seriesInfo || !container) return;
+
+  const containerRect = container.getBoundingClientRect();
+  const seriesRect = seriesInfo.getBoundingClientRect();
+  const seriesStyle = getComputedStyle(seriesInfo);
+  const shareWidth = shareButton.offsetWidth || 44;
+  const shareHeight = shareButton.offsetHeight || 44;
+  const visibleInset = 5;
+  const visualGap = 14;
+  const safeMargin = 8;
+  const lineHeight = parseFloat(seriesStyle.lineHeight)
+    || (parseFloat(seriesStyle.fontSize) || 14) * 1.3;
+  const singleLineBoxHeight = (parseFloat(seriesStyle.borderTopWidth) || 0)
+    + (parseFloat(seriesStyle.paddingTop) || 0)
+    + lineHeight
+    + (parseFloat(seriesStyle.paddingBottom) || 0)
+    + (parseFloat(seriesStyle.borderBottomWidth) || 0);
+  const lastLineCenterY = seriesRect.bottom - singleLineBoxHeight / 2;
+
+  // 見える円(::beforeのinset 5px)とラベルの間を、下部サイドボタンと同じ14pxにする。
+  // Y座標は行数で動かないラベル下端から算出し、2～3行でも跳ねないようにする。
+  const desiredLeft = seriesRect.right + visualGap - visibleInset;
+  const desiredTop = lastLineCenterY - shareHeight / 2;
+  const viewportLeft = Math.min(
+    Math.max(desiredLeft, safeMargin),
+    window.innerWidth - safeMargin - shareWidth
+  );
+  const viewportTop = Math.max(desiredTop, safeMargin);
+
+  shareButton.style.left = `${Math.round(viewportLeft - containerRect.left)}px`;
+  shareButton.style.top = `${Math.round(viewportTop - containerRect.top)}px`;
+  shareButton.style.right = 'auto';
 };
 
 // リサイズ時にボタン位置を更新
@@ -3677,6 +3728,7 @@ const MODAL_FAQ_CLOSE_DURATION = 160;
 let cardSharePreviewOverlay = null;
 let cardSharePreviewObjectUrl = '';
 let cardShareReturnFocus = null;
+let cardShareShouldRestoreFocus = false;
 let cardShareGenerationToken = 0;
 
 // 拡大モーダル専用の小さなデコード済み画像キャッシュ。
@@ -8241,6 +8293,7 @@ function buildCardShareModel(card) {
     cardName,
     displayName,
     fileName: `${safeFileName}_収録情報.png`,
+    plainFileName: `${safeFileName}_カード画像.png`,
     fullSrc,
     lines,
     visualLayout: getCardShareVisualLayout()
@@ -8382,13 +8435,17 @@ function cardShareCanvasToBlob(canvas) {
   });
 }
 
-async function createCardShareBlob(model) {
+async function createCardShareBlob(model, { includeLabels = true } = {}) {
   const sourceImage = await loadCardShareSource(model.fullSrc);
   const cardWidth = sourceImage.naturalWidth;
   const cardHeight = sourceImage.naturalHeight;
   const sourceScale = Math.max(0.75, cardWidth / 868);
   const visualLayout = model.visualLayout;
-  const uiScale = visualLayout?.imageWidth > 0 ? cardWidth / visualLayout.imageWidth : null;
+  const measuredUiScale = visualLayout?.imageWidth > 0 ? cardWidth / visualLayout.imageWidth : null;
+  // 高さが極端に低い画面ではカードだけが縮み、固定幅の収録ラベルとの比率が膨らむ。
+  // 通常のスマホ表示相当を上限にして、端末サイズで保存画像が横長化しないようにする。
+  const maxUiScale = sourceScale * (39 / 14);
+  const uiScale = measuredUiScale ? Math.min(measuredUiScale, maxUiScale) : null;
   const outerPadding = Math.round(32 * sourceScale);
   const normalSize = Math.round(uiScale ? visualLayout.normalFontSize * uiScale : 39 * sourceScale);
   const smallSize = Math.round(uiScale ? visualLayout.smallFontSize * uiScale : 33 * sourceScale);
@@ -8404,27 +8461,31 @@ async function createCardShareBlob(model) {
   const panelWidth = Math.round(uiScale ? visualLayout.panelWidth * uiScale : cardWidth * 1.096);
   const cardRadius = Math.round(uiScale ? visualLayout.cardRadius * uiScale : cardWidth * (18 / 302));
   const cardBorderWidth = Math.max(1, Math.round(uiScale ? visualLayout.cardBorderWidth * uiScale : 3 * sourceScale));
-  const canvasWidth = Math.max(cardWidth, panelWidth) + outerPadding * 2;
+  const canvasWidth = Math.max(cardWidth, includeLabels ? panelWidth : cardWidth) + outerPadding * 2;
   const fontFamily = visualLayout?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
   const fontWeight = visualLayout?.fontWeight || 700;
 
   const measureCanvas = document.createElement('canvas');
   const measureContext = measureCanvas.getContext('2d');
   if (!measureContext) throw new Error('画像の文字領域を作成できませんでした。');
-  const laidOutLines = layoutCardShareLines(
-    measureContext,
-    model.lines,
-    panelWidth - panelPaddingLeft - panelPaddingRight - panelBorderWidth * 2,
-    normalSize,
-    smallSize,
-    normalLineHeight,
-    smallLineHeight,
-    fontFamily,
-    fontWeight
-  );
-  const panelHeight = panelBorderWidth * 2 + panelPaddingTop + panelPaddingBottom
-    + laidOutLines.reduce((sum, line) => sum + line.lineHeight, 0);
-  const cardY = outerPadding + panelHeight + panelGap;
+  const laidOutLines = includeLabels
+    ? layoutCardShareLines(
+      measureContext,
+      model.lines,
+      panelWidth - panelPaddingLeft - panelPaddingRight - panelBorderWidth * 2,
+      normalSize,
+      smallSize,
+      normalLineHeight,
+      smallLineHeight,
+      fontFamily,
+      fontWeight
+    )
+    : [];
+  const panelHeight = includeLabels
+    ? panelBorderWidth * 2 + panelPaddingTop + panelPaddingBottom
+      + laidOutLines.reduce((sum, line) => sum + line.lineHeight, 0)
+    : 0;
+  const cardY = outerPadding + (includeLabels ? panelHeight + panelGap : 0);
   const canvasHeight = cardY + cardHeight + outerPadding;
 
   const canvas = document.createElement('canvas');
@@ -8449,39 +8510,41 @@ async function createCardShareBlob(model) {
   ctx.fill();
   ctx.restore();
 
-  const panelX = Math.round((canvasWidth - panelWidth) / 2);
-  const panelY = outerPadding;
-  ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.42)';
-  ctx.shadowBlur = Math.round((uiScale ? 4 * uiScale : 11 * sourceScale));
-  ctx.shadowOffsetY = Math.round((uiScale ? 2 * uiScale : 6 * sourceScale));
-  roundedCardShareRect(ctx, panelX, panelY, panelWidth, panelHeight, panelRadius);
-  ctx.fillStyle = visualLayout?.panelBackground || 'rgba(0, 0, 0, 0.8)';
-  ctx.fill();
-  ctx.restore();
+  if (includeLabels) {
+    const panelX = Math.round((canvasWidth - panelWidth) / 2);
+    const panelY = outerPadding;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.42)';
+    ctx.shadowBlur = Math.round((uiScale ? 4 * uiScale : 11 * sourceScale));
+    ctx.shadowOffsetY = Math.round((uiScale ? 2 * uiScale : 6 * sourceScale));
+    roundedCardShareRect(ctx, panelX, panelY, panelWidth, panelHeight, panelRadius);
+    ctx.fillStyle = visualLayout?.panelBackground || 'rgba(0, 0, 0, 0.8)';
+    ctx.fill();
+    ctx.restore();
 
-  const panelStrokeInset = panelBorderWidth / 2;
-  roundedCardShareRect(
-    ctx,
-    panelX + panelStrokeInset,
-    panelY + panelStrokeInset,
-    panelWidth - panelBorderWidth,
-    panelHeight - panelBorderWidth,
-    panelRadius
-  );
-  ctx.strokeStyle = visualLayout?.panelBorderColor || 'rgba(255, 255, 255, 0.15)';
-  ctx.lineWidth = panelBorderWidth;
-  ctx.stroke();
+    const panelStrokeInset = panelBorderWidth / 2;
+    roundedCardShareRect(
+      ctx,
+      panelX + panelStrokeInset,
+      panelY + panelStrokeInset,
+      panelWidth - panelBorderWidth,
+      panelHeight - panelBorderWidth,
+      panelRadius
+    );
+    ctx.strokeStyle = visualLayout?.panelBorderColor || 'rgba(255, 255, 255, 0.15)';
+    ctx.lineWidth = panelBorderWidth;
+    ctx.stroke();
 
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  let textY = panelY + panelBorderWidth + panelPaddingTop;
-  laidOutLines.forEach((line) => {
-    setCardShareCanvasFont(ctx, line.fontSize, fontWeight, fontFamily);
-    ctx.fillStyle = line.color;
-    ctx.fillText(line.text, panelX + panelWidth / 2, textY + line.lineHeight / 2);
-    textY += line.lineHeight;
-  });
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    let textY = panelY + panelBorderWidth + panelPaddingTop;
+    laidOutLines.forEach((line) => {
+      setCardShareCanvasFont(ctx, line.fontSize, fontWeight, fontFamily);
+      ctx.fillStyle = line.color;
+      ctx.fillText(line.text, panelX + panelWidth / 2, textY + line.lineHeight / 2);
+      textY += line.lineHeight;
+    });
+  }
 
   // 実画面と同じ角丸で四隅だけを隠し、画像本体は縮小・切り抜きせず等倍で描く。
   ctx.save();
@@ -8523,8 +8586,10 @@ function closeCardSharePreview({ restoreFocus = true } = {}) {
   }
 
   const returnTarget = cardShareReturnFocus;
+  const shouldRestoreFocus = cardShareShouldRestoreFocus;
   cardShareReturnFocus = null;
-  if (restoreFocus && returnTarget?.isConnected) {
+  cardShareShouldRestoreFocus = false;
+  if (restoreFocus && shouldRestoreFocus && returnTarget?.isConnected) {
     returnTarget.focus({ preventScroll: true });
   }
 }
@@ -8538,27 +8603,36 @@ function downloadCardShareImage(blobUrl, fileName) {
   link.remove();
 }
 
-function showCardSharePreview(blob, model, trigger) {
+function showCardSharePreview(blob, model, trigger, shouldRestoreFocus = false) {
   closeCardSharePreview({ restoreFocus: false });
   cardShareReturnFocus = trigger?.isConnected ? trigger : null;
+  cardShareShouldRestoreFocus = shouldRestoreFocus;
   cardSharePreviewObjectUrl = URL.createObjectURL(blob);
 
+  let currentBlob = blob;
+  let currentFileName = model.fileName;
   let file = null;
-  if (typeof File === 'function') {
-    try {
-      file = new File([blob], model.fileName, { type: 'image/png' });
-    } catch (error) {
-      file = null;
-    }
-  }
   let canShareFile = false;
-  if (file && typeof navigator.share === 'function') {
-    try {
-      canShareFile = typeof navigator.canShare !== 'function' || navigator.canShare({ files: [file] });
-    } catch (error) {
-      canShareFile = false;
+
+  const refreshShareFile = () => {
+    file = null;
+    canShareFile = false;
+    if (typeof File === 'function') {
+      try {
+        file = new File([currentBlob], currentFileName, { type: 'image/png' });
+      } catch (error) {
+        file = null;
+      }
     }
-  }
+    if (file && typeof navigator.share === 'function') {
+      try {
+        canShareFile = typeof navigator.canShare !== 'function' || navigator.canShare({ files: [file] });
+      } catch (error) {
+        canShareFile = false;
+      }
+    }
+  };
+  refreshShareFile();
 
   const overlay = document.createElement('div');
   overlay.className = 'card-share-preview-overlay';
@@ -8569,6 +8643,7 @@ function showCardSharePreview(blob, model, trigger) {
   dialog.setAttribute('role', 'dialog');
   dialog.setAttribute('aria-modal', 'true');
   dialog.setAttribute('aria-label', `${model.displayName}の共有画像`);
+  dialog.tabIndex = -1;
 
   const imageFrame = document.createElement('div');
   imageFrame.className = 'card-share-preview-image-frame';
@@ -8579,6 +8654,16 @@ function showCardSharePreview(blob, model, trigger) {
   previewImage.alt = `${model.displayName}の収録情報付きカード画像`;
   imageWrapper.appendChild(previewImage);
   imageFrame.appendChild(imageWrapper);
+
+  const options = document.createElement('div');
+  options.className = 'card-share-preview-options';
+  const labelOption = document.createElement('label');
+  labelOption.className = 'deck-image-option card-share-preview-option';
+  const labelCheckbox = document.createElement('input');
+  labelCheckbox.type = 'checkbox';
+  labelCheckbox.className = 'card-share-label-checkbox';
+  labelOption.append(labelCheckbox, document.createTextNode('カード上のラベルを非表示'));
+  options.appendChild(labelOption);
 
   const actions = document.createElement('div');
   actions.className = 'card-share-preview-actions';
@@ -8600,7 +8685,7 @@ function showCardSharePreview(blob, model, trigger) {
   shareButton.innerHTML = '<i class="fas fa-share" aria-hidden="true"></i><span>共有</span>';
   imageWrapper.appendChild(shareButton);
 
-  dialog.append(imageFrame, actions);
+  dialog.append(imageFrame, options, actions);
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
   cardSharePreviewOverlay = overlay;
@@ -8620,9 +8705,53 @@ function showCardSharePreview(blob, model, trigger) {
   });
   dialog.addEventListener('click', (event) => event.stopPropagation());
 
+  const variantBlobs = new Map([[false, blob]]);
+  let previewUpdateToken = 0;
+  labelCheckbox.addEventListener('change', async () => {
+    const hideLabels = labelCheckbox.checked;
+    const updateToken = ++previewUpdateToken;
+    saveButton.disabled = true;
+    shareButton.disabled = true;
+    dialog.setAttribute('aria-busy', 'true');
+    imageFrame.classList.add('is-updating');
+
+    try {
+      let nextBlob = variantBlobs.get(hideLabels);
+      if (!nextBlob) {
+        nextBlob = await createCardShareBlob(model, { includeLabels: !hideLabels });
+        variantBlobs.set(hideLabels, nextBlob);
+      }
+      if (updateToken !== previewUpdateToken || cardSharePreviewOverlay !== overlay || !overlay.isConnected) return;
+
+      const nextObjectUrl = URL.createObjectURL(nextBlob);
+      const previousObjectUrl = cardSharePreviewObjectUrl;
+      cardSharePreviewObjectUrl = nextObjectUrl;
+      currentBlob = nextBlob;
+      currentFileName = hideLabels ? model.plainFileName : model.fileName;
+      refreshShareFile();
+      previewImage.alt = hideLabels
+        ? `${model.displayName}のカード画像`
+        : `${model.displayName}の収録情報付きカード画像`;
+      previewImage.src = nextObjectUrl;
+      if (previousObjectUrl) URL.revokeObjectURL(previousObjectUrl);
+    } catch (error) {
+      if (updateToken !== previewUpdateToken || cardSharePreviewOverlay !== overlay || !overlay.isConnected) return;
+      labelCheckbox.checked = !hideLabels;
+      console.error('カード共有画像の表示切替に失敗しました:', error);
+      deckBuilder?.showMessage?.('カード画像の表示を切り替えられませんでした。');
+    } finally {
+      if (updateToken === previewUpdateToken && cardSharePreviewOverlay === overlay && overlay.isConnected) {
+        saveButton.disabled = false;
+        shareButton.disabled = false;
+        dialog.removeAttribute('aria-busy');
+        imageFrame.classList.remove('is-updating');
+      }
+    }
+  });
+
   saveButton.addEventListener('click', () => {
     // iOSでは表示・Files保存などブラウザ側の選択になるため、保存完了とは断定しない。
-    downloadCardShareImage(cardSharePreviewObjectUrl, model.fileName);
+    downloadCardShareImage(cardSharePreviewObjectUrl, currentFileName);
   });
 
   shareButton.addEventListener('click', async () => {
@@ -8660,7 +8789,7 @@ function showCardSharePreview(blob, model, trigger) {
       return;
     }
     if (event.key !== 'Tab') return;
-    const focusable = Array.from(dialog.querySelectorAll('button:not([disabled])'));
+    const focusable = Array.from(dialog.querySelectorAll('button:not([disabled]), input:not([disabled])'));
     if (focusable.length === 0) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -8675,7 +8804,11 @@ function showCardSharePreview(blob, model, trigger) {
 
   requestAnimationFrame(() => {
     overlay.classList.add('is-open');
-    (shareButton || saveButton).focus({ preventScroll: true });
+    if (shouldRestoreFocus) {
+      (canShareFile ? shareButton : saveButton).focus({ preventScroll: true });
+    } else {
+      dialog.focus({ preventScroll: true });
+    }
   });
 }
 
@@ -8683,6 +8816,7 @@ async function openCardSharePreview(trigger = document.getElementById('card-shar
   if (!currentModalCard || !trigger || trigger.disabled) return;
 
   const card = currentModalCard;
+  const openedWithKeyboard = trigger.matches(':focus-visible');
   const generationToken = ++cardShareGenerationToken;
   trigger.disabled = true;
   trigger.classList.add('is-loading');
@@ -8693,7 +8827,7 @@ async function openCardSharePreview(trigger = document.getElementById('card-shar
     const blob = await createCardShareBlob(model);
     const imageModal = document.getElementById('image-modal');
     if (generationToken !== cardShareGenerationToken || imageModal?.style.display !== 'flex') return;
-    showCardSharePreview(blob, model, trigger);
+    showCardSharePreview(blob, model, trigger, openedWithKeyboard);
   } catch (error) {
     if (generationToken !== cardShareGenerationToken) return;
     console.error('カード共有画像の生成に失敗しました:', error);
@@ -8749,18 +8883,20 @@ function ensureModalShareButton(controls) {
     shareButton.type = 'button';
     shareButton.id = 'card-share-button';
     shareButton.className = 'card-share-modal-button';
-    shareButton.innerHTML = '<i class="fas fa-share" aria-hidden="true"></i>';
+    shareButton.innerHTML = '<i class="fas fa-camera" aria-hidden="true"></i>';
     modalContent.appendChild(shareButton);
   }
 
   const displayName = stripCardReading(currentModalCardName).trim();
-  shareButton.title = 'カード画像を共有';
-  shareButton.setAttribute('aria-label', `${displayName}の収録情報付きカード画像を共有`);
+  shareButton.title = 'カード画像を保存・共有';
+  shareButton.setAttribute('aria-label', `${displayName}のカード画像を保存または共有`);
   shareButton.onclick = (event) => {
     event.preventDefault();
     event.stopPropagation();
     openCardSharePreview(shareButton);
   };
+  positionModalShareButton();
+  requestAnimationFrame(positionModalShareButton);
   return shareButton;
 }
 

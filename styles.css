@@ -3895,7 +3895,8 @@ body.modal-open {
 }
 
 .deck-name-checkbox,
-.deck-qr-checkbox {
+.deck-qr-checkbox,
+.card-share-label-checkbox {
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -8234,7 +8235,8 @@ button {
 }
 
 /* ---------- カード拡大：収録情報付き画像共有 ---------- */
-/* 既存の下段（Q&A / 増減 / お気に入り）へ要素を足さず、暗幕右上にだけ控えめに置く。 */
+/* 既存の下段（Q&A / 増減 / お気に入り）へ要素を足さず、
+   PCは収録ラベル右側、スマホは暗幕右上へ控えめに置く。 */
 #card-share-button.card-share-modal-button {
   position: absolute;
   top: calc(10px + env(safe-area-inset-top));
@@ -8277,7 +8279,7 @@ button {
   }
 }
 
-#card-share-button.card-share-modal-button .fa-share {
+#card-share-button.card-share-modal-button .fa-camera {
   position: relative;
   z-index: 1;
   width: 16px;
@@ -8304,7 +8306,7 @@ button {
   cursor: wait;
 }
 
-#card-share-button.card-share-modal-button.is-loading .fa-share {
+#card-share-button.card-share-modal-button.is-loading .fa-camera {
   opacity: 0;
 }
 
@@ -8385,6 +8387,10 @@ button {
   transition: transform 0.19s cubic-bezier(0.22, 0.8, 0.36, 1);
 }
 
+.card-share-preview-dialog:focus {
+  outline: none;
+}
+
 .card-share-preview-overlay.is-open .card-share-preview-dialog {
   transform: translateY(0) scale(1);
 }
@@ -8420,7 +8426,7 @@ button {
   height: auto;
   max-width: 100%;
   max-height: calc(100vh - 140px);
-  max-height: calc(100dvh - max(14px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 112px);
+  max-height: calc(100dvh - max(14px, env(safe-area-inset-top)) - max(14px, env(safe-area-inset-bottom)) - 144px);
   min-width: 0;
   min-height: 0;
   object-fit: contain;
@@ -8430,6 +8436,28 @@ button {
   -webkit-touch-callout: default;
   user-select: none;
   -webkit-user-select: none;
+  transition: opacity 0.14s ease;
+}
+
+.card-share-preview-image-frame.is-updating img {
+  opacity: 0.72;
+}
+
+.card-share-preview-options {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 24px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -1px 0;
+}
+
+.card-share-preview-option {
+  padding: 2px 8px;
+  color: #d1d1d4;
+  line-height: 1.4;
 }
 
 .card-share-preview-actions {
