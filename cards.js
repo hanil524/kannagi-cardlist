@@ -18882,5 +18882,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (94).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10084"
+  data-name="ゆい"
+  data-cost="3"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年8月20日"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="猫 日陰"
+  data-keyword=""
+  data-role="ドロー 直接ダメ "
+  data-sakka="トレカマーケットオンリーワン"
+>
+  <img data-src="images/card_17_p (95).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
