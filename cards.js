@@ -18900,5 +18900,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (95).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10085"
+  data-name="築地の健吾(つきじのけんご)"
+  data-cost="5"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年5月上旬"
+  data-type="季節札"
+  data-season="春"
+  data-rare=""
+  data-attribute="七不思議 海 災害"
+  data-keyword=""
+  data-role="展開時 ヒール 攻撃時 "
+  data-sakka="築地の健吾"
+>
+  <img data-src="images/card_17_p (96).png" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
