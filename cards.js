@@ -18916,7 +18916,7 @@ data-attribute="妖怪 幽霊"
   data-role="展開時 ヒール 攻撃時 "
   data-sakka="築地の健吾"
 >
-  <img data-src="images/card_17_p (96).png" src="placeholder.jpg" decoding="async" />
+  <img data-src="images/card_17_p (96).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
 `;

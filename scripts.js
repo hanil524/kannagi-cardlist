@@ -431,7 +431,7 @@ let isObserverSetup = false;
 // 読み込み、拡大モーダルだけがフル解像度（images/*.jpg）を使う。
 // デコード後の画像メモリ（1枚あたり約3MB→約1MB）を抑え、
 // iPhone Safariのメモリ超過クラッシュ（白画面）を防ぐための仕組み。
-// サムネイルは「サムネ生成.bat」（make-thumbnails.py）で生成する。
+// サムネイルは「サムネ生成.bat」（make-thumbnails.ps1）で生成する。
 // 未生成でも onerror フォールバックで自動的にフル画像が表示されるため、
 // 生成し忘れで表示が壊れることはない。
 const THUMB_PATH_RE = /(^|\/)images\/thumbs\//;
