@@ -18918,5 +18918,41 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (96).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10086"
+  data-name="学び場(ほーむべーす)"
+  data-cost="1"
+  data-power="2"
+  data-series="プロモ"
+  data-promo-date="2026年7月31日"
+  data-type="場所札"
+  data-season="夏"
+  data-rare=""
+  data-attribute="怨霊 廃校"
+  data-keyword="速攻"
+  data-role="攻撃時 直接ダメ "
+  data-sakka="学び場HOMEBASE"
+>
+  <img data-src="images/card_17_p (97).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10087"
+  data-name="一番目の花子さん（いちばんめのはなこさん）"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年8月22日"
+  data-type="怪異札"
+  data-season="春"
+  data-rare=""
+  data-attribute="噂 幽霊"
+  data-keyword=""
+  data-role="サーチ 除外加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (98).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
