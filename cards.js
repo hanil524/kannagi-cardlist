@@ -18954,5 +18954,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (98).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10088"
+  data-name="名怖夜(めいこわよる)"
+  data-cost="4"
+  data-power="5"
+  data-series="プロモ"
+  data-promo-date="2026年9月8日"
+  data-type="場所札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="動物 園"
+  data-keyword=""
+  data-role="バニラ "
+  data-sakka="名怖夜 参夜目～名古屋の怖い夜～"
+>
+  <img data-src="images/card_17_p (99).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
