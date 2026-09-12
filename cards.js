@@ -18972,5 +18972,59 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (99).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10089"
+  data-name="無意味な記憶(むいみなきおく)"
+  data-cost="7"
+  data-power="6"
+  data-series="プロモ"
+  data-promo-date="2026年10月1日"
+  data-type="場所札"
+  data-season="秋"
+  data-rare=""
+  data-attribute="からくり"
+  data-keyword=""
+  data-role="攻撃時 ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (100).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10090"
+  data-name="悪習の調べ(あくしゅうのしらべ)"
+  data-cost="0"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年10月1日"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare=""
+  data-attribute="花"
+  data-keyword=""
+  data-role="トップ確認 トップ送り "
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (101).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10091"
+  data-name="臭いの元(においのもと)"
+  data-cost="2"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年10月1日"
+  data-type="道具札"
+  data-season="秋"
+  data-rare=""
+  data-attribute="からくり"
+  data-keyword=""
+  data-role="ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (102).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
