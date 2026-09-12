@@ -1,4 +1,33 @@
 /* 横方向のオーバースクロールのみ無効化（縦方向はプルダウンリフレッシュ許可） */
+#deck-save-warning {
+  position: fixed;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  right: 16px;
+  z-index: 1000000;
+  box-sizing: border-box;
+  width: min(380px, calc(100vw - 32px));
+  padding: 14px;
+  border: 1px solid #dd9d55;
+  border-radius: 8px;
+  background: #30251b;
+  color: #fff;
+  box-shadow: 0 4px 20px #0008;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#deck-save-warning p { margin: 0 0 10px; }
+#deck-save-warning button {
+  margin-right: 8px;
+  padding: 8px 12px;
+  border: 1px solid #b9a58d;
+  border-radius: 5px;
+  background: #4b3b2b;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
 html,
 body {
   overscroll-behavior-x: none;

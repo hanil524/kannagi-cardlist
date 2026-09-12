@@ -2779,7 +2779,6 @@ const filterCards = () => {
 
   let anyVisible = false;
   const cardList = document.getElementById('card-list');
-  const activeFilters = new Set(Object.values(filters).flatMap((set) => Array.from(set)));
   const selectedFavoriteCardKeys = getFavoriteCardKeysForGroup();
   const has廃Filter = filters.attribute.has('廃');
 
@@ -2944,24 +2943,21 @@ const filterCards = () => {
       }
     }
 
-    if (shouldDisplay) {
-      anyVisible = true;
-      card.style.display = 'block';
-
-    } else {
-      card.style.display = 'none';
-    }
+    if (shouldDisplay) anyVisible = true;
+    const nextDisplay = shouldDisplay ? 'block' : 'none';
+    if (card.style.display !== nextDisplay) card.style.display = nextDisplay;
   }
 
   const noCardsMessage = document.getElementById('no-cards-message');
   if (noCardsMessage) {
     if (anyVisible) {
-      noCardsMessage.style.display = 'none';
+      if (noCardsMessage.style.display !== 'none') noCardsMessage.style.display = 'none';
     } else {
-      noCardsMessage.innerHTML = favoriteFilterEnabled && selectedFavoriteCardKeys.size === 0
+      const messageHtml = favoriteFilterEnabled && selectedFavoriteCardKeys.size === 0
         ? '<p><strong>お気に入り（★）にしたカードがありません。</strong></p>'
         : '<p><strong>該当カードがありません。</strong></p><p><strong>「リセット」を押す、または</strong></p><p><strong>「絞り込み」をOFFにしてください。</strong></p>';
-      noCardsMessage.style.display = 'block';
+      if (noCardsMessage.innerHTML !== messageHtml) noCardsMessage.innerHTML = messageHtml;
+      if (noCardsMessage.style.display !== 'block') noCardsMessage.style.display = 'block';
     }
   }
 
@@ -4490,6 +4486,16 @@ document.addEventListener('DOMContentLoaded', function () {
     closeImageModal();
   });
 
+  const restoreMenuScroll = () => {
+    const scrollPosition = Math.abs(parseInt(document.body.style.top || '0', 10)) || 0;
+    document.body.classList.remove('no-scroll');
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    document.body.style.touchAction = '';
+    window.scrollTo(0, scrollPosition);
+  };
+
   // DOMContentLoaded イベントリスナー内の toggleMenu 関数
   function toggleMenu() {
     hamburgerMenu.classList.toggle('active');
@@ -4504,13 +4510,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.style.top = `-${scrollPosition}px`;
       document.body.style.touchAction = 'none';
     } else {
-      // スクロール位置を復元
-      const scrollPosition = Math.abs(parseInt(document.body.style.top || '0'));
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      document.body.style.touchAction = '';
-      window.scrollTo(0, scrollPosition);
+      restoreMenuScroll();
     }
 
     resetFontSize();
@@ -4528,10 +4528,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.addEventListener('resize', function () {
     if (window.innerWidth > 768) {
+      const menuWasOpen = mobileNav.classList.contains('active');
       hamburgerMenu.classList.remove('active');
       mobileNav.classList.remove('active');
       menuOverlay.classList.remove('active');
       document.body.classList.remove('no-scroll');
+      if (menuWasOpen) restoreMenuScroll();
     }
   });
 
@@ -5506,7 +5508,8 @@ const deckBuilder = {
   updateDeckCount() {
     const deckCounter = document.querySelector('.deck-counter');
     if (deckCounter) {
-      deckCounter.textContent = `${this.deck.length}枚`;
+      const countText = `${this.deck.length}枚`;
+      if (deckCounter.textContent !== countText) deckCounter.textContent = countText;
       // 39枚以下の場合、warningクラスを追加
       if (this.deck.length <= 39) {
         deckCounter.classList.add('warning');
@@ -5524,18 +5527,20 @@ const deckBuilder = {
 
     if (this.deck.length > 0) {
       if (deckButton) {
-        deckButton.setAttribute('data-count', this.deck.length);
+        const countText = String(this.deck.length);
+        if (deckButton.getAttribute('data-count') !== countText) deckButton.setAttribute('data-count', countText);
       }
       if (headerIconBadge) {
-        headerIconBadge.textContent = this.deck.length;
-        headerIconBadge.style.display = 'block';
+        const countText = String(this.deck.length);
+        if (headerIconBadge.textContent !== countText) headerIconBadge.textContent = countText;
+        if (headerIconBadge.style.display !== 'block') headerIconBadge.style.display = 'block';
       }
     } else {
       if (deckButton) {
-        deckButton.removeAttribute('data-count');
+        if (deckButton.hasAttribute('data-count')) deckButton.removeAttribute('data-count');
       }
       if (headerIconBadge) {
-        headerIconBadge.style.display = 'none';
+        if (headerIconBadge.style.display !== 'none') headerIconBadge.style.display = 'none';
       }
     }
   },
@@ -6694,6 +6699,7 @@ const deckManager = {
   currentDeckId: 1,
   decks: {},
   deckOrder: [],
+  hasUnsavedChanges: false,
 
   // 初期化時にデッキデータを確実に読み込む
   initialize() {
@@ -7299,14 +7305,23 @@ const deckManager = {
     this.updateActiveButton();
   },
 
-  // ローカルストレージに保存
-  saveToLocalStorage() {
-    const saveData = {
-      currentDeckId: this.currentDeckId,
-      decks: this.decks,
-      deckOrder: this.deckOrder
-    };
-    localStorage.setItem('kannagi-deck-manager', JSON.stringify(saveData));
+  showSaveWarning() {
+    if (document.getElementById('deck-save-warning')) return;
+    const warning = document.createElement('div');
+    warning.id = 'deck-save-warning';
+    warning.setAttribute('role', 'alert');
+    const message = document.createElement('p');
+    message.textContent = 'デッキを保存できていません。再読み込みせず、再試行するかバックアップを控えてください。';
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = '再試行';
+    retry.addEventListener('click', () => this.saveToLocalStorage());
+    const backup = document.createElement('button');
+    backup.type = 'button';
+    backup.textContent = 'バックアップ';
+    backup.addEventListener('click', () => openDeckBackupModal());
+    warning.append(message, retry, backup);
+    document.body.appendChild(warning);
   },
 
   // deckManagerオブジェクト内
@@ -7317,7 +7332,19 @@ const deckManager = {
       deckOrder: this.deckOrder,
       version: '2'
     };
-    localStorage.setItem('kannagi-deck-manager-v2', JSON.stringify(saveData));
+    try {
+      localStorage.setItem('kannagi-deck-manager-v2', JSON.stringify(saveData));
+      const wasUnsaved = this.hasUnsavedChanges;
+      this.hasUnsavedChanges = false;
+      document.getElementById('deck-save-warning')?.remove();
+      if (wasUnsaved) deckBuilder.showMessage('デッキを保存しました。');
+      return true;
+    } catch (error) {
+      // 編集内容はメモリに残し、再試行・バックアップから回収できるようにする。
+      this.hasUnsavedChanges = true;
+      this.showSaveWarning();
+      return false;
+    }
   },
 
   loadFromLocalStorage() {
@@ -7620,6 +7647,12 @@ const deckManager = {
     }, 300);
   }
 };
+
+window.addEventListener('beforeunload', (event) => {
+  if (!deckManager.hasUnsavedChanges) return;
+  event.preventDefault();
+  event.returnValue = '';
+});
 
 // html2canvasライブラリを動的に読み込む
 let html2CanvasLoadPromise = null;
@@ -9590,7 +9623,8 @@ function updateCardCount() {
 
   const countElement = document.getElementById('search-result-count');
   if (countElement) {
-    countElement.innerHTML = `検索結果：<span class="count-number">${visibleCount}</span>枚`;
+    const countHtml = `検索結果：<span class="count-number">${visibleCount}</span>枚`;
+    if (countElement.innerHTML !== countHtml) countElement.innerHTML = countHtml;
   }
 }
 
@@ -9979,13 +10013,30 @@ async function deckToCodeV5(map) {
   return `v5|${checksum}|${payload}`;
 }
 
+// v7と同じ上限を旧形式・適用直前にも使用する（ゲーム上の枚数制限とは別）。
+const MAX_IMPORTED_DECK_CARDS = 10000;
+
+function validateDeckImportMap(map) {
+  if (!map || typeof map !== 'object' || Array.isArray(map)) throw new Error('無効なカードデータです');
+  let total = 0;
+  for (const [id, value] of Object.entries(map)) {
+    const count = Number(value);
+    if (!/^[1-9]\d*$/.test(id) || !Number.isSafeInteger(Number(id)) || !Number.isSafeInteger(count) || count <= 0) {
+      throw new Error('無効なカードデータです');
+    }
+    total += count;
+    if (total > MAX_IMPORTED_DECK_CARDS) throw new Error('デッキの枚数が多すぎます');
+  }
+  return map;
+}
+
 async function codeToMap(code) {
   try {
     const raw0 = normalizeWholeCode(code);
 
     // v7: 固定カード辞書 + 組合せ順位（短縮バイナリ）
     if (/^7[A-Za-z0-9_-]+$/.test(raw0)) {
-      return await deckCodeV7ToMap(raw0);
+      return validateDeckImportMap(await deckCodeV7ToMap(raw0));
     }
 
     // v6: 5|checksum|base64url(VARINT binary)
@@ -10006,7 +10057,7 @@ async function codeToMap(code) {
         const id = prev + d.value; prev = id;
         if (c.value > 0) map[String(id)] = (map[String(id)] || 0) + c.value;
       }
-      return map;
+      return validateDeckImportMap(map);
     }
     // legacy v5: v5|checksum|base64url(JSON[[id,count],...])
     if (/^v5\|/i.test(raw0)) {
@@ -10023,7 +10074,7 @@ async function codeToMap(code) {
       if (Array.isArray(pairs)) {
         pairs.forEach(([id, c]) => { const n = Number(c) || 0; if (id && n > 0) map[String(id)] = (map[String(id)] || 0) + n; });
       }
-      return map;
+      return validateDeckImportMap(map);
     }
 
     // 初期版では「v1/v2コード全文をBase64URL化」した形式も配布していた。
@@ -10064,12 +10115,18 @@ async function codeToMap(code) {
         if (idStr && n > 0) map[idStr] = (map[idStr] || 0) + n;
       });
     }
-    return map;
+    return validateDeckImportMap(map);
   } catch (e) {
     throw new Error("無効なコードです");
   }
 }
 function replaceDeckWithMap(map) {
+  try {
+    validateDeckImportMap(map);
+  } catch (error) {
+    deckBuilder.showMessage(error.message);
+    return false;
+  }
   // 先に全IDの存在確認（1枚でも欠けたら適用を中止）
   const missing = [];
   Object.entries(map).forEach(([id]) => {
@@ -10232,13 +10289,8 @@ function openDeckShareModal() {
             if (document.activeElement === input) input.blur();
           }
         } catch (err) {
-          // 取得できない環境では、上の表示コードを流用
-          const displayTxt = content.querySelector('#deck-code-display')?.textContent?.trim() || '';
-          const input = content.querySelector('#deck-code-input');
-          if (input) {
-            input.value = displayTxt;
-            if (document.activeElement === input) input.blur();
-          }
+          deckBuilder.showMessage('クリップボードを読み取れませんでした。\n入力欄に直接貼り付けてください。');
+          content.querySelector('#deck-code-input')?.focus();
         }
       });
     }
@@ -10368,7 +10420,7 @@ const DECK_CODE_V7_CATALOG_SIZE = 1090;
 const DECK_CODE_V7_CATALOG_FINGERPRINT = 0x8fa93167;
 const DECK_CODE_V7_RAW_OFFSET = 16384;
 const DECK_CODE_V7_MAX_CARD_NUMBER = 0xffffffff;
-const DECK_CODE_V7_MAX_TOTAL = 10000;
+const DECK_CODE_V7_MAX_TOTAL = MAX_IMPORTED_DECK_CARDS;
 // 通常デッキを大きく超える場合はv6へ退避し、不正rankのBigInt演算量を抑える。
 const DECK_CODE_V7_MAX_UNIQUE = 256;
 const DECK_CODE_V7_CHECKSUM_BYTES = 5;
@@ -11072,7 +11124,7 @@ function applyBackupData(backupData) {
     const deckInfo = backupData.decks[String(deckId)] || {};
     const name = typeof deckInfo.name === 'string' && deckInfo.name ? deckInfo.name : `デッキ${deckId}`;
     const cardMap = deckInfo.cards || {};
-    if (typeof cardMap !== 'object' || Array.isArray(cardMap)) throw new Error('無効なカードデータです');
+    validateDeckImportMap(cardMap);
 
     const cards = [];
     let total = 0;
@@ -11122,6 +11174,9 @@ function applyBackupData(backupData) {
     version: '2'
   });
   localStorage.setItem('kannagi-deck-manager-v2', serializedState);
+
+  deckManager.hasUnsavedChanges = false;
+  document.getElementById('deck-save-warning')?.remove();
 
   deckManager.decks = nextDecks;
   deckManager.deckOrder = nextOrder;
