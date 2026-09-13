@@ -3775,6 +3775,13 @@ body.modal-open {
   margin: auto;
 }
 
+/* 保存画像はカード幅に比例した角丸で元画像の白い角を隠す。
+   縦半径はカード比率745:1041で補正し、画面の縦横比に依存させない。 */
+.deck-display.capturing .deck-card,
+.deck-display.capturing .deck-card img {
+  border-radius: 8% / 5.725%;
+}
+
 /* キャプチャ中は不要な要素を非表示 */
 .capturing-deck .deck-menu,
 .capturing-deck .deck-back-button {
