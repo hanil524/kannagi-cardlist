@@ -1674,44 +1674,53 @@ button[onclick='resetFilters()']:active {
 
 #modal.card-limits-mode .modal-buttons {
   display: block;
-  padding: 12px 20px 20px;
+  padding: 18px 20px 20px;
 }
 
 #modal button.card-limits-back {
   width: auto;
   min-height: 36px;
-  margin: 0 0 8px -8px;
+  margin: 0;
+  padding: 8px 0;
   border: 0;
+  justify-self: start;
 }
 
 #modal .card-limits-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 #modal .card-limits-heading h2 {
   margin: 0;
-  color: #f2f2f5;
-  font-size: 20px;
-  letter-spacing: 0.06em;
+  color: #f6eeee;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-indent: 0.12em;
+  text-align: center;
 }
 
 #modal .card-limits-total {
-  color: #aaaab6;
+  justify-self: end;
+  color: #b7aeb4;
   font-size: 12px;
   line-height: 1.6;
 }
 
-#modal .card-limits-heading {
-  margin-bottom: 16px;
-}
-
 #modal .card-limits-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(8, 8, 13, 0.16);
   color: #e4e4ea;
   font-size: 14px;
   line-height: 1.6;
@@ -1719,34 +1728,70 @@ button[onclick='resetFilters()']:active {
 
 #modal .card-limits-table th,
 #modal .card-limits-table td {
-  padding: 9px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 7px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
   text-align: left;
   font-weight: normal;
   overflow-wrap: anywhere;
 }
 
 #modal .card-limits-table thead th {
-  color: #aaaab6;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #b7aeb4;
   font-size: 11px;
+  letter-spacing: 0.04em;
 }
 
 #modal .card-limits-table th:last-child,
 #modal .card-limits-table td {
-  width: 64px;
-  padding-left: 12px;
-  text-align: right;
+  width: 48px;
+  padding-left: 8px;
+  text-align: center;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
-#modal .card-limits-table tbody td {
-  color: #f2c7c7;
-  font-weight: bold;
+#modal .card-limits-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.018);
+}
+
+#modal .card-limits-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+#modal .card-limits-table tr.card-limits-group-start > * {
+  border-top: 1px solid rgba(220, 145, 150, 0.38);
+}
+
+#modal .card-limits-amount {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  min-width: 44px;
+  padding: 2px 0;
+  border-radius: 6px;
+  background: rgba(220, 190, 190, 0.08);
+  color: #d9c7ca;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+#modal tr[data-limit="0"] .card-limits-amount,
+#modal tr[data-limit="1"] .card-limits-amount {
+  background: rgba(210, 100, 110, 0.15);
+  color: #f0b5bc;
+}
+
+#modal .card-limits-unit {
+  font-size: 11px;
+  font-weight: normal;
 }
 
 #modal button.card-limits-name {
-  min-height: 28px;
+  min-height: 30px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -1760,13 +1805,46 @@ button[onclick='resetFilters()']:active {
   justify-content: flex-start;
   transform: none;
   text-decoration: underline;
-  text-decoration-color: rgba(228, 228, 234, 0.25);
+  text-decoration-color: rgba(228, 228, 234, 0.16);
   text-underline-offset: 4px;
 }
 
 #modal button.card-limits-name:hover {
   color: #fff;
   text-decoration-color: currentColor;
+}
+
+@media (hover: hover) {
+  #modal .card-limits-table tbody tr:hover {
+    background: rgba(220, 145, 150, 0.07);
+  }
+}
+
+#modal .card-limits-table tbody tr:focus-within {
+  background: rgba(220, 145, 150, 0.07);
+}
+
+@media (max-width: 480px) {
+  #modal.card-limits-mode .modal-buttons {
+    padding: 16px 14px 18px;
+  }
+
+  #modal .card-limits-heading {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2px 10px;
+    margin-bottom: 10px;
+  }
+
+  #modal .card-limits-heading h2 {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  #modal .card-limits-table th,
+  #modal .card-limits-table td {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
 }
 
 #modal.card-limits-mode .modal-buttons:focus {

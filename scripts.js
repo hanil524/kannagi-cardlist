@@ -3593,8 +3593,8 @@ function openCardLimitsModal() {
   modal.setAttribute('aria-labelledby', 'card-limits-title');
   content.tabIndex = -1;
   content.innerHTML = `
-    <button type="button" class="card-limits-back">‹ レアに戻る</button>
     <div class="card-limits-heading">
+      <button type="button" class="card-limits-back">‹ レアに戻る</button>
       <h2 id="card-limits-title">封印改定</h2>
       <span class="card-limits-total"></span>
     </div>
@@ -3613,9 +3613,11 @@ function openCardLimitsModal() {
   const listCards = entries.map(([name]) => cardByName.get(name)).filter(Boolean);
   content.querySelector('.card-limits-total').textContent = `${entries.length}種類`;
   const rows = document.createDocumentFragment();
-  entries.forEach(([name, limit]) => {
+  entries.forEach(([name, limit], index) => {
     const row = document.createElement('tr');
     row.dataset.cardName = name;
+    row.dataset.limit = limit;
+    if (index > 0 && entries[index - 1][1] !== limit) row.classList.add('card-limits-group-start');
     const nameCell = document.createElement('th');
     nameCell.scope = 'row';
     const nameButton = document.createElement('button');
@@ -3635,7 +3637,14 @@ function openCardLimitsModal() {
     };
     nameCell.appendChild(nameButton);
     const limitCell = document.createElement('td');
-    limitCell.textContent = `${limit}枚`;
+    const amount = document.createElement('span');
+    amount.className = 'card-limits-amount';
+    amount.textContent = limit;
+    const unit = document.createElement('span');
+    unit.className = 'card-limits-unit';
+    unit.textContent = '枚';
+    amount.appendChild(unit);
+    limitCell.appendChild(amount);
     row.append(nameCell, limitCell);
     rows.appendChild(row);
   });
