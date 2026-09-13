@@ -1637,6 +1637,147 @@ button[onclick='resetFilters()']:active {
   border-radius: 8px;
 }
 
+/* 封印改定の入口はレア選択内にだけ表示する。 */
+#modal button.card-limits-entry,
+#modal button.card-limits-back {
+  background: transparent;
+  box-shadow: none;
+  color: #c8c8d0;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: 0;
+  transform: none;
+}
+
+#modal button.card-limits-entry {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  padding: 10px 8px;
+  min-height: 40px;
+  border: 1px solid rgba(220, 145, 150, 0.40);
+  border-radius: 8px;
+  background: rgba(190, 100, 110, 0.12);
+  color: #f0dadd;
+  font-weight: 600;
+}
+
+#modal button.card-limits-entry:hover {
+  color: #fff;
+  border-color: rgba(230, 160, 165, 0.65);
+  background: rgba(190, 100, 110, 0.22);
+}
+
+#modal button.card-limits-back:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+#modal.card-limits-mode .modal-buttons {
+  display: block;
+  padding: 12px 20px 20px;
+}
+
+#modal button.card-limits-back {
+  width: auto;
+  min-height: 36px;
+  margin: 0 0 8px -8px;
+  border: 0;
+}
+
+#modal .card-limits-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#modal .card-limits-heading h2 {
+  margin: 0;
+  color: #f2f2f5;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+}
+
+#modal .card-limits-total {
+  color: #aaaab6;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#modal .card-limits-heading {
+  margin-bottom: 16px;
+}
+
+#modal .card-limits-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #e4e4ea;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#modal .card-limits-table th,
+#modal .card-limits-table td {
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  font-weight: normal;
+  overflow-wrap: anywhere;
+}
+
+#modal .card-limits-table thead th {
+  color: #aaaab6;
+  font-size: 11px;
+}
+
+#modal .card-limits-table th:last-child,
+#modal .card-limits-table td {
+  width: 64px;
+  padding-left: 12px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+#modal .card-limits-table tbody td {
+  color: #f2c7c7;
+  font-weight: bold;
+}
+
+#modal button.card-limits-name {
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  justify-content: flex-start;
+  transform: none;
+  text-decoration: underline;
+  text-decoration-color: rgba(228, 228, 234, 0.25);
+  text-underline-offset: 4px;
+}
+
+#modal button.card-limits-name:hover {
+  color: #fff;
+  text-decoration-color: currentColor;
+}
+
+#modal.card-limits-mode .modal-buttons:focus {
+  outline: none;
+}
+
+#modal.card-limits-mode button:focus-visible {
+  outline: 2px solid #cf7474;
+  outline-offset: -2px;
+}
+
 #modal .filter-category,
 #modal .filter-category-header,
 #modal .attribute-modal-header {

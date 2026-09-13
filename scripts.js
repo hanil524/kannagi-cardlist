@@ -1407,12 +1407,29 @@ function parseSakkaValues(value) {
 
 // === フィルター高速化: 逆引きインデックス ===
 // カードのdata属性を事前にパースしてキャッシュし、フィルター時のDOM読み取りを省略する
+function isSealedCard(cardName) {
+  const limit = deckBuilder.cardLimits.get(cardName);
+  return Number.isFinite(limit) && limit >= 0 && limit <= 3;
+}
+
+function syncCardLimitTags(cards) {
+  cards.forEach((card) => {
+    const original = card.dataset.rare || '';
+    const values = original.split(/\s+/).filter((value) => value && value !== '封印改定' && value !== '封印改訂');
+    if (isSealedCard(card.dataset.name)) values.push('封印改定');
+    const next = values.join(' ');
+    if (original !== next) card.dataset.rare = next;
+  });
+}
+
 const cardIndexCache = {
   built: false,
   entries: [],    // [{el, series:[], season:[], type:'', role:[], keyword:[], attribute:[], rare:[], sakka:[], cost:'', power:'', name:'', nameLower:'', attributeLower:''}]
   build() {
     if (this.built) return;
     const cards = document.querySelectorAll('#card-list .card');
+    // 保存済みフィルターの復元も、この自動タグを含めてインデックス化する。
+    syncCardLimitTags(cards);
     this.entries = [];
     cards.forEach(card => {
       this.entries.push({
@@ -1839,6 +1856,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildNumericFilterButtons();
   buildSakkaFilterButtons();
   setupFilterTouchActivation();
+  setupCardLimitsTouchActivation();
   // モーダル操作中の強制レイアウトを避けるため、スクロールバー幅を先に計測しておく。
   getScrollbarWidth();
 
@@ -1997,6 +2015,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 画像モーダルのイベントリスナーを追加
   const imageModal = document.getElementById('image-modal');
+  imageModal.addEventListener('keydown', (event) => {
+    if (!cardLimitsImageReturnState) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      closeImageModal();
+    } else if (event.key === 'Shift') {
+      event.stopPropagation();
+    }
+  });
   imageModal.addEventListener('click', function (event) {
     if (event.target === imageModal) {
       closeImageModal();
@@ -3223,6 +3251,7 @@ const saveCurrentFilterModalScrollPosition = () => {
 const openModal = (filterId) => {
   const modal = document.getElementById('modal');
   const modalButtons = document.getElementById('modal-buttons');
+  resetCardLimitsModalView();
   modalButtons.innerHTML = '';
 
   const fitSakkaModalButtonText = () => {
@@ -3482,6 +3511,15 @@ const openModal = (filterId) => {
     appendFilterElements(filterContent);
   }
 
+  if (filterId === 'rare') {
+    const entry = document.createElement('button');
+    entry.type = 'button';
+    entry.className = 'card-limits-entry';
+    entry.textContent = '封印改定 カード一覧';
+    entry.onclick = openCardLimitsModal;
+    modalButtons.appendChild(entry);
+  }
+
   scrollPosition = window.pageYOffset;
   const scrollbarWidth = getScrollbarWidth();
   modal.style.setProperty('--filter-modal-scrollbar-width', `${scrollbarWidth}px`);
@@ -3502,9 +3540,17 @@ const openModal = (filterId) => {
   modalButtons.scrollTop = filterModalScrollPositions[filterId] || 0;
 };
 
-const closeModal = () => {
+const closeModal = (event) => {
+  if (activeFilterModalId === 'card-limits') {
+    openModal('rare');
+    if (event?.isTrusted && (event.type === 'keydown' || event.detail === 0)) {
+      document.querySelector('#modal .card-limits-entry').focus({ preventScroll: true });
+    }
+    return;
+  }
   saveCurrentFilterModalScrollPosition();
   activeFilterModalId = null;
+  resetCardLimitsModalView();
 
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
@@ -3526,9 +3572,146 @@ const closeModal = () => {
   }
 };
 
+// 一覧専用の表示に切り替える。既存モーダルの開閉・スクロール制御を共有する。
+function resetCardLimitsModalView() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('card-limits-mode');
+  modal.removeAttribute('role');
+  modal.removeAttribute('aria-modal');
+  modal.removeAttribute('aria-labelledby');
+  document.getElementById('modal-buttons').removeAttribute('tabindex');
+}
+
+function openCardLimitsModal() {
+  saveCurrentFilterModalScrollPosition();
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-buttons');
+  activeFilterModalId = 'card-limits';
+  modal.classList.add('card-limits-mode');
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'card-limits-title');
+  content.tabIndex = -1;
+  content.innerHTML = `
+    <button type="button" class="card-limits-back">‹ レアに戻る</button>
+    <div class="card-limits-heading">
+      <h2 id="card-limits-title">封印改定</h2>
+      <span class="card-limits-total"></span>
+    </div>
+    <table class="card-limits-table">
+      <thead><tr><th scope="col">カード名</th><th scope="col">上限</th></tr></thead>
+      <tbody></tbody>
+    </table>`;
+
+  // Mapの1項目を1行にするため、再録カードがあっても重複しない。
+  const entries = [...deckBuilder.cardLimits].filter(([name]) => isSealedCard(name)).sort((a, b) =>
+    (a[1] === b[1] ? a[0].localeCompare(b[0], 'ja') : a[1] - b[1]));
+  const cardByName = new Map();
+  document.querySelectorAll('#card-list .card').forEach((card) => {
+    if (!cardByName.has(card.dataset.name)) cardByName.set(card.dataset.name, card);
+  });
+  const listCards = entries.map(([name]) => cardByName.get(name)).filter(Boolean);
+  content.querySelector('.card-limits-total').textContent = `${entries.length}種類`;
+  const rows = document.createDocumentFragment();
+  entries.forEach(([name, limit]) => {
+    const row = document.createElement('tr');
+    row.dataset.cardName = name;
+    const nameCell = document.createElement('th');
+    nameCell.scope = 'row';
+    const nameButton = document.createElement('button');
+    nameButton.type = 'button';
+    nameButton.className = 'card-limits-name';
+    nameButton.textContent = name.replace(/[（(][^（）()]*[）)]\s*$/, '');
+    nameButton.setAttribute('aria-label', `${nameButton.textContent}を拡大表示`);
+    const card = cardByName.get(name);
+    nameButton.disabled = !card;
+    nameButton.onclick = (event) => {
+      openImageModal(getModalCardFullImageSrc(card), {
+        cards: listCards,
+        card,
+        returnToCardLimits: true,
+        returnFocus: event.isTrusted && event.detail === 0 ? nameButton : content
+      });
+    };
+    nameCell.appendChild(nameButton);
+    const limitCell = document.createElement('td');
+    limitCell.textContent = `${limit}枚`;
+    row.append(nameCell, limitCell);
+    rows.appendChild(row);
+  });
+  content.querySelector('tbody').appendChild(rows);
+  content.querySelector('.card-limits-back').onclick = closeModal;
+  content.scrollTop = 0;
+  content.focus({ preventScroll: true });
+}
+
+function handleCardLimitsModalKeydown(event) {
+  if (activeFilterModalId !== 'card-limits') return;
+  // 一覧を読んでいる間は、背後のリセット・デッキ操作キーを発動させない。
+  event.stopPropagation();
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeModal(event);
+  } else if (event.key === 'Tab') {
+    const focusable = [...document.querySelectorAll('#modal button, #modal [tabindex="0"]')];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  }
+}
+
+function setupCardLimitsTouchActivation() {
+  const modal = document.getElementById('modal');
+  let tap = null;
+  let suppressedButton = null;
+  let suppressUntil = 0;
+  // スワイプ後にclickが省略される端末でも、一覧のボタンを1回のタップで有効化する。
+  modal.addEventListener('touchstart', (event) => {
+    tap = null;
+    suppressedButton = null;
+    suppressUntil = 0;
+    if (activeFilterModalId !== 'card-limits' || event.touches.length !== 1) return;
+    const button = event.target.closest('button.close, button.card-limits-back, button.card-limits-name');
+    if (button) {
+      const touch = event.touches[0];
+      tap = { button, id: touch.identifier, x: touch.clientX, y: touch.clientY };
+    }
+  }, { passive: true });
+  modal.addEventListener('touchmove', (event) => {
+    if (!tap) return;
+    const touch = [...event.touches].find((item) => item.identifier === tap.id);
+    if (!touch || Math.abs(touch.clientX - tap.x) > 12 || Math.abs(touch.clientY - tap.y) > 12) tap = null;
+  }, { passive: true });
+  modal.addEventListener('touchcancel', () => { tap = null; }, { passive: true });
+  modal.addEventListener('touchend', (event) => {
+    const pending = tap;
+    tap = null;
+    if (!pending || activeFilterModalId !== 'card-limits') return;
+    const touch = [...event.changedTouches].find((item) => item.identifier === pending.id);
+    if (!touch || Math.abs(touch.clientX - pending.x) > 12 || Math.abs(touch.clientY - pending.y) > 12) return;
+    if (event.cancelable) event.preventDefault();
+    suppressedButton = pending.button;
+    suppressUntil = Date.now() + 400;
+    pending.button.click();
+  }, { passive: false });
+  modal.addEventListener('click', (event) => {
+    if (event.isTrusted && Date.now() <= suppressUntil && event.target.closest('button') === suppressedButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      suppressedButton = null;
+    }
+  }, true);
+}
+
 const closeModalOnClick = (event) => {
   if (event.target.id === 'modal') {
-    closeModal();
+    closeModal(event);
   }
 };
 let savedScrollPosition = 0;
@@ -3536,6 +3719,7 @@ let savedScrollPosition = 0;
 // 現在の画像のインデックスを追跡
 let currentImageIndex = 0;
 let visibleCards = [];
+let cardLimitsImageReturnState = null;
 
 // 制限カード情報を取得（3枚以下の制限カードのみ表示）
 function getCardLimitText(cardName) {
@@ -3903,7 +4087,7 @@ const clearModalImagePreloads = () => {
 };
 
 
-const openImageModal = (src) => {
+const openImageModal = (src, options = {}) => {
   const now = Date.now();
   if (now - lastModalOpenTime < 300) return;
   cancelPendingCardShareGeneration();
@@ -3931,19 +4115,30 @@ const openImageModal = (src) => {
   const isDeckModalVisible = document.getElementById('deck-modal').style.display === 'block';
 
   // 現在の表示状態に応じてカードリストを取得（軽量化版）
-  visibleCards = isDeckModalVisible
+  const previousVisibleCards = visibleCards;
+  const previousImageIndex = currentImageIndex;
+  visibleCards = Array.isArray(options.cards) ? [...options.cards] : isDeckModalVisible
     ? Array.from(document.querySelectorAll('.deck-card')) // デッキ内のカード
     : Array.from(document.querySelectorAll('.card')).filter((card) =>
       card.style.display !== 'none' && !card.classList.contains('hidden')
     ); // getComputedStyleを避けた軽量版
 
   // クリックされた画像のインデックスを取得
-  currentImageIndex = visibleCards.findIndex((card) => {
+  currentImageIndex = options.card ? visibleCards.indexOf(options.card) : visibleCards.findIndex((card) => {
     const cardImg = card.querySelector('img');
     return cardImg && (cardImg.src === src || cardImg.getAttribute('data-src') === src);
   });
 
   if (currentImageIndex === -1) return;
+
+  cardLimitsImageReturnState = options.returnToCardLimits ? {
+    visibleCards: previousVisibleCards,
+    currentImageIndex: previousImageIndex,
+    scrollTop: document.getElementById('modal-buttons').scrollTop,
+    returnFocus: options.returnFocus,
+    bodyStyles: Object.fromEntries(['overflow', 'position', 'top', 'width'].map((key) => [key, document.body.style[key]]))
+  } : null;
+  if (cardLimitsImageReturnState) document.getElementById('modal').inert = true;
 
   const currentCard = visibleCards[currentImageIndex];
   const cardName = currentCard.dataset.name;
@@ -4080,6 +4275,10 @@ const openImageModal = (src) => {
   document.body.style.position = 'fixed';
   document.body.style.top = `-${savedScrollPosition}px`;
   document.body.style.width = '100%';
+  if (cardLimitsImageReturnState) {
+    modal.tabIndex = -1;
+    modal.focus({ preventScroll: true });
+  }
 
   // カード画像は即座に表示、左右ボタンは位置確定後にフェードイン
   modalImage.style.transition = 'none';
@@ -4186,7 +4385,10 @@ const closeImageModal = () => {
 
   // 暗幕がまだ不透明なうちに背面を本来の状態へ戻す。
   // フェード中に固定bodyの幅やスクロール位置が切り替わって見えるのを防ぐ。
-  if (deckModal && deckModal.style.display === 'block') {
+  if (cardLimitsImageReturnState) {
+    // 背後の一覧のスクロールロックとレイアウトを、開く前の状態に戻す。
+    Object.assign(document.body.style, cardLimitsImageReturnState.bodyStyles);
+  } else if (deckModal && deckModal.style.display === 'block') {
     // デッキ作成画面が開いている場合はスクロール禁止を維持（position/topは必ずリセット）
     document.body.style.overflow = 'hidden';
     document.body.style.position = '';
@@ -4227,6 +4429,17 @@ const closeImageModal = () => {
     modalConnectionInfo = null;
     connectionModalStack = [];
     clearModalImagePreloads();
+
+    if (cardLimitsImageReturnState) {
+      const returnState = cardLimitsImageReturnState;
+      cardLimitsImageReturnState = null;
+      visibleCards = returnState.visibleCards;
+      currentImageIndex = returnState.currentImageIndex;
+      document.getElementById('modal').inert = false;
+      document.getElementById('modal-buttons').scrollTop = returnState.scrollTop;
+      modal.removeAttribute('tabindex');
+      if (returnState.returnFocus?.isConnected) returnState.returnFocus.focus({ preventScroll: true });
+    }
 
     // メモリリーク対策（全デバイス共通）
     if (seriesInfoCache.size > 100) {
@@ -4841,6 +5054,11 @@ const loadFiltersFromLocalStorage = () => {
 
   // フィルターの適用
   if (savedFilters) {
+    // 旧表記で保存済みの選択も、新しい表記へ引き継ぐ。
+    if (Array.isArray(savedFilters.rare) && savedFilters.rare.includes('封印改訂')) {
+      savedFilters.rare = [...new Set(savedFilters.rare.map((value) => value === '封印改訂' ? '封印改定' : value))];
+      localStorage.setItem('cardFilters', JSON.stringify(savedFilters));
+    }
     for (const [key, value] of Object.entries(savedFilters)) {
       filters[key] = new Set(value);
     }
@@ -5111,10 +5329,9 @@ const deckBuilder = {
   maxCards: 4,
   // カードごとの上限枚数（通常4枚のカードはここに不要）
   // 追加する場合: ['カード名', 枚数] を足すだけ。Infinity = 無制限
+  // このうち3枚以下の指定が「封印改定」の自動タグと枚数一覧に反映される。
   cardLimits: new Map([
     // 1枚制限
-    ['人魚の活き血（にんぎょのいきち）', 1],
-    ['肥川の大蛇（ひのかわのおろち）', 1],
     ['消さなきゃ（けさなきゃ）', 1],
     ['暗躍者(あんやくしゃ)', 1],
     ['仮想世界の外(かそうせかいのそと)', 1],
@@ -5123,20 +5340,16 @@ const deckBuilder = {
     ['大災害（だいさいがい）', 1],
     // 2枚制限
     ['悠習の古日記（ゆうしゅうのこにっき）', 2],
-    ['本物のお化け屋敷（ほんもののおばけやしき）', 2],
-    ['つちのこ', 2],
-    ['新府城（しんぶじょう）', 2],
     ['札絵れあ（ふだえれあ）', 2],
     ['血の視線（ちのしせん）', 2],
-    ['死神の蝋燭（しにがみのろうそく）', 2],
+    ['すずめの道（すずめのみち）', 2],
+    ['人魚の活き血（にんぎょのいきち）', 2],
     ['失われた海域(うしなわれたかいいき)', 2],
-    ['赤津川（あかつがわ）', 2],
-    ['いっしょにあそぼ・・・', 2],
-    // 7枚制限
+    // 7枚上限
     ['山口：7つの家（やまぐち：ななつのいえ）', 7],
-    // 8枚制限
+    // 8枚上限
     ['ヤマタノオロチ(やまたのおろち)', 8],
-    // 10枚制限
+    // 10枚上限
     ['火の玉（ひのたま）', 10],
     // 無制限
     ['複製体(くろーん)', Infinity],
