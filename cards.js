@@ -19026,5 +19026,77 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (102).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10092"
+  data-name="ねこやま"
+  data-cost="0"
+  data-power="1"
+  data-series="プロモ"
+  data-promo-date=""
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="動物"
+  data-keyword=""
+  data-role="ヒール 常時"
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (104).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10093"
+  data-name="次に期待（つぎにきたい）"
+  data-cost="0"
+  data-power="4"
+  data-series="プロモ"
+  data-promo-date=""
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="うつしよ 罪"
+  data-keyword=""
+  data-role="自傷ダメ 攻撃時"
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (105).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10094"
+  data-name="夜中の繁華街（よなかのはんかがい）"
+  data-cost="0"
+  data-power="1"
+  data-series="プロモ"
+  data-promo-date=""
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="妖怪 視線"
+  data-keyword=""
+  data-role="トップ確認 召喚時"
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (106).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="10095"
+  data-name="暗予劇場（あんよげきじょう）"
+  data-cost="0"
+  data-power="1"
+  data-series="プロモ"
+  data-promo-date="2026年8月5日"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="廃劇場 胎内"
+  data-keyword=""
+  data-role="バニラ"
+  data-sakka=""
+>
+  <img data-src="images/card_17_p (103).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
