@@ -19098,5 +19098,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (103).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10097"
+  data-name="おもちゃのイチノセ(おもちゃのいちのせ)"
+  data-cost="1"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2026年9月16日"
+  data-type="道具札"
+  data-season="冬"
+  data-rare=""
+  data-attribute="からくり 人形"
+  data-keyword=""
+  data-role="ダメ無効 相手ヒール "
+  data-sakka="おもちゃのイチノセ"
+>
+  <img data-src="images/card_17_p (107).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
