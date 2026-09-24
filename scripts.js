@@ -40,8 +40,16 @@ const SHARED_FOUR_COPY_CARD_NAME = '「古書の怪」';
 
 const getDeckLimitGroupKey = (cardName) => {
   const name = String(cardName || '');
-  return name.includes(SHARED_FOUR_COPY_CARD_NAME) ? SHARED_FOUR_COPY_CARD_NAME : name;
+  // 通常版・固有名付きの新版・保存済みの旧表記を、共通の4枚枠として扱う。
+  const isKoshoCard = /^古書の怪(?:[\s(（]|$)/.test(name) || name.includes(SHARED_FOUR_COPY_CARD_NAME);
+  return isKoshoCard ? SHARED_FOUR_COPY_CARD_NAME : name;
 };
+
+// 名前で保存されていた旧お気に入りを、新表記の同じカードへ引き継ぐ。
+const normalizeLegacyKoshoCardName = (cardName) => String(cardName || '').replace(
+  /^(.+?)[(（](.*?)「古書の怪」[)）]$/,
+  (_, title, reading) => `古書の怪 ${title}(こしょのかい ${reading || title})`
+);
 
 const isSameDeckLimitGroup = (leftName, rightName) => {
   return getDeckLimitGroupKey(leftName) === getDeckLimitGroupKey(rightName);
@@ -907,7 +915,8 @@ function migrateLegacyFavoriteCards() {
   const firstFavoriteGroup = getFavoriteCardKeysForGroup(1);
 
   legacyFavoriteCardNames.forEach((legacyName) => {
-    const firstMatchingCard = originalCards.find((card) => card.dataset.name === legacyName);
+    const currentName = normalizeLegacyKoshoCardName(legacyName);
+    const firstMatchingCard = originalCards.find((card) => card.dataset.name === currentName);
     const favoriteKey = getFavoriteCardKey(firstMatchingCard);
     if (favoriteKey) firstFavoriteGroup.add(favoriteKey);
   });
@@ -1638,6 +1647,8 @@ function buildNumericFilterButtons() {
 // 英字・数字・漢字始まりの作家名は、ここを直すだけで並び順と行分類を変更できる。
 // ひらがな・カタカナ始まりの名前は自動判定するため、通常は登録不要。
 const SAKKA_READINGS = {
+  'モノフシギ': 'ものふしぎ',
+  'ぺろりん先生': 'ぺろりんせんせい',
   'おもちゃのイチノセ': 'おもちゃのいちのせ',
   '名怖夜 参夜目～名古屋の怖い夜～': 'なごやさんよめ',
   '学び場HOMEBASE': 'まなびばほーむべーす',

@@ -17595,6 +17595,1234 @@ data-sakka="marukko"
 >
   <img data-src="images/card_17_p (81).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<!--
+<div
+  class="card"
+  data-number="2901"
+  data-name="油壷の別荘(あぶらつぼのべっそう)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 血液 戦"
+  data-keyword=""
+  data-role="召喚時 トップ確認 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<div
+  class="card"
+  data-number="2902"
+  data-name="瘴気の壁（しょうきのかべ）"
+  data-cost="6"
+  data-power="2"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="壁"
+  data-keyword=""
+  data-role="ダメ無効 常時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<!--
+<div
+  class="card"
+  data-number="2903"
+  data-name="KAMNA(かむな)"
+  data-cost="7"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="烏 罪 病"
+  data-keyword=""
+  data-role="攻撃時 特殊勝利 "
+  data-connection="中野友加里(なかのゆかり),MATT(まっと),世界ミステリーch(せかいみすてりーch)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2904"
+  data-name="KAMNA(かむな)"
+  data-cost="7"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SR"
+  data-attribute="烏 罪 病"
+  data-keyword=""
+  data-role="攻撃時 特殊勝利 "
+  data-connection="中野友加里(なかのゆかり),MATT(まっと),世界ミステリーch(せかいみすてりーch)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2905"
+  data-name="まろっく様(まろっくさま)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 動物 猫"
+  data-keyword=""
+  data-role="魂加速 ヒール "
+  data-connection="テズ様(てずさま)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2906"
+  data-name="まろっく様(まろっくさま)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 動物 猫"
+  data-keyword=""
+  data-role="魂加速 ヒール "
+  data-connection="テズ様(てずさま)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2907"
+  data-name="テズ様(てずさま)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="七不思議 動物 犬族"
+  data-keyword=""
+  data-role="サーチ ヒール "
+  data-connection="まろっく様(まろっくさま)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2908"
+  data-name="テズ様(てずさま)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 動物 犬族"
+  data-keyword=""
+  data-role="サーチ ヒール "
+  data-connection="まろっく様(まろっくさま)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2909"
+  data-name="屈折する万華鏡（くっせつするまんげきょう）"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="春"
+  data-rare="C"
+  data-attribute="鏡"
+  data-keyword=""
+  data-role="ヒール ドロー"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2910"
+  data-name="パシンペロンはやぶさ：再来(ぱしんぺろんはやぶさ：さいらい)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="春"
+  data-rare="R"
+  data-attribute="七不思議 動物 視線"
+  data-keyword="言霊"
+  data-role="魂加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2911"
+  data-name="猛々の嫁メリケンサック(もうもうのよめめりけんさっく)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="春"
+  data-rare="UC"
+  data-attribute="七不思議 猫"
+  data-keyword=""
+  data-role="札ダメ 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2912"
+  data-name="寮の謎の掟(りょうのなぞのおきて)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 廃マンション"
+  data-keyword=""
+  data-role="召喚時 トップ確認 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (12).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<div
+  class="card"
+  data-number="2913"
+  data-name="キジムナー（きじむなー）"
+  data-cost="1"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="妖怪"
+  data-keyword=""
+  data-role="手札入替 攻撃時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (13).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<!--
+<div
+  class="card"
+  data-number="2914"
+  data-name="アイリスラーメンch(あいりすらーめんちゃんねる)"
+  data-cost="3"
+  data-power="3"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="UC"
+  data-attribute="怨霊 糧"
+  data-keyword=""
+  data-role="召喚時"
+  data-connection="アイリスラーメン(あいりすらーめん)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (14).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2915"
+  data-name="ヤースー(やーすー)"
+  data-cost="12"
+  data-power="12"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="夏"
+  data-rare="SR"
+  data-attribute="七不思議 犬族 神"
+  data-keyword="神秘"
+  data-role="召喚時 攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (15).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2916"
+  data-name="築地の健吾：再来(つきじのけんご：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="C"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (16).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2917"
+  data-name="築地の健吾：再来(つきじのけんご：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (17).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2918"
+  data-name="怪談ショーの椅子(かいだんしょーのいす)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="夏"
+  data-rare="R"
+  data-attribute="七不思議 噂"
+  data-keyword=""
+  data-role="直接ダメ 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (18).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2919"
+  data-name="言霊信仰(ことだましんこう)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="C"
+  data-attribute="七不思議 噂"
+  data-keyword=""
+  data-role="召喚時 トップ確認 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (19).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<div
+  class="card"
+  data-number="2920"
+  data-name="夜の鳥（よるのとり）"
+  data-cost="5"
+  data-power="4"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="廃円宿 火事"
+  data-keyword="四季欲"
+  data-role="手札公開 ハンデス"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (20).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<!--
+<div
+  class="card"
+  data-number="2921"
+  data-name="RIKEOKA いの(りけおか いの)"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 からくり 噂"
+  data-keyword="学校の怪談"
+  data-role="召喚時 除外加速 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (21).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2922"
+  data-name="Craft attic(くらふと あてぃっく)"
+  data-cost="6"
+  data-power="4"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="糧"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (22).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2923"
+  data-name="Craft attic(くらふと あてぃっく)"
+  data-cost="6"
+  data-power="4"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="糧"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (23).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2924"
+  data-name="廻MEGURU喫茶(めぐるきっさ)"
+  data-cost="8"
+  data-power="3"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="樹木 幽霊"
+  data-keyword=""
+  data-role="召喚時 ドロー 特殊召喚 追加行動 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (24).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2925"
+  data-name="真実を語る黒子：再来(しんじつをかたるくろこ：さいらい)"
+  data-cost="10"
+  data-power="10"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="秋"
+  data-rare="R"
+  data-attribute="七不思議 灯火 龍"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (25).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2926"
+  data-name="人間椅子（にんげんいす）"
+  data-cost="2"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="からくり 噂"
+  data-keyword=""
+  data-role="ハンデス 除外加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (26).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2927"
+  data-name="DDD(でぃーぷ・でぃーぱー・でぃーぺすと)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="UC"
+  data-attribute="七不思議 虹 ゴリラ"
+  data-keyword=""
+  data-role="ドロー 展開時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (27).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2928"
+  data-name="悲痛(ひつう)"
+  data-cost="13"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="秋"
+  data-rare="SR"
+  data-attribute="花"
+  data-keyword=""
+  data-role="デッキ破壊 相手ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (28).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2929"
+  data-name="いっしょにしんで"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 幻"
+  data-keyword=""
+  data-role="召喚時 公開ドロー ドロー トップ確認 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (29).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2930"
+  data-name="カッパとぺろりん(かっぱとぺろりん)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="除外戻し "
+  data-sakka="ぺろりん先生"
+>
+  <img data-src="images/card_18_p (30).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2931"
+  data-name="巡り巡って風車(めぐりめぐってかざぐるま)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 日差し"
+  data-keyword=""
+  data-role="札無効 自傷ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (31).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2932"
+  data-name="がん：再来(がん：さいらい)"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="C"
+  data-attribute="七不思議 鬼"
+  data-keyword=""
+  data-role="ヒール "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (32).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2933"
+  data-name="がん：再来(がん：さいらい)"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="冬"
+  data-rare="R"
+  data-attribute="七不思議 鬼"
+  data-keyword=""
+  data-role="ヒール "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (33).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2934"
+  data-name="おろげずるーむ"
+  data-cost="1"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="冬"
+  data-rare="UC"
+  data-attribute="七不思議 家屋 電話"
+  data-keyword=""
+  data-role="札無効"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (34).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<div
+  class="card"
+  data-number="2935"
+  data-name="本物のお化け屋敷（ほんもののおばけやしき）"
+  data-cost="0"
+  data-power="2"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="うつしよ 血液 人形 殺人"
+  data-keyword="速攻 襲撃"
+  data-role="札ダメ 札除去 常時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (35).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<!--
+<div
+  class="card"
+  data-number="2936"
+  data-name="モノフシギ(ものふしぎ)"
+  data-cost="5"
+  data-power="3"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 家屋"
+  data-keyword=""
+  data-role="召喚時 直接ダメ"
+  data-sakka="モノフシギ"
+>
+  <img data-src="images/card_18_p (36).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2937"
+  data-name="八重光樹(やえみつき)"
+  data-cost="8"
+  data-power="4"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 狐 月 呪"
+  data-keyword="言霊"
+  data-role="召喚時 攻撃時 底送り ドロー ハンデス 相手ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (37).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2938"
+  data-name="ナナフシギ(ななふしぎ)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="サーチ 底送り "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (38).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2939"
+  data-name="神奈備(かむなび)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="都市伝説 烏 罪 病"
+  data-keyword=""
+  data-role="サーチ "
+  data-connection="八咫烏（やたがらす）,中野友加里(なかのゆかり),世界ミステリーch(せかいみすてりーch),MATT(まっと),KAMNA(かむな)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (39).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2940"
+  data-name="藤園いさら(ふじそのいさら)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="七不思議 陰"
+  data-keyword=""
+  data-role="魂加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (40).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2941"
+  data-name="ねこポーチ(ねこぽーち)"
+  data-cost="0"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="C"
+  data-attribute="猫"
+  data-keyword=""
+  data-role="属性追加"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (41).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2942"
+  data-name="古書の怪(こしょのかい)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="UC"
+  data-attribute="古書"
+  data-keyword=""
+  data-role="魂戻し 魂利用 底送り トップ確認 公開ドロー ドロー 魂加速"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (42).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2943"
+  data-name="呪われた苗字(のろわれたみょうじ)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="SR"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="踏み倒し コスト軽減 追加行動 "
+  data-connection="大赤見ノヴ：再来(おおあかみのゔ：さいらい)",大赤見ノヴ(おおあかみのゔ)
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (43).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2944"
+  data-name="最恐を語る名(さいきょうをかたるな)"
+  data-cost="6"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="道具札"
+  data-season="無"
+  data-rare="SR"
+  data-attribute="七不思議 妖怪"
+  data-keyword=""
+  data-role="踏み倒し コスト軽減 追加行動 "
+  data-connection="吉田猛々：再来(よしだもうもう：さいらい),吉田猛々(よしだもうもう)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (44).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2945"
+  data-name="十二月田護朗：再来(じゅうにつきだまもるろう：さいらい)"
+  data-cost="6"
+  data-power="11"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="R"
+  data-attribute="七不思議 事件 怨念"
+  data-keyword=""
+  data-role="攻撃時 トップ送り 直接ダメ "
+  data-connection="十二月田護朗(しわすだごろー)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (45).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2946"
+  data-name="牛抱せん夏：再来(うし抱せんなつ：さいらい)"
+  data-cost="8"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="R"
+  data-attribute="七不思議 死神"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-connection="牛抱せん夏(うしだきせんか)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (46).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2947"
+  data-name="おてもと真悟(おてもとしんご)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春夏"
+  data-rare="UC"
+  data-attribute="七不思議 不吉"
+  data-keyword=""
+  data-role="展開時 魂加速 ドレイン 直接ダメ ヒール "
+  data-connection="夕暮怪雨"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (47).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2948"
+  data-name="うえまつそう：再来(うえまつそう：さいらい)"
+  data-cost="5"
+  data-power="6"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋夏"
+  data-rare="R"
+  data-attribute="七不思議 廃校 噂"
+  data-keyword=""
+  data-role="召喚時 デッキ破壊 ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (48).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2949"
+  data-name="ハニトラ梅木：再来(はにとらうめき：さいらい)"
+  data-cost="7"
+  data-power="7"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋夏"
+  data-rare="R"
+  data-attribute="七不思議 墓地 廃車 交通事故"
+  data-keyword=""
+  data-role="攻撃時 ランデス ハンデス "
+  data-connection="ヤースー(やーすー),大赤見ノヴ：再来(おおあかみのゔ：さいらい)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (49).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2950"
+  data-name="いわお☆カイキスキー(いわお☆かいきすきー)"
+  data-cost="10"
+  data-power="13"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋夏"
+  data-rare="R"
+  data-attribute="七不思議 火事 刀"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-connection="うえまつそう：再来(うえまつそう：さいらい),大赤見ノヴ：再来(おおあかみのゔ：さいらい)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (50).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2951"
+  data-name="全部私が独りで（ぜんぶわたしがひとりで）"
+  data-cost="12"
+  data-power="8"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋夏"
+  data-rare="C"
+  data-attribute="廃屋 怨念"
+  data-keyword=""
+  data-role="直接ダメ 攻撃時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (51).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2952"
+  data-name="大赤見ノヴ：再来(おおあかみのゔ：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="混化 秋夏"
+  data-rare="SR"
+  data-attribute="七不思議 神"
+  data-keyword=""
+  data-role="展開時 サーチ 魂加速 "
+  data-connection="大赤見ノヴ(おおあかみのゔ)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (52).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2953"
+  data-name="カチモード児玉：再来(かちもーどこだま：さいらい)"
+  data-cost="4"
+  data-power="6"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋冬"
+  data-rare="R"
+  data-attribute="七不思議 事件 廃屋"
+  data-keyword=""
+  data-role="召喚時 憑依破壊 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (53).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2954"
+  data-name="夏目太一郎：再来(なつめたいちろう：さいらい)"
+  data-cost="6"
+  data-power="9"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 秋冬"
+  data-rare="R"
+  data-attribute="七不思議 妖怪 写真"
+  data-keyword=""
+  data-role="攻撃時 魂加速 ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (54).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2955"
+  data-name="夕暮怪雨(ゆうぐれかいう)"
+  data-cost="4"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="混化 秋冬"
+  data-rare="UC"
+  data-attribute="七不思議 不吉"
+  data-keyword=""
+  data-role="展開時 魂加速 ランデス ドロー "
+  data-connection="おてもと真悟(おてもとしんご)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (55).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2956"
+  data-name="サヤカスター：再来(さやかすたー：さいらい)"
+  data-cost="4"
+  data-power="5"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春冬"
+  data-rare="UC"
+  data-attribute="七不思議 楽器 幽霊"
+  data-keyword="合唱"
+  data-role="召喚時 ヒール 攻撃時 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (56).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2957"
+  data-name="響洋平：再来(ひびきようへい：さいらい)"
+  data-cost="5"
+  data-power="6"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春冬"
+  data-rare="R"
+  data-attribute="七不思議 楽器"
+  data-keyword="↻（伏せ） 徳"
+  data-role="常時 攻撃時 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (57).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2958"
+  data-name="夜馬裕：再来(やまゆう：さいらい)"
+  data-cost="5"
+  data-power="5"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="混化 春冬"
+  data-rare="R"
+  data-attribute="七不思議 髑髏 幽霊"
+  data-keyword="言霊"
+  data-role="召喚時 攻撃時 札除去 デッキ破壊 トップ確認 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (58).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2959"
+  data-name="吉田猛々：再来(よしだもうもう：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="混化 春冬"
+  data-rare="SR"
+  data-attribute="七不思議 神"
+  data-keyword=""
+  data-role="展開時 サーチ 魂加速 "
+  data-connection="吉田猛々(よしだもうもう)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (59).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2960"
+  data-name="オオパパミ：再来(おおぱぱみ：さいらい)"
+  data-cost="0"
+  data-power="1"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SSR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="召喚時 ヒール 魂加速 除外加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (60).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2961"
+  data-name="肥川の大蛇（ひのかわのおろち）"
+  data-cost="10"
+  data-power="8"
+  data-series="ナナフシギ再来"
+  data-type="場所札"
+  data-season="春"
+  data-rare="SSR"
+  data-attribute="神 大蛇"
+  data-keyword=""
+  data-role="直接ダメ 魂利用 召喚時"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (61).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2962"
+  data-name="大赤見ノヴ：再来(おおあかみのゔ：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="混化 秋夏"
+  data-rare="SSR"
+  data-attribute="七不思議 神"
+  data-keyword=""
+  data-role="展開時 サーチ 魂加速 "
+  data-connection="大赤見ノヴ(おおあかみのゔ)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (62).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2963"
+  data-name="吉田猛々：再来(よしだもうもう：さいらい)"
+  data-cost="5"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="季節札"
+  data-season="混化 春冬"
+  data-rare="SSR"
+  data-attribute="七不思議 神"
+  data-keyword=""
+  data-role="展開時 サーチ 魂加速 "
+  data-connection="吉田猛々(よしだもうもう)"
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (63).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
+<!--
+<div
+  class="card"
+  data-number="2964"
+  data-name="言葉(ことば)"
+  data-cost="3"
+  data-power="0"
+  data-series="ナナフシギ再来"
+  data-type="怪異札"
+  data-season="夏"
+  data-rare="KR"
+  data-attribute="七不思議"
+  data-keyword=""
+  data-role="魂加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_18_p (64).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+-->
 
 <!-- ★★ -->
 
@@ -18605,7 +19833,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10068"
-  data-name="これで最後。(これでさいご。「古書の怪」)"
+  data-name="古書の怪 これで最後。(こしょのかい これでさいご。)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18622,7 +19850,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10069"
-  data-name="私達の足跡(わたしたちのあしあと「古書の怪」)"
+  data-name="古書の怪 私達の足跡(こしょのかい わたしたちのあしあと)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18639,7 +19867,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10070"
-  data-name="終わらせて(おわらせて「古書の怪」)"
+  data-name="古書の怪 終わらせて(こしょのかい おわらせて)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18657,7 +19885,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10071"
-  data-name="地獄の行き方(じごくのいきかた「古書の怪」)"
+  data-name="古書の怪 地獄の行き方(こしょのかい じごくのいきかた)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18674,7 +19902,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10072"
-  data-name="崩壊記録(ほうかいきろく「古書の怪」)"
+  data-name="古書の怪 崩壊記録(こしょのかい ほうかいきろく)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18691,7 +19919,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10073"
-  data-name="あれ、なに(「古書の怪」)"
+  data-name="古書の怪 あれ、なに(こしょのかい あれ、なに)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18708,7 +19936,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10074"
-  data-name="罪悪感(ざいあくかん「古書の怪」)"
+  data-name="古書の怪 罪悪感(こしょのかい ざいあくかん)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18725,7 +19953,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10075"
-  data-name="鬼になるまで(おにになるまで「古書の怪」)"
+  data-name="古書の怪 鬼になるまで(こしょのかい おにになるまで)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18742,7 +19970,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10076"
-  data-name="ぞくり(「古書の怪」)"
+  data-name="古書の怪 ぞくり(こしょのかい ぞくり)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
@@ -18759,7 +19987,7 @@ data-attribute="妖怪 幽霊"
 <div
   class="card"
   data-number="10077"
-  data-name="もっとこうして(「古書の怪」)"
+  data-name="古書の怪 もっとこうして(こしょのかい もっとこうして)"
   data-cost="3"
   data-power="0"
   data-series="プロモ"
