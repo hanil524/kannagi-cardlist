@@ -7412,7 +7412,7 @@ body {
   #card-list .card > .favorite-card-button {
     position: absolute;
     top: 8px;
-    left: 8px;
+    right: 8px;
     z-index: 6;
     width: 30px;
     height: 30px;
