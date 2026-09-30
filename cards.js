@@ -18372,7 +18372,7 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
+
 <div
   class="card"
   data-number="2942"
@@ -18390,7 +18390,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (42).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <!--
 <div
   class="card"
@@ -18821,6 +18821,176 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (64).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 -->
+<div
+  class="card"
+  data-number="3001"
+  data-name="見てて(みてて)"
+  data-cost="0"
+  data-power="1"
+  data-series="九相図"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏"
+  data-keyword=""
+  data-role="バニラ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (1).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3002"
+  data-name="脹相(ちょうそう)"
+  data-cost="0"
+  data-power="1"
+  data-series="九相図"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="園"
+  data-keyword=""
+  data-role="攻撃時 トップ確認 公開ドロー ドロー "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (2).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3003"
+  data-name="血塗相(けちずそう)"
+  data-cost="3"
+  data-power="4"
+  data-series="九相図"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 血液"
+  data-keyword=""
+  data-role="バニラ"
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (3).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3004"
+  data-name="膿欄相(のうらんそう)"
+  data-cost="5"
+  data-power="5"
+  data-series="九相図"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 腐乱"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (4).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3005"
+  data-name="噉食相(たんじきそう)"
+  data-cost="7"
+  data-power="7"
+  data-series="九相図"
+  data-type="場所札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 動物"
+  data-keyword=""
+  data-role="攻撃時 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (5).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3006"
+  data-name="未完の髑髏(みかんのどくろ)"
+  data-cost="0"
+  data-power="0"
+  data-series="九相図"
+  data-type="怪異札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 石像"
+  data-keyword=""
+  data-role="サーチ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (6).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3007"
+  data-name="久遠者(くおんしゃ)"
+  data-cost="4"
+  data-power="0"
+  data-series="九相図"
+  data-type="怪異札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 大蛇"
+  data-keyword=""
+  data-role="魂加速 "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (7).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3008"
+  data-name="狂骨(きょうこつ)"
+  data-cost="8"
+  data-power="0"
+  data-series="九相図"
+  data-type="怪異札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 怨霊"
+  data-keyword=""
+  data-role="ランデス 直接ダメ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (8).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3009"
+  data-name="相図(そうず)"
+  data-cost="1"
+  data-power="0"
+  data-series="九相図"
+  data-type="道具札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏 写真"
+  data-keyword=""
+  data-role="2種類札 バニラ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (9).jpg" src="placeholder.jpg" decoding="async" />
+</div>
+<div
+  class="card"
+  data-number="3010"
+  data-name="骨相(こっそう)"
+  data-cost="2"
+  data-power="0"
+  data-series="九相図"
+  data-type="季節札"
+  data-season="無"
+  data-rare=""
+  data-attribute="髑髏"
+  data-keyword=""
+  data-role="バフ "
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (10).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 <!-- ★★ -->
 
