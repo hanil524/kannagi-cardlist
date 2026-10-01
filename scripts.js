@@ -5487,9 +5487,16 @@ const deckBuilder = {
     return true;
   },
 
-  // カードを削除（番号のみで識別）
+  // 指定した絵柄を優先して削除。未採用の絵柄からも共有カウントを減らせる。
   removeCard(cardName, cardNumber) {
-    const index = this.deck.findIndex((card) => card.dataset.number === cardNumber);
+    let index = this.deck.findIndex((card) => card.dataset.number === cardNumber);
+    if (index === -1) {
+      const groupName = cardName || cardIndexCache.entries.find((entry) => entry.number === cardNumber)?.name;
+      if (groupName) {
+        const cardToRemove = findLastDeckLimitGroupCard(this.deck, groupName);
+        index = this.deck.indexOf(cardToRemove);
+      }
+    }
 
     if (index !== -1) {
       this.deck.splice(index, 1);
