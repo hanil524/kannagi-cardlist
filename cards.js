@@ -17974,7 +17974,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (20).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-<!--
+
 <div
   class="card"
   data-number="2921"
@@ -17992,7 +17992,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <!--
 <div
   class="card"
