@@ -18451,11 +18451,11 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (45).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 -->
-<!--
+
 <div
   class="card"
   data-number="2946"
-  data-name="牛抱せん夏：再来(うし抱せんなつ：さいらい)"
+  data-name="牛抱せん夏：再来(うしだきせんか：さいらい)"
   data-cost="8"
   data-power="1"
   data-series="ナナフシギ再来"
@@ -18470,7 +18470,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (46).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <!--
 <div
   class="card"
