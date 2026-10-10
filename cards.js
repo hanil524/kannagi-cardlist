@@ -18471,7 +18471,7 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (46).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
+
 <div
   class="card"
   data-number="2947"
@@ -18485,12 +18485,12 @@ data-sakka="marukko"
   data-attribute="七不思議 不吉"
   data-keyword=""
   data-role="展開時 魂加速 ドレイン 直接ダメ ヒール "
-  data-connection="夕暮怪雨"
+  data-connection="夕暮怪雨(ゆうぐれかいう)"
   data-sakka=""
 >
   <img data-src="images/card_18_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <!--
 <div
   class="card"
@@ -18627,7 +18627,7 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (54).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 -->
-<!--
+
 <div
   class="card"
   data-number="2955"
@@ -18646,7 +18646,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <!--
 <div
   class="card"
