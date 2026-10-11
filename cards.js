@@ -18608,7 +18608,7 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (53).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
+
 <div
   class="card"
   data-number="2954"
@@ -18626,7 +18626,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (54).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 
 <div
   class="card"
@@ -19769,7 +19769,6 @@ data-role="魂加速 魂戻し 常時"
 data-sakka="りょーすけくん"
 >
 <img data-src="images/card_14_p (61).jpg" src="placeholder.jpg" decoding="async" />
-</div>
 </div>
 <div
 class="card"
