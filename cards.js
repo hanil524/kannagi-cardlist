@@ -18183,7 +18183,7 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 -->
-<!--
+
 <div
   class="card"
   data-number="2932"
@@ -18201,8 +18201,8 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (32).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
+
 <div
   class="card"
   data-number="2933"
@@ -18220,7 +18220,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 
 <div
   class="card"
@@ -20525,7 +20525,7 @@ data-attribute="妖怪 幽霊"
   data-attribute="神 花面の神"
   data-keyword="不屈"
   data-role="ランデス ハンデス"
-  data-sakka=""
+  data-sakka="りょーすけくん"
 >
   <img data-src="images/card_19_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
