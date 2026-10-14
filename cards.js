@@ -20511,5 +20511,23 @@ data-attribute="妖怪 幽霊"
 >
   <img data-src="images/card_17_p (107).jpg" src="placeholder.jpg" decoding="async" />
 </div>
+<div
+  class="card"
+  data-number="10098"
+  data-name="赤い紙、青い紙（あかいかみ、あおいかみ）"
+  data-cost="12"
+  data-power="0"
+  data-series="プロモ"
+  data-promo-date="2027年1月31日"
+  data-type="怪異札"
+  data-season="秋"
+  data-rare="KR"
+  data-attribute="神 花面の神"
+  data-keyword="不屈"
+  data-role="ランデス ハンデス"
+  data-sakka=""
+>
+  <img data-src="images/card_19_p (11).jpg" src="placeholder.jpg" decoding="async" />
+</div>
 
 `;
