@@ -7,7 +7,7 @@
 <title>デッキ共有 | 巫カードフィルター</title>
 <meta name="description" content="巫カードフィルターのデッキ共有ページ">
 <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="images/icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="images/kannagi-cardlist-touch-20261016.png">
 <style>
 :root {
   color-scheme: dark;
@@ -541,6 +541,8 @@ button, a {
   // ===== URLハッシュのデコード =====
   // 形式: Base64URL( varint(titleByteLen) + title(UTF-8) + delta-varint pairs )
 
+  const SHARE_MAX_TOTAL_CARDS = 150;
+
   function decodeShareHash(hash) {
     if (!hash) return null;
     try {
@@ -571,6 +573,10 @@ button, a {
         prev = id;
         if (c.value > 0) cards[String(id)] = (cards[String(id)] || 0) + c.value;
       }
+
+      // 細工した巨大な枚数でページが固まらないよう、合計枚数に上限を設ける
+      const total = Object.values(cards).reduce((s, n) => s + n, 0);
+      if (total > SHARE_MAX_TOTAL_CARDS) return null;
 
       return { title, cards };
     } catch (e) {

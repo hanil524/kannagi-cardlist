@@ -3833,7 +3833,6 @@ data-sakka="りょーすけくん"
 <img data-src="images/card_3_ (92).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <!-- さいごのうた -->
 <div
 class="card"
@@ -10161,7 +10160,6 @@ data-role="除外戻し ドロー"
 >
   <img data-src="images/card_12_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <!-- ナナフシギ襲来 -->
 
@@ -17631,7 +17629,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (2).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-<!--
+
 <div
   class="card"
   data-number="2903"
@@ -17650,8 +17648,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (3).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2904"
@@ -17670,8 +17667,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (4).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2905"
@@ -17690,7 +17686,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (5).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -17711,7 +17706,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (6).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2907"
@@ -17730,7 +17724,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (7).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -17751,7 +17744,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (8).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2909"
@@ -17769,7 +17761,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (9).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -17789,7 +17780,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (10).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2911"
@@ -17807,7 +17797,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (11).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -17862,7 +17851,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (14).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-<!--
+
 <div
   class="card"
   data-number="2915"
@@ -17880,8 +17869,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (15).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2916"
@@ -17899,8 +17887,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (16).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2917"
@@ -17918,7 +17905,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (17).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -17937,7 +17923,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (18).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -17993,7 +17978,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2922"
@@ -18011,8 +17995,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (22).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2923"
@@ -18030,7 +18013,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (23).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18050,7 +18032,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (24).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2925"
@@ -18068,8 +18049,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (25).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2926"
@@ -18087,7 +18067,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (26).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18107,7 +18086,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (27).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2928"
@@ -18121,11 +18099,11 @@ data-sakka="marukko"
   data-attribute="花"
   data-keyword=""
   data-role="デッキ破壊 相手ドロー "
+  data-connection="悲痛の荒野(ひつうのこうや)"
   data-sakka=""
 >
   <img data-src="images/card_18_p (28).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18145,7 +18123,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2930"
@@ -18164,7 +18141,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (30).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2931"
@@ -18182,7 +18158,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (31).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18202,7 +18177,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (32).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2933"
@@ -18220,7 +18194,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (33).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18257,7 +18230,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (35).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-<!--
+
 <div
   class="card"
   data-number="2936"
@@ -18275,7 +18248,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (36).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18295,7 +18267,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (37).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2938"
@@ -18313,7 +18284,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (38).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18334,7 +18304,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (39).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2940"
@@ -18352,7 +18321,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (40).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18372,7 +18340,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (41).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2942"
@@ -18390,7 +18357,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (42).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18411,7 +18377,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (43).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2944"
@@ -18431,7 +18396,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (44).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2945"
@@ -18450,7 +18414,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (45).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18471,7 +18434,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (46).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2947"
@@ -18491,7 +18453,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (47).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2948"
@@ -18509,7 +18470,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (48).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18530,7 +18490,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (49).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2950"
@@ -18549,7 +18508,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (50).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18568,7 +18526,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (51).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18589,7 +18546,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (52).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2953"
@@ -18608,7 +18564,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (53).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2954"
@@ -18626,7 +18581,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (54).jpg" src="placeholder.jpg" decoding="async" />
 </div>
-
 
 <div
   class="card"
@@ -18647,7 +18601,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (55).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2956"
@@ -18665,8 +18618,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (56).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2957"
@@ -18684,8 +18636,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (57).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2958"
@@ -18703,7 +18654,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (58).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18724,7 +18674,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (59).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2960"
@@ -18742,8 +18691,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (60).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
-<!--
+
 <div
   class="card"
   data-number="2961"
@@ -18761,7 +18709,6 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (61).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
 
 <div
   class="card"
@@ -18782,7 +18729,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (62).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-
 <div
   class="card"
   data-number="2963"
@@ -18802,7 +18748,6 @@ data-sakka="marukko"
   <img data-src="images/card_18_p (63).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 
-<!--
 <div
   class="card"
   data-number="2964"
@@ -18820,7 +18765,7 @@ data-sakka="marukko"
 >
   <img data-src="images/card_18_p (64).jpg" src="placeholder.jpg" decoding="async" />
 </div>
--->
+
 <div
   class="card"
   data-number="3001"
