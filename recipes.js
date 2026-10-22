@@ -24,11 +24,13 @@
   const errorMessages = {
     LINK_NOT_ALLOWED: 'リンクは投稿できません。URLを削除してください。',
     POST_RATE_LIMIT: '投稿は1分に1件、24時間で10件までです。時間をおいてお試しください。',
+    POSTING_BUSY: '現在、投稿が混み合っています。しばらく時間をおいてお試しください。',
     VOTE_RATE_LIMIT: '少し時間をおいてから、もう一度お試しください。',
     DUPLICATE_DECK: '同じ内容のデッキをすでに投稿しています。',
     INVALID_TEXT: 'デッキ名・投稿者名・説明の文字数を確認してください。',
     INVALID_DECK: 'デッキ内容を確認してください。',
     DECK_TOO_SMALL: 'デッキは40枚以上で投稿できます。',
+    DECK_TOO_LARGE: 'デッキは150枚までで投稿できます。',
     SELF_LIKE_NOT_ALLOWED: '自分の投稿にはグッドできません。',
     INVALID_TAGS: 'タグを選び直してください。',
     POST_NOT_FOUND: 'この投稿は削除されています。',
@@ -41,11 +43,28 @@
   let session;
   let refreshTask;
   let anonymousTask;
-  try { session = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) { session = null; }
+  // 一般利用者の匿名IDはlocalStorage、運営者のログインはタブを閉じると消えるsessionStorageへ分けて保存する。
+  let sessionStore = { area: 'localStorage', key: storageKey };
+  function readSession(store = sessionStore) {
+    try { return JSON.parse(window[store.area].getItem(store.key) || 'null'); } catch (_) { return null; }
+  }
+  function writeSession(value, store = sessionStore) {
+    try { if (value) window[store.area].setItem(store.key, JSON.stringify(value)); else window[store.area].removeItem(store.key); } catch (_) { }
+  }
+  session = readSession();
+  // 旧版は運営者のログインを一般利用者と同じ場所に保存していた。見つけたら一般利用者の側から外し、
+  // 運営画面で退避していた匿名IDがあれば元に戻す。
+  const legacyVisitorStore = { area: 'sessionStorage', key: storageKey + ':visitor' };
+  let legacyAdminSession = null;
+  if (session?.user?.is_anonymous === false) {
+    legacyAdminSession = session;
+    session = readSession(legacyVisitorStore);
+    writeSession(session); writeSession(null, legacyVisitorStore);
+  }
   function keepSession(data) {
     session = data ? { access_token: data.access_token, refresh_token: data.refresh_token,
       expires_at: data.expires_at || Math.floor(Date.now() / 1000) + data.expires_in, user: data.user } : null;
-    try { if (session) localStorage.setItem(storageKey, JSON.stringify(session)); else localStorage.removeItem(storageKey); } catch (_) { }
+    writeSession(session);
   }
   async function request(path, body, token) {
     const controller = new AbortController();
@@ -213,7 +232,7 @@
       const item = onCard ? button('', event => onCard(card, item, event), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
       if (onCard) item.setAttribute('aria-label', stripCardReading(card.name) + 'を拡大表示');
       item.dataset.number = card.number;
-      const img = node('img'); img.alt = card.name; img.loading = 'lazy';
+      const img = node('img'); img.alt = card.name; img.loading = 'lazy'; img.decoding = 'async';
       const original = card.el.querySelector('img');
       setListImage(img, toFullImagePath(original.getAttribute('data-src') || original.src));
       item.append(img, node('span', 'recipe-card-count', '×' + count)); grid.append(item);
@@ -232,6 +251,12 @@
     }); return group;
   }
   const cardCount = map => Object.values(map).reduce((sum, count) => sum + count, 0);
+  // 投稿できる枚数（40〜150枚）。保存先のSQLと同じ範囲にそろえる。
+  const MAX_RECIPE_CARDS = 150;
+  function deckSizeError(map) {
+    const total = cardCount(map);
+    return total < 40 ? errorMessages.DECK_TOO_SMALL : total > MAX_RECIPE_CARDS ? errorMessages.DECK_TOO_LARGE : '';
+  }
   function deckTotal(map) {
     return node('span', 'recipe-deck-total', cardCount(map) + '枚');
   }
@@ -385,6 +410,13 @@
       [['', 'タグ'], ...[...SEASONS, ...CHOICE_TAGS].map(x => [x, x])].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; tag.append(option); }); tag.value = state.tag;
       sort = node('select'); sort.setAttribute('aria-label', 'レシピの並び順');
       [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
+      for (const control of [tag, sort]) {
+        // 標準selectはマウス操作でも:focus-visibleが残るため、操作方法を分ける。
+        control.addEventListener('pointerdown', () => control.setAttribute('data-pointer-focus', ''));
+        const clearPointerFocus = () => control.removeAttribute('data-pointer-focus');
+        control.addEventListener('keydown', clearPointerFocus);
+        control.addEventListener('blur', clearPointerFocus);
+      }
       const find = button('検索', () => reload(), 'recipe-search-submit');
       find.setAttribute('aria-label', '検索'); find.replaceChildren(icon('search'));
       const saved = button('', switchFeed, 'recipe-saved-toggle'); saved.append(icon('star'));
@@ -436,6 +468,7 @@
     }
     function renderPost(row) {
       const article = node('article', 'recipe-post');
+      article.classList.toggle('is-owner', Boolean(row.is_owner));
       const meta = node('div', 'recipe-post-meta'), number = node('span', 'recipe-post-number', 'No.' + row.post_no);
       const author = node('span', 'recipe-post-author', row.author); author.title = row.author;
       const date = node('time', 'recipe-post-date', new Date(row.created_at).toLocaleDateString('ja-JP')); date.dateTime = row.created_at;
@@ -592,11 +625,12 @@
         if (deckId !== deckManager.currentDeckId || JSON.stringify(cards) !== JSON.stringify(currentDeckToMap()) || deckName !== (deckManager.decks[deckId]?.name || 'デッキ')) { confirmComposer(); return; }
         openComposer(cards, deckId, deckName);
       }, 'recipe-button recipe-primary');
-      yes.disabled = total < 40;
+      yes.disabled = Boolean(deckSizeError(cards));
       const fromCode = button('デッキコードから投稿', () => {
         close(false); if (state.active) openComposer(cards, deckId, deckName, true);
       }, 'recipe-code-post-start');
       if (total < 40) question.append(node('span', 'recipe-confirm-empty', '現在' + total + '枚です。デッキは40枚以上で投稿できます。デッキコードからも投稿できます。'));
+      else if (total > MAX_RECIPE_CARDS) question.append(node('span', 'recipe-confirm-empty', '現在' + total + '枚です。デッキは' + MAX_RECIPE_CARDS + '枚までで投稿できます。デッキコードからも投稿できます。'));
       actions.append(no, yes); dialog.append(question, actions, fromCode); overlay.append(dialog);
       overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
       overlay.addEventListener('keydown', event => {
@@ -631,8 +665,8 @@
         const known = knownCards(draft.cards);
         automatic = SEASONS.filter(season => known.some(({ card }) => card.season.some(value => value.includes(season))));
         preview.replaceChildren(...(known.length ? [deckTotal(draft.cards), cardImages(draft.cards, 8)] : [status('投稿するデッキコードを入力してください。')]));
-        if (known.length && cardCount(draft.cards) < 40) preview.append(status(errorMessages.DECK_TOO_SMALL, true));
-        if (submit) submit.disabled = state.posting || cardCount(draft.cards) < 40;
+        if (known.length && deckSizeError(draft.cards)) preview.append(status(deckSizeError(draft.cards), true));
+        if (submit) submit.disabled = state.posting || Boolean(deckSizeError(draft.cards));
         seasonTags.replaceChildren(badges(automatic));
       }
       renderCards();
@@ -648,7 +682,7 @@
         try {
           const map = await codeToMap(value);
           knownCards(map);
-          if (cardCount(map) < 40) throw new Error(errorMessages.DECK_TOO_SMALL);
+          if (deckSizeError(map)) throw new Error(deckSizeError(map));
           if (!form.isConnected || code.input.value.trim() !== value) return;
           draft.cards = map; draft.appliedCode = value; draft.fromCode = true; draft.request = crypto.randomUUID();
           renderCards(); codeStatus.replaceChildren(status('デッキコードを反映しました（' + Object.values(map).reduce((sum, count) => sum + count, 0) + '枚）。'));
@@ -665,7 +699,7 @@
         label.append(box, node('span', '', tag)); choices.append(label);
       });
       const submitLabel = editing ? '変更を保存' : 'この内容で投稿';
-      const notice = node('div'); submit = node('button', 'recipe-button recipe-primary', state.posting ? '保存中…' : submitLabel); submit.type = 'submit'; submit.disabled = state.posting || cardCount(draft.cards) < 40; submit.dataset.readyLabel = submitLabel;
+      const notice = node('div'); submit = node('button', 'recipe-button recipe-primary', state.posting ? '保存中…' : submitLabel); submit.type = 'submit'; submit.disabled = state.posting || Boolean(deckSizeError(draft.cards)); submit.dataset.readyLabel = submitLabel;
       submitCurrent = submit;
       function updateDraft() {
         const next = { title: title.input.value, author: author.input.value, description: description.input.value, tags: [...choices.querySelectorAll(':checked')].map(el => el.value) };
@@ -682,8 +716,8 @@
         if (LINK.test([draft.title, draft.author, draft.description].join(' ').normalize('NFKC'))) {
           notice.replaceChildren(status(errorMessages.LINK_NOT_ALLOWED, true)); return;
         }
-        if (cardCount(draft.cards) < 40) {
-          notice.replaceChildren(status(errorMessages.DECK_TOO_SMALL, true)); return;
+        if (deckSizeError(draft.cards)) {
+          notice.replaceChildren(status(deckSizeError(draft.cards), true)); return;
         }
         if (!draft.title.trim() || !draft.author.trim()) { notice.replaceChildren(status('デッキ名と投稿者名を入力してください。', true)); return; }
         rememberAuthor(draft.author);
@@ -701,7 +735,7 @@
         finally {
           state.posting = false;
           setFormBusy(form, false); setFormBusy(composer?.querySelector('form'), false);
-          for (const el of [submit, submitCurrent]) if (el) { el.disabled = cardCount((el === submit ? draft : state.draft)?.cards || {}) < 40; el.textContent = el.dataset.readyLabel; }
+          for (const el of [submit, submitCurrent]) if (el) { el.disabled = Boolean(deckSizeError((el === submit ? draft : state.draft)?.cards || {})); el.textContent = el.dataset.readyLabel; }
         }
       });
       form.append(choices, notice, submit); composer.append(form);
@@ -713,7 +747,8 @@
         bookmarks = readBookmarks();
         storageEvents?.abort(); storageEvents = new AbortController();
         document.addEventListener('pointerdown', event => {
-          if (document.activeElement === search && event.target !== search) search.blur();
+          const focused = document.activeElement;
+          if ([search, tag, sort].includes(focused) && event.target !== focused) focused.blur();
         }, { signal: storageEvents.signal, capture: true });
         window.addEventListener('storage', event => {
           if (event.key !== bookmarksKey && event.key !== null) return;
@@ -742,6 +777,9 @@
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
   function mountAdmin(host) {
+    sessionStore = { area: 'sessionStorage', key: storageKey + ':admin' };
+    session = readSession() || legacyAdminSession;
+    writeSession(session);
     let offset = 0, query = '', revision = 0;
     async function feed(append = false) {
       const requestId = ++revision;
@@ -779,7 +817,10 @@
       const submit = node('button', 'recipe-button', '検索'); submit.type = 'submit';
       search.append(input, submit, button('ログアウト', () => {
         revision++;
-        try { const saved = sessionStorage.getItem(storageKey + ':visitor'); keepSession(saved ? JSON.parse(saved) : null); sessionStorage.removeItem(storageKey + ':visitor'); } catch (_) { keepSession(null); }
+        // この端末のログインだけをサーバー側でも無効にする。通信できなくても画面上はログアウトする。
+        const token = session?.access_token;
+        keepSession(null);
+        if (token) fetch(cfg.url + '/auth/v1/logout?scope=local', { method: 'POST', headers: { apikey: cfg.publishableKey, Authorization: 'Bearer ' + token } }).catch(() => {});
         login();
       }));
       search.addEventListener('submit', event => { event.preventDefault(); query = input.value.trim(); feed(); });
@@ -799,7 +840,6 @@
         try {
           const next = await request('/auth/v1/token?grant_type=password', { email: email.input.value, password: password.input.value });
           if (!await request('/rest/v1/rpc/recipe_is_admin', {}, next.access_token)) throw new Error(errorMessages.ADMIN_REQUIRED);
-          try { sessionStorage.setItem(storageKey + ':visitor', JSON.stringify(session)); } catch (_) { }
           keepSession(next); password.input.value = ''; dashboard();
         } catch (error) { notice.replaceChildren(status(error.message, true)); }
         finally { submit.disabled = false; }
