@@ -1,12 +1,19 @@
 /* レシピ共有。コード共有を使うだけの場合、このファイルは読み込まない。 */
 (() => {
   'use strict';
-  const CHOICE_TAGS = ['初心者向け', '速攻', 'コントロール', 'コンボ', 'テーマ', '大会向け', 'お試し'];
+  const CHOICE_TAGS = ['優勝レシピ', '初心者向け', '速攻', 'コントロール', 'コンボ', 'テーマ', '大会向け', 'お試し'];
   const SEASONS = ['春', '夏', '秋', '冬', '無', '混化'];
   const LINK = /https?:|ftp:\/\/|mailto:|www\.|[a-z0-9][a-z0-9.-]*\.(?:com|net|org|jp|io|dev|app|info|biz|xyz|co)(?:[^a-z]|$)/i;
   const cfg = window.KANNAGI_RECIPES || {};
   const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.url || '') && Boolean(cfg.publishableKey);
   const storageKey = 'kannagi-recipes:' + cfg.url;
+  const feedOptionsKey = storageKey + ':feed-options';
+  function readFeedOptions() {
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(feedOptionsKey) || 'null'); } catch (_) { }
+    return { sort: ['new', 'week', 'all'].includes(saved?.sort) ? saved.sort : 'new',
+      tag: [...SEASONS, ...CHOICE_TAGS].includes(saved?.tag) ? saved.tag : '' };
+  }
   const errorMessages = {
     LINK_NOT_ALLOWED: 'リンクは投稿できません。URLを削除してください。',
     POST_RATE_LIMIT: '投稿は1分に1件、24時間で10件までです。時間をおいてお試しください。',
@@ -14,6 +21,8 @@
     DUPLICATE_DECK: '同じ内容のデッキをすでに投稿しています。',
     INVALID_TEXT: 'デッキ名・投稿者名・説明の文字数を確認してください。',
     INVALID_DECK: 'デッキ内容を確認してください。',
+    DECK_TOO_SMALL: 'デッキは40枚以上で投稿できます。',
+    SELF_LIKE_NOT_ALLOWED: '自分の投稿にはグッドできません。',
     INVALID_TAGS: 'タグを選び直してください。',
     POST_NOT_FOUND: 'この投稿は削除されています。',
     POST_OWNER_REQUIRED: 'この投稿を編集・削除できるのは、投稿した本人です。',
@@ -79,7 +88,7 @@
     svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
     svg.setAttribute('stroke-width', '1.6'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
     const path = document.createElementNS(svg.namespaceURI, 'path');
-    path.setAttribute('d', name === 'good' ? 'M7 10v11H3V10h4Zm0 1 5-8c2 0 3 1 2 5l-1 2h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7' : name === 'search' ? 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6' : 'M4 12h16m-6-6 6 6-6 6');
+    path.setAttribute('d', name === 'good' ? 'M7 10v11H3V10h4Zm0 1 5-8c2 0 3 1 2 5l-1 2h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7' : name === 'search' ? 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6' : name === 'crown' ? 'M3 6l4 4 5-7 5 7 4-4-2 12H5L3 6Zm3 15h12' : 'M4 12h16m-6-6 6 6-6 6');
     svg.append(path); return svg;
   }
   const button = (label, action, className = 'recipe-button') => {
@@ -198,16 +207,28 @@
     });
     return grid;
   }
-  function badges(tags) {
+  function badges(tags, onTag) {
     const group = node('div', 'recipe-tags');
     const order = [...SEASONS, ...CHOICE_TAGS];
-    [...new Set(tags || [])].sort((a, b) => order.indexOf(a) - order.indexOf(b)).forEach(tag => group.append(node('span', 'recipe-tag', tag))); return group;
+    [...new Set(tags || [])].sort((a, b) => order.indexOf(a) - order.indexOf(b)).forEach(tag => {
+      const badge = onTag ? button(tag, () => onTag(tag), 'recipe-tag') : node('span', 'recipe-tag', tag);
+      if (onTag) badge.setAttribute('aria-label', '「' + tag + '」で絞り込み');
+      if (tag === '優勝レシピ') { badge.classList.add('is-winner'); badge.prepend(icon('crown')); }
+      group.append(badge);
+    }); return group;
   }
-  function mount(host, bridge) {
-    const state = { active: false, revision: 0, query: '', tag: '', sort: 'new', offset: 0, rows: [], draft: null, posting: false };
+  const cardCount = map => Object.values(map).reduce((sum, count) => sum + count, 0);
+  function deckTotal(map) {
+    return node('span', 'recipe-deck-total', cardCount(map) + '枚');
+  }
+  function mount(host) {
+    const state = { active: false, revision: 0, query: '', ...readFeedOptions(), offset: 0, rows: [], draft: null, posting: false };
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
+    function filterByTag(value) {
+      state.tag = value; detail = composer = null; renderShell(); host.scrollTop = 0; reload();
+    }
     function renderShell() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       host.classList.remove('is-detail');
@@ -233,6 +254,7 @@
     }
     async function reload() {
       state.query = search.value.trim(); state.tag = tag.value; state.sort = sort.value;
+      try { localStorage.setItem(feedOptionsKey, JSON.stringify({ tag: state.tag, sort: state.sort })); } catch (_) { }
       state.offset = 0; state.rows = []; list.replaceChildren(); await load();
     }
     async function load(append = false) {
@@ -257,22 +279,25 @@
       const article = node('article', 'recipe-post');
       const copy = node('div', 'recipe-post-copy');
       const title = button(row.title, () => openDetail(row), 'recipe-title');
-      copy.append(title, node('p', 'recipe-byline', row.author + ' · ' + new Date(row.created_at).toLocaleDateString('ja-JP')));
+      const heading = node('div', 'recipe-heading'); heading.append(title, deckTotal(row.cards));
+      copy.append(heading, node('p', 'recipe-byline', row.author + ' · ' + new Date(row.created_at).toLocaleDateString('ja-JP')));
       try { article.append(cardImages(row.cards, 5, (card, trigger) => openRecipeCard(row.cards, card, trigger))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
-      copy.append(badges(row.tags));
+      copy.append(badges(row.tags, filterByTag));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
       const actions = node('div', 'recipe-post-actions');
       const good = button('', async () => {
-        if (good.disabled) return; good.disabled = true;
+        if (row.is_owner || good.disabled) return; good.disabled = true;
         try {
           const result = await rpc('like', { p_post: row.id, p_liked: !row.liked }, true);
           row.liked = result.liked; row.likes = result.likes; setGood();
-        } catch (error) { if (state.active) showError(error); } finally { good.disabled = false; }
+        } catch (error) { if (state.active) showError(error); } finally { good.disabled = Boolean(row.is_owner); }
       });
       good.className = 'recipe-good';
       function setGood() {
         good.replaceChildren(icon('good'), node('span', '', String(row.likes)));
         good.setAttribute('aria-label', 'グッド ' + row.likes); good.setAttribute('aria-pressed', String(row.liked));
+        good.disabled = Boolean(row.is_owner);
+        if (row.is_owner) { good.title = errorMessages.SELF_LIKE_NOT_ALLOWED; good.setAttribute('aria-label', 'グッド ' + row.likes + '（自分の投稿）'); }
       }
       const view = button('レシピを見る', () => openDetail(row), 'recipe-view'); view.append(icon('arrow'));
       setGood(); actions.append(good, view); copy.append(actions);
@@ -325,34 +350,59 @@
       host.classList.add('is-detail'); detail.classList.add('recipe-detail');
       const header = detail.querySelector('.recipe-subview-header');
       header.classList.add('recipe-detail-header');
+      header.querySelector('h3').append(deckTotal(row.cards));
       const body = node('div', 'recipe-detail-body'), meta = node('div', 'recipe-detail-meta');
-      meta.append(node('p', 'recipe-byline', row.author), badges(row.tags)); body.append(meta);
+      meta.append(node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag)); body.append(meta);
       if (row.description) body.append(node('p', 'recipe-description', row.description));
       detail.append(body);
       try {
         body.append(cardImages(row.cards, Infinity, (card, trigger) => openRecipeCard(row.cards, card, trigger)));
-        const use = button('このレシピのコードを使う', async () => {
-          use.disabled = true; const revision = state.revision;
+        let preparedCode = '';
+        const revision = state.revision, codeNotice = node('div'); body.prepend(codeNotice);
+        const use = button('このデッキコードを使う', async () => {
+          if (!preparedCode || use.disabled) return;
+          use.disabled = true;
+          try {
+            // コードは詳細を開いた時点で準備し、クリック直後にコピーする。
+            // Safariでもクリップボード操作までユーザー操作の権限を保つ。
+            if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(preparedCode);
+            else {
+              const text = node('textarea'), previousFocus = document.activeElement;
+              text.value = preparedCode; text.readOnly = true;
+              text.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+              document.body.append(text);
+              try { text.select(); text.setSelectionRange(0, text.value.length); if (!document.execCommand('copy')) throw new Error('COPY_FAILED'); }
+              finally { text.remove(); previousFocus?.focus({ preventScroll: true }); }
+            }
+            if (state.active && revision === state.revision) deckBuilder.showMessage('デッキコードをコピーしました。');
+          } catch (_) { if (use.isConnected) deckBuilder.showMessage('コピーできませんでした。もう一度お試しください。'); }
+          finally { use.disabled = false; }
+        }, 'recipe-button recipe-primary');
+        use.classList.add('recipe-use-code'); use.disabled = true; header.append(use);
+        async function prepareCode() {
+          codeNotice.replaceChildren(); preparedCode = ''; use.disabled = true;
           try {
             const code = await deckToCodeV7(row.cards);
-            if (state.active && revision === state.revision) bridge.useCode(code);
-          } catch (error) { if (use.isConnected) body.prepend(status(error.message, true)); } finally { use.disabled = false; }
-        }, 'recipe-button recipe-primary');
-        use.classList.add('recipe-use-code'); header.append(use);
+            if (use.isConnected && state.active && revision === state.revision) { preparedCode = code; use.disabled = false; }
+          } catch (_) {
+            if (use.isConnected) codeNotice.replaceChildren(status('デッキコードを生成できませんでした。', true), button('再試行', prepareCode));
+          }
+        }
+        prepareCode();
       } catch (error) { body.append(status(error.message, true)); }
       if (row.is_owner) body.append(ownerActions(row));
     }
     function openRecipeCard(map, card, trigger) {
       const cards = recipeCards(map).map(entry => entry.card.el);
       openImageModal(getModalCardFullImageSrc(card.el), {
-        cards, card: card.el, returnTo: host.closest('#deck-share-modal'),
+        cards, card: card.el, recipeCards: map, returnTo: host.closest('#deck-share-modal'),
         returnScroll: host.querySelector('.recipe-detail-body') || host, returnFocus: trigger
       });
     }
     function confirmComposer() {
       if (cancelConfirmation || document.querySelector('.confirm-popup')) return;
       const cards = currentDeckToMap();
-      const empty = !Object.keys(cards).length;
+      const total = cardCount(cards);
       const deckId = deckManager.currentDeckId;
       const deckName = deckManager.decks[deckId]?.name || 'デッキ';
       const trigger = document.activeElement;
@@ -374,11 +424,11 @@
         if (deckId !== deckManager.currentDeckId || JSON.stringify(cards) !== JSON.stringify(currentDeckToMap()) || deckName !== (deckManager.decks[deckId]?.name || 'デッキ')) { confirmComposer(); return; }
         openComposer(cards, deckId, deckName);
       }, 'recipe-button recipe-primary');
-      yes.disabled = empty;
+      yes.disabled = total < 40;
       const fromCode = button('デッキコードから投稿', () => {
         close(false); if (state.active) openComposer(cards, deckId, deckName, true);
       }, 'recipe-code-post-start');
-      if (empty) question.append(node('span', 'recipe-confirm-empty', '選択中のデッキは空です。デッキコードから投稿できます。'));
+      if (total < 40) question.append(node('span', 'recipe-confirm-empty', '現在' + total + '枚です。デッキは40枚以上で投稿できます。デッキコードからも投稿できます。'));
       actions.append(no, yes); dialog.append(question, actions, fromCode); overlay.append(dialog);
       overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
       overlay.addEventListener('keydown', event => {
@@ -406,12 +456,14 @@
       title.input.required = author.input.required = true;
       title.input.value = draft.title; author.input.value = draft.author; description.input.value = draft.description;
       cleanupAuthorHistory = setupAuthorHistory(author);
-      let automatic = [];
+      let automatic = [], submit;
       const preview = node('div', 'recipe-composer-preview'), seasonTags = node('div');
       function renderCards() {
         const known = knownCards(draft.cards);
         automatic = SEASONS.filter(season => known.some(({ card }) => card.season.some(value => value.includes(season))));
-        preview.replaceChildren(known.length ? cardImages(draft.cards, 8) : status('投稿するデッキコードを入力してください。'));
+        preview.replaceChildren(...(known.length ? [deckTotal(draft.cards), cardImages(draft.cards, 8)] : [status('投稿するデッキコードを入力してください。')]));
+        if (known.length && cardCount(draft.cards) < 40) preview.append(status(errorMessages.DECK_TOO_SMALL, true));
+        if (submit) submit.disabled = state.posting || cardCount(draft.cards) < 40;
         seasonTags.replaceChildren(badges(automatic));
       }
       renderCards();
@@ -427,7 +479,7 @@
         try {
           const map = await codeToMap(value);
           knownCards(map);
-          if (!Object.keys(map).length) throw new Error('カードが入っているデッキコードを入力してください。');
+          if (cardCount(map) < 40) throw new Error(errorMessages.DECK_TOO_SMALL);
           if (!form.isConnected || code.input.value.trim() !== value) return;
           draft.cards = map; draft.appliedCode = value; draft.fromCode = true; draft.request = crypto.randomUUID();
           renderCards(); codeStatus.replaceChildren(status('デッキコードを反映しました（' + Object.values(map).reduce((sum, count) => sum + count, 0) + '枚）。'));
@@ -444,7 +496,7 @@
         label.append(box, node('span', '', tag)); choices.append(label);
       });
       const submitLabel = editing ? '変更を保存' : 'この内容で投稿';
-      const notice = node('div'); const submit = node('button', 'recipe-button recipe-primary', state.posting ? '保存中…' : submitLabel); submit.type = 'submit'; submit.disabled = state.posting; submit.dataset.readyLabel = submitLabel;
+      const notice = node('div'); submit = node('button', 'recipe-button recipe-primary', state.posting ? '保存中…' : submitLabel); submit.type = 'submit'; submit.disabled = state.posting || cardCount(draft.cards) < 40; submit.dataset.readyLabel = submitLabel;
       submitCurrent = submit;
       function updateDraft() {
         const next = { title: title.input.value, author: author.input.value, description: description.input.value, tags: [...choices.querySelectorAll(':checked')].map(el => el.value) };
@@ -461,6 +513,9 @@
         if (LINK.test([draft.title, draft.author, draft.description].join(' ').normalize('NFKC'))) {
           notice.replaceChildren(status(errorMessages.LINK_NOT_ALLOWED, true)); return;
         }
+        if (cardCount(draft.cards) < 40) {
+          notice.replaceChildren(status(errorMessages.DECK_TOO_SMALL, true)); return;
+        }
         if (!draft.title.trim() || !draft.author.trim()) { notice.replaceChildren(status('デッキ名と投稿者名を入力してください。', true)); return; }
         rememberAuthor(draft.author);
         state.posting = true; submit.disabled = true; submit.textContent = editing ? '保存中…' : '投稿中…';
@@ -475,7 +530,7 @@
         } catch (error) { if (form.isConnected) notice.replaceChildren(status(error.message, true)); }
         finally {
           state.posting = false;
-          for (const el of [submit, submitCurrent]) if (el) { el.disabled = false; el.textContent = el.dataset.readyLabel; }
+          for (const el of [submit, submitCurrent]) if (el) { el.disabled = cardCount((el === submit ? draft : state.draft)?.cards || {}) < 40; el.textContent = el.dataset.readyLabel; }
         }
       });
       form.append(choices, notice, submit); composer.append(form);
