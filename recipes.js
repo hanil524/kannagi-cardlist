@@ -325,7 +325,8 @@
       find.setAttribute('aria-label', '検索'); find.replaceChildren(icon('search'));
       const saved = button('', switchFeed, 'recipe-saved-toggle'); saved.append(icon('star'));
       saved.setAttribute('aria-label', 'ブックマークしたレシピ'); saved.setAttribute('aria-pressed', String(state.mode === 'saved')); saved.title = state.mode === 'saved' ? 'すべてのレシピに戻る' : 'ブックマークしたレシピ';
-      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(search, find, saved);
+      const searchField = node('div', 'recipe-search-field'); searchField.append(search, find);
+      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(searchField, saved);
       controls.append(searchGroup, tag, sort, post);
       controls.addEventListener('submit', event => { event.preventDefault(); reload(); });
       const clearSearch = event => {
