@@ -8,11 +8,18 @@
   const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(cfg.url || '') && Boolean(cfg.publishableKey);
   const storageKey = 'kannagi-recipes:' + cfg.url;
   const feedOptionsKey = storageKey + ':feed-options';
-  function readFeedOptions() {
+  const bookmarksKey = storageKey + ':recipe-bookmarks';
+  const feedKey = mode => feedOptionsKey + (mode === 'saved' ? ':saved' : '');
+  function readFeedOptions(mode = 'all') {
     let saved;
-    try { saved = JSON.parse(localStorage.getItem(feedOptionsKey) || 'null'); } catch (_) { }
+    try { saved = JSON.parse(localStorage.getItem(feedKey(mode)) || 'null'); } catch (_) { }
     return { sort: ['new', 'week', 'all'].includes(saved?.sort) ? saved.sort : 'new',
       tag: [...SEASONS, ...CHOICE_TAGS].includes(saved?.tag) ? saved.tag : '' };
+  }
+  function readBookmarks() {
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(bookmarksKey) || '[]'); } catch (_) { }
+    return new Set((Array.isArray(saved) ? saved : []).filter(id => typeof id === 'string' && /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id)));
   }
   const errorMessages = {
     LINK_NOT_ALLOWED: 'リンクは投稿できません。URLを削除してください。',
@@ -88,6 +95,10 @@
     svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor');
     svg.setAttribute('stroke-width', '1.6'); svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
     const path = document.createElementNS(svg.namespaceURI, 'path');
+    if (name === 'star') {
+      path.setAttribute('d', 'm12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.2L12 17.4l-5.6 2.9 1.1-6.2L2.9 9.6l6.3-.9Z');
+      svg.append(path); return svg;
+    }
     path.setAttribute('d', name === 'good' ? 'M7 10v11H3V10h4Zm0 1 5-8c2 0 3 1 2 5l-1 2h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7' : name === 'search' ? 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6' : name === 'crown' ? 'M3 6l4 4 5-7 5 7 4-4-2 12H5L3 6Zm3 15h12' : 'M4 12h16m-6-6 6 6-6 6');
     svg.append(path); return svg;
   }
@@ -222,15 +233,47 @@
     return node('span', 'recipe-deck-total', cardCount(map) + '枚');
   }
   function mount(host) {
-    const state = { active: false, revision: 0, query: '', ...readFeedOptions(), offset: 0, rows: [], draft: null, posting: false };
+    const views = { all: { query: '', ...readFeedOptions() }, saved: { query: '', ...readFeedOptions('saved') } };
+    const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
+    let bookmarks = readBookmarks(), storageEvents;
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
+    function saveOptions() {
+      views[state.mode] = { query: state.query, tag: state.tag, sort: state.sort };
+      try { localStorage.setItem(feedKey(state.mode), JSON.stringify({ tag: state.tag, sort: state.sort })); } catch (_) { }
+    }
+    function switchFeed() {
+      state.query = search.value.trim(); state.tag = tag.value; state.sort = sort.value; saveOptions();
+      state.mode = state.mode === 'all' ? 'saved' : 'all'; Object.assign(state, views[state.mode]);
+      renderShell(); host.scrollTop = 0; load();
+    }
+    function setBookmarkButton(control, id) {
+      const saved = bookmarks.has(id);
+      control.setAttribute('aria-pressed', String(saved));
+      control.setAttribute('aria-label', saved ? 'ブックマークから解除' : 'ブックマークに登録');
+      control.title = saved ? 'ブックマークから解除' : 'ブックマークに登録';
+    }
+    function bookmarkButton(row) {
+      const control = button('', () => {
+        const next = readBookmarks();
+        if (next.has(row.id)) next.delete(row.id); else {
+          if (next.size >= 10000) { deckBuilder.showMessage('ブックマークは10,000件まで登録できます。'); return; }
+          next.add(row.id);
+        }
+        try { localStorage.setItem(bookmarksKey, JSON.stringify([...next])); }
+        catch (_) { deckBuilder.showMessage('ブックマークを保存できません。ブラウザの保存設定を確認してください。'); return; }
+        bookmarks = next; setBookmarkButton(control, row.id);
+        if (state.mode === 'saved' && !detail) reload();
+      }, 'recipe-bookmark');
+      control.append(icon('star')); control.dataset.recipeBookmark = row.id; setBookmarkButton(control, row.id); return control;
+    }
     function filterByTag(value) {
       state.tag = value; detail = composer = null; renderShell(); host.scrollTop = 0; reload();
     }
     function renderShell() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      detail = composer = null;
       host.classList.remove('is-detail');
       host.replaceChildren();
       const post = button('投稿する', confirmComposer, 'recipe-button recipe-primary'); post.disabled = !configured;
@@ -242,7 +285,9 @@
       [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
       const find = button('検索', () => reload(), 'recipe-search-submit');
       find.setAttribute('aria-label', '検索'); find.replaceChildren(icon('search'));
-      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(search, find);
+      const saved = button('', switchFeed, 'recipe-saved-toggle'); saved.append(icon('star'));
+      saved.setAttribute('aria-label', 'ブックマークしたレシピ'); saved.setAttribute('aria-pressed', String(state.mode === 'saved')); saved.title = state.mode === 'saved' ? 'すべてのレシピに戻る' : 'ブックマークしたレシピ';
+      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(search, find, saved);
       controls.append(searchGroup, tag, sort, post);
       controls.addEventListener('submit', event => { event.preventDefault(); reload(); });
       tag.addEventListener('change', reload); sort.addEventListener('change', reload);
@@ -250,11 +295,13 @@
       more = button('さらに表示', () => load(true)); more.hidden = true;
       const foot = node('div', 'recipe-footer');
       foot.append(node('span', '', '週間人気：直近7日間のグッド数'));
-      host.append(controls, message, list, more, foot);
+      host.append(controls);
+      if (state.mode === 'saved') host.append(node('p', 'recipe-saved-heading', 'ブックマークしたレシピ'));
+      host.append(message, list, more, foot);
     }
     async function reload() {
       state.query = search.value.trim(); state.tag = tag.value; state.sort = sort.value;
-      try { localStorage.setItem(feedOptionsKey, JSON.stringify({ tag: state.tag, sort: state.sort })); } catch (_) { }
+      saveOptions();
       state.offset = 0; state.rows = []; list.replaceChildren(); await load();
     }
     async function load(append = false) {
@@ -262,14 +309,16 @@
       if (!configured) { message.replaceChildren(status('レシピ共有は準備中です。コード共有はそのまま使えます。')); return; }
       message.replaceChildren(status('読み込み中…'));
       try {
-        const result = await rpc('feed', { p_query: state.query, p_tag: state.tag, p_sort: state.sort, p_offset: append ? state.offset : 0 });
+        const args = { p_query: state.query, p_tag: state.tag, p_sort: state.sort, p_offset: append ? state.offset : 0 };
+        const result = state.mode === 'saved' && !bookmarks.size ? { items: [], more: false }
+          : await rpc(state.mode === 'saved' ? 'bookmark_feed' : 'feed', state.mode === 'saved' ? { ...args, p_ids: [...bookmarks] } : args);
         if (!state.active || revision !== state.revision) return;
         if (!append) { state.rows = []; list.replaceChildren(); }
         const seen = new Set(state.rows.map(row => row.id));
         for (const row of result.items) if (!seen.has(row.id)) { state.rows.push(row); list.append(renderPost(row)); }
         state.offset = (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
-        if (!state.rows.length) message.append(status(state.query || state.tag ? '条件に合うレシピはありません。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
+        if (!state.rows.length) message.append(status(state.query || state.tag ? '条件に合うレシピはありません。' : state.mode === 'saved' ? 'ブックマークしたレシピはありません。各投稿の☆から登録できます。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
       } catch (error) {
         if (!state.active || revision !== state.revision) return;
         showError(error); message.append(button('再読み込み', () => load(append)));
@@ -277,10 +326,14 @@
     }
     function renderPost(row) {
       const article = node('article', 'recipe-post');
+      const meta = node('div', 'recipe-post-meta'), number = node('span', 'recipe-post-number', 'No.' + row.post_no);
+      const author = node('span', 'recipe-post-author', row.author); author.title = row.author;
+      const date = node('time', 'recipe-post-date', new Date(row.created_at).toLocaleDateString('ja-JP')); date.dateTime = row.created_at;
+      meta.append(number, author, date); article.append(meta);
       const copy = node('div', 'recipe-post-copy');
       const title = button(row.title, () => openDetail(row), 'recipe-title');
       const heading = node('div', 'recipe-heading'); heading.append(title, deckTotal(row.cards));
-      copy.append(heading, node('p', 'recipe-byline', row.author + ' · ' + new Date(row.created_at).toLocaleDateString('ja-JP')));
+      copy.append(heading);
       try { article.append(cardImages(row.cards, 5, (card, trigger) => openRecipeCard(row.cards, card, trigger))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
       copy.append(badges(row.tags, filterByTag));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
@@ -300,7 +353,8 @@
         if (row.is_owner) { good.title = errorMessages.SELF_LIKE_NOT_ALLOWED; good.setAttribute('aria-label', 'グッド ' + row.likes + '（自分の投稿）'); }
       }
       const view = button('レシピを見る', () => openDetail(row), 'recipe-view'); view.append(icon('arrow'));
-      setGood(); actions.append(good, view); copy.append(actions);
+      const reactions = node('div', 'recipe-reactions'); reactions.append(good, bookmarkButton(row));
+      setGood(); actions.append(reactions, view); copy.append(actions);
       if (row.is_owner) copy.append(ownerActions(row));
       article.append(copy); return article;
     }
@@ -352,7 +406,7 @@
       header.classList.add('recipe-detail-header');
       header.querySelector('h3').append(deckTotal(row.cards));
       const body = node('div', 'recipe-detail-body'), meta = node('div', 'recipe-detail-meta');
-      meta.append(node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag)); body.append(meta);
+      meta.append(node('span', 'recipe-post-number', 'No.' + row.post_no), node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag), bookmarkButton(row)); body.append(meta);
       if (row.description) body.append(node('p', 'recipe-description', row.description));
       detail.append(body);
       try {
@@ -538,9 +592,17 @@
     renderShell();
     return {
       async open() {
+        bookmarks = readBookmarks();
+        storageEvents?.abort(); storageEvents = new AbortController();
+        window.addEventListener('storage', event => {
+          if (event.key !== bookmarksKey && event.key !== null) return;
+          bookmarks = readBookmarks();
+          for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
+          if (state.mode === 'saved' && !detail && !composer) reload();
+        }, { signal: storageEvents.signal });
         state.active = true; renderShell(); await load();
       },
-      close() { cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; state.active = false; invalidate(); }
+      close() { storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; state.active = false; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
