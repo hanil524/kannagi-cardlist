@@ -234,7 +234,8 @@
       item.dataset.number = card.number;
       const img = node('img'); img.alt = card.name; img.loading = 'lazy'; img.decoding = 'async';
       const original = card.el.querySelector('img');
-      setListImage(img, toFullImagePath(original.getAttribute('data-src') || original.src));
+      // 読み込めた画像からフェードインする（読み込み失敗時も枠だけ残さず表示状態にする）。
+      setListImage(img, toFullImagePath(original.getAttribute('data-src') || original.src), () => item.classList.add('is-loaded'));
       item.append(img, node('span', 'recipe-card-count', '×' + count)); grid.append(item);
     });
     return grid;
@@ -449,7 +450,10 @@
       const revision = ++state.revision; more.hidden = true;
       if (!configured) { message.replaceChildren(status('レシピ共有は準備中です。コード共有はそのまま使えます。')); return; }
       loading = true;
-      message.replaceChildren(status('読み込み中…'));
+      // 表示中の一覧は残したまま裏で更新し、空→再表示のちらつきを出さない。
+      const refreshing = !append && list.childElementCount > 0;
+      list.classList.toggle('is-refreshing', refreshing);
+      if (!refreshing) message.replaceChildren(status('読み込み中…'));
       try {
         const args = { p_query: state.query, p_tag: state.tag, p_sort: state.sort, p_offset: append ? state.offset : 0 };
         const result = state.mode === 'saved' && !bookmarks.size ? { items: [], more: false }
@@ -457,14 +461,17 @@
         if (!state.active || revision !== state.revision) return;
         if (!append) { state.rows = []; list.replaceChildren(); }
         const seen = new Set(state.rows.map(row => row.id));
-        for (const row of result.items) if (!seen.has(row.id)) { bookmarkCounts.set(row.id, Number(row.bookmarks) || 0); state.rows.push(row); list.append(renderPost(row)); }
+        for (const row of result.items) if (!seen.has(row.id)) {
+          bookmarkCounts.set(row.id, Number(row.bookmarks) || 0); state.rows.push(row);
+          list.append(renderPost(row));
+        }
         state.offset = (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
         if (!state.rows.length) showEmptyFeed();
       } catch (error) {
         if (!state.active || revision !== state.revision) return;
         showError(error); message.append(button('再読み込み', () => load(append)));
-      } finally { if (revision === state.revision) loading = false; }
+      } finally { if (revision === state.revision) { loading = false; list.classList.remove('is-refreshing'); } }
     }
     function renderPost(row) {
       const article = node('article', 'recipe-post');
@@ -762,7 +769,10 @@
             if ([...bookmarks].some(id => !previous.has(id))) reload(); else pruneSavedFeed();
           }
         }, { signal: storageEvents.signal });
-        state.active = true; renderShell(); const revision = ++state.revision;
+        state.active = true;
+        // 一覧を表示していた場合は作り直さず、表示したまま裏で最新に差し替える。
+        if (detail || composer || !list?.isConnected || !state.rows.length) renderShell(); else refreshBookmarkButtons();
+        const revision = ++state.revision;
         try { await bookmarkWrite(syncBookmarks); }
         catch (_) { if (state.active && revision === state.revision) deckBuilder.showMessage('ブックマーク件数を同期できませんでした。次に開いたときに再試行します。'); }
         if (state.active && revision === state.revision) await load();

@@ -158,7 +158,6 @@
 @keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
 
   to {
@@ -168,13 +167,7 @@
 }
 
 .page-main {
-  animation: pageEnter 0.3s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-main {
-    animation: none;
-  }
+  animation: pageEnter 0.15s ease-out;
 }
 
 /* レスポンシブ */
