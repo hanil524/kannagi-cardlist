@@ -34,7 +34,9 @@
     POST_NOT_FOUND: 'この投稿は削除されています。',
     POST_OWNER_REQUIRED: 'この投稿を編集・削除できるのは、投稿した本人です。',
     ADMIN_REQUIRED: '運営者のアカウントでログインしてください。',
-    AUTH_REQUIRED: '接続を確認して、もう一度お試しください。'
+    AUTH_REQUIRED: '接続を確認して、もう一度お試しください。',
+    BOOKMARK_RATE_LIMIT: 'ブックマークの操作が続いています。少し時間をおいてお試しください。',
+    BOOKMARK_LIMIT: 'ブックマークは10,000件まで登録できます。'
   };
   let session;
   let refreshTask;
@@ -232,11 +234,38 @@
   function deckTotal(map) {
     return node('span', 'recipe-deck-total', cardCount(map) + '枚');
   }
+  function exceedsCardLimit(map) {
+    const groups = new Map();
+    for (const { card, count } of knownCards(map)) {
+      const key = getDeckLimitGroupKey(card.name);
+      const entry = groups.get(key) || { count: 0, limit: Infinity };
+      entry.count += count;
+      entry.limit = Math.min(entry.limit, deckBuilder.getBaseLimit(card.name));
+      groups.set(key, entry);
+    }
+    return [...groups.values()].some(entry => entry.count > entry.limit);
+  }
+  let bookmarkWrites = Promise.resolve(), bookmarkSnapshot = '';
+  const bookmarkVersion = (ids, uid) => uid + ':' + [...ids].sort().join(',');
+  function bookmarkWrite(action) {
+    const task = bookmarkWrites.catch(() => {}).then(action); bookmarkWrites = task; return task;
+  }
+  async function syncBookmarks() {
+    const ids = readBookmarks();
+    if (!ids.size && !session) return;
+    const s = await getSession(ids.size > 0);
+    if (!s) return;
+    const version = bookmarkVersion(ids, s.user.id);
+    if (version === bookmarkSnapshot) return;
+    await rpc('bookmarks_sync', { p_ids: [...ids] }, true); bookmarkSnapshot = version;
+  }
   function mount(host) {
     const views = { all: { query: '', ...readFeedOptions() }, saved: { query: '', ...readFeedOptions('saved') } };
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
     let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false;
+    const bookmarkCounts = new Map(), pendingBookmarks = new Set();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
+    let detailRow = null, composerPreviousRow = null;
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
     function setFormBusy(form, busy) {
@@ -267,7 +296,7 @@
     function returnToFeed() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       const previous = feedSnapshot;
-      feedSnapshot = null; invalidate(); loading = false; detail = composer = null;
+      feedSnapshot = null; invalidate(); loading = false; detail = composer = detailRow = composerPreviousRow = null;
       host.classList.remove('is-detail');
       if (!previous) { renderShell(); load(); return; }
       host.replaceChildren(...previous.content);
@@ -289,21 +318,55 @@
       const saved = bookmarks.has(id);
       control.setAttribute('aria-pressed', String(saved));
       control.setAttribute('aria-label', saved ? 'ブックマークから解除' : 'ブックマークに登録');
-      control.title = saved ? 'ブックマークから解除' : 'ブックマークに登録';
+      const count = bookmarkCounts.get(id) || 0;
+      control.title = (saved ? 'ブックマークから解除' : 'ブックマークに登録') + '（' + count + '件）';
+      control.replaceChildren(icon('star'), node('span', 'recipe-bookmark-count', String(count)));
+      control.disabled = pendingBookmarks.has(id);
+    }
+    function refreshBookmarkButtons(id) {
+      const roots = [host, ...(feedSnapshot?.content || [])];
+      for (const root of roots) for (const control of root.querySelectorAll?.('[data-recipe-bookmark]') || []) {
+        if (!id || control.dataset.recipeBookmark === id) setBookmarkButton(control, control.dataset.recipeBookmark);
+      }
     }
     function bookmarkButton(row) {
-      const control = button('', () => {
-        const next = readBookmarks();
-        if (next.has(row.id)) next.delete(row.id); else {
-          if (next.size >= 10000) { deckBuilder.showMessage('ブックマークは10,000件まで登録できます。'); return; }
-          next.add(row.id);
-        }
-        try { localStorage.setItem(bookmarksKey, JSON.stringify([...next])); }
-        catch (_) { deckBuilder.showMessage('ブックマークを保存できません。ブラウザの保存設定を確認してください。'); return; }
-        bookmarks = next; setBookmarkButton(control, row.id);
-        if (state.mode === 'saved' && !detail) pruneSavedFeed();
+      const control = button('', async () => {
+        if (pendingBookmarks.has(row.id)) return;
+        pendingBookmarks.add(row.id); refreshBookmarkButtons(row.id);
+        try {
+          await bookmarkWrite(async () => {
+            await syncBookmarks();
+            const before = readBookmarks(), saved = !before.has(row.id);
+            if (saved && before.size >= 10000) throw new Error(errorMessages.BOOKMARK_LIMIT);
+            // 保存できる端末か先に確認し、通信失敗時は登録状態を変えない。
+            try { localStorage.setItem(bookmarksKey, JSON.stringify([...before])); }
+            catch (_) { throw new Error('ブックマークを保存できません。ブラウザの保存設定を確認してください。'); }
+            const result = await rpc('bookmark', { p_post: row.id, p_saved: saved }, true);
+            const next = readBookmarks();
+            if (saved) next.add(row.id); else next.delete(row.id);
+            try { localStorage.setItem(bookmarksKey, JSON.stringify([...next])); }
+            catch (error) {
+              bookmarkSnapshot = '';
+              try { await rpc('bookmark', { p_post: row.id, p_saved: !saved }, true); } catch (_) { }
+              throw new Error('ブックマークを保存できません。ブラウザの保存設定を確認してください。');
+            }
+            bookmarks = next; row.bookmarks = result.bookmarks; bookmarkCounts.set(row.id, result.bookmarks);
+            bookmarkSnapshot = bookmarkVersion(next, session.user.id);
+          });
+          if (state.mode === 'saved' && !detail && !composer) pruneSavedFeed();
+        } catch (error) { deckBuilder.showMessage(error.message || 'ブックマークを保存できませんでした。'); }
+        finally { pendingBookmarks.delete(row.id); refreshBookmarkButtons(row.id); }
       }, 'recipe-bookmark');
-      control.append(icon('star')); control.dataset.recipeBookmark = row.id; setBookmarkButton(control, row.id); return control;
+      control.dataset.recipeBookmark = row.id; setBookmarkButton(control, row.id); return control;
+    }
+    function bookmarkStatus(row) {
+      const group = node('div', 'recipe-bookmark-status'); group.append(bookmarkButton(row));
+      try {
+        if (exceedsCardLimit(row.cards)) {
+          const seal = node('span', 'recipe-sealed', '封印'); seal.title = '現在の枚数上限を超えているカードがあります。'; group.append(seal);
+        }
+      } catch (_) { }
+      return group;
     }
     function filterByTag(value) {
       state.tag = value; detail = composer = null; renderShell(); host.scrollTop = 0; reload();
@@ -311,14 +374,14 @@
     function renderShell() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       feedSnapshot = null;
-      detail = composer = null;
+      detail = composer = detailRow = composerPreviousRow = null;
       host.classList.remove('is-detail');
       host.replaceChildren();
       const post = button('投稿する', confirmComposer, 'recipe-button recipe-primary'); post.disabled = !configured;
       const controls = node('form', 'recipe-search');
       search = node('input'); search.type = 'search'; search.maxLength = 80; search.placeholder = 'デッキ名・投稿者・説明を検索'; search.setAttribute('aria-label', 'レシピを検索'); search.value = state.query;
       tag = node('select'); tag.setAttribute('aria-label', 'タグで絞り込み');
-      [['', 'すべてのタグ'], ...[...SEASONS, ...CHOICE_TAGS].map(x => [x, x])].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; tag.append(option); }); tag.value = state.tag;
+      [['', 'タグ'], ...[...SEASONS, ...CHOICE_TAGS].map(x => [x, x])].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; tag.append(option); }); tag.value = state.tag;
       sort = node('select'); sort.setAttribute('aria-label', 'レシピの並び順');
       [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
       const find = button('検索', () => reload(), 'recipe-search-submit');
@@ -361,7 +424,7 @@
         if (!state.active || revision !== state.revision) return;
         if (!append) { state.rows = []; list.replaceChildren(); }
         const seen = new Set(state.rows.map(row => row.id));
-        for (const row of result.items) if (!seen.has(row.id)) { state.rows.push(row); list.append(renderPost(row)); }
+        for (const row of result.items) if (!seen.has(row.id)) { bookmarkCounts.set(row.id, Number(row.bookmarks) || 0); state.rows.push(row); list.append(renderPost(row)); }
         state.offset = (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
         if (!state.rows.length) showEmptyFeed();
@@ -399,7 +462,7 @@
         if (row.is_owner) { good.title = errorMessages.SELF_LIKE_NOT_ALLOWED; good.setAttribute('aria-label', 'グッド ' + row.likes + '（自分の投稿）'); }
       }
       const view = button('レシピを見る', () => openDetail(row), 'recipe-view'); view.append(icon('arrow'));
-      const reactions = node('div', 'recipe-reactions'); reactions.append(good, bookmarkButton(row));
+      const reactions = node('div', 'recipe-reactions'); reactions.append(good, bookmarkStatus(row));
       setGood(); actions.append(reactions, view); copy.append(actions);
       if (row.is_owner) copy.append(ownerActions(row));
       article.append(copy); return article;
@@ -447,6 +510,7 @@
       panel.append(header); host.replaceChildren(panel); return panel;
     }
     function openDetail(row) {
+      composer = composerPreviousRow = null; detailRow = row;
       detail = subview(row.title);
       host.classList.add('is-detail'); detail.classList.add('recipe-detail');
       const header = detail.querySelector('.recipe-subview-header');
@@ -454,7 +518,7 @@
       const title = header.querySelector('h3'), heading = node('div', 'recipe-detail-heading');
       title.title = row.title; title.replaceWith(heading); heading.append(title, deckTotal(row.cards));
       const body = node('div', 'recipe-detail-body'), meta = node('div', 'recipe-detail-meta');
-      meta.append(node('span', 'recipe-post-number', 'No.' + row.post_no), node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag), bookmarkButton(row)); body.append(meta);
+      meta.append(node('span', 'recipe-post-number', 'No.' + row.post_no), node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag), bookmarkStatus(row)); body.append(meta);
       if (row.description) body.append(node('p', 'recipe-description', row.description));
       detail.append(body);
       try {
@@ -544,6 +608,7 @@
       cancelConfirmation = () => close(false); content.inert = true; document.body.append(overlay); no.focus({ preventScroll: true });
     }
     function openComposer(cards, deckId, deckName, fromCode = false, editing = null) {
+      composerPreviousRow = detail && !composer ? detailRow : null; detail = detailRow = null;
       const context = editing ? 'post:' + editing.id : deckId + ':' + JSON.stringify(cards);
       if (!state.draft || state.draft.context !== context) {
         let author = ''; try { author = localStorage.getItem('kannagi-recipe-author') || ''; } catch (_) { }
@@ -652,12 +717,23 @@
           if (event.key !== bookmarksKey && event.key !== null) return;
           const previous = bookmarks;
           bookmarks = readBookmarks();
-          for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
+          for (const id of new Set([...previous, ...bookmarks])) if (previous.has(id) !== bookmarks.has(id) && bookmarkCounts.has(id)) {
+            bookmarkCounts.set(id, Math.max(0, bookmarkCounts.get(id) + (bookmarks.has(id) ? 1 : -1)));
+          }
+          refreshBookmarkButtons();
           if (state.mode === 'saved' && !detail && !composer) {
             if ([...bookmarks].some(id => !previous.has(id))) reload(); else pruneSavedFeed();
           }
         }, { signal: storageEvents.signal });
-        state.active = true; renderShell(); await load();
+        state.active = true; renderShell(); const revision = ++state.revision;
+        try { await bookmarkWrite(syncBookmarks); }
+        catch (_) { if (state.active && revision === state.revision) deckBuilder.showMessage('ブックマーク件数を同期できませんでした。次に開いたときに再試行します。'); }
+        if (state.active && revision === state.revision) await load();
+      },
+      back() {
+        if (composer && composerPreviousRow) { openDetail(composerPreviousRow); return true; }
+        if (detail || composer) { returnToFeed(); return true; }
+        return false;
       },
       close() { storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
     };
