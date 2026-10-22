@@ -210,7 +210,7 @@
     const cards = max === Infinity ? recipeCards(map) : knownCards(map);
     if (max !== Infinity) cards.sort((a, b) => Number(b.card.cost) - Number(a.card.cost) || Number(a.card.number) - Number(b.card.number));
     cards.slice(0, max).forEach(({ card, count }) => {
-      const item = onCard ? button('', () => onCard(card, item), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
+      const item = onCard ? button('', event => onCard(card, item, event), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
       if (onCard) item.setAttribute('aria-label', stripCardReading(card.name) + 'を拡大表示');
       item.dataset.number = card.number;
       const img = node('img'); img.alt = card.name; img.loading = 'lazy';
@@ -224,7 +224,8 @@
     const group = node('div', 'recipe-tags');
     const order = [...SEASONS, ...CHOICE_TAGS];
     [...new Set(tags || [])].sort((a, b) => order.indexOf(a) - order.indexOf(b)).forEach(tag => {
-      const badge = onTag ? button(tag, () => onTag(tag), 'recipe-tag') : node('span', 'recipe-tag', tag);
+      const badge = onTag ? button('', () => onTag(tag), 'recipe-tag') : node('span', 'recipe-tag');
+      badge.append(node('span', 'recipe-tag-label', tag));
       if (onTag) badge.setAttribute('aria-label', '「' + tag + '」で絞り込み');
       if (tag === '優勝レシピ') { badge.classList.add('is-winner'); badge.prepend(icon('crown')); }
       group.append(badge);
@@ -443,7 +444,7 @@
       const title = button(row.title, () => openDetail(row), 'recipe-title');
       const heading = node('div', 'recipe-heading'); heading.append(title, deckTotal(row.cards));
       copy.append(heading);
-      try { article.append(cardImages(row.cards, 5, (card, trigger) => openRecipeCard(row.cards, card, trigger))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
+      try { article.append(cardImages(row.cards, 5, (card, trigger, event) => openRecipeCard(row.cards, card, trigger, event))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
       copy.append(badges(row.tags, filterByTag));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
       const actions = node('div', 'recipe-post-actions');
@@ -522,7 +523,7 @@
       if (row.description) body.append(node('p', 'recipe-description', row.description));
       detail.append(body);
       try {
-        body.append(cardImages(row.cards, Infinity, (card, trigger) => openRecipeCard(row.cards, card, trigger)));
+        body.append(cardImages(row.cards, Infinity, (card, trigger, event) => openRecipeCard(row.cards, card, trigger, event)));
         let preparedCode = '';
         const revision = state.revision, codeNotice = node('div'); body.prepend(codeNotice);
         const use = button('このデッキコードを使う', async () => {
@@ -558,11 +559,12 @@
       } catch (error) { body.append(status(error.message, true)); }
       if (row.is_owner) body.append(ownerActions(row));
     }
-    function openRecipeCard(map, card, trigger) {
+    function openRecipeCard(map, card, trigger, event) {
       const cards = recipeCards(map).map(entry => entry.card.el);
       openImageModal(getModalCardFullImageSrc(card.el), {
         cards, card: card.el, recipeCards: map, returnTo: host.closest('#deck-share-modal'),
-        returnScroll: host.querySelector('.recipe-detail-body') || host, returnFocus: trigger
+        returnScroll: host.querySelector('.recipe-detail-body') || host,
+        returnFocus: event?.isTrusted && event.detail === 0 ? trigger : host.closest('.deck-share-expanded')
       });
     }
     function confirmComposer() {
