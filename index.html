@@ -67,7 +67,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no" />
   <title>巫カードフィルター | 巫KANNAGIカードゲーム</title>
   <meta name="description" content="巫KANNAGIカードゲームのフィルター付きギャラリー。全てのカードを閲覧・検索・フィルタリング可能。気になるカードだけに絞ってデッキ作成のお供に。" />
-  <link rel="stylesheet" href="styles.css?v=20261018-ipad-layout" />
+  <link rel="stylesheet" href="styles.css?v=20261023-recipe-sharing5" />
   <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
   <!-- Windows タイル -->
   <meta name="msapplication-TileImage" content="images/icon.jpg" />
@@ -77,7 +77,7 @@
   <!-- Android Chrome / 汎用 -->
   <link rel="icon" type="image/png" sizes="180x180" href="images/icon.png" />
   <script src="faq-data.js?v=20260729-card-faq"></script>
-  <script src="scripts.js?v=20261018-deck-share-refresh"></script>
+  <script src="scripts.js?v=20261023-recipe-sharing5"></script>
   <script>
     // Service Worker登録（キャッシュでリピーターの読み込みを高速化）
     if ('serviceWorker' in navigator) {
@@ -181,14 +181,22 @@
           </div>
         </div>
 
+        <div class="menu-item tools-menu">
+          <button type="button" class="pc-only menu-trigger tools-menu-trigger" aria-haspopup="true"
+            aria-controls="tools-submenu" data-open-recipes>ツール</button>
+          <div class="submenu" id="tools-submenu">
+            <a href="#deck-recipes" data-open-recipes>デッキレシピ共有</a>
+            <a href="https://hanil524.github.io/kannagi_battle/" target="_blank" rel="noopener noreferrer">一人回しツール</a>
+            <a href="https://hanil524.github.io/0cost-checker/" target="_blank" rel="noreferrer">零探しチェッカー（便利ツール）</a>
+          </div>
+        </div>
+
         <!-- メインメニュー -->
         <div class="menu-item">
           <a href="https://x.com/hanil524" target="_blank" rel="noreferrer" class="pc-only menu-trigger">お知らせ</a>
           <!-- サブメニュー -->
           <div class="submenu">
             <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">報告フォーム（アプデ履歴）</a>
-            <a href="https://hanil524.github.io/kannagi_battle/" target="_blank" rel="noopener noreferrer">一人回しツール</a>
-            <a href="https://hanil524.github.io/0cost-checker/" target="_blank" rel="noreferrer">零探しチェッカー（便利ツール）</a>
             <a href="https://lit.link/hanil524" target="_blank" rel="noreferrer">ツール運営者 はん（リンク集）</a>
           </div>
         </div>
@@ -230,6 +238,7 @@
         <a href="https://forms.gle/nF9ty8UDgnSumtut7" target="_blank" rel="noreferrer">お問い合わせ</a>
         <a href="https://hanil524.github.io/kannagi_battle/" target="_blank" rel="noopener noreferrer"
           class="nav-battle-link">一人回しツール：『墓暴き』編</a>
+        <a href="#deck-recipes" class="nav-recipes-link" data-open-recipes>デッキレシピ共有</a>
       </div>
       <section class="mobile-favorite-group-selector" aria-label="お気に入りグループ選択">
         <button type="button" class="mobile-favorite-group-toggle" onclick="toggleMobileFavoriteGroupMenu(event)"
