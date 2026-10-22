@@ -235,10 +235,47 @@
   function mount(host) {
     const views = { all: { query: '', ...readFeedOptions() }, saved: { query: '', ...readFeedOptions('saved') } };
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
-    let bookmarks = readBookmarks(), storageEvents;
+    let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false;
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
+    function setFormBusy(form, busy) {
+      if (!form) return;
+      if (busy) {
+        if (form._busyControls) return;
+        form._busyControls = [...form.elements].map(control => [control, control.disabled]);
+        for (const [control] of form._busyControls) control.disabled = true;
+        form.setAttribute('aria-busy', 'true');
+      } else {
+        for (const [control, disabled] of form._busyControls || []) control.disabled = disabled;
+        delete form._busyControls; form.removeAttribute('aria-busy');
+      }
+    }
+    function showEmptyFeed() {
+      message.replaceChildren(status(state.query || state.tag ? '条件に合うレシピはありません。' : state.mode === 'saved' ? 'ブックマークしたレシピはありません。各投稿の☆から登録できます。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
+    }
+    function pruneSavedFeed() {
+      const removed = state.rows.filter(row => !bookmarks.has(row.id));
+      if (!removed.length) return false;
+      state.rows = state.rows.filter(row => bookmarks.has(row.id));
+      state.offset = Math.max(0, state.offset - removed.length);
+      for (const row of removed) list.querySelector('[data-recipe-bookmark="' + row.id + '"]')?.closest('.recipe-post').remove();
+      if (loading || (!state.rows.length && !more.hidden)) { load(true); return true; }
+      else if (!state.rows.length) showEmptyFeed();
+      return false;
+    }
+    function returnToFeed() {
+      cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      const previous = feedSnapshot;
+      feedSnapshot = null; invalidate(); loading = false; detail = composer = null;
+      host.classList.remove('is-detail');
+      if (!previous) { renderShell(); load(); return; }
+      host.replaceChildren(...previous.content);
+      for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
+      const resuming = state.mode === 'saved' && pruneSavedFeed();
+      host.scrollTop = previous.scrollTop;
+      if (previous.pending && !resuming) load(Boolean(state.rows.length));
+    }
     function saveOptions() {
       views[state.mode] = { query: state.query, tag: state.tag, sort: state.sort };
       try { localStorage.setItem(feedKey(state.mode), JSON.stringify({ tag: state.tag, sort: state.sort })); } catch (_) { }
@@ -264,7 +301,7 @@
         try { localStorage.setItem(bookmarksKey, JSON.stringify([...next])); }
         catch (_) { deckBuilder.showMessage('ブックマークを保存できません。ブラウザの保存設定を確認してください。'); return; }
         bookmarks = next; setBookmarkButton(control, row.id);
-        if (state.mode === 'saved' && !detail) reload();
+        if (state.mode === 'saved' && !detail) pruneSavedFeed();
       }, 'recipe-bookmark');
       control.append(icon('star')); control.dataset.recipeBookmark = row.id; setBookmarkButton(control, row.id); return control;
     }
@@ -273,6 +310,7 @@
     }
     function renderShell() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      feedSnapshot = null;
       detail = composer = null;
       host.classList.remove('is-detail');
       host.replaceChildren();
@@ -290,6 +328,12 @@
       const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(search, find, saved);
       controls.append(searchGroup, tag, sort, post);
       controls.addEventListener('submit', event => { event.preventDefault(); reload(); });
+      const clearSearch = event => {
+        if (!event.isComposing && !search.value.trim() && state.query) reload();
+      };
+      search.addEventListener('input', clearSearch);
+      search.addEventListener('search', clearSearch);
+      search.addEventListener('compositionend', clearSearch);
       tag.addEventListener('change', reload); sort.addEventListener('change', reload);
       message = node('div'); list = node('div', 'recipe-feed');
       more = button('さらに表示', () => load(true)); more.hidden = true;
@@ -307,6 +351,7 @@
     async function load(append = false) {
       const revision = ++state.revision; more.hidden = true;
       if (!configured) { message.replaceChildren(status('レシピ共有は準備中です。コード共有はそのまま使えます。')); return; }
+      loading = true;
       message.replaceChildren(status('読み込み中…'));
       try {
         const args = { p_query: state.query, p_tag: state.tag, p_sort: state.sort, p_offset: append ? state.offset : 0 };
@@ -318,11 +363,11 @@
         for (const row of result.items) if (!seen.has(row.id)) { state.rows.push(row); list.append(renderPost(row)); }
         state.offset = (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
-        if (!state.rows.length) message.append(status(state.query || state.tag ? '条件に合うレシピはありません。' : state.mode === 'saved' ? 'ブックマークしたレシピはありません。各投稿の☆から登録できます。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
+        if (!state.rows.length) showEmptyFeed();
       } catch (error) {
         if (!state.active || revision !== state.revision) return;
         showError(error); message.append(button('再読み込み', () => load(append)));
-      }
+      } finally { if (revision === state.revision) loading = false; }
     }
     function renderPost(row) {
       const article = node('article', 'recipe-post');
@@ -393,10 +438,11 @@
     }
     function subview(title) {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      if (!feedSnapshot) feedSnapshot = { content: [...host.childNodes], scrollTop: host.scrollTop, pending: loading };
       host.classList.remove('is-detail');
-      invalidate(); const panel = node('section', 'recipe-subview');
+      invalidate(); loading = false; const panel = node('section', 'recipe-subview');
       const header = node('div', 'recipe-subview-header');
-      header.append(button('一覧に戻る', () => { panel.remove(); detail = composer = null; renderShell(); load(); }), node('h3', '', title));
+      header.append(button('一覧に戻る', returnToFeed), node('h3', '', title));
       panel.append(header); host.replaceChildren(panel); return panel;
     }
     function openDetail(row) {
@@ -404,7 +450,8 @@
       host.classList.add('is-detail'); detail.classList.add('recipe-detail');
       const header = detail.querySelector('.recipe-subview-header');
       header.classList.add('recipe-detail-header');
-      header.querySelector('h3').append(deckTotal(row.cards));
+      const title = header.querySelector('h3'), heading = node('div', 'recipe-detail-heading');
+      title.title = row.title; title.replaceWith(heading); heading.append(title, deckTotal(row.cards));
       const body = node('div', 'recipe-detail-body'), meta = node('div', 'recipe-detail-meta');
       meta.append(node('span', 'recipe-post-number', 'No.' + row.post_no), node('p', 'recipe-byline', row.author), badges(row.tags, filterByTag), bookmarkButton(row)); body.append(meta);
       if (row.description) body.append(node('p', 'recipe-description', row.description));
@@ -573,6 +620,7 @@
         if (!draft.title.trim() || !draft.author.trim()) { notice.replaceChildren(status('デッキ名と投稿者名を入力してください。', true)); return; }
         rememberAuthor(draft.author);
         state.posting = true; submit.disabled = true; submit.textContent = editing ? '保存中…' : '投稿中…';
+        setFormBusy(form, true);
         const revision = state.revision;
         const payload = { p_request: draft.request, p_title: draft.title, p_author: draft.author, p_description: draft.description, p_cards: draft.cards, p_tags: [...automatic, ...draft.tags] };
         try {
@@ -584,25 +632,33 @@
         } catch (error) { if (form.isConnected) notice.replaceChildren(status(error.message, true)); }
         finally {
           state.posting = false;
+          setFormBusy(form, false); setFormBusy(composer?.querySelector('form'), false);
           for (const el of [submit, submitCurrent]) if (el) { el.disabled = cardCount((el === submit ? draft : state.draft)?.cards || {}) < 40; el.textContent = el.dataset.readyLabel; }
         }
       });
       form.append(choices, notice, submit); composer.append(form);
+      if (state.posting) setFormBusy(form, true);
     }
     renderShell();
     return {
       async open() {
         bookmarks = readBookmarks();
         storageEvents?.abort(); storageEvents = new AbortController();
+        document.addEventListener('pointerdown', event => {
+          if (document.activeElement === search && event.target !== search) search.blur();
+        }, { signal: storageEvents.signal, capture: true });
         window.addEventListener('storage', event => {
           if (event.key !== bookmarksKey && event.key !== null) return;
+          const previous = bookmarks;
           bookmarks = readBookmarks();
           for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
-          if (state.mode === 'saved' && !detail && !composer) reload();
+          if (state.mode === 'saved' && !detail && !composer) {
+            if ([...bookmarks].some(id => !previous.has(id))) reload(); else pruneSavedFeed();
+          }
         }, { signal: storageEvents.signal });
         state.active = true; renderShell(); await load();
       },
-      close() { storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; state.active = false; invalidate(); }
+      close() { storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
