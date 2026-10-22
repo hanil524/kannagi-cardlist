@@ -179,12 +179,17 @@
       return { card, count };
     });
   }
-  function cardImages(map, max = Infinity) {
+  function recipeCards(map) {
+    const entries = new Map(knownCards(map).map(entry => [entry.card.el, entry]));
+    return deckBuilder.sortDeck([...entries.keys()]).map(card => entries.get(card));
+  }
+  function cardImages(map, max = Infinity, onCard) {
     const grid = node('div', max === Infinity ? 'recipe-card-grid' : 'recipe-card-preview');
-    const cards = knownCards(map);
+    const cards = max === Infinity ? recipeCards(map) : knownCards(map);
     if (max !== Infinity) cards.sort((a, b) => Number(b.card.cost) - Number(a.card.cost) || Number(a.card.number) - Number(b.card.number));
     cards.slice(0, max).forEach(({ card, count }) => {
-      const item = node('div', 'recipe-card-image');
+      const item = onCard ? button('', () => onCard(card, item), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
+      if (onCard) item.setAttribute('aria-label', stripCardReading(card.name) + 'を拡大表示');
       item.dataset.number = card.number;
       const img = node('img'); img.alt = card.name; img.loading = 'lazy';
       const original = card.el.querySelector('img');
@@ -205,6 +210,7 @@
     function showError(error) { message.replaceChildren(status(error.message, true)); }
     function renderShell() {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      host.classList.remove('is-detail');
       host.replaceChildren();
       const post = button('投稿する', confirmComposer, 'recipe-button recipe-primary'); post.disabled = !configured;
       const controls = node('form', 'recipe-search');
@@ -252,7 +258,7 @@
       const copy = node('div', 'recipe-post-copy');
       const title = button(row.title, () => openDetail(row), 'recipe-title');
       copy.append(title, node('p', 'recipe-byline', row.author + ' · ' + new Date(row.created_at).toLocaleDateString('ja-JP')));
-      try { article.append(cardImages(row.cards, 5)); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
+      try { article.append(cardImages(row.cards, 5, (card, trigger) => openRecipeCard(row.cards, card, trigger))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
       copy.append(badges(row.tags));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
       const actions = node('div', 'recipe-post-actions');
@@ -308,6 +314,7 @@
     }
     function subview(title) {
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
+      host.classList.remove('is-detail');
       invalidate(); const panel = node('section', 'recipe-subview');
       const header = node('div', 'recipe-subview-header');
       header.append(button('一覧に戻る', () => { panel.remove(); detail = composer = null; renderShell(); load(); }), node('h3', '', title));
@@ -315,19 +322,32 @@
     }
     function openDetail(row) {
       detail = subview(row.title);
-      detail.append(node('p', 'recipe-byline', row.author), badges(row.tags), node('p', 'recipe-description', row.description));
+      host.classList.add('is-detail'); detail.classList.add('recipe-detail');
+      const header = detail.querySelector('.recipe-subview-header');
+      header.classList.add('recipe-detail-header');
+      const body = node('div', 'recipe-detail-body'), meta = node('div', 'recipe-detail-meta');
+      meta.append(node('p', 'recipe-byline', row.author), badges(row.tags)); body.append(meta);
+      if (row.description) body.append(node('p', 'recipe-description', row.description));
+      detail.append(body);
       try {
-        detail.append(cardImages(row.cards));
+        body.append(cardImages(row.cards, Infinity, (card, trigger) => openRecipeCard(row.cards, card, trigger)));
         const use = button('このレシピのコードを使う', async () => {
           use.disabled = true; const revision = state.revision;
           try {
             const code = await deckToCodeV7(row.cards);
             if (state.active && revision === state.revision) bridge.useCode(code);
-          } catch (error) { if (use.isConnected) detail.append(status(error.message, true)); } finally { use.disabled = false; }
+          } catch (error) { if (use.isConnected) body.prepend(status(error.message, true)); } finally { use.disabled = false; }
         }, 'recipe-button recipe-primary');
-        detail.append(use);
-      } catch (error) { detail.append(status(error.message, true)); }
-      if (row.is_owner) detail.append(ownerActions(row));
+        use.classList.add('recipe-use-code'); header.append(use);
+      } catch (error) { body.append(status(error.message, true)); }
+      if (row.is_owner) body.append(ownerActions(row));
+    }
+    function openRecipeCard(map, card, trigger) {
+      const cards = recipeCards(map).map(entry => entry.card.el);
+      openImageModal(getModalCardFullImageSrc(card.el), {
+        cards, card: card.el, returnTo: host.closest('#deck-share-modal'),
+        returnScroll: host.querySelector('.recipe-detail-body') || host, returnFocus: trigger
+      });
     }
     function confirmComposer() {
       if (cancelConfirmation || document.querySelector('.confirm-popup')) return;
