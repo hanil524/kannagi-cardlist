@@ -25,7 +25,7 @@
   }
   const errorMessages = {
     LINK_NOT_ALLOWED: 'リンクは投稿できません。URLを削除してください。',
-    POST_RATE_LIMIT: '投稿は1分に1件、24時間で10件までです。時間をおいてお試しください。',
+    POST_RATE_LIMIT: '投稿は1分に1件、24時間で15件までです。時間をおいてお試しください。',
     POSTING_BUSY: '現在、投稿が混み合っています。しばらく時間をおいてお試しください。',
     VOTE_RATE_LIMIT: '少し時間をおいてから、もう一度お試しください。',
     DUPLICATE_DECK: '同じ内容のデッキをすでに投稿しています。',
@@ -278,10 +278,11 @@
   }
   function badges(tags, onTag) {
     const group = node('div', 'recipe-tags');
-    const order = [...SEASONS, ...CHOICE_TAGS];
+    const order = ['優勝レシピ', ...SEASONS, ...CHOICE_TAGS.filter(tag => tag !== '優勝レシピ')];
     [...new Set(tags || [])].sort((a, b) => order.indexOf(a) - order.indexOf(b)).forEach(tag => {
       const badge = onTag ? button('', () => onTag(tag), 'recipe-tag') : node('span', 'recipe-tag');
       badge.append(node('span', 'recipe-tag-label', tag));
+      if (SEASONS.includes(tag)) badge.dataset.season = tag;
       if (onTag) badge.setAttribute('aria-label', '「' + tag + '」で絞り込み');
       if (tag === '優勝レシピ') { badge.classList.add('is-winner'); badge.prepend(icon('crown')); }
       group.append(badge);
