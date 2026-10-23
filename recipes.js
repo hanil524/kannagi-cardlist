@@ -35,6 +35,7 @@
     DECK_TOO_LARGE: 'デッキは150枚までで投稿できます。',
     SELF_LIKE_NOT_ALLOWED: '自分の投稿にはグッドできません。',
     INVALID_TAGS: 'タグを選び直してください。',
+    INVALID_PREVIEW: 'サムネイルをデッキ内のカードから選び直してください。',
     POST_NOT_FOUND: 'この投稿は削除されています。',
     POST_OWNER_REQUIRED: 'この投稿を編集・削除できるのは、投稿した本人です。',
     ADMIN_REQUIRED: '運営者のアカウントでログインしてください。',
@@ -260,10 +261,15 @@
     const entries = new Map(knownCards(map).map(entry => [entry.card.el, entry]));
     return deckBuilder.sortDeck([...entries.keys()]).map(card => entries.get(card));
   }
-  function cardImages(map, max = Infinity, onCard) {
+  function previewCards(map, numbers) {
+    const cards = knownCards(map).sort((a, b) => Number(b.card.cost) - Number(a.card.cost) || Number(a.card.number) - Number(b.card.number));
+    const index = new Map(cards.map(entry => [entry.card.number, entry]));
+    const order = [...new Set([...(Array.isArray(numbers) ? numbers : []), ...cards.map(entry => entry.card.number)])];
+    return order.filter(number => index.has(number)).slice(0, 5).map(number => index.get(number));
+  }
+  function cardImages(map, max = Infinity, onCard, preview) {
     const grid = node('div', max === Infinity ? 'recipe-card-grid' : 'recipe-card-preview');
-    const cards = max === Infinity ? recipeCards(map) : knownCards(map);
-    if (max !== Infinity) cards.sort((a, b) => Number(b.card.cost) - Number(a.card.cost) || Number(a.card.number) - Number(b.card.number));
+    const cards = max === Infinity ? recipeCards(map) : previewCards(map, preview);
     cards.slice(0, max).forEach(({ card, count }) => {
       const item = onCard ? button('', event => onCard(card, item, event), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
       if (onCard) item.setAttribute('aria-label', stripCardReading(card.name) + 'を拡大表示');
@@ -329,7 +335,7 @@
     let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false, loadingAppend = false;
     const bookmarkCounts = new Map(), pendingBookmarks = new Set();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
-    let detailRow = null, composerPreviousRow = null;
+    let detailRow = null, composerPreviousRow = null, cleanupPreviewPicker = null;
     let totalRevision = 0;
     async function refreshTotal() {
       const revision = ++totalRevision;
@@ -370,6 +376,7 @@
       return false;
     }
     function returnToFeed() {
+      cleanupPreviewPicker?.();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       const previous = feedSnapshot;
       feedSnapshot = null; invalidate(); loading = false; detail = composer = detailRow = composerPreviousRow = null;
@@ -383,6 +390,7 @@
       if (previous.pending && !resuming) load(previous.append);
     }
     function goBack() {
+      if (cleanupPreviewPicker) { cleanupPreviewPicker(); return true; }
       if (composer && composerPreviousRow) { openDetail(composerPreviousRow); return true; }
       if (detail || composer) { returnToFeed(); return true; }
       return false;
@@ -526,6 +534,7 @@
       updateTagControl(); return trigger;
     }
     function renderShell() {
+      cleanupPreviewPicker?.();
       closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       feedSnapshot = null;
@@ -616,7 +625,7 @@
       const title = button(row.title, () => openDetail(row), 'recipe-title');
       const heading = node('div', 'recipe-heading'); heading.append(title, deckTotal(row.cards));
       copy.append(heading);
-      try { article.append(cardImages(row.cards, 5, (card, trigger, event) => openRecipeCard(row.cards, card, trigger, event))); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
+      try { article.append(cardImages(row.cards, 5, (card, trigger, event) => openRecipeCard(row.cards, card, trigger, event), row.preview_numbers)); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
       copy.append(badges(row.tags, filterByTag));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
       const actions = node('div', 'recipe-post-actions');
@@ -687,6 +696,7 @@
       cancelConfirmation = () => close(false); content.inert = true; document.body.append(overlay); no.focus({ preventScroll: true });
     }
     function subview(title) {
+      cleanupPreviewPicker?.();
       closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       const focusTarget = document.activeElement, keyboardFocus = host.contains(focusTarget) && focusTarget.matches(':focus-visible');
@@ -807,10 +817,10 @@
       if (!state.draft || state.draft.context !== context) {
         let author = ''; try { author = localStorage.getItem('kannagi-recipe-author') || ''; } catch (_) { }
         state.draft = { context, cards, title: deckName, author: editing?.author || author, description: editing?.description || '',
-          tags: (editing?.tags || []).filter(tag => CHOICE_TAGS.includes(tag)), editingId: editing?.id || null, request: crypto.randomUUID() };
+          tags: (editing?.tags || []).filter(tag => CHOICE_TAGS.includes(tag)), preview: editing?.preview_numbers || [], editingId: editing?.id || null, request: crypto.randomUUID() };
       }
       const draft = state.draft;
-      if (fromCode && !draft.fromCode) { draft.cards = {}; draft.fromCode = true; draft.request = crypto.randomUUID(); }
+      if (fromCode && !draft.fromCode) { draft.cards = {}; draft.preview = []; draft.fromCode = true; draft.request = crypto.randomUUID(); }
       composer = subview(editing ? '投稿を編集' : 'デッキを投稿');
       const form = node('form', 'recipe-composer');
       const title = field('デッキ名', 'input', 64), author = field('投稿者名', 'input', 24), description = field('説明', 'textarea', 400);
@@ -822,10 +832,74 @@
       function renderCards() {
         const known = knownCards(draft.cards);
         automatic = SEASONS.filter(season => known.some(({ card }) => card.season.some(value => value.includes(season))));
-        preview.replaceChildren(...(known.length ? [deckTotal(draft.cards), cardImages(draft.cards, 8)] : [status('投稿するデッキコードを入力してください。')]));
+        draft.preview = previewCards(draft.cards, draft.preview).map(entry => entry.card.number);
+        preview.replaceChildren();
+        if (known.length) {
+          const header = node('div', 'recipe-preview-header');
+          header.append(node('span', 'recipe-preview-title', 'サムネイル'), deckTotal(draft.cards));
+          if (cfg.previewVersion === 1) {
+            const reset = button('自動に戻す', () => { draft.preview = []; draft.request = crypto.randomUUID(); renderCards(); }, 'recipe-preview-reset');
+            const automaticNumbers = previewCards(draft.cards).map(entry => entry.card.number);
+            reset.disabled = JSON.stringify(draft.preview) === JSON.stringify(automaticNumbers); header.append(reset);
+          }
+          const images = cardImages(draft.cards, 5, cfg.previewVersion === 1 ? (card, trigger) => openPreviewPicker(draft.preview.indexOf(card.number), trigger) : null, draft.preview);
+          if (cfg.previewVersion === 1) {
+            images.classList.add('recipe-preview-slots');
+            [...images.children].forEach((item, index) => { item.setAttribute('aria-label', (index + 1) + '枚目のサムネイルを変更：' + stripCardReading(item.querySelector('img').alt)); item.prepend(node('span', 'recipe-preview-order', String(index + 1))); });
+          }
+          preview.append(header, images);
+          if (cfg.previewVersion === 1) preview.append(node('p', 'recipe-preview-hint', '画像を押して変更。選択済みのカードなら、位置を入れ替えます。'));
+        } else preview.append(status('投稿するデッキコードを入力してください。'));
         if (known.length && deckSizeError(draft.cards)) preview.append(status(deckSizeError(draft.cards), true));
         if (submit) submit.disabled = state.posting || Boolean(deckSizeError(draft.cards));
         seasonTags.replaceChildren(badges(automatic));
+      }
+      function openPreviewPicker(slot, trigger) {
+        if (state.posting || slot < 0 || cleanupPreviewPicker) return;
+        const current = [...draft.preview], known = knownCards(draft.cards);
+        const dialog = node('dialog', 'recipe-preview-dialog'), header = node('div', 'recipe-preview-dialog-header');
+        const heading = node('h3', '', 'サムネイルを変更'); heading.id = 'recipe-preview-dialog-title';
+        const closeButton = button('×', () => close(), 'recipe-preview-close'); closeButton.setAttribute('aria-label', 'サムネイル選択を閉じる');
+        header.append(heading, closeButton);
+        const description = node('p', 'recipe-preview-dialog-description', '左から' + (slot + 1) + '枚目に表示するカードを選んでください。');
+        const notice = node('p', 'recipe-preview-selection'); notice.setAttribute('aria-live', 'polite');
+        let selected = current[slot];
+        const grid = cardImages(draft.cards, Infinity, card => { selected = card.number; updateSelection(); }); grid.classList.add('recipe-preview-options');
+        const cancel = button('キャンセル', () => close());
+        const confirm = button('このカードに変更', () => {
+          const next = [...current], previous = next.indexOf(selected);
+          if (previous >= 0) [next[slot], next[previous]] = [next[previous], next[slot]];
+          else next[slot] = selected;
+          const scrollTop = host.scrollTop;
+          close(false); draft.preview = next; draft.request = crypto.randomUUID(); renderCards(); host.scrollTop = scrollTop;
+          preview.querySelector('.recipe-preview-slots')?.children[slot]?.focus({ preventScroll: true });
+        }, 'recipe-button recipe-primary');
+        function updateSelection() {
+          for (const item of grid.children) {
+            item.setAttribute('aria-pressed', String(item.dataset.number === selected));
+          }
+          const position = current.indexOf(selected), entry = known.find(item => item.card.number === selected);
+          notice.textContent = entry ? stripCardReading(entry.card.name) + (position >= 0 && position !== slot ? '（' + (position + 1) + '枚目と入れ替え）' : '') : '';
+          confirm.disabled = selected === current[slot];
+        }
+        function close(restore = true) {
+          if (!dialog.isConnected) return;
+          cleanupPreviewPicker = null; dialog.close(); dialog.remove();
+          if (restore && trigger.isConnected) trigger.focus({ preventScroll: true });
+        }
+        for (const item of grid.children) {
+          const position = current.indexOf(item.dataset.number);
+          if (position >= 0) item.prepend(node('span', 'recipe-preview-order', String(position + 1)));
+        }
+        const actions = node('div', 'recipe-preview-dialog-actions'); actions.append(cancel, confirm);
+        dialog.append(header, description, grid, notice, actions); dialog.setAttribute('aria-labelledby', heading.id);
+        dialog.addEventListener('keydown', event => event.stopPropagation());
+        dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
+        dialog.addEventListener('click', event => {
+          const r = dialog.getBoundingClientRect();
+          if (event.target === dialog && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)) close();
+        });
+        cleanupPreviewPicker = () => close(false); updateSelection(); document.body.append(dialog); dialog.showModal();
       }
       renderCards();
       const source = node('details', 'recipe-code-source'); source.open = Boolean(draft.fromCode);
@@ -885,7 +959,8 @@
         const payload = { p_request: draft.request, p_title: draft.title, p_author: draft.author, p_description: draft.description, p_cards: draft.cards, p_tags: [...automatic, ...draft.tags] };
         try {
           if (editing) { delete payload.p_request; payload.p_post = draft.editingId; }
-          await rpc(editing ? 'update' : 'publish', payload, true);
+          if (cfg.previewVersion === 1) payload.p_preview_numbers = [...draft.preview];
+          await rpc((editing ? 'update' : 'publish') + (cfg.previewVersion === 1 ? '_preview' : ''), payload, true);
           if (!editing && state.active) refreshTotal();
           try { localStorage.setItem('kannagi-recipe-author', payload.p_author); } catch (_) { }
           if (state.draft === draft) state.draft = null;
@@ -931,7 +1006,7 @@
         if (state.active && revision === state.revision) await load();
       },
       back: goBack,
-      close() { closeTagMenu(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; totalRevision++; invalidate(); }
+      close() { closeTagMenu(); cleanupPreviewPicker?.(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; totalRevision++; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。

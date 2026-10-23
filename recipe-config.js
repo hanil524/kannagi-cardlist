@@ -2,5 +2,6 @@
 window.KANNAGI_RECIPES = Object.freeze({
   url: 'https://eurywqqzexqqxvxltenu.supabase.co',
   publishableKey: 'sb_publishable_076uEDV1zSRbiTOUywEG0w_KSbYQS-s',
-  feedVersion: 2
+  feedVersion: 2,
+  previewVersion: 1
 });
