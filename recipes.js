@@ -15,7 +15,7 @@
   function readFeedOptions(mode = 'all') {
     let saved;
     try { saved = JSON.parse(localStorage.getItem(feedKey(mode)) || 'null'); } catch (_) { }
-    return { sort: ['new', 'week', 'all'].includes(saved?.sort) ? saved.sort : 'new',
+    return { sort: ['new', 'week', 'all', 'bookmarks'].includes(saved?.sort) ? saved.sort : 'new',
       tags: cleanTags(saved?.tags ?? [saved?.tag]) };
   }
   function readBookmarks() {
@@ -497,7 +497,7 @@
       const menu = node('div', 'recipe-tag-menu'); menu.id = 'recipe-tag-menu';
       menu.setAttribute('role', 'dialog'); menu.setAttribute('aria-label', 'タグで絞り込み');
       const header = node('div', 'recipe-tag-menu-header');
-      const clear = button('解除', event => { state.tags = []; updateTagControl(); closeTagMenu(event.detail === 0); reload(); }, 'recipe-tag-clear');
+      const clear = button('解除', () => { state.tags = []; updateTagControl(); reload(); }, 'recipe-tag-clear');
       header.append(node('span', '', 'すべて一致'), clear);
       const items = node('div', 'recipe-tag-options'), inputs = new Map();
       for (const value of FILTER_TAGS) {
@@ -537,7 +537,7 @@
       search = node('input'); search.type = 'search'; search.maxLength = 80; search.placeholder = 'デッキ名・投稿者・説明を検索'; search.setAttribute('aria-label', 'レシピを検索'); search.value = state.query;
       tag = tagControl();
       sort = node('select'); sort.setAttribute('aria-label', 'レシピの並び順');
-      [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
+      [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気'], ['bookmarks', '保存順']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
       for (const control of [sort]) {
         // 標準selectはマウス操作でも:focus-visibleが残るため、操作方法を分ける。
         control.addEventListener('pointerdown', () => control.setAttribute('data-pointer-focus', ''));
