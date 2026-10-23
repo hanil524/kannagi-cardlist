@@ -9,12 +9,14 @@
   const storageKey = 'kannagi-recipes:' + cfg.url;
   const feedOptionsKey = storageKey + ':feed-options';
   const bookmarksKey = storageKey + ':recipe-bookmarks';
-  const feedKey = mode => feedOptionsKey + (mode === 'saved' ? ':saved' : '');
+  const FILTER_TAGS = [...SEASONS, ...CHOICE_TAGS];
+  const cleanTags = values => FILTER_TAGS.filter(tag => Array.isArray(values) && values.includes(tag));
+  const feedKey = mode => feedOptionsKey + (mode === 'all' ? '' : ':' + mode);
   function readFeedOptions(mode = 'all') {
     let saved;
     try { saved = JSON.parse(localStorage.getItem(feedKey(mode)) || 'null'); } catch (_) { }
     return { sort: ['new', 'week', 'all'].includes(saved?.sort) ? saved.sort : 'new',
-      tag: [...SEASONS, ...CHOICE_TAGS].includes(saved?.tag) ? saved.tag : '' };
+      tags: cleanTags(saved?.tags ?? [saved?.tag]) };
   }
   function readBookmarks() {
     let saved;
@@ -103,6 +105,40 @@
   async function rpc(name, args = {}, signed = false) {
     const s = await getSession(signed);
     return request('/rest/v1/rpc/recipe_' + name, args, s?.access_token);
+  }
+  async function readRecipeFeed(args, isCurrent) {
+    const s = await getSession();
+    const empty = { items: [], more: false, nextOffset: args.p_offset };
+    if (args.p_mode === 'own' && !s) return empty;
+    // 保存先への追加を確認した構成だけが、新しいAPIを使用する。
+    if (cfg.feedVersion === 2) {
+      const result = await rpc('filtered_feed', args);
+      return { ...result, nextOffset: args.p_offset + result.items.length };
+    }
+    const saved = args.p_mode === 'saved', name = saved ? 'bookmark_feed' : 'feed';
+    const read = offset => rpc(name, { p_query: args.p_query, p_tag: args.p_tags[0] || '', p_sort: args.p_sort, p_offset: offset,
+      ...(saved ? { p_ids: args.p_ids } : {}) });
+    if (args.p_mode !== 'own' && args.p_tags.length <= 1) {
+      const result = await read(args.p_offset);
+      return { ...result, nextOffset: args.p_offset + result.items.length };
+    }
+    // 旧APIは先頭タグで絞って取得する。続きも順に調べ、全タグ・本人の条件で21件目まで確認する。
+    // 次回の開始位置は採用件数ではなく元の一覧の位置を使い、未読・重複を防ぐ。
+    const matches = [];
+    let offset = args.p_offset;
+    while (isCurrent()) {
+      const result = await read(offset);
+      if (!isCurrent()) return null;
+      for (let i = 0; i < result.items.length; i++) {
+        const row = result.items[i];
+        if (args.p_mode === 'own' && !row.is_owner || !args.p_tags.every(tag => row.tags.includes(tag))) continue;
+        if (matches.length === 20) return { items: matches, more: true, nextOffset: offset + i };
+        matches.push(row);
+      }
+      offset += result.items.length;
+      if (!result.more || !result.items.length || offset > 10000) return { items: matches, more: false, nextOffset: offset };
+    }
+    return null;
   }
   const node = (tag, className, text) => {
     const el = document.createElement(tag);
@@ -287,12 +323,13 @@
     await rpc('bookmarks_sync', { p_ids: [...ids] }, true); bookmarkSnapshot = version;
   }
   function mount(host) {
-    const views = { all: { query: '', ...readFeedOptions() }, saved: { query: '', ...readFeedOptions('saved') } };
+    const views = Object.fromEntries(['all', 'saved', 'own'].map(mode => [mode, { query: '', ...readFeedOptions(mode) }]));
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
-    let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false;
+    let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false, loadingAppend = false;
     const bookmarkCounts = new Map(), pendingBookmarks = new Set();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     let detailRow = null, composerPreviousRow = null;
+    let closeTagMenu = () => {}, updateTagControl = () => {};
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
     function setFormBusy(form, busy) {
@@ -308,7 +345,7 @@
       }
     }
     function showEmptyFeed() {
-      message.replaceChildren(status(state.query || state.tag ? '条件に合うレシピはありません。' : state.mode === 'saved' ? 'ブックマークしたレシピはありません。各投稿の☆から登録できます。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
+      message.replaceChildren(status(state.query || state.tags.length ? '条件に合うレシピはありません。' : state.mode === 'saved' ? 'ブックマークしたレシピはありません。各投稿の☆から登録できます。' : state.mode === 'own' ? 'このブラウザから投稿したレシピはありません。' : 'まだ投稿がありません。最初のレシピを投稿してみましょう。'));
     }
     function pruneSavedFeed() {
       const removed = state.rows.filter(row => !bookmarks.has(row.id));
@@ -330,15 +367,16 @@
       for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
       const resuming = state.mode === 'saved' && pruneSavedFeed();
       host.scrollTop = previous.scrollTop;
-      if (previous.pending && !resuming) load(Boolean(state.rows.length));
+      if (previous.pending && !resuming) load(previous.append);
     }
     function saveOptions() {
-      views[state.mode] = { query: state.query, tag: state.tag, sort: state.sort };
-      try { localStorage.setItem(feedKey(state.mode), JSON.stringify({ tag: state.tag, sort: state.sort })); } catch (_) { }
+      views[state.mode] = { query: state.query, tags: [...state.tags], sort: state.sort };
+      try { localStorage.setItem(feedKey(state.mode), JSON.stringify({ tags: state.tags, sort: state.sort })); } catch (_) { }
     }
-    function switchFeed() {
-      state.query = search.value.trim(); state.tag = tag.value; state.sort = sort.value; saveOptions();
-      state.mode = state.mode === 'all' ? 'saved' : 'all'; Object.assign(state, views[state.mode]);
+    function switchFeed(mode) {
+      state.query = search.value.trim(); state.sort = sort.value; saveOptions();
+      state.mode = state.mode === mode ? 'all' : mode; Object.assign(state, views[state.mode]);
+      state.rows = []; state.offset = 0;
       renderShell(); host.scrollTop = 0; load();
     }
     function setBookmarkButton(control, id) {
@@ -396,9 +434,81 @@
       return group;
     }
     function filterByTag(value) {
-      state.tag = value; detail = composer = null; renderShell(); host.scrollTop = 0; reload();
+      state.tags = [value]; detail = composer = null; renderShell(); host.scrollTop = 0; reload();
+    }
+    function tagControl() {
+      const trigger = button('', event => {
+        if (menu.isConnected) { closeTagMenu(); return; }
+        const events = new AbortController(), options = { signal: events.signal };
+        document.body.append(menu); trigger.setAttribute('aria-expanded', 'true');
+        const place = () => {
+          const viewport = window.visualViewport, left = viewport?.offsetLeft || 0, top = viewport?.offsetTop || 0;
+          const width = viewport?.width || innerWidth, height = viewport?.height || innerHeight;
+          const r = trigger.getBoundingClientRect(), below = top + height - r.bottom - 16, above = r.top - top - 16;
+          const down = below >= Math.min(300, above), space = Math.max(80, down ? below : above);
+          menu.style.width = Math.min(Math.max(224, r.width), width - 24) + 'px';
+          const limit = Math.min(440, space), rowHeight = items.firstElementChild.offsetHeight;
+          const chrome = header.offsetHeight + 10; // 候補欄の上下余白と枠。
+          menu.style.maxHeight = Math.min(limit, chrome + Math.max(1, Math.floor((limit - chrome) / rowHeight)) * rowHeight) + 'px';
+          menu.style.left = Math.max(left + 12, Math.min(r.left, left + width - menu.offsetWidth - 12)) + 'px';
+          menu.style.top = (down ? r.bottom + 6 : r.top - menu.offsetHeight - 6) + 'px';
+        };
+        closeTagMenu = (focus = false) => {
+          events.abort(); menu.remove(); trigger.setAttribute('aria-expanded', 'false');
+          closeTagMenu = () => {};
+          if (focus && trigger.isConnected) trigger.focus({ preventScroll: true });
+        };
+        document.addEventListener('pointerdown', event => {
+          if (!menu.contains(event.target) && !trigger.contains(event.target)) closeTagMenu();
+        }, { ...options, capture: true });
+        document.addEventListener('focusin', event => {
+          if (!menu.contains(event.target) && !trigger.contains(event.target)) closeTagMenu();
+        }, options);
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeTagMenu(true); }
+        }, { ...options, capture: true });
+        window.addEventListener('resize', place, options);
+        window.visualViewport?.addEventListener('resize', place, options);
+        window.visualViewport?.addEventListener('scroll', place, options);
+        host.addEventListener('scroll', place, options);
+        place();
+        if (event.detail === 0) menu.querySelector('button').focus({ preventScroll: true });
+      }, 'recipe-tag-trigger');
+      trigger.setAttribute('aria-haspopup', 'dialog'); trigger.setAttribute('aria-expanded', 'false');
+      trigger.setAttribute('aria-controls', 'recipe-tag-menu');
+      const menu = node('div', 'recipe-tag-menu'); menu.id = 'recipe-tag-menu';
+      menu.setAttribute('role', 'dialog'); menu.setAttribute('aria-label', 'タグで絞り込み');
+      const header = node('div', 'recipe-tag-menu-header');
+      const clear = button('解除', event => { state.tags = []; updateTagControl(); closeTagMenu(event.detail === 0); reload(); }, 'recipe-tag-clear');
+      header.append(node('span', '', 'すべて一致'), clear);
+      const items = node('div', 'recipe-tag-options'), inputs = new Map();
+      for (const value of FILTER_TAGS) {
+        const row = node('div', 'recipe-tag-option');
+        const choose = button(value, event => {
+          state.tags = [value]; updateTagControl(); closeTagMenu(event.detail === 0); reload();
+        }, 'recipe-tag-single');
+        const check = node('label', 'recipe-tag-check'), input = node('input'); input.type = 'checkbox';
+        input.setAttribute('aria-label', value + 'を含める');
+        input.addEventListener('change', () => {
+          state.tags = FILTER_TAGS.filter(tag => tag === value ? input.checked : state.tags.includes(tag));
+          updateTagControl(); reload();
+        });
+        check.append(input); row.append(choose, check); items.append(row); inputs.set(value, input);
+      }
+      menu.append(header, items);
+      updateTagControl = () => {
+        trigger.textContent = state.tags.length === 1 ? state.tags[0] : state.tags.length ? 'タグ（' + state.tags.length + '）' : 'タグ';
+        trigger.title = state.tags.length ? state.tags.join(' ＋ ') + '（すべて一致）' : 'タグで絞り込み';
+        trigger.setAttribute('aria-label', state.tags.length ? 'タグで絞り込み：' + state.tags.join('、') : 'タグで絞り込み');
+        for (const [value, input] of inputs) {
+          input.checked = state.tags.includes(value); input.closest('.recipe-tag-option').classList.toggle('is-selected', input.checked);
+        }
+        clear.disabled = !state.tags.length;
+      };
+      updateTagControl(); return trigger;
     }
     function renderShell() {
+      closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
       feedSnapshot = null;
       detail = composer = detailRow = composerPreviousRow = null;
@@ -407,11 +517,10 @@
       const post = button('投稿する', confirmComposer, 'recipe-button recipe-primary'); post.disabled = !configured;
       const controls = node('form', 'recipe-search');
       search = node('input'); search.type = 'search'; search.maxLength = 80; search.placeholder = 'デッキ名・投稿者・説明を検索'; search.setAttribute('aria-label', 'レシピを検索'); search.value = state.query;
-      tag = node('select'); tag.setAttribute('aria-label', 'タグで絞り込み');
-      [['', 'タグ'], ...[...SEASONS, ...CHOICE_TAGS].map(x => [x, x])].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; tag.append(option); }); tag.value = state.tag;
+      tag = tagControl();
       sort = node('select'); sort.setAttribute('aria-label', 'レシピの並び順');
       [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
-      for (const control of [tag, sort]) {
+      for (const control of [sort]) {
         // 標準selectはマウス操作でも:focus-visibleが残るため、操作方法を分ける。
         control.addEventListener('pointerdown', () => control.setAttribute('data-pointer-focus', ''));
         const clearPointerFocus = () => control.removeAttribute('data-pointer-focus');
@@ -420,10 +529,13 @@
       }
       const find = button('検索', () => reload(), 'recipe-search-submit');
       find.setAttribute('aria-label', '検索'); find.replaceChildren(icon('search'));
-      const saved = button('', switchFeed, 'recipe-saved-toggle'); saved.append(icon('star'));
+      const saved = button('', () => switchFeed('saved'), 'recipe-saved-toggle'); saved.append(icon('star'));
       saved.setAttribute('aria-label', 'ブックマークしたレシピ'); saved.setAttribute('aria-pressed', String(state.mode === 'saved')); saved.title = state.mode === 'saved' ? 'すべてのレシピに戻る' : 'ブックマークしたレシピ';
+      const own = button('投稿済', () => switchFeed('own'), 'recipe-saved-toggle recipe-own-toggle');
+      own.setAttribute('aria-label', '投稿済のレシピ'); own.setAttribute('aria-pressed', String(state.mode === 'own'));
+      own.title = state.mode === 'own' ? 'すべてのレシピに戻る' : 'このブラウザから投稿したレシピ';
       const searchField = node('div', 'recipe-search-field'); searchField.append(search, find);
-      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(searchField, saved);
+      const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(searchField, own, saved);
       controls.append(searchGroup, tag, sort, post);
       controls.addEventListener('submit', event => { event.preventDefault(); reload(); });
       const clearSearch = event => {
@@ -432,32 +544,34 @@
       search.addEventListener('input', clearSearch);
       search.addEventListener('search', clearSearch);
       search.addEventListener('compositionend', clearSearch);
-      tag.addEventListener('change', reload); sort.addEventListener('change', reload);
+      sort.addEventListener('change', reload);
       message = node('div'); list = node('div', 'recipe-feed');
       more = button('さらに表示', () => load(true)); more.hidden = true;
       const foot = node('div', 'recipe-footer');
       foot.append(node('span', '', '週間人気：直近7日間のグッド数'));
       host.append(controls);
       if (state.mode === 'saved') host.append(node('p', 'recipe-saved-heading', 'ブックマークしたレシピ'));
+      if (state.mode === 'own') host.append(node('p', 'recipe-saved-heading recipe-own-heading', '投稿済のレシピ'));
       host.append(message, list, more, foot);
     }
     async function reload() {
-      state.query = search.value.trim(); state.tag = tag.value; state.sort = sort.value;
+      state.query = search.value.trim(); state.sort = sort.value;
       saveOptions();
-      state.offset = 0; state.rows = []; list.replaceChildren(); await load();
+      state.offset = 0; await load();
     }
     async function load(append = false) {
       const revision = ++state.revision; more.hidden = true;
       if (!configured) { message.replaceChildren(status('レシピ共有は準備中です。コード共有はそのまま使えます。')); return; }
-      loading = true;
+      loading = true; loadingAppend = append;
       // 表示中の一覧は残したまま裏で更新し、空→再表示のちらつきを出さない。
       const refreshing = !append && list.childElementCount > 0;
       list.classList.toggle('is-refreshing', refreshing);
       if (!refreshing) message.replaceChildren(status('読み込み中…'));
       try {
-        const args = { p_query: state.query, p_tag: state.tag, p_sort: state.sort, p_offset: append ? state.offset : 0 };
+        const args = { p_query: state.query, p_tags: [...state.tags], p_sort: state.sort, p_offset: append ? state.offset : 0,
+          p_mode: state.mode, p_ids: state.mode === 'saved' ? [...bookmarks] : [] };
         const result = state.mode === 'saved' && !bookmarks.size ? { items: [], more: false }
-          : await rpc(state.mode === 'saved' ? 'bookmark_feed' : 'feed', state.mode === 'saved' ? { ...args, p_ids: [...bookmarks] } : args);
+          : await readRecipeFeed(args, () => state.active && revision === state.revision);
         if (!state.active || revision !== state.revision) return;
         if (!append) { state.rows = []; list.replaceChildren(); }
         const seen = new Set(state.rows.map(row => row.id));
@@ -465,7 +579,7 @@
           bookmarkCounts.set(row.id, Number(row.bookmarks) || 0); state.rows.push(row);
           list.append(renderPost(row));
         }
-        state.offset = (append ? state.offset : 0) + result.items.length;
+        state.offset = result.nextOffset ?? (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
         if (!state.rows.length) showEmptyFeed();
       } catch (error) {
@@ -542,8 +656,9 @@
       cancelConfirmation = () => close(false); content.inert = true; document.body.append(overlay); no.focus({ preventScroll: true });
     }
     function subview(title) {
+      closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
-      if (!feedSnapshot) feedSnapshot = { content: [...host.childNodes], scrollTop: host.scrollTop, pending: loading };
+      if (!feedSnapshot) feedSnapshot = { content: [...host.childNodes], scrollTop: host.scrollTop, pending: loading, append: loadingAppend };
       host.classList.remove('is-detail');
       invalidate(); loading = false; const panel = node('section', 'recipe-subview');
       const header = node('div', 'recipe-subview-header');
@@ -782,7 +897,7 @@
         if (detail || composer) { returnToFeed(); return true; }
         return false;
       },
-      close() { storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
+      close() { closeTagMenu(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
