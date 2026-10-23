@@ -323,13 +323,24 @@
     if (version === bookmarkSnapshot) return;
     await rpc('bookmarks_sync', { p_ids: [...ids] }, true); bookmarkSnapshot = version;
   }
-  function mount(host) {
+  function mount(host, { onTotalChange = () => {} } = {}) {
     const views = Object.fromEntries(['all', 'saved', 'own'].map(mode => [mode, { query: '', ...readFeedOptions(mode) }]));
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
     let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false, loadingAppend = false;
     const bookmarkCounts = new Map(), pendingBookmarks = new Set();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     let detailRow = null, composerPreviousRow = null;
+    let totalRevision = 0;
+    async function refreshTotal() {
+      const revision = ++totalRevision;
+      try {
+        const total = await rpc('total_count');
+        if (!Number.isSafeInteger(total) || total < 0) throw new Error('Invalid recipe count');
+        if (state.active && revision === totalRevision) onTotalChange(total);
+      } catch (_) {
+        if (state.active && revision === totalRevision) onTotalChange(null);
+      }
+    }
     let closeTagMenu = () => {}, updateTagControl = () => {};
     function invalidate() { state.revision++; }
     function showError(error) { message.replaceChildren(status(error.message, true)); }
@@ -664,7 +675,7 @@
         try {
           await rpc('delete', { p_post: row.id }, true); close(false);
           if (state.draft?.editingId === row.id) state.draft = null;
-          if (state.active) { renderShell(); await load(); message.prepend(status('投稿を削除しました。')); }
+          if (state.active) { refreshTotal(); renderShell(); await load(); message.prepend(status('投稿を削除しました。')); }
         } catch (error) { notice.replaceChildren(status(error.message, true)); no.disabled = yes.disabled = false; }
       }, 'recipe-button recipe-delete');
       actions.append(no, yes); dialog.append(question, notice, actions); overlay.append(dialog);
@@ -875,6 +886,7 @@
         try {
           if (editing) { delete payload.p_request; payload.p_post = draft.editingId; }
           await rpc(editing ? 'update' : 'publish', payload, true);
+          if (!editing && state.active) refreshTotal();
           try { localStorage.setItem('kannagi-recipe-author', payload.p_author); } catch (_) { }
           if (state.draft === draft) state.draft = null;
           if (state.active && revision === state.revision) { renderShell(); await load(); message.prepend(status(editing ? '投稿を更新しました。' : 'レシピを投稿しました。')); }
@@ -910,6 +922,7 @@
           }
         }, { signal: storageEvents.signal });
         state.active = true;
+        refreshTotal();
         // 一覧を表示していた場合は作り直さず、表示したまま裏で最新に差し替える。
         if (detail || composer || !list?.isConnected || !state.rows.length) renderShell(); else refreshBookmarkButtons();
         const revision = ++state.revision;
@@ -918,7 +931,7 @@
         if (state.active && revision === state.revision) await load();
       },
       back: goBack,
-      close() { closeTagMenu(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
+      close() { closeTagMenu(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; totalRevision++; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
