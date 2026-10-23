@@ -156,7 +156,7 @@
       path.setAttribute('d', 'm12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.2L12 17.4l-5.6 2.9 1.1-6.2L2.9 9.6l6.3-.9Z');
       svg.append(path); return svg;
     }
-    path.setAttribute('d', name === 'good' ? 'M7 10v11H3V10h4Zm0 1 5-8c2 0 3 1 2 5l-1 2h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7' : name === 'search' ? 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6' : name === 'crown' ? 'M3 6l4 4 5-7 5 7 4-4-2 12H5L3 6Zm3 15h12' : 'M4 12h16m-6-6 6 6-6 6');
+    path.setAttribute('d', name === 'good' ? 'M7 10v11H3V10h4Zm0 1 5-8c2 0 3 1 2 5l-1 2h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 2H7' : name === 'search' ? 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm5 12 6 6' : name === 'crown' ? 'M3 6l4 4 5-7 5 7 4-4-2 12H5L3 6Zm3 15h12' : name === 'back' ? 'm15.5 5-7 7 7 7' : 'M4 12h16m-6-6 6 6-6 6');
     svg.append(path); return svg;
   }
   const button = (label, action, className = 'recipe-button') => {
@@ -367,7 +367,13 @@
       for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
       const resuming = state.mode === 'saved' && pruneSavedFeed();
       host.scrollTop = previous.scrollTop;
+      if (previous.keyboardFocus && previous.focusTarget?.isConnected) previous.focusTarget.focus({ preventScroll: true });
       if (previous.pending && !resuming) load(previous.append);
+    }
+    function goBack() {
+      if (composer && composerPreviousRow) { openDetail(composerPreviousRow); return true; }
+      if (detail || composer) { returnToFeed(); return true; }
+      return false;
     }
     function saveOptions() {
       views[state.mode] = { query: state.query, tags: [...state.tags], sort: state.sort };
@@ -620,6 +626,19 @@
       const reactions = node('div', 'recipe-reactions'); reactions.append(good, bookmarkStatus(row));
       setGood(); actions.append(reactions, view); copy.append(actions);
       if (row.is_owner) copy.append(ownerActions(row));
+      let pointerOrigin = null, pointerMoved = false;
+      article.addEventListener('pointerdown', event => { pointerOrigin = { x: event.clientX, y: event.clientY, id: event.pointerId }; pointerMoved = false; });
+      article.addEventListener('pointermove', event => {
+        if (pointerOrigin?.id === event.pointerId && Math.hypot(event.clientX - pointerOrigin.x, event.clientY - pointerOrigin.y) > 8) pointerMoved = true;
+      });
+      article.addEventListener('click', event => {
+        // ブックマークは押した直後にアイコンを置換するため、元のイベント経路で操作部を判定する。
+        const interactive = event.composedPath().some(el => el instanceof Element && el !== article && el.matches('button, a, input, select, textarea, label, [role="button"], [role="link"], [contenteditable="true"]'));
+        if (event.defaultPrevented || event.button !== 0 || interactive || event.detail > 0 && pointerMoved) return;
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed && (article.contains(selection.anchorNode) || article.contains(selection.focusNode))) return;
+        openDetail(row);
+      });
       article.append(copy); return article;
     }
     function ownerActions(row) {
@@ -658,12 +677,17 @@
     function subview(title) {
       closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
-      if (!feedSnapshot) feedSnapshot = { content: [...host.childNodes], scrollTop: host.scrollTop, pending: loading, append: loadingAppend };
+      const focusTarget = document.activeElement, keyboardFocus = host.contains(focusTarget) && focusTarget.matches(':focus-visible');
+      if (!feedSnapshot) feedSnapshot = { content: [...host.childNodes], scrollTop: host.scrollTop, pending: loading, append: loadingAppend, focusTarget, keyboardFocus };
       host.classList.remove('is-detail');
       invalidate(); loading = false; const panel = node('section', 'recipe-subview');
       const header = node('div', 'recipe-subview-header');
-      header.append(button('一覧に戻る', returnToFeed), node('h3', '', title));
-      panel.append(header); host.replaceChildren(panel); return panel;
+      const back = button('', goBack, 'recipe-button recipe-back');
+      back.append(icon('back'), node('span', 'recipe-back-label', '戻る'));
+      header.append(back, node('h3', '', title));
+      panel.append(header); host.replaceChildren(panel);
+      if (keyboardFocus) back.focus({ preventScroll: true });
+      return panel;
     }
     function openDetail(row) {
       composer = composerPreviousRow = null; detailRow = row;
@@ -892,11 +916,7 @@
         catch (_) { if (state.active && revision === state.revision) deckBuilder.showMessage('ブックマーク件数を同期できませんでした。次に開いたときに再試行します。'); }
         if (state.active && revision === state.revision) await load();
       },
-      back() {
-        if (composer && composerPreviousRow) { openDetail(composerPreviousRow); return true; }
-        if (detail || composer) { returnToFeed(); return true; }
-        return false;
-      },
+      back: goBack,
       close() { closeTagMenu(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; invalidate(); }
     };
   }
