@@ -112,8 +112,8 @@
     const empty = { items: [], more: false, nextOffset: args.p_offset };
     if (args.p_mode === 'own' && !s) return empty;
     // 保存先への追加を確認した構成だけが、新しいAPIを使用する。
-    if (cfg.feedVersion === 2) {
-      const result = await rpc('filtered_feed', args);
+    if (cfg.cardSearchVersion === 1 || cfg.feedVersion === 2) {
+      const result = await rpc(cfg.cardSearchVersion === 1 ? 'search_feed' : 'filtered_feed', args);
       return { ...result, nextOffset: args.p_offset + result.items.length };
     }
     const saved = args.p_mode === 'saved', name = saved ? 'bookmark_feed' : 'feed';
@@ -257,6 +257,42 @@
       return { card, count };
     });
   }
+  const normalizeCardQuery = value => String(value || '').normalize('NFKC').toLowerCase()
+    .replace(/[ァ-ヶ]/g, letter => String.fromCharCode(letter.charCodeAt(0) - 0x60)).replace(/\s+/g, '');
+  let recipeSearchCards, lastCardSearchText, lastCardSearchMatches;
+  function searchCards() {
+    if (recipeSearchCards) return recipeSearchCards;
+    const groups = new Map();
+    for (const card of cardIndexCache.entries) {
+      const label = getDeckLimitGroupKey(card.name) === SHARED_FOUR_COPY_CARD_NAME ? '古書の怪' : stripCardReading(card.name).trim();
+      const key = normalizeCardQuery(label);
+      if (!groups.has(key)) groups.set(key, { key, label, numbers: [], terms: new Set() });
+      const group = groups.get(key); group.numbers.push(card.number); group.terms.add(normalizeCardQuery(label));
+      group.terms.add(normalizeCardQuery(stripCardReading(card.name)));
+      for (const match of card.name.matchAll(/[(（]([^()（）]*)[)）]/g)) group.terms.add(normalizeCardQuery(match[1]));
+    }
+    // 名前順は一度だけ作り、入力中は一致の強さごとに振り分ける。
+    recipeSearchCards = [...groups.values()].map(group => ({ ...group, numbers: [...new Set(group.numbers)], terms: [...group.terms] }))
+      .sort((a, b) => a.label.localeCompare(b.label, 'ja'));
+    return recipeSearchCards;
+  }
+  function matchingSearchCards(query) {
+    const text = normalizeCardQuery(query);
+    if (!text) return [];
+    if (text === lastCardSearchText) return lastCardSearchMatches;
+    const matches = [[], [], []];
+    for (const card of searchCards()) {
+      let rank = 3;
+      for (const term of card.terms) {
+        if (term === text) { rank = 0; break; }
+        if (term.startsWith(text)) rank = Math.min(rank, 1);
+        else if (rank > 2 && term.includes(text)) rank = 2;
+      }
+      if (rank < 3) matches[rank].push(card);
+    }
+    lastCardSearchText = text;
+    return lastCardSearchMatches = matches.flat();
+  }
   function recipeCards(map) {
     const entries = new Map(knownCards(map).map(entry => [entry.card.el, entry]));
     return deckBuilder.sortDeck([...entries.keys()]).map(card => entries.get(card));
@@ -330,12 +366,13 @@
     await rpc('bookmarks_sync', { p_ids: [...ids] }, true); bookmarkSnapshot = version;
   }
   function mount(host, { onTotalChange = () => {} } = {}) {
-    const views = Object.fromEntries(['all', 'saved', 'own'].map(mode => [mode, { query: '', ...readFeedOptions(mode) }]));
+    const views = Object.fromEntries(['all', 'saved', 'own'].map(mode => [mode, { query: '', cardKey: '', ...readFeedOptions(mode) }]));
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
     let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false, loadingAppend = false;
     const bookmarkCounts = new Map(), pendingBookmarks = new Set();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     let detailRow = null, composerPreviousRow = null, cleanupPreviewPicker = null;
+    let closeCardSearch = () => {}, searchSuggestionRoot = null, searchCardKey = '', searchIsComposing = false;
     let totalRevision = 0;
     async function refreshTotal() {
       const revision = ++totalRevision;
@@ -396,11 +433,11 @@
       return false;
     }
     function saveOptions() {
-      views[state.mode] = { query: state.query, tags: [...state.tags], sort: state.sort };
+      views[state.mode] = { query: state.query, cardKey: state.cardKey, tags: [...state.tags], sort: state.sort };
       try { localStorage.setItem(feedKey(state.mode), JSON.stringify({ tags: state.tags, sort: state.sort })); } catch (_) { }
     }
     function switchFeed(mode) {
-      state.query = search.value.trim(); state.sort = sort.value; saveOptions();
+      state.query = search.value.trim(); state.cardKey = searchCardKey; state.sort = sort.value; saveOptions();
       state.mode = state.mode === mode ? 'all' : mode; Object.assign(state, views[state.mode]);
       state.rows = []; state.offset = 0;
       renderShell(); host.scrollTop = 0; load();
@@ -533,7 +570,62 @@
       };
       updateTagControl(); return trigger;
     }
+    function setupCardSearch(input, field) {
+      const menu = node('div', 'recipe-card-suggestions'); menu.id = 'recipe-card-suggestions'; menu.setAttribute('role', 'listbox'); menu.setAttribute('aria-label', 'カード名の候補');
+      input.setAttribute('role', 'combobox'); input.setAttribute('aria-autocomplete', 'list'); input.setAttribute('aria-controls', menu.id); input.setAttribute('aria-expanded', 'false'); input.autocomplete = 'off';
+      let candidates = [], active = -1, events = null;
+      function hide() { events?.abort(); events = null; menu.remove(); input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+      closeCardSearch = hide; searchSuggestionRoot = menu;
+      function position() {
+        const viewport = window.visualViewport, left = viewport?.offsetLeft || 0, top = viewport?.offsetTop || 0;
+        const width = viewport?.width || innerWidth, height = viewport?.height || innerHeight, r = field.getBoundingClientRect();
+        const panel = host.getBoundingClientRect();
+        if (r.bottom <= Math.max(top, panel.top) || r.top >= Math.min(top + height, panel.bottom)) { hide(); return; }
+        const below = top + height - r.bottom - 12, above = r.top - top - 12, down = below >= Math.min(240, above);
+        menu.style.width = Math.min(Math.max(260, r.width), width - 24) + 'px';
+        menu.style.maxHeight = Math.max(44, Math.min(328, down ? below : above)) + 'px';
+        menu.style.left = Math.max(left + 12, Math.min(r.left, left + width - menu.offsetWidth - 12)) + 'px';
+        menu.style.top = Math.max(top + 6, Math.min(down ? r.bottom + 6 : r.top - menu.offsetHeight - 6, top + height - menu.offsetHeight - 6)) + 'px';
+      }
+      function choose(index) {
+        const card = candidates[index]; if (!card) return;
+        input.value = card.label; searchCardKey = card.key; hide(); input.blur(); reload();
+      }
+      function show() {
+        if (searchIsComposing) return;
+        candidates = matchingSearchCards(input.value).slice(0, 8); hide(); menu.replaceChildren();
+        if (!candidates.length) return;
+        candidates.forEach((card, index) => {
+          const option = button(card.label, () => choose(index), 'recipe-card-suggestion');
+          option.id = menu.id + '-' + index; option.tabIndex = -1; option.setAttribute('role', 'option'); option.setAttribute('aria-selected', 'false');
+          option.addEventListener('pointerdown', event => event.preventDefault()); menu.append(option);
+        });
+        document.body.append(menu); input.setAttribute('aria-expanded', 'true'); position();
+        if (!menu.isConnected) return;
+        events = new AbortController(); const options = { signal: events.signal };
+        document.addEventListener('pointerdown', event => { if (!field.contains(event.target) && !menu.contains(event.target)) hide(); }, { ...options, capture: true });
+        window.addEventListener('resize', position, options); window.visualViewport?.addEventListener('resize', position, options); window.visualViewport?.addEventListener('scroll', position, options); host.addEventListener('scroll', position, options);
+      }
+      input.addEventListener('focus', show);
+      input.addEventListener('click', () => { if (!menu.isConnected) show(); });
+      input.addEventListener('input', event => { searchCardKey = ''; if (!event.isComposing) show(); });
+      input.addEventListener('compositionstart', () => { searchIsComposing = true; hide(); });
+      input.addEventListener('compositionend', () => { searchIsComposing = false; searchCardKey = ''; show(); });
+      input.addEventListener('blur', hide);
+      input.addEventListener('keydown', event => {
+        if (event.isComposing || event.keyCode === 229 || searchIsComposing) return;
+        if (event.key === 'Escape' && menu.isConnected) { event.preventDefault(); event.stopPropagation(); hide(); return; }
+        if (event.key === 'Tab') { hide(); return; }
+        if (event.key === 'Enter' && menu.isConnected && active >= 0) { event.preventDefault(); event.stopPropagation(); choose(active); return; }
+        if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+        event.preventDefault(); event.stopPropagation(); if (!menu.isConnected) show(); if (!menu.isConnected) return;
+        active = active < 0 ? (event.key === 'ArrowDown' ? 0 : candidates.length - 1) : (active + (event.key === 'ArrowDown' ? 1 : -1) + candidates.length) % candidates.length;
+        [...menu.children].forEach((option, index) => option.setAttribute('aria-selected', String(index === active)));
+        input.setAttribute('aria-activedescendant', menu.children[active].id); menu.children[active].scrollIntoView({ block: 'nearest' });
+      });
+    }
     function renderShell() {
+      closeCardSearch();
       cleanupPreviewPicker?.();
       closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
@@ -543,7 +635,8 @@
       host.replaceChildren();
       const post = button('投稿する', confirmComposer, 'recipe-button recipe-primary'); post.disabled = !configured;
       const controls = node('form', 'recipe-search');
-      search = node('input'); search.type = 'search'; search.maxLength = 80; search.placeholder = 'デッキ名・投稿者・説明を検索'; search.setAttribute('aria-label', 'レシピを検索'); search.value = state.query;
+      search = node('input'); search.type = 'search'; search.maxLength = 80; search.placeholder = 'カード名などで検索'; search.setAttribute('aria-label', 'レシピを検索'); search.value = state.query;
+      searchCardKey = state.cardKey; searchIsComposing = false;
       tag = tagControl();
       sort = node('select'); sort.setAttribute('aria-label', 'レシピの並び順');
       [['new', '新着順'], ['week', '週間人気'], ['all', '累計人気'], ['bookmarks', '保存順']].forEach(([value, label]) => { const option = node('option', '', label); option.value = value; sort.append(option); }); sort.value = state.sort;
@@ -562,9 +655,10 @@
       own.setAttribute('aria-label', '投稿済のレシピ'); own.setAttribute('aria-pressed', String(state.mode === 'own'));
       own.title = state.mode === 'own' ? 'すべてのレシピに戻る' : 'このブラウザから投稿したレシピ';
       const searchField = node('div', 'recipe-search-field'); searchField.append(search, find);
+      if (cfg.cardSearchVersion === 1) setupCardSearch(search, searchField);
       const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(searchField, own, saved);
       controls.append(searchGroup, tag, sort, post);
-      controls.addEventListener('submit', event => { event.preventDefault(); reload(); });
+      controls.addEventListener('submit', event => { event.preventDefault(); if (!searchIsComposing) reload(); });
       const clearSearch = event => {
         if (!event.isComposing && !search.value.trim() && state.query) reload();
       };
@@ -582,7 +676,8 @@
       host.append(message, list, more, foot);
     }
     async function reload() {
-      state.query = search.value.trim(); state.sort = sort.value;
+      closeCardSearch();
+      state.query = search.value.trim(); state.cardKey = searchCardKey; state.sort = sort.value;
       saveOptions();
       state.offset = 0; await load();
     }
@@ -597,6 +692,11 @@
       try {
         const args = { p_query: state.query, p_tags: [...state.tags], p_sort: state.sort, p_offset: append ? state.offset : 0,
           p_mode: state.mode, p_ids: state.mode === 'saved' ? [...bookmarks] : [] };
+        if (cfg.cardSearchVersion === 1) {
+          const exact = state.cardKey && searchCards().find(card => card.key === state.cardKey);
+          args.p_card_numbers = [...new Set((exact ? [exact] : matchingSearchCards(state.query)).flatMap(card => card.numbers))];
+          args.p_card_only = Boolean(exact);
+        }
         const result = state.mode === 'saved' && !bookmarks.size ? { items: [], more: false }
           : await readRecipeFeed(args, () => state.active && revision === state.revision);
         if (!state.active || revision !== state.revision) return;
@@ -696,6 +796,7 @@
       cancelConfirmation = () => close(false); content.inert = true; document.body.append(overlay); no.focus({ preventScroll: true });
     }
     function subview(title) {
+      closeCardSearch();
       cleanupPreviewPicker?.();
       closeTagMenu();
       cleanupAuthorHistory?.(); cleanupAuthorHistory = null;
@@ -982,6 +1083,7 @@
         storageEvents?.abort(); storageEvents = new AbortController();
         document.addEventListener('pointerdown', event => {
           const focused = document.activeElement;
+          if (focused === search && searchSuggestionRoot?.contains(event.target)) return;
           if ([search, tag, sort].includes(focused) && event.target !== focused) focused.blur();
         }, { signal: storageEvents.signal, capture: true });
         window.addEventListener('storage', event => {
@@ -1006,7 +1108,7 @@
         if (state.active && revision === state.revision) await load();
       },
       back: goBack,
-      close() { closeTagMenu(); cleanupPreviewPicker?.(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; totalRevision++; invalidate(); }
+      close() { closeCardSearch(); closeTagMenu(); cleanupPreviewPicker?.(); storageEvents?.abort(); cancelConfirmation?.(); cleanupAuthorHistory?.(); cleanupAuthorHistory = null; feedSnapshot = null; loading = false; state.active = false; totalRevision++; invalidate(); }
     };
   }
   // 公開モーダルからは呼ばない。運営専用ページからのみ表示する。
