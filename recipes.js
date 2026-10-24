@@ -657,7 +657,14 @@
       const searchField = node('div', 'recipe-search-field'); searchField.append(search, find);
       if (cfg.cardSearchVersion === 1) setupCardSearch(search, searchField);
       const searchGroup = node('div', 'recipe-search-input'); searchGroup.append(searchField, own, saved);
-      controls.append(searchGroup, tag, sort, post);
+      const reset = button('リセット', () => {
+        closeCardSearch(); closeTagMenu();
+        search.value = ''; searchCardKey = ''; searchIsComposing = false;
+        state.tags = []; sort.value = 'new'; updateTagControl();
+        host.scrollTop = 0; reload();
+      }, 'recipe-button recipe-search-reset');
+      const actions = node('div', 'recipe-search-actions'); actions.append(reset, post);
+      controls.append(searchGroup, tag, sort, actions);
       controls.addEventListener('submit', event => { event.preventDefault(); if (!searchIsComposing) reload(); });
       const clearSearch = event => {
         if (!event.isComposing && !search.value.trim() && state.query) reload();
