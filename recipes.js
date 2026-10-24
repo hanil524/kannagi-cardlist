@@ -305,9 +305,9 @@
   }
   function cardImages(map, max = Infinity, onCard, preview) {
     const grid = node('div', max === Infinity ? 'recipe-card-grid' : 'recipe-card-preview');
-    const cards = max === Infinity ? recipeCards(map) : previewCards(map, preview);
-    cards.slice(0, max).forEach(({ card, count }) => {
-      const item = onCard ? button('', event => onCard(card, item, event), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
+    const cards = (max === Infinity ? recipeCards(map) : previewCards(map, preview)).slice(0, max);
+    cards.forEach(({ card, count }) => {
+      const item = onCard ? button('', event => onCard(card, item, event, cards), 'recipe-card-image recipe-card-open') : node('div', 'recipe-card-image');
       if (onCard) item.setAttribute('aria-label', stripCardReading(card.name) + 'を拡大表示');
       item.dataset.number = card.number;
       const img = node('img'); img.alt = card.name; img.loading = 'lazy'; img.decoding = 'async';
@@ -370,6 +370,7 @@
     const state = { active: false, revision: 0, mode: 'all', ...views.all, offset: 0, rows: [], draft: null, posting: false };
     let bookmarks = readBookmarks(), storageEvents, feedSnapshot, loading = false, loadingAppend = false;
     const bookmarkCounts = new Map(), pendingBookmarks = new Set();
+    const previewSignatures = new WeakMap();
     let list, message, more, search, tag, sort, detail, composer, submitCurrent, cancelConfirmation, cleanupAuthorHistory;
     let detailRow = null, composerPreviousRow = null, cleanupPreviewPicker = null;
     let closeCardSearch = () => {}, searchSuggestionRoot = null, searchCardKey = '', searchIsComposing = false;
@@ -707,11 +708,15 @@
         const result = state.mode === 'saved' && !bookmarks.size ? { items: [], more: false }
           : await readRecipeFeed(args, () => state.active && revision === state.revision);
         if (!state.active || revision !== state.revision) return;
-        if (!append) { state.rows = []; list.replaceChildren(); }
+        const previousPreviews = new Map();
+        if (!append) {
+          for (const article of list.children) previousPreviews.set(article.dataset.recipePost, article.querySelector('.recipe-card-preview'));
+          state.rows = []; list.replaceChildren();
+        }
         const seen = new Set(state.rows.map(row => row.id));
         for (const row of result.items) if (!seen.has(row.id)) {
           bookmarkCounts.set(row.id, Number(row.bookmarks) || 0); state.rows.push(row);
-          list.append(renderPost(row));
+          list.append(renderPost(row, previousPreviews.get(row.id)));
         }
         state.offset = result.nextOffset ?? (append ? state.offset : 0) + result.items.length;
         more.hidden = !result.more; message.replaceChildren();
@@ -721,8 +726,9 @@
         showError(error); message.append(button('再読み込み', () => load(append)));
       } finally { if (revision === state.revision) { loading = false; list.classList.remove('is-refreshing'); } }
     }
-    function renderPost(row) {
+    function renderPost(row, previousPreview) {
       const article = node('article', 'recipe-post');
+      article.dataset.recipePost = row.id;
       article.classList.toggle('is-owner', Boolean(row.is_owner));
       const meta = node('div', 'recipe-post-meta'), number = node('span', 'recipe-post-number', 'No.' + row.post_no);
       const author = node('span', 'recipe-post-author', row.author); author.title = row.author;
@@ -732,7 +738,12 @@
       const title = button(row.title, () => openDetail(row), 'recipe-title');
       const heading = node('div', 'recipe-heading'); heading.append(title, deckTotal(row.cards));
       copy.append(heading);
-      try { article.append(cardImages(row.cards, 5, (card, trigger, event) => openRecipeCard(row.cards, card, trigger, event), row.preview_numbers)); } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
+      try {
+        const signature = JSON.stringify([row.cards, row.preview_numbers || []]);
+        const preview = previousPreview && previewSignatures.get(previousPreview) === signature ? previousPreview
+          : cardImages(row.cards, 5, (card, trigger, event, cards) => openRecipeCard(row.cards, card, trigger, event, cards), row.preview_numbers);
+        previewSignatures.set(preview, signature); article.append(preview);
+      } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
       copy.append(badges(row.tags, filterByTag));
       if (row.description) copy.append(node('p', 'recipe-description', row.description));
       const actions = node('div', 'recipe-post-actions');
@@ -868,8 +879,8 @@
       } catch (error) { body.append(status(error.message, true)); }
       if (row.is_owner) body.append(ownerActions(row));
     }
-    function openRecipeCard(map, card, trigger, event) {
-      const cards = recipeCards(map).map(entry => entry.card.el);
+    function openRecipeCard(map, card, trigger, event, selection) {
+      const cards = (selection || recipeCards(map)).map(entry => entry.card.el);
       openImageModal(getModalCardFullImageSrc(card.el), {
         cards, card: card.el, recipeCards: map, returnTo: host.closest('#deck-share-modal'),
         returnScroll: host.querySelector('.recipe-detail-body') || host,
@@ -1031,7 +1042,9 @@
       });
       code.input.addEventListener('input', () => { draft.sourceCode = code.input.value; codeStatus.replaceChildren(); });
       source.append(code.wrap, applyCode, codeStatus);
-      form.append(source, preview, title.wrap, author.wrap, description.wrap, node('p', 'recipe-hint', '説明は400文字まで。リンクは投稿できません。'), seasonTags);
+      const descriptionHint = node('p', 'recipe-hint', '説明は400文字まで。リンクは投稿できません。');
+      descriptionHint.append(node('span', 'recipe-description-hint', '2行まではサムネイルと一緒に表示されます。'));
+      form.append(source, preview, title.wrap, author.wrap, description.wrap, descriptionHint, seasonTags);
       const choices = node('fieldset', 'recipe-tag-choices'); choices.append(node('legend', '', 'タグを選択（3つまで）'));
       CHOICE_TAGS.forEach(tag => {
         const label = node('label'); const box = node('input'); box.type = 'checkbox'; box.value = tag; box.checked = draft.tags.includes(tag);
