@@ -303,6 +303,10 @@
     const order = [...new Set([...(Array.isArray(numbers) ? numbers : []), ...cards.map(entry => entry.card.number)])];
     return order.filter(number => index.has(number)).slice(0, 5).map(number => index.get(number));
   }
+  const recipeImageRetries = new WeakMap();
+  function retryFailedRecipeImages(root) {
+    for (const img of root.querySelectorAll('.recipe-card-image.has-image-error img')) recipeImageRetries.get(img)?.();
+  }
   function cardImages(map, max = Infinity, onCard, preview) {
     const grid = node('div', max === Infinity ? 'recipe-card-grid' : 'recipe-card-preview');
     const cards = (max === Infinity ? recipeCards(map) : previewCards(map, preview)).slice(0, max);
@@ -312,8 +316,21 @@
       item.dataset.number = card.number;
       const img = node('img'); img.alt = card.name; img.loading = 'lazy'; img.decoding = 'async';
       const original = card.el.querySelector('img');
-      // 読み込めた画像からフェードインする（読み込み失敗時も枠だけ残さず表示状態にする）。
-      setListImage(img, toFullImagePath(original.getAttribute('data-src') || original.src), () => item.classList.add('is-loaded'));
+      const fullSrc = toFullImagePath(original.getAttribute('data-src') || original.src);
+      let pending = false, retryTimer = null, automaticRetries = 0;
+      const loadImage = (initial = false) => {
+        if (pending || (!initial && !img.isConnected)) return;
+        clearTimeout(retryTimer); retryTimer = null; pending = true;
+        item.classList.remove('has-image-error');
+        setListImage(img, fullSrc, didLoad => {
+          pending = false; item.classList.add('is-loaded');
+          item.classList.toggle('has-image-error', !didLoad);
+          // 通信が一時的に途切れた場合だけ、同じ画像を一度再取得する。
+          if (!didLoad && automaticRetries++ === 0) retryTimer = setTimeout(() => { retryTimer = null; loadImage(); }, 750);
+        });
+      };
+      recipeImageRetries.set(img, () => { automaticRetries = 0; loadImage(); });
+      loadImage(true);
       item.append(img, node('span', 'recipe-card-count', '×' + count)); grid.append(item);
     });
     return grid;
@@ -421,6 +438,7 @@
       host.classList.remove('is-detail');
       if (!previous) { renderShell(); load(); return; }
       host.replaceChildren(...previous.content);
+      retryFailedRecipeImages(host);
       for (const control of host.querySelectorAll('[data-recipe-bookmark]')) setBookmarkButton(control, control.dataset.recipeBookmark);
       const resuming = state.mode === 'saved' && pruneSavedFeed();
       host.scrollTop = previous.scrollTop;
@@ -536,7 +554,7 @@
         window.visualViewport?.addEventListener('scroll', place, options);
         host.addEventListener('scroll', place, options);
         place();
-        if (event.detail === 0) menu.querySelector('button').focus({ preventScroll: true });
+        if (event.detail === 0) menu.querySelector('button:not(:disabled)')?.focus({ preventScroll: true });
       }, 'recipe-tag-trigger');
       trigger.setAttribute('aria-haspopup', 'dialog'); trigger.setAttribute('aria-expanded', 'false');
       trigger.setAttribute('aria-controls', 'recipe-tag-menu');
@@ -740,7 +758,7 @@
       copy.append(heading);
       try {
         const signature = JSON.stringify([row.cards, row.preview_numbers || []]);
-        const preview = previousPreview && previewSignatures.get(previousPreview) === signature ? previousPreview
+        const preview = previousPreview && !previousPreview.querySelector('.has-image-error') && previewSignatures.get(previousPreview) === signature ? previousPreview
           : cardImages(row.cards, 5, (card, trigger, event, cards) => openRecipeCard(row.cards, card, trigger, event, cards), row.preview_numbers);
         previewSignatures.set(preview, signature); article.append(preview);
       } catch (_) { article.append(status('未対応のカードを含むレシピです。')); }
@@ -1104,8 +1122,14 @@
         document.addEventListener('pointerdown', event => {
           const focused = document.activeElement;
           if (focused === search && searchSuggestionRoot?.contains(event.target)) return;
-          if ([search, tag, sort].includes(focused) && event.target !== focused) focused.blur();
+          if ([search, tag].includes(focused) && !focused.contains(event.target)) focused.blur();
         }, { signal: storageEvents.signal, capture: true });
+        // ネイティブの選択肢を開く操作中にフォーカスを外すと、メニューが閉じる端末がある。
+        // 並び順だけ、実際に外をクリックし終えた後にフォーカスを外す。
+        document.addEventListener('click', event => {
+          if (document.activeElement === sort && !sort.contains(event.target)) sort.blur();
+        }, { signal: storageEvents.signal, capture: true });
+        window.addEventListener('online', () => retryFailedRecipeImages(host), { signal: storageEvents.signal });
         window.addEventListener('storage', event => {
           if (event.key !== bookmarksKey && event.key !== null) return;
           const previous = bookmarks;
