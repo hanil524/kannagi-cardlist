@@ -693,13 +693,11 @@
       search.addEventListener('compositionend', clearSearch);
       sort.addEventListener('change', reload);
       message = node('div'); list = node('div', 'recipe-feed');
-      more = button('さらに表示', () => load(true)); more.hidden = true;
-      const foot = node('div', 'recipe-footer');
-      foot.append(node('span', '', '週間人気：直近7日間のグッド数'));
+      more = button('さらに表示', () => load(true), 'recipe-button recipe-more'); more.hidden = true;
       host.append(controls);
       if (state.mode === 'saved') host.append(node('p', 'recipe-saved-heading', 'ブックマークしたレシピ'));
       if (state.mode === 'own') host.append(node('p', 'recipe-saved-heading recipe-own-heading', '投稿済のレシピ'));
-      host.append(message, list, more, foot);
+      host.append(message, list, more);
     }
     async function reload() {
       closeCardSearch();
