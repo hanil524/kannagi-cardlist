@@ -17079,7 +17079,7 @@ data-sakka="marukko"
   class="card"
   data-number="2713"
   data-name="犬面人（けんめんじん）"
-  data-cost="3"
+  data-cost="2"
   data-power="0"
   data-series="不安の果実"
   data-type="怪異札"
@@ -19923,7 +19923,7 @@ data-attribute="妖怪 幽霊"
   data-keyword=""
   data-role="直接ダメ "
 >
-  <img data-src="images/card_16_p (22).jpg" src="placeholder.jpg" decoding="async" />
+  <img data-src="images/card_16_p (21).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
@@ -19940,7 +19940,7 @@ data-attribute="妖怪 幽霊"
   data-keyword=""
   data-role="直接ダメ "
 >
-  <img data-src="images/card_16_p (21).jpg" src="placeholder.jpg" decoding="async" />
+  <img data-src="images/card_16_p (22).jpg" src="placeholder.jpg" decoding="async" />
 </div>
 <div
   class="card"
