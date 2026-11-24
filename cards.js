@@ -16680,7 +16680,7 @@ data-sakka="marukko"
   data-rare="エキスパンション"
   data-attribute="妖怪 蟲 都市伝説"
   data-keyword="憤怒 速攻"
-  data-role="ランデス"
+  data-role=""
 >
   <img data-src="images/card_17_p (29).jpg" src="placeholder.jpg" decoding="async" />
 </div>
