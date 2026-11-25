@@ -251,6 +251,8 @@
   }
   function knownCards(map) {
     validateDeckImportMap(map);
+    // URL（#deck-recipes）から直接開いた時は、一覧の絞り込みがまだ一度も動いておらず索引が空のことがある。
+    cardIndexCache.build();
     const index = new Map(cardIndexCache.entries.map(entry => [entry.number, entry]));
     return Object.entries(map).map(([number, count]) => {
       const card = index.get(number); if (!card) throw new Error('未対応のカードが含まれています。ページを更新してお試しください。');
@@ -262,6 +264,7 @@
   let recipeSearchCards, lastCardSearchText, lastCardSearchMatches;
   function searchCards() {
     if (recipeSearchCards) return recipeSearchCards;
+    cardIndexCache.build();
     const groups = new Map();
     for (const card of cardIndexCache.entries) {
       const label = getDeckLimitGroupKey(card.name) === SHARED_FOUR_COPY_CARD_NAME ? '古書の怪' : stripCardReading(card.name).trim();
